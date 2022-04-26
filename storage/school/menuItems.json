@@ -1,0 +1,34 @@
+{
+    "primaryMenuItems": [
+        "Scuola",
+        "Servizi",
+        "Novità",
+        "Didattica"
+    ],
+    "secondaryMenuItems": {
+        "Scuola": [
+            "Presentazione",
+            "I luoghi",
+            "Le persone",
+            "I numeri della scuola",
+            "Le carte della scuola",
+            "Organizzazione"
+        ],
+        "Servizi": [
+            "Famiglie e studenti",
+            "Personale scolastico",
+            "Percorsi di studio"
+        ],
+        "Novità": [
+            "Le notizie",
+            "Le circolari",
+            "Calendario eventi",
+            "Albo online"
+        ],
+        "Didattica": [
+            "Offerta formativa",
+            "Le schede didattiche",
+            "I progetti delle classi"
+        ]
+    }
+}

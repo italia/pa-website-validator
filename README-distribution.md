@@ -28,14 +28,6 @@ PA Website Validator utilizza le seguenti tecnologie
 - [Node.js] - Javascript runtime
 - [npm] - Gestore di pacchetti
 - [Lighthouse] - Libreria principale estesa per l'esecuzione degli audit
-- [Typescript] - Linguaggio di programmazione fortemente tipizzato che si basa su JavaScript
-
-## Build
-Per l'installazione in locale partendo dalla repository effettuare prima la build del pacchetto:
-```sh
-cd pa-website-validator
-npm run distribution
-```
 
 ## Installazione
 
@@ -49,7 +41,7 @@ npm install -g pa-website-validator
 
 Installazione locale:
 ```sh
-cd pa-website-validator/distribution
+cd pa-website-validator
 npm install
 npm install -g ./
 ```
@@ -107,7 +99,6 @@ Mappa opzioni comando
 [lighthouse]: <https://www.npmjs.com/package/lighthouse>
 [node.js]: <http://nodejs.org>
 [npm]: <https://www.npmjs.com/>
-[typescript]: https://www.typescriptlang.org/
 [repository]: <https://github.com/italia/pa-website-validator/>
 
 [yargs-url]: <https://github.com/yargs/yargs>

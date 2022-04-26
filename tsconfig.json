@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "es6",
+    "moduleResolution": "node",
+    "sourceMap": false,
+    "outDir": "distribution",
+    "skipLibCheck": true
+  },
+  "lib": [
+    "esnext",
+    "ES2021.String",
+    "ESNext.String"
+  ],
+  "exclude": [
+    "node_modules",
+    "node_modules/lighthouse/types"
+  ]
+}

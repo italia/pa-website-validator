@@ -3,14 +3,18 @@
   "version": "1.0.0",
   "description": "TBD",
   "private": true,
-  "main": "./index.js",
-  "engines" : {
-    "node" : ">=16.0.0"
+  "main": "index.js",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "distribution": "tsc --project ./ && ./build-distribution.sh"
   },
   "bin": {
-    "pa-website-validator": "./index.js"
+    "pa-website-validator": "index.js"
   },
   "dependencies": {
+    "yargs": "^17.0.10",
     "boxen": "4.0",
     "chalk": "2.4",
     "cheerio": "^1.0.0-rc.10",
@@ -25,10 +29,12 @@
     "node-html-parser": "^5.3.3",
     "puppeteer": "^13.5.2",
     "selenium-webdriver": "^4.1.1",
-    "striptags": "^3.2.0",
-    "yargs": "13.2"
+    "striptags": "^3.2.0"
   },
   "bundledDependencies": [
     "lighthouse"
-  ]
+  ],
+  "devDependencies": {
+    "typescript": "^4.6.3"
+  }
 }

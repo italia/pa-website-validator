@@ -2,6 +2,8 @@
 
 const yargs = require("yargs")
 const { spawn } = require('child_process')
+
+// @ts-ignore
 const fs = require("fs")
 
 const crawelerCommand = yargs
@@ -26,7 +28,7 @@ fs.access(crawelerCommand.destination, function(error) {
     }
 })
 
-savePath = crawelerCommand.destination + '/' + crawelerCommand.report
+const savePath = crawelerCommand.destination + '/' + crawelerCommand.report
 
 const view = crawelerCommand.view === 'yes' ? '--view' : ''
 console.log('[INFO] Try to execute: ' + `node ${__dirname}/node_modules/lighthouse/lighthouse-cli/index.js --config-path=${configPath} --chrome-flags="--headless" --output json --output html --output-path ${savePath} ${crawelerCommand.website} ${view}`)
