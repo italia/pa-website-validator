@@ -34,18 +34,13 @@ PA Website Validator utilizza le seguenti tecnologie
 Per l'installazione in locale partendo dalla repository effettuare prima la build del pacchetto:
 ```sh
 cd pa-website-validator
+npm install
 npm run distribution
 ```
 
 ## Installazione
 
 PA Website Validator necessita [Node.js](https://nodejs.org/it/) v16+ (LTS), [npm] e [Google Chrome](https://www.google.com/chrome/).
-
-Installazione da npmjs:
-
-```sh
-npm install -g pa-website-validator
-```
 
 Installazione locale:
 ```sh

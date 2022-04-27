@@ -33,12 +33,6 @@ PA Website Validator utilizza le seguenti tecnologie
 
 PA Website Validator necessita [Node.js](https://nodejs.org/it/) v16+ (LTS), [npm] e [Google Chrome](https://www.google.com/chrome/).
 
-Installazione da npmjs:
-
-```sh
-npm install -g pa-website-validator
-```
-
 Installazione locale:
 ```sh
 cd pa-website-validator
