@@ -1,6 +1,6 @@
 'use strict'
 
-import { CheerioAPI } from "cheerio";
+import { CheerioAPI } from "cheerio"
 
 // @ts-ignore
 const Audit = require('lighthouse').Audit

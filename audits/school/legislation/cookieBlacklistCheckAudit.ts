@@ -1,7 +1,10 @@
 'use strict';
 
-import { Page, Protocol } from "puppeteer";
+import { Page, Protocol } from "puppeteer"
 import { LH } from "lighthouse"
+import crawlerTypes from "../../../types/crawler-types"
+import links = crawlerTypes.links
+import cookie = crawlerTypes.cookie
 
 // @ts-ignore
 const Audit = require('lighthouse').Audit
@@ -12,23 +15,14 @@ const fs = require('fs')
 // @ts-ignore
 const storageFolder = __dirname + '/../../../storage/school'
 
+// @ts-ignore
 const cookieBlackListFile = 'cookieBlackList.json'
+
+// @ts-ignore
 const cookieAllowedBtnNamesFile = 'allowedCookieBtnNames.json'
+
+// @ts-ignore
 const puppeteer = require('puppeteer')
-
-interface linksInterface {
-    text: string,
-    className: string
-}
-
-interface cookieInterface {
-    name: string,
-    value: string,
-    domain: string,
-    secure: string,
-    httpOnly: string,
-    isInBlacklist: boolean
-}
 
 // @ts-ignore
 class LoadAudit extends Audit {
@@ -46,9 +40,9 @@ class LoadAudit extends Audit {
     static async audit(artifacts: any) : Promise<{ score: number, details: LH.Audit.Details.Table }> {
         const url = artifacts.legislationCookieBlacklist
 
-        const browser = await puppeteer.launch();
-        const page : Page = await browser.newPage();
-        await page.goto(url, {waitUntil: ['load','domcontentloaded','networkidle0','networkidle2']});
+        const browser = await puppeteer.launch()
+        const page : Page = await browser.newPage()
+        await page.goto(url, {waitUntil: ['load','domcontentloaded','networkidle0','networkidle2']})
 
         const links = await getLinksFromHTMLPage(page)
 
@@ -91,7 +85,7 @@ class LoadAudit extends Audit {
 
 module.exports = LoadAudit
 
-async function getLinksFromHTMLPage(page: Page) : Promise<linksInterface[]> {
+async function getLinksFromHTMLPage(page: Page) : Promise<links[]> {
     return await Promise.all(
         (await page.$$('a,button')).map(async a => {
             // @ts-ignore
@@ -105,14 +99,14 @@ async function getLinksFromHTMLPage(page: Page) : Promise<linksInterface[]> {
     )
 }
 
-async function clickOnAcceptCookiesButtonIfExists(page: Page, links: linksInterface[]) {
+async function clickOnAcceptCookiesButtonIfExists(page: Page, links: links[]) {
     for (let link of links) {
         if (containsCookieWord(link.text) || link.className === '.ginger_btn.ginger-accept.ginger_btn_accept_all') {
             try {
                 let element = await page.$(link.className)
                 await element.click()
                 await sleep(750)
-                await page.reload({ waitUntil: ["networkidle0", "domcontentloaded"] });
+                await page.reload({ waitUntil: ["networkidle0", "domcontentloaded"] })
                 break
             } catch (e){
                 continue
@@ -136,7 +130,7 @@ function containsCookieWord(text: string) : boolean {
     return false
 }
 
-async function checkIfInBlacklist(cookies: Protocol.Network.Cookie[]) : Promise<{ score: number; cookies: cookieInterface[] }> {
+async function checkIfInBlacklist(cookies: Protocol.Network.Cookie[]) : Promise<{ score: number; cookies: cookie[] }> {
     const cookieBlackList = JSON.parse(fs.readFileSync(storageFolder + '/' + cookieBlackListFile));
     let result = {
         score: 1,
@@ -170,5 +164,5 @@ async function checkIfInBlacklist(cookies: Protocol.Network.Cookie[]) : Promise<
 }
 
 async function sleep (time: number) {
-    return new Promise((resolve) => setTimeout(resolve, time));
+    return new Promise((resolve) => setTimeout(resolve, time))
 }

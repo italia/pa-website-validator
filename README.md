@@ -34,7 +34,6 @@ PA Website Validator utilizza le seguenti tecnologie
 Per l'installazione in locale partendo dalla repository effettuare prima la build del pacchetto:
 ```sh
 cd pa-website-validator
-npm install
 npm run distribution
 ```
 

@@ -26,7 +26,7 @@ class LoadAudit extends Audit {
         }
     }
 
-    static async audit(artifacts) : Promise<{ score: number, details: LH.Audit.Details.Table }> {
+    static async audit(artifacts: any) : Promise<{ score: number, details: LH.Audit.Details.Table }> {
         const hostname = artifacts.securityDomainNameCheck
 
         let score = 0

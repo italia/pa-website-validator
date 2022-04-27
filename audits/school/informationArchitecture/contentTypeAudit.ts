@@ -1,6 +1,8 @@
-'use strict';
+'use strict'
 
 import { LH } from "lighthouse"
+import crawlerTypes from "../../../types/crawler-types"
+import servizi = crawlerTypes.servizi
 
 // @ts-ignore
 const Audit = require('lighthouse').Audit
@@ -18,12 +20,6 @@ const fs = require('fs')
 const storageFolder = __dirname + '/../../../storage/school'
 
 const contentTypeItemsFile = 'contentTypeItems.json'
-
-interface serviziInterface {
-    containsAllTheMandatoryItems: boolean,
-    rightOrder: boolean,
-    missingItems: []
-}
 
 // @ts-ignore
 class LoadAudit extends Audit {
@@ -58,7 +54,7 @@ class LoadAudit extends Audit {
             }
         }
 
-        let result: serviziInterface = {
+        let result: servizi = {
             containsAllTheMandatoryItems: false,
             rightOrder: false,
             missingItems: []
@@ -101,15 +97,15 @@ class LoadAudit extends Audit {
     }
 }
 
-module.exports = LoadAudit;
+module.exports = LoadAudit
 
-async function matchServizi(url: string) : Promise<serviziInterface> {
+async function matchServizi(url: string) : Promise<servizi> {
     const response = await got(url)
-	const $ = cheerio.load(response.body);
+	const $ = cheerio.load(response.body)
     const contentTypeItems = JSON.parse(fs.readFileSync(storageFolder + '/' + contentTypeItemsFile))
     const mandatoryItems: [] = contentTypeItems.Servizio
 
-    const divMainContent = $('.main-content');
+    const divMainContent = $('.main-content')
     const headingTags = $(divMainContent).find('h4, h6')
     let rightOrder = true
     let found = -1
@@ -130,7 +126,7 @@ async function matchServizi(url: string) : Promise<serviziInterface> {
     const arrayDiff = difference(mandatoryItems, elementsFound)
 
     return {
-        containsAllTheMandatoryItems: arrayDiff.length > 0 ? false : true,
+        containsAllTheMandatoryItems: arrayDiff.length <= 0,
         rightOrder,
         missingItems: arrayDiff
     }
@@ -154,8 +150,8 @@ function selectType(url: string) : string | null {
     return contentType
 }
 
-function difference(array1: [], array2: []) : [] {
-    let result: [] = []
+function difference(array1: string [], array2: string []) : string [] {
+    let result: string [] = []
 
     for (let a of array1) {
         if (!array2.includes(a)) {

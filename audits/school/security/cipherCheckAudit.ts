@@ -1,6 +1,8 @@
 'use strict'
 
 import { LH } from "lighthouse"
+import crawlerTypes from "../../../types/crawler-types"
+import cipherInfo = crawlerTypes.cipherInfo
 
 // @ts-ignore
 const Audit = require('lighthouse').Audit
@@ -15,11 +17,6 @@ const fs = require('fs')
 const storageFolder = __dirname + '/../../../storage/school'
 
 const allowedCiphersFile = 'allowedCiphers.json'
-
-interface cipherInfoInterface {
-    version: string,
-    standardName: string
-}
 
 // @ts-ignore
 class LoadAudit extends Audit {
@@ -61,7 +58,7 @@ class LoadAudit extends Audit {
             }
         ]
 
-        const cipherInfo: cipherInfoInterface = {
+        const cipherInfo: cipherInfo = {
             version: await getCipherVersion(hostname),
             standardName: await getCipherStandardName(hostname)
         }
@@ -93,7 +90,7 @@ class LoadAudit extends Audit {
     }
 }
 
-module.exports = LoadAudit;
+module.exports = LoadAudit
 
 // @ts-ignore
 async function getCipherVersion(hostname: string) : Promise<string> {

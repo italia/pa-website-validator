@@ -1,7 +1,10 @@
-'use strict';
+'use strict'
 
 import { LH } from "lighthouse"
-import {Cheerio, CheerioAPI, Element} from "cheerio";
+import { Cheerio, CheerioAPI, Element } from "cheerio"
+import crawlerTypes from "../../../types/crawler-types"
+import primaryModelMenu = crawlerTypes.primaryModelMenu
+import secondaryModelMenu = crawlerTypes.secondaryModelMenu
 
 // @ts-ignore
 const Audit = require('lighthouse').Audit
@@ -17,21 +20,6 @@ const storageFolder = __dirname + '/../../../storage/school'
 
 const cheerio = require('cheerio')
 const menuItemsFile = 'menuItems.json'
-
-interface primaryModelMenuInterface {
-    passed : boolean,
-    rightOrder: boolean,
-    items: Array<Element>,
-    rawText : string [],
-    missingItems: []
-}
-
-interface secondaryModelMenuInterface {
-    passed : boolean,
-    items : Array<Element>,
-    rawText : string [],
-    missingItems: []
-}
 
 // @ts-ignore
 class LoadAudit extends Audit {
@@ -56,7 +44,7 @@ class LoadAudit extends Audit {
         let headerMenuPassed = false
 
         const headerUl = $('header').find('ul')
-        let listMatchPrimaryMenuModelObj : primaryModelMenuInterface = {
+        let listMatchPrimaryMenuModelObj : primaryModelMenu = {
             'passed' : false,
             'rightOrder': false,
             'items' : [],
@@ -124,7 +112,7 @@ class LoadAudit extends Audit {
 
 module.exports = LoadAudit;
 
-function listMatchPrimaryMenuModel(list: Cheerio<Element>, $: CheerioAPI) : primaryModelMenuInterface {
+function listMatchPrimaryMenuModel(list: Cheerio<Element>, $: CheerioAPI) : primaryModelMenu {
     const menuItems = JSON.parse(fs.readFileSync(storageFolder + '/' + menuItemsFile))
     const primaryMenuItems = menuItems.primaryMenuItems
 
@@ -153,7 +141,7 @@ function listMatchPrimaryMenuModel(list: Cheerio<Element>, $: CheerioAPI) : prim
             'rightOrder': rightOrder,
             'items' : passedItems,
             'rawText' : passedRawText,
-            'missingItems': difference(primaryMenuItems,passedRawText)
+            'missingItems': difference(primaryMenuItems, passedRawText)
         }
     }
 
@@ -163,7 +151,7 @@ function listMatchPrimaryMenuModel(list: Cheerio<Element>, $: CheerioAPI) : prim
             'rightOrder': rightOrder,
             'items' : passedItems,
             'rawText' : passedRawText,
-            'missingItems': difference(primaryMenuItems,passedRawText)
+            'missingItems': difference(primaryMenuItems, passedRawText)
         }
     }
 
@@ -172,15 +160,16 @@ function listMatchPrimaryMenuModel(list: Cheerio<Element>, $: CheerioAPI) : prim
       'rightOrder': rightOrder,
       'items' : passedItems,
       'rawText' : passedRawText,
-      'missingItems': difference(primaryMenuItems,passedRawText)
+      'missingItems': difference(primaryMenuItems, passedRawText)
     }
 }
 
-function listMatchSecondaryMenuModel(item: Array<Element>, list: Cheerio<Element>, $: CheerioAPI) : secondaryModelMenuInterface {
+function listMatchSecondaryMenuModel(item: Element, list: Cheerio<Element>, $: CheerioAPI) : secondaryModelMenu {
     const menuItems = JSON.parse(fs.readFileSync(storageFolder + '/' + menuItemsFile))
     const secondaryMenuItems = menuItems.secondaryMenuItems
 
     const h4Text = $(item).text().trim()
+
     let count = 0
     let passedItems = []
     let passedRawText = []
@@ -192,12 +181,12 @@ function listMatchSecondaryMenuModel(item: Array<Element>, list: Cheerio<Element
         }
     }
 
-    if (Boolean(secondaryMenuItems[h4Text]) && count >= (secondaryMenuItems[h4Text].length/2)) {
+    if (Boolean(secondaryMenuItems[h4Text]) && count >= (secondaryMenuItems[h4Text].length / 2)) {
         return {
             'passed' : true,
             'items' : passedItems,
             'rawText' : passedRawText,
-            'missingItems': difference(secondaryMenuItems[h4Text],passedRawText)
+            'missingItems': difference(secondaryMenuItems[h4Text], passedRawText)
         }
     }
 
@@ -205,12 +194,12 @@ function listMatchSecondaryMenuModel(item: Array<Element>, list: Cheerio<Element
         'passed' : false,
         'items' : passedItems,
         'rawText' : passedRawText,
-        'missingItems': difference(secondaryMenuItems[h4Text],passedRawText)
+        'missingItems': difference(secondaryMenuItems[h4Text], passedRawText)
     }
 }
 
-function difference(array1: [], array2: string []) : [] {
-    let result: [] = []
+function difference(array1: string [], array2: string []) : string [] {
+    let result: string [] = []
 
     for (let a of array1) {
         if (!array2.includes(a)) {

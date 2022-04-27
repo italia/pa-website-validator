@@ -1,6 +1,8 @@
 'use strict';
 
 import { LH } from "lighthouse"
+import crawlerTypes from "../../../types/crawler-types"
+import cipher = crawlerTypes.cipher
 
 // @ts-ignore
 const Audit = require('lighthouse').Audit
@@ -9,10 +11,6 @@ const Audit = require('lighthouse').Audit
 const https = require('https')
 
 const allowedTlsVersions = ['TLSv1.2', 'TLSv1.3']
-
-interface cipher {
-    version: string;
-}
 
 // @ts-ignore
 class LoadAudit extends Audit {
