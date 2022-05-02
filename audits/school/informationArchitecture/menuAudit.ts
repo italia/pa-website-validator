@@ -72,25 +72,13 @@ class LoadAudit extends Audit {
             }
         }
 
-        let headerSubmenuPassed = true
-        let headerFirstLevelVoicesWithIncorrectSecondLevelVoices = []
-        for (let i = 0; i < headerFirstLevelPassedItems.length; i++) {
-            const listLi : Cheerio<Element> = $(headerFirstLevelPassedItems[i]).parent().find('ul li')
-
-            if (!listMatchSecondaryMenuModel(headerFirstLevelPassedItems[i], listLi, $).passed) {
-                headerFirstLevelVoicesWithIncorrectSecondLevelVoices.push($(headerFirstLevelPassedItems[i]).text().trim())
-                headerSubmenuPassed = false
-            }
-        }
-
-        if (headerMenuPassed && headerSubmenuPassed) {
+        if (headerMenuPassed) {
             score = 1
         }
 
         const headings = [
-            { key: 'header_missing_first_level_voices', itemType: 'text', text: "Voci di primo livello mancanti nell'header" },
+            { key: 'header_missing_first_level_voices', itemType: 'text', text: "Voci di primo livello mancanti (o diverse) nell'header" },
             { key: 'header_first_level_voices_order', itemType: 'text', text: "Ordine delle voci di primo livello nell'header" },
-            { key: 'header_first_level_voices_with_incorrect_second_level_voices', itemType: 'text', text: "Voci di primo livello che non contengono una corretta quantità di voci di secondo livello (la quantità deve corrispondere almeno al 50% delle voci di secondo livello presenti nel modello di riferimento)" },
             { key: 'model_link', itemType: 'url', text: "Link al modello di riferimento" },
         ]
 
@@ -98,7 +86,6 @@ class LoadAudit extends Audit {
             {
                 header_missing_first_level_voices: headerFirstLevelMissingItems.length === 0 ? 'nessuna' : headerFirstLevelMissingItems.join(', '),
                 header_first_level_voices_order : headerFirstLevelOrder ? 'rispettato' : 'non rispettato',
-                header_first_level_voices_with_incorrect_second_level_voices: headerFirstLevelVoicesWithIncorrectSecondLevelVoices.length === 0 ? 'nessuna' : headerFirstLevelVoicesWithIncorrectSecondLevelVoices.join(', '),
                 model_link: 'https://docs.google.com/drawings/d/1qzpCZrTc1x7IxdQ9WEw_wO0qn-mUk6mIRtSgJlmIz7g/edit'
             }
         ]
@@ -110,7 +97,7 @@ class LoadAudit extends Audit {
     }
 }
 
-module.exports = LoadAudit;
+module.exports = LoadAudit
 
 function listMatchPrimaryMenuModel(list: Cheerio<Element>, $: CheerioAPI) : primaryModelMenu {
     const menuItems = JSON.parse(fs.readFileSync(storageFolder + '/' + menuItemsFile))
@@ -161,40 +148,6 @@ function listMatchPrimaryMenuModel(list: Cheerio<Element>, $: CheerioAPI) : prim
       'items' : passedItems,
       'rawText' : passedRawText,
       'missingItems': difference(primaryMenuItems, passedRawText)
-    }
-}
-
-function listMatchSecondaryMenuModel(item: Element, list: Cheerio<Element>, $: CheerioAPI) : secondaryModelMenu {
-    const menuItems = JSON.parse(fs.readFileSync(storageFolder + '/' + menuItemsFile))
-    const secondaryMenuItems = menuItems.secondaryMenuItems
-
-    const h4Text = $(item).text().trim()
-
-    let count = 0
-    let passedItems = []
-    let passedRawText = []
-    for (let i = 0; i < list.length; i++){
-        if (Boolean(secondaryMenuItems[h4Text]) && secondaryMenuItems[h4Text].includes($(list[i]).text().trim())) {
-            count++
-            passedItems.push(list[i])
-            passedRawText.push($(list[i]).text().trim())
-        }
-    }
-
-    if (Boolean(secondaryMenuItems[h4Text]) && count >= (secondaryMenuItems[h4Text].length / 2)) {
-        return {
-            'passed' : true,
-            'items' : passedItems,
-            'rawText' : passedRawText,
-            'missingItems': difference(secondaryMenuItems[h4Text], passedRawText)
-        }
-    }
-
-    return {
-        'passed' : false,
-        'items' : passedItems,
-        'rawText' : passedRawText,
-        'missingItems': difference(secondaryMenuItems[h4Text], passedRawText)
     }
 }
 
