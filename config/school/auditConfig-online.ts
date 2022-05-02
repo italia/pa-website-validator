@@ -17,6 +17,7 @@ module.exports = {
                 __dirname + '/../../gatherers' + '/school/ux-ui-consistency/bootstrapCheckGatherer.js',
                 __dirname + '/../../gatherers' + '/school/ux-ui-consistency/bootstrapItaliaCheckGatherer.js',
                 __dirname + '/../../gatherers' + '/school/ux-ui-consistency/themeCheckGatherer.js',
+                __dirname + '/../../gatherers' + '/school/ux-ui-consistency/themeVersionCheckGatherer.js',
 
                 __dirname + '/../../gatherers' + '/school/legislation/cookieAmountCheckGatherer.js',
                 __dirname + '/../../gatherers' + '/school/legislation/cookieBlacklistCheckGatherer.js',
@@ -40,6 +41,7 @@ module.exports = {
         __dirname + '/../../audits' + '/school/ux-ui-consistency/bootstrapCheckAudit.js',
         __dirname + '/../../audits' + '/school/ux-ui-consistency/bootstrapItaliaCheckAudit.js',
         __dirname + '/../../audits' + '/school/ux-ui-consistency/themeCheckAudit.js',
+        __dirname + '/../../audits' + '/school/ux-ui-consistency/themeVersionCheckAudit.js',
 
         __dirname + '/../../audits' + '/school/legislation/cookieAmountCheckAudit.js',
         __dirname + '/../../audits' + '/school/legislation/cookieBlacklistCheckAudit.js',
@@ -69,7 +71,8 @@ module.exports = {
                 { id: 'school-ux-ui-consistency-fonts-check', weight: 10 },
                 { id: 'school-ux-ui-consistency-bootstrap-check', weight: 10 },
                 { id: 'school-ux-ui-consistency-bootstrap-italia-check', weight: 10 },
-                { id: 'school-ux-ui-consistency-theme-check', weight: 10 }
+                { id: 'school-ux-ui-consistency-theme-check', weight: 10 },
+                { id: 'school-ux-ui-consistency-theme-version-check', weight: 10 }
             ],
         },
         legislation: {
