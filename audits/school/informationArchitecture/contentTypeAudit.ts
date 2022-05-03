@@ -3,6 +3,7 @@
 import { LH } from "lighthouse"
 import crawlerTypes from "../../../types/crawler-types"
 import servizi = crawlerTypes.servizi
+import _ from "lodash"
 
 // @ts-ignore
 const Audit = require('lighthouse').Audit
@@ -123,7 +124,7 @@ async function matchServizi(url: string) : Promise<servizi> {
         }
     }
 
-    const arrayDiff = difference(mandatoryItems, elementsFound)
+    const arrayDiff = _.difference(mandatoryItems, elementsFound)
 
     return {
         containsAllTheMandatoryItems: arrayDiff.length <= 0,
@@ -148,16 +149,4 @@ function selectType(url: string) : string | null {
     }
 
     return contentType
-}
-
-function difference(array1: string [], array2: string []) : string [] {
-    let result: string [] = []
-
-    for (let a of array1) {
-        if (!array2.includes(a)) {
-            result.push(a)
-        }
-    }
-
-    return result
 }

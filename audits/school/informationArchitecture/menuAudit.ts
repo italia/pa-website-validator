@@ -5,6 +5,7 @@ import { Cheerio, CheerioAPI, Element } from "cheerio"
 import crawlerTypes from "../../../types/crawler-types"
 import primaryModelMenu = crawlerTypes.primaryModelMenu
 import secondaryModelMenu = crawlerTypes.secondaryModelMenu
+import _ from "lodash"
 
 // @ts-ignore
 const Audit = require('lighthouse').Audit
@@ -128,7 +129,7 @@ function listMatchPrimaryMenuModel(list: Cheerio<Element>, $: CheerioAPI) : prim
             'rightOrder': rightOrder,
             'items' : passedItems,
             'rawText' : passedRawText,
-            'missingItems': difference(primaryMenuItems, passedRawText)
+            'missingItems': _.difference(primaryMenuItems, passedRawText)
         }
     }
 
@@ -138,7 +139,7 @@ function listMatchPrimaryMenuModel(list: Cheerio<Element>, $: CheerioAPI) : prim
             'rightOrder': rightOrder,
             'items' : passedItems,
             'rawText' : passedRawText,
-            'missingItems': difference(primaryMenuItems, passedRawText)
+            'missingItems': _.difference(primaryMenuItems, passedRawText)
         }
     }
 
@@ -147,18 +148,6 @@ function listMatchPrimaryMenuModel(list: Cheerio<Element>, $: CheerioAPI) : prim
       'rightOrder': rightOrder,
       'items' : passedItems,
       'rawText' : passedRawText,
-      'missingItems': difference(primaryMenuItems, passedRawText)
+      'missingItems': _.difference(primaryMenuItems, passedRawText)
     }
-}
-
-function difference(array1: string [], array2: string []) : string [] {
-    let result: string [] = []
-
-    for (let a of array1) {
-        if (!array2.includes(a)) {
-            result.push(a)
-        }
-    }
-
-    return result
 }
