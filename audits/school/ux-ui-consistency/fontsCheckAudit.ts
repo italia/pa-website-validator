@@ -37,10 +37,6 @@ class LoadAudit extends Audit {
         ]
 
         const allowedFonts = JSON.parse(fs.readFileSync(storageFolder + '/' + allowedFontsFile));
-        let allowedFontsPrint = ''
-        allowedFonts.fonts.forEach(font => {
-            allowedFontsPrint += font.replace('"','')
-        })
 
         let cleanFontsSplitted = []
         fontsSplitted.forEach(font => {
@@ -55,7 +51,7 @@ class LoadAudit extends Audit {
 
         return {
             score: score,
-            details: Audit.makeTableDetails(headings, [{font_in_page: fonts.replaceAll('"', ''), allowed_fonts: allowedFontsPrint}])
+            details: Audit.makeTableDetails(headings, [{font_in_page: fonts.replaceAll('"', ''), allowed_fonts: allowedFonts.fonts.join(', ')}])
         }
     }
 }
