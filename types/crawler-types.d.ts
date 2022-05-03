@@ -44,6 +44,11 @@ declare module crawlerTypes {
         httpOnly: string,
         isInBlacklist: boolean
     }
+
+    interface orderResult {
+        numberOfElementsNotInSequence: number,
+        elementsNotInSequence: string []
+    }
 }
 
 export default crawlerTypes

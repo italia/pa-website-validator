@@ -79,15 +79,13 @@ Mappa opzioni comando
 | - -detination | Folder dove salvare la reportistica | ✅ |
 | - -report | Nome da assegnare al report | ✅  | |
 | - -website | Url sito web da analizzare | ✅  | |
-| - -scope | Scope di esecuzione |  ❌  |   "local" "online" "local-information-architecture" "online-information-architecture" | "online" |
+| - -scope | Scope di esecuzione |  ❌  |   "local" "online" | "online" |
 | - -view | Visualizzazione istantanea report | ❌  |  "Yes", "No" |  "No" |
 
 > `--type` indica quale tipologia di sito web viene passato da ispezionare (comunale o scolastico).
 > `--scope` indica la tipologia di audit da eseguire:
 - `local` se il tool è lanciato su un sito web hostato in locale: esegue solo alcuni audit specifici.
 - `online` esegue tutti gli audit disponibili.
-- `local-information-architecture` esegue solo gli audit dello scope local per una scheda di servizio, è da usare se l'url passato è quello di una scheda di servizio.
-- `online-information-architecture` esegue tutti gli audit dello scope online per una scheda di servizio, è da usare se l'url passato è quello di una scheda di servizio.
 > `--view` se impostato su `Yes` alla fine dell'auditing lancia un'istanza di chrome che mostra automaticamente la reportistica generata.
 
 [lighthouse]: <https://www.npmjs.com/package/lighthouse>

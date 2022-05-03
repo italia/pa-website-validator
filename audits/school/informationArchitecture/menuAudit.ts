@@ -1,10 +1,8 @@
 'use strict'
 
 import { LH } from "lighthouse"
-import { Cheerio, CheerioAPI, Element } from "cheerio"
+import { CheerioAPI } from "cheerio"
 import crawlerTypes from "../../../types/crawler-types"
-import primaryModelMenu = crawlerTypes.primaryModelMenu
-import secondaryModelMenu = crawlerTypes.secondaryModelMenu
 
 // @ts-ignore
 const Audit = require('lighthouse').Audit

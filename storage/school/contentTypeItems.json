@@ -8,5 +8,10 @@
         "Tempi e scadenze",
         "Contatti",
         "Ulteriori informazioni"
+    ],
+    "Header" : [
+        "Titolo",
+        "Descrizione",
+        "Tipologia servizio"
     ]
 }

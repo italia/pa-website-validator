@@ -2,7 +2,6 @@
 
 import { LH } from "lighthouse"
 import {CheerioAPI} from "cheerio";
-import {index} from "cheerio/lib/api/traversing";
 
 // @ts-ignore
 const Audit = require('lighthouse').Audit
@@ -15,6 +14,9 @@ const cheerio = require('cheerio')
 
 // @ts-ignore
 const fs = require('fs')
+
+// @ts-ignore
+const utils = require('../../../utils/utils')
 
 const storageFolder = __dirname + '/../../../storage/school'
 const menuItemsFile = 'menuItems.json'
@@ -67,7 +69,7 @@ class LoadAudit extends Audit {
         }
 
         let correctOrder = true
-        const correctOrderResult = await checkOrder(secondaryMenuScuolaItems, elementsFound)
+        const correctOrderResult = await utils.checkOrder(secondaryMenuScuolaItems, elementsFound)
 
         if (correctOrderResult.numberOfElementsNotInSequence > 0) {
             correctOrder = false
@@ -99,53 +101,3 @@ class LoadAudit extends Audit {
 }
 
 module.exports = LoadAudit
-
-async function checkOrder(mandatoryElements: string [], foundElements: string []) : Promise<{ numberOfElementsNotInSequence: number, elementsNotInSequence: string []}> {
-    let newMandatoryElements = []
-    let newFoundElements = []
-    let numberOfElementsNotInSequence : number = 0
-    let elementsNotInSequence : string [] = []
-
-    for (let mandatoryElement of mandatoryElements) {
-        if (foundElements.includes(mandatoryElement)) {
-            newMandatoryElements.push(mandatoryElement)
-        }
-    }
-
-    for (let foundElement of foundElements) {
-        if (newMandatoryElements.includes(foundElement)) {
-            newFoundElements.push(foundElement)
-        }
-    }
-
-    for (let i = 1; i < newFoundElements.length; i++) {
-        let indexInMandatory = newMandatoryElements.indexOf(newFoundElements[i])
-        let isInSequence = true
-
-        if (indexInMandatory != (newMandatoryElements.length - 1)) {
-            if (i === (newFoundElements.length - 1)) {
-                isInSequence = false
-            } else if (newFoundElements[i + 1] != newMandatoryElements[indexInMandatory + 1]){
-                isInSequence = false
-            }
-        }
-
-        if (indexInMandatory != 0) {
-            if (i === 0) {
-                isInSequence = false
-            } else if (newFoundElements[i - 1] != newMandatoryElements[indexInMandatory - 1]) {
-                isInSequence = false
-            }
-        }
-
-        if (!isInSequence) {
-            numberOfElementsNotInSequence++
-            elementsNotInSequence.push(newFoundElements[i])
-        }
-    }
-
-    return {
-        numberOfElementsNotInSequence: numberOfElementsNotInSequence,
-        elementsNotInSequence: elementsNotInSequence
-    }
-}

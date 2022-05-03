@@ -12,7 +12,7 @@ const crawelerCommand = yargs
     .option("destination", { describe: "Path where to save the report", type: "string", demandOption: true })
     .option("report", { describe: "Name of the result report", type: "string", demandOption: true })
     .option("website", { describe: "Website where to run the crawler", type: "string", demandOption: true })
-    .option("scope", { describe: "Execution scope", type: "string", demandOption: true , default: "online", choices: ['local', 'online', 'local-information-architecture', 'online-information-architecture']})
+    .option("scope", { describe: "Execution scope", type: "string", demandOption: true , default: "online", choices: ['local', 'online']})
     .option("view", { describe: "Autolaunch reports in browser", type: "string", demandOption: true , default: "no", choices: ['yes', 'no']})
     .argv;
 

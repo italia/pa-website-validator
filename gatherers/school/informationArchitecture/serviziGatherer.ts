@@ -6,13 +6,13 @@ import LoadData = gatherer.LoadData
 
 const { Gatherer } = require('lighthouse')
 
-class contentTypeStructureMatchModel extends Gatherer {
+class serviziStructure extends Gatherer {
     afterPass(options: PassContext, loadData: LoadData) {
-       const expression = `window.location.href`
+       const expression = `window.location.origin`
        const driver = options.driver
 
        return driver.evaluateAsync(expression)
     }
 }
 
-module.exports = contentTypeStructureMatchModel
+module.exports = serviziStructure
