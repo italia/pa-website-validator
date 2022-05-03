@@ -37,8 +37,8 @@ class LoadAudit extends Audit {
         const headings = [
             { key: 'missing_voices', itemType: 'text', text: "Voci di secondo livello per 'Scuola' mancanti o con nome errato" },
             { key: 'missing_voices_percentage', itemType: 'text', text: "Percentuale voci mancanti" },
-            { key: 'correct_order', itemType: 'text', text: "Sequenzialità delle voci obbligatorie rispettato" },
-            { key: 'elements_not_in_correct_order', itemType: 'text', text: "Voci che non rispettano la sequenzialità" },
+            { key: 'correct_order', itemType: 'text', text: "Sequenzialità delle voci obbligatorie (tra quelle presenti) rispettato" },
+            { key: 'elements_not_in_correct_order', itemType: 'text', text: "Voci (tra quelle presenti) obbligatorie che non rispettano la sequenzialità" },
             { key: 'model_link', itemType: 'url', text: "Link al modello di riferimento" },
         ]
 
@@ -118,7 +118,7 @@ async function checkOrder(mandatoryElements: string [], foundElements: string []
         }
     }
 
-    for (let i = 0; i < newFoundElements.length; i++) {
+    for (let i = 1; i < newFoundElements.length; i++) {
         let indexInMandatory = newMandatoryElements.indexOf(newFoundElements[i])
         let isInSequence = true
 
