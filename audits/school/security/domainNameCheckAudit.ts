@@ -31,7 +31,10 @@ class LoadAudit extends Audit {
 
         let score = 0
 
-        const headings = [ { key: 'domain_name', itemType: 'text', text: "Dominio corrente" } ]
+        const headings = [
+            { key: 'domain_name', itemType: 'text', text: "Dominio corrente" },
+            { key: 'domain_rule', itemType: 'text', text: "Regola: deve contenere" }
+        ]
 
         const allowedDomains = JSON.parse(fs.readFileSync(storageFolder + '/' + allowedDomainsFile));
 
@@ -42,7 +45,7 @@ class LoadAudit extends Audit {
             }
         }
 
-        let items = [ { domain_name: hostname } ]
+        const items = [ { domain_name: hostname, domain_rule: '.it' } ]
 
         return {
             score: score,
