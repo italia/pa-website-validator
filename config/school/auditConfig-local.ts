@@ -16,7 +16,8 @@ module.exports = {
                 __dirname + '/../../gatherers' + '/school/legislation/privacyGatherer.js',
 
                 __dirname + '/../../gatherers' + '/school/informationArchitecture/menuGatherer.js',
-                __dirname + '/../../gatherers' + '/school/informationArchitecture/menuScuolaSecondLevelGatherer.js'
+                __dirname + '/../../gatherers' + '/school/informationArchitecture/menuScuolaSecondLevelGatherer.js',
+                __dirname + '/../../gatherers' + '/school/informationArchitecture/controlledVocabulariesGatherer.js'
             ],
         },
     ],
@@ -32,7 +33,8 @@ module.exports = {
         __dirname + '/../../audits' + '/school/legislation/privacyAudit.js',
 
         __dirname + '/../../audits' + '/school/informationArchitecture/menuAudit.js',
-        __dirname + '/../../audits' + '/school/informationArchitecture/menuScuolaSecondLevelAudit.js'
+        __dirname + '/../../audits' + '/school/informationArchitecture/menuScuolaSecondLevelAudit.js',
+        __dirname + '/../../audits' + '/school/informationArchitecture/controlledVocabulariesAudit.js'
     ],
 
     categories: {
@@ -60,7 +62,8 @@ module.exports = {
             description: 'Lista degli audit di architettura delle informazioni eseguiti',
             auditRefs: [
                 { id: 'school-menu-structure-match-model', weight: 10 },
-                { id: 'school-menu-scuola-second-level-structure-match-model', weight: 10 }
+                { id: 'school-menu-scuola-second-level-structure-match-model', weight: 10 },
+                { id: 'school-controlled-vocabularies', weight: 10 }
             ],
         }
     },

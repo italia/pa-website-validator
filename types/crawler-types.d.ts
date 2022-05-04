@@ -47,6 +47,11 @@ declare module crawlerTypes {
         numberOfElementsNotInSequence: number,
         elementsNotInSequence: string []
     }
+
+    interface vocabularyResult {
+        allArgumentsInVocabulary: boolean,
+        elementNotIncluded: string []
+    }
 }
 
 export default crawlerTypes

@@ -2,7 +2,6 @@
 
 import { LH } from "lighthouse"
 import { CheerioAPI } from "cheerio"
-import crawlerTypes from "../../../types/crawler-types"
 
 // @ts-ignore
 const Audit = require('lighthouse').Audit
@@ -28,8 +27,8 @@ class LoadAudit extends Audit {
             failureTitle: 'Il menu non rispetta le indicazioni fornite dal modello: non sono presenti le voci obbligatorie oppure sono in ordine scorretto prima delle non obbligatorie',
             scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
             description: 'Test per verificare il rispetto delle regole per la costruzione del menu principale',
-            requiredArtifacts: ['menuStructureMatchModel'],
-        };
+            requiredArtifacts: ['menuStructureMatchModel']
+        }
     }
 
     static async audit(artifacts: any) : Promise<{ score: number, details: LH.Audit.Details.Table }> {

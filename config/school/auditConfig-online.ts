@@ -26,7 +26,9 @@ module.exports = {
 
                 __dirname + '/../../gatherers' + '/school/informationArchitecture/menuGatherer.js',
                 __dirname + '/../../gatherers' + '/school/informationArchitecture/menuScuolaSecondLevelGatherer.js',
-                __dirname + '/../../gatherers' + '/school/informationArchitecture/serviziGatherer.js'
+                __dirname + '/../../gatherers' + '/school/informationArchitecture/serviziGatherer.js',
+                __dirname + '/../../gatherers' + '/school/informationArchitecture/controlledVocabulariesGatherer.js'
+
             ],
         },
     ],
@@ -52,7 +54,8 @@ module.exports = {
 
         __dirname + '/../../audits' + '/school/informationArchitecture/menuAudit.js',
         __dirname + '/../../audits' + '/school/informationArchitecture/menuScuolaSecondLevelAudit.js',
-        __dirname + '/../../audits' + '/school/informationArchitecture/serviziAudit.js'
+        __dirname + '/../../audits' + '/school/informationArchitecture/serviziAudit.js',
+        __dirname + '/../../audits' + '/school/informationArchitecture/controlledVocabulariesAudit.js'
     ],
 
     categories: {
@@ -95,7 +98,8 @@ module.exports = {
             auditRefs: [
                 { id: 'school-menu-structure-match-model', weight: 10 },
                 { id: 'school-menu-scuola-second-level-structure-match-model', weight: 10 },
-                { id: 'school-servizi-structure-match-model', weight: 10 }
+                { id: 'school-servizi-structure-match-model', weight: 10 },
+                { id: 'school-controlled-vocabularies', weight: 10 }
             ],
         }
     },
