@@ -44,14 +44,13 @@ class LoadAudit extends Audit {
             { key: 'model_link', itemType: 'url', text: "Link al modello di riferimento" },
         ]
 
+        let score = 0
+
         const response = await got(url)
 	    const $ : CheerioAPI = cheerio.load(response.body)
 
         const menuItems = JSON.parse(fs.readFileSync(storageFolder + '/' + menuItemsFile))
         const secondaryMenuScuolaItems = menuItems.secondaryMenuItems.Scuola
-
-        let score
-        let missingVoicesPercentage: any = 0
 
         const headerUl = $('#menu-la-scuola').find('li')
         let numberOfMandatoryVoicesPresent = 0
@@ -64,13 +63,10 @@ class LoadAudit extends Audit {
             elementsFound.push($(element).text().trim())
         }
 
-        if (numberOfMandatoryVoicesPresent > 0) {
-            missingVoicesPercentage = (((secondaryMenuScuolaItems.length - numberOfMandatoryVoicesPresent) / secondaryMenuScuolaItems.length) * 100).toFixed(0)
-        }
+        const missingVoicesPercentage: any = (((secondaryMenuScuolaItems.length - numberOfMandatoryVoicesPresent) / secondaryMenuScuolaItems.length) * 100).toFixed(0)
 
         let correctOrder = true
         const correctOrderResult = await utils.checkOrder(secondaryMenuScuolaItems, elementsFound)
-
         if (correctOrderResult.numberOfElementsNotInSequence > 0) {
             correctOrder = false
         }
@@ -79,7 +75,7 @@ class LoadAudit extends Audit {
             score = 0
         } else if (missingVoicesPercentage <= 30 && !correctOrder) {
             score = 0.5
-        } else {
+        } else if (missingVoicesPercentage <= 30 && correctOrder) {
             score = 1
         }
 

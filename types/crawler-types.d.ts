@@ -37,12 +37,10 @@ declare module crawlerTypes {
     }
 
     interface cookie {
-        name: string,
-        value: string,
-        domain: string,
-        secure: string,
-        httpOnly: string,
-        isInBlacklist: boolean
+        cookie_name: string,
+        cookie_value: string,
+        cookie_domain: string,
+        allowed_cookie: string
     }
 
     interface orderResult {

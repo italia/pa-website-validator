@@ -20,7 +20,7 @@ module.exports = {
                 __dirname + '/../../gatherers' + '/school/ux-ui-consistency/themeVersionCheckGatherer.js',
 
                 __dirname + '/../../gatherers' + '/school/legislation/cookieAmountCheckGatherer.js',
-                __dirname + '/../../gatherers' + '/school/legislation/cookieBlacklistCheckGatherer.js',
+                __dirname + '/../../gatherers' + '/school/legislation/cookieDomainCheckGatherer.js',
                 __dirname + '/../../gatherers' + '/school/legislation/accessibilityDeclarationIsPresentGatherer.js',
                 __dirname + '/../../gatherers' + '/school/legislation/privacyGatherer.js',
 
@@ -46,7 +46,7 @@ module.exports = {
         __dirname + '/../../audits' + '/school/ux-ui-consistency/themeVersionCheckAudit.js',
 
         __dirname + '/../../audits' + '/school/legislation/cookieAmountCheckAudit.js',
-        __dirname + '/../../audits' + '/school/legislation/cookieBlacklistCheckAudit.js',
+        __dirname + '/../../audits' + '/school/legislation/cookieDomainCheckAudit.js',
         __dirname + '/../../audits' + '/school/legislation/accessibilityDeclarationIsPresentAudit.js',
         __dirname + '/../../audits' + '/school/legislation/privacyAudit.js',
 
@@ -84,7 +84,7 @@ module.exports = {
             description: 'Lista degli audit di normativa eseguiti',
             auditRefs: [
                 { id: 'school-legislation-cookie-amount-check', weight: 10 },
-                { id: 'school-legislation-cookie-blacklist-check', weight: 10 },
+                { id: 'school-legislation-cookie-domain-check', weight: 10 },
                 { id: 'school-legislation-accessibility-declaration-is-present', weight: 10 },
                 { id: 'school-legislation-privacy-is-present', weight: 10 }
             ],

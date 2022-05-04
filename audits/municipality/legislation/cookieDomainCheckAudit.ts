@@ -16,9 +16,6 @@ const fs = require('fs')
 const storageFolder = __dirname + '/../../../storage/municipality'
 
 // @ts-ignore
-const cookieBlackListFile = 'cookieBlackList.json'
-
-// @ts-ignore
 const cookieAllowedBtnNamesFile = 'allowedCookieBtnNames.json'
 
 // @ts-ignore
@@ -28,20 +25,29 @@ const puppeteer = require('puppeteer')
 class LoadAudit extends Audit {
     static get meta() {
         return {
-            id: 'municipality-legislation-cookie-blacklist-check',
-            title: 'Cookie blacklist',
-            failureTitle: 'Alcuni Cookie sono in una blacklist',
+            id: 'municipality-legislation-cookie-domain-check',
+            title: 'Domini dei cookie',
+            failureTitle: 'Alcuni Cookie hanno un dominio diverso da quello del sito',
             scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
-            description: 'Test per controllare se ci sono Cookie in blacklist',
-            requiredArtifacts: ['legislationCookieBlacklist']
+            description: 'Test per controllare se ci sono Cookie con domini non consentiti',
+            requiredArtifacts: ['legislationCookieDomain']
         }
     }
 
     static async  audit(artifacts: any) : Promise<{ score: number, details: LH.Audit.Details.Table }> {
-        const url = artifacts.legislationCookieBlacklist
+        const url = artifacts.legislationCookieDomain
+
+        const headings = [
+            { key: 'cookie_name', itemType: 'text', text: "Nome del Cookie" },
+            { key: 'cookie_value', itemType: 'text', text: "Valore del Cookie" },
+            { key: 'cookie_domain', itemType: 'text', text: "Dominio del cookie" },
+            { key: 'allowed_cookie', itemType: 'text', text: "Cookie consentito" }
+        ]
+
+        let items = []
+        let score = 1
 
         const browser = await puppeteer.launch()
-
         const page : Page = await browser.newPage()
         await page.goto(url, {waitUntil: ['load','domcontentloaded','networkidle0','networkidle2']})
 
@@ -50,32 +56,15 @@ class LoadAudit extends Audit {
         await clickOnAcceptCookiesButtonIfExists(page, links)
 
         let cookies : Protocol.Network.Cookie[] = await page.cookies()
-
         await browser.close()
 
-        const result = await checkIfInBlacklist(cookies)
-        const score = result.score
+        const resultCookies = await checkCookieDomain(url, cookies)
+        for (let resultCookie of resultCookies) {
+            if (resultCookie.allowed_cookie === 'No') {
+                score = 0
+            }
 
-        const headings = [
-            { key: 'cookie_name', itemType: 'text', text: "Nome del Cookie" },
-            { key: 'cookie_value', itemType: 'text', text: "Valore del Cookie" },
-            { key: 'cookie_domain', itemType: 'text', text: "Dominio del cookie" },
-            { key: 'cookie_secure', itemType: 'text', text: "Flag secure" },
-            { key: 'cookie_http_only', itemType: 'text', text: "Flag http only" },
-            { key: 'cookie_blacklist', itemType: 'text', text: "Cookie in blacklist" }
-        ]
-
-        let items = []
-
-        for (let cookieObj of result.cookies) {
-            items.push({
-                cookie_name: cookieObj.name,
-                cookie_value: cookieObj.value,
-                cookie_domain: cookieObj.domain,
-                cookie_secure: cookieObj.secure,
-                cookie_http_only: cookieObj.httpOnly,
-                cookie_blacklist: cookieObj.isInBlacklist,
-            })
+            items.push(resultCookie)
         }
 
         return {
@@ -132,39 +121,27 @@ function containsCookieWord(text: string) : boolean {
     return false
 }
 
-async function checkIfInBlacklist(cookies: Protocol.Network.Cookie[]) : Promise<{ score: number; cookies: cookie[] }> {
-    const cookieBlackList = JSON.parse(fs.readFileSync(storageFolder + '/' + cookieBlackListFile))
-    let result = {
-        score: 1,
-        cookies: []
-    }
-
-    for (let cookie of cookies) {
-        if (cookieBlackList.names.includes(cookie.name) || cookieBlackList.domains.includes(cookie.domain)) {
-            result.score = 0
-            result.cookies.push({
-                name: cookie.name,
-                value: cookie.value,
-                domain: cookie.domain,
-                secure: cookie.secure,
-                httpOnly: cookie.httpOnly,
-                isInBlacklist: true
-            })
-        } else {
-            result.cookies.push({
-                name: cookie.name,
-                value: cookie.value,
-                domain: cookie.domain,
-                secure: cookie.secure,
-                httpOnly: cookie.httpOnly,
-                isInBlacklist: false
-            })
-        }
-    }
-
-    return result
-}
-
 async function sleep (time: number) {
     return new Promise((resolve) => setTimeout(resolve, time))
+}
+
+async function checkCookieDomain (url : string, cookies: Protocol.Network.Cookie[]) : Promise<cookie[]> {
+    let returnValue = []
+
+    for (let cookie of cookies) {
+        let cookieValues = {
+            cookie_name: cookie.name,
+            cookie_value: cookie.value,
+            cookie_domain: cookie.domain,
+            allowed_cookie: 'No'
+        }
+
+        if (url.includes(cookie.domain)) {
+            cookieValues.allowed_cookie = 'Sì'
+        }
+
+        returnValue.push(cookieValues)
+    }
+
+    return returnValue
 }

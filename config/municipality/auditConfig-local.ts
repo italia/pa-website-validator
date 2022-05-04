@@ -9,8 +9,6 @@ module.exports = {
                 __dirname + '/../../gatherers' + '/municipality/ux-ui-consistency/fontsCheckGatherer.js',
                 __dirname + '/../../gatherers' + '/municipality/ux-ui-consistency/bootstrapCheckGatherer.js',
 
-                __dirname + '/../../gatherers' + '/municipality/legislation/cookieAmountCheckGatherer.js',
-                __dirname + '/../../gatherers' + '/municipality/legislation/cookieBlacklistCheckGatherer.js',
                 __dirname + '/../../gatherers' + '/municipality/legislation/accessibilityDeclarationIsPresentGatherer.js',
                 __dirname + '/../../gatherers' + '/municipality/legislation/privacyGatherer.js',
 
@@ -23,8 +21,6 @@ module.exports = {
         __dirname + '/../../audits' + '/municipality/ux-ui-consistency/fontsCheckAudit.js',
         __dirname + '/../../audits' + '/municipality/ux-ui-consistency/bootstrapCheckAudit.js',
 
-        __dirname + '/../../audits' + '/municipality/legislation/cookieAmountCheckAudit.js',
-        __dirname + '/../../audits' + '/municipality/legislation/cookieBlacklistCheckAudit.js',
         __dirname + '/../../audits' + '/municipality/legislation/accessibilityDeclarationIsPresentAudit.js',
         __dirname + '/../../audits' + '/municipality/legislation/privacyAudit.js',
 
@@ -44,8 +40,6 @@ module.exports = {
             title: 'Test di normativa',
             description: 'Lista degli audit di normativa eseguiti',
             auditRefs: [
-                { id: 'municipality-legislation-cookie-amount-check', weight: 10 },
-                { id: 'municipality-legislation-cookie-blacklist-check', weight: 10 },
                 { id: 'municipality-legislation-accessibility-declaration-is-present', weight: 10 },
                 { id: 'municipality-legislation-privacy-is-present', weight: 10 }
             ],

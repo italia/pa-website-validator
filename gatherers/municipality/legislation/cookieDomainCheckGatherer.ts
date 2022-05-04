@@ -6,7 +6,7 @@ import LoadData = gatherer.LoadData
 
 const { Gatherer } = require('lighthouse')
 
-class legislationCookieBlacklist extends Gatherer {
+class legislationCookieDomain extends Gatherer {
     afterPass(options: PassContext, loadData: LoadData) {
         const expression = `window.location.origin`
         const driver = options.driver
@@ -15,4 +15,4 @@ class legislationCookieBlacklist extends Gatherer {
     }
 }
 
-module.exports = legislationCookieBlacklist
+module.exports = legislationCookieDomain
