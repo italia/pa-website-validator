@@ -9,7 +9,7 @@ const Audit = require('lighthouse').Audit
 class LoadAudit extends Audit {
     static get meta() {
         return {
-            id: 'school-security-https-is-present',
+            id: 'common-security-https-is-present',
             title: 'Presenza protocollo HTTPS',
             failureTitle: 'Il protocollo HTTPS non è presente',
             scoreDisplayMode: Audit.SCORING_MODES.BINARY,

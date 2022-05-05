@@ -14,7 +14,7 @@ const https = require('https')
 import * as fs from "fs"
 
 // @ts-ignore
-const storageFolder = __dirname + '/../../../storage/school'
+const storageFolder = __dirname + '/../../../storage/common'
 
 // @ts-ignore
 const allowedCiphersFile = 'allowedCiphers.json'
@@ -23,7 +23,7 @@ const allowedCiphersFile = 'allowedCiphers.json'
 class LoadAudit extends Audit {
     static get meta() {
         return {
-            id: 'school-security-cipher-check',
+            id: 'common-security-cipher-check',
             title: 'Versione della suite di cifratura',
             failureTitle: 'La versione della suite di cifratura non è valida',
             scoreDisplayMode: Audit.SCORING_MODES.BINARY,
@@ -46,18 +46,12 @@ class LoadAudit extends Audit {
             { key: 'allowed_tls13_versions', itemType: 'text', text: "Versione suite accettate per TLSv1.3" }
         ]
 
-        let allowedTls12 = ''
-        allowedCiphersItems.tls12.forEach(item => allowedTls12+=item+' | ')
-
-        let allowedTls13 = ''
-        allowedCiphersItems.tls13.forEach(item => allowedTls13+=item+' | ')
-
         let items = [
             {
                 tls_version: '',
                 cipher_version: '',
-                allowed_tls12_versions: allowedTls12,
-                allowed_tls13_versions: allowedTls13
+                allowed_tls12_versions: allowedCiphersItems.tls12.join(' | '),
+                allowed_tls13_versions: allowedCiphersItems.tls13.join(' | ')
             }
         ]
 

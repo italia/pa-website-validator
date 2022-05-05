@@ -1,3 +1,6 @@
+import { schoolGatherersFolder } from "../configFolderingConstants"
+import { schoolAuditsFolder } from "../configFolderingConstants"
+
 module.exports = {
     extends: 'lighthouse:default',
     settings: {
@@ -6,35 +9,35 @@ module.exports = {
     passes: [
         {
             gatherers: [
-                __dirname + '/../../gatherers' + '/school/ux-ui-consistency/fontsCheckGatherer.js',
-                __dirname + '/../../gatherers' + '/school/ux-ui-consistency/bootstrapCheckGatherer.js',
-                __dirname + '/../../gatherers' + '/school/ux-ui-consistency/themeCheckGatherer.js',
-                __dirname + '/../../gatherers' + '/school/ux-ui-consistency/themeVersionCheckGatherer.js',
-                __dirname + '/../../gatherers' + '/school/ux-ui-consistency/bootstrapItaliaCheckGatherer.js',
+                schoolGatherersFolder + '/ux-ui-consistency/fontsCheckGatherer.js',
+                schoolGatherersFolder + '/ux-ui-consistency/bootstrapCheckGatherer.js',
+                schoolGatherersFolder + '/ux-ui-consistency/themeCheckGatherer.js',
+                schoolGatherersFolder + '/ux-ui-consistency/themeVersionCheckGatherer.js',
+                schoolGatherersFolder + '/ux-ui-consistency/bootstrapItaliaCheckGatherer.js',
 
-                __dirname + '/../../gatherers' + '/school/legislation/accessibilityDeclarationIsPresentGatherer.js',
-                __dirname + '/../../gatherers' + '/school/legislation/privacyGatherer.js',
+                schoolGatherersFolder + '/legislation/accessibilityDeclarationIsPresentGatherer.js',
+                schoolGatherersFolder + '/legislation/privacyGatherer.js',
 
-                __dirname + '/../../gatherers' + '/school/informationArchitecture/menuGatherer.js',
-                __dirname + '/../../gatherers' + '/school/informationArchitecture/menuScuolaSecondLevelGatherer.js',
-                __dirname + '/../../gatherers' + '/school/informationArchitecture/controlledVocabulariesGatherer.js'
+                schoolGatherersFolder + '/informationArchitecture/menuGatherer.js',
+                schoolGatherersFolder + '/informationArchitecture/menuScuolaSecondLevelGatherer.js',
+                schoolGatherersFolder + '/informationArchitecture/controlledVocabulariesGatherer.js'
             ],
         },
     ],
 
     audits: [
-        __dirname + '/../../audits' + '/school/ux-ui-consistency/fontsCheckAudit.js',
-        __dirname + '/../../audits' + '/school/ux-ui-consistency/bootstrapCheckAudit.js',
-        __dirname + '/../../audits' + '/school/ux-ui-consistency/themeCheckAudit.js',
-        __dirname + '/../../audits' + '/school/ux-ui-consistency/themeVersionCheckAudit.js',
-        __dirname + '/../../audits' + '/school/ux-ui-consistency/bootstrapItaliaCheckAudit.js',
+        schoolAuditsFolder + '/ux-ui-consistency/fontsCheckAudit.js',
+        schoolAuditsFolder + '/ux-ui-consistency/bootstrapCheckAudit.js',
+        schoolAuditsFolder + '/ux-ui-consistency/themeCheckAudit.js',
+        schoolAuditsFolder + '/ux-ui-consistency/themeVersionCheckAudit.js',
+        schoolAuditsFolder + '/ux-ui-consistency/bootstrapItaliaCheckAudit.js',
 
-        __dirname + '/../../audits' + '/school/legislation/accessibilityDeclarationIsPresentAudit.js',
-        __dirname + '/../../audits' + '/school/legislation/privacyAudit.js',
+        schoolAuditsFolder + '/legislation/accessibilityDeclarationIsPresentAudit.js',
+        schoolAuditsFolder + '/legislation/privacyAudit.js',
 
-        __dirname + '/../../audits' + '/school/informationArchitecture/menuAudit.js',
-        __dirname + '/../../audits' + '/school/informationArchitecture/menuScuolaSecondLevelAudit.js',
-        __dirname + '/../../audits' + '/school/informationArchitecture/controlledVocabulariesAudit.js'
+        schoolAuditsFolder + '/informationArchitecture/menuAudit.js',
+        schoolAuditsFolder + '/informationArchitecture/menuScuolaSecondLevelAudit.js',
+        schoolAuditsFolder + '/informationArchitecture/controlledVocabulariesAudit.js'
     ],
 
     categories: {

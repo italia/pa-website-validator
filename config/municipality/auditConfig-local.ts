@@ -1,3 +1,6 @@
+import { municipalityGatherersFolder } from "../configFolderingConstants"
+import { municipalityAuditsFolder } from "../configFolderingConstants"
+
 module.exports = {
     extends: 'lighthouse:default',
     settings: {
@@ -6,25 +9,25 @@ module.exports = {
     passes: [
         {
             gatherers: [
-                __dirname + '/../../gatherers' + '/municipality/ux-ui-consistency/fontsCheckGatherer.js',
-                __dirname + '/../../gatherers' + '/municipality/ux-ui-consistency/bootstrapCheckGatherer.js',
+                municipalityGatherersFolder + '/ux-ui-consistency/fontsCheckGatherer.js',
+                municipalityGatherersFolder + '/ux-ui-consistency/bootstrapCheckGatherer.js',
 
-                __dirname + '/../../gatherers' + '/municipality/legislation/accessibilityDeclarationIsPresentGatherer.js',
-                __dirname + '/../../gatherers' + '/municipality/legislation/privacyGatherer.js',
+                municipalityGatherersFolder + '/legislation/accessibilityDeclarationIsPresentGatherer.js',
+                municipalityGatherersFolder + '/legislation/privacyGatherer.js',
 
-                __dirname + '/../../gatherers' + '/municipality/informationArchitecture/menuGatherer.js'
+                municipalityGatherersFolder + '/informationArchitecture/menuGatherer.js'
             ],
         },
     ],
 
     audits: [
-        __dirname + '/../../audits' + '/municipality/ux-ui-consistency/fontsCheckAudit.js',
-        __dirname + '/../../audits' + '/municipality/ux-ui-consistency/bootstrapCheckAudit.js',
+        municipalityAuditsFolder + '/ux-ui-consistency/fontsCheckAudit.js',
+        municipalityAuditsFolder + '/ux-ui-consistency/bootstrapCheckAudit.js',
 
-        __dirname + '/../../audits' + '/municipality/legislation/accessibilityDeclarationIsPresentAudit.js',
-        __dirname + '/../../audits' + '/municipality/legislation/privacyAudit.js',
+        municipalityAuditsFolder + '/legislation/accessibilityDeclarationIsPresentAudit.js',
+        municipalityAuditsFolder + '/legislation/privacyAudit.js',
 
-        __dirname + '/../../audits' + '/municipality/informationArchitecture/menuAudit.js'
+        municipalityAuditsFolder + '/informationArchitecture/menuAudit.js'
     ],
 
     categories: {

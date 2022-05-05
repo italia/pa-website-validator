@@ -11,7 +11,7 @@ import * as sslCertificate from "get-ssl-certificate"
 class LoadAudit extends Audit {
     static get meta() {
         return {
-            id: 'school-security-certificate-expiration',
+            id: 'common-security-certificate-expiration',
             title: 'Scadenza del certificato',
             failureTitle: 'Il certificato è scaduto',
             scoreDisplayMode: Audit.SCORING_MODES.BINARY,

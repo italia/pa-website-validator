@@ -12,7 +12,7 @@ const Audit = require('lighthouse').Audit
 import * as fs from "fs"
 
 // @ts-ignore
-const storageFolder = __dirname + '/../../../storage/school'
+const storageFolder = __dirname + '/../../../storage/common'
 
 // @ts-ignore
 import puppeteer from "puppeteer"
@@ -27,7 +27,7 @@ const COOKIES_MIN_AMOUNT = 1
 class LoadAudit extends Audit {
     static get meta() {
         return {
-            id: 'school-legislation-cookie-amount-check',
+            id: 'common-legislation-cookie-amount-check',
             title: 'Quantità di Cookie',
             failureTitle: 'La quantità di Cookie non è appropriata',
             scoreDisplayMode: Audit.SCORING_MODES.BINARY,

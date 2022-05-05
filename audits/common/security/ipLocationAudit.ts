@@ -18,7 +18,7 @@ import * as dns from "dns"
 import * as util from "util"
 
 // @ts-ignore
-const storageFolder = __dirname + '/../../../storage/school'
+const storageFolder = __dirname + '/../../../storage/common'
 
 // @ts-ignore
 const allowedCountriesFiles = 'allowedCountries.json'
@@ -27,7 +27,7 @@ const allowedCountriesFiles = 'allowedCountries.json'
 class LoadAudit extends Audit {
     static get meta() {
         return {
-            id: 'school-security-ip-location',
+            id: 'common-security-ip-location',
             title: 'Localizzazione indirizzo IP',
             failureTitle: "L'indirizzo IP non rientra in uno stato membro dell'UE",
             scoreDisplayMode: Audit.SCORING_MODES.BINARY,

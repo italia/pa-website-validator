@@ -16,7 +16,7 @@ const allowedTlsVersions = ['TLSv1.2', 'TLSv1.3']
 class LoadAudit extends Audit {
     static get meta() {
         return {
-            id: 'school-security-tls-check',
+            id: 'common-security-tls-check',
             title: 'Versione del TLS',
             failureTitle: 'La versione del TLS non è valida, sono valide: TLSv1.2 e TLSv1.3',
             scoreDisplayMode: Audit.SCORING_MODES.BINARY,

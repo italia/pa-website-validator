@@ -1,3 +1,9 @@
+import { municipalityGatherersFolder } from "../configFolderingConstants"
+import { municipalityAuditsFolder } from "../configFolderingConstants"
+
+import { commonGatherersFolder } from "../configFolderingConstants"
+import { commonAuditsFolder } from "../configFolderingConstants"
+
 module.exports = {
     extends: 'lighthouse:default',
     settings: {
@@ -6,43 +12,47 @@ module.exports = {
     passes: [
         {
             gatherers: [
-                __dirname + '/../../gatherers' + '/municipality/security/certificateExpirationGatherer.js',
-                __dirname + '/../../gatherers' + '/municipality/security/httpsIsPresentGatherer.js',
-                __dirname + '/../../gatherers' + '/municipality/security/tlsCheckGatherer.js',
-                __dirname + '/../../gatherers' + '/municipality/security/ipLocationGatherer.js',
-                __dirname + '/../../gatherers' + '/municipality/security/cipherCheckGatherer.js',
-                __dirname + '/../../gatherers' + '/municipality/security/domainNameCheckGatherer.js',
+                municipalityGatherersFolder + '/security/domainNameCheckGatherer.js',
 
-                __dirname + '/../../gatherers' + '/municipality/ux-ui-consistency/fontsCheckGatherer.js',
-                __dirname + '/../../gatherers' + '/municipality/ux-ui-consistency/bootstrapCheckGatherer.js',
+                municipalityGatherersFolder + '/ux-ui-consistency/fontsCheckGatherer.js',
+                municipalityGatherersFolder + '/ux-ui-consistency/bootstrapCheckGatherer.js',
 
-                __dirname + '/../../gatherers' + '/municipality/legislation/cookieAmountCheckGatherer.js',
-                __dirname + '/../../gatherers' + '/municipality/legislation/cookieDomainCheckGatherer.js',
-                __dirname + '/../../gatherers' + '/municipality/legislation/accessibilityDeclarationIsPresentGatherer.js',
-                __dirname + '/../../gatherers' + '/municipality/legislation/privacyGatherer.js',
+                municipalityGatherersFolder + '/legislation/accessibilityDeclarationIsPresentGatherer.js',
+                municipalityGatherersFolder + '/legislation/privacyGatherer.js',
 
-                __dirname + '/../../gatherers' + '/municipality/informationArchitecture/menuGatherer.js'
+                municipalityGatherersFolder + '/informationArchitecture/menuGatherer.js',
+
+                commonGatherersFolder + '/legislation/cookieAmountCheckGatherer.js',
+                commonGatherersFolder + '/legislation/cookieDomainCheckGatherer.js',
+
+                commonGatherersFolder + '/security/certificateExpirationGatherer.js',
+                commonGatherersFolder + '/security/httpsIsPresentGatherer.js',
+                commonGatherersFolder + '/security/tlsCheckGatherer.js',
+                commonGatherersFolder + '/security/ipLocationGatherer.js',
+                commonGatherersFolder + '/security/cipherCheckGatherer.js'
             ],
         },
     ],
 
     audits: [
-        __dirname + '/../../audits' + '/municipality/security/certificateExpirationAudit.js',
-        __dirname + '/../../audits' + '/municipality/security/httpsIsPresentAudit.js',
-        __dirname + '/../../audits' + '/municipality/security/tlsCheckAudit.js',
-        __dirname + '/../../audits' + '/municipality/security/ipLocationAudit.js',
-        __dirname + '/../../audits' + '/municipality/security/cipherCheckAudit.js',
-        __dirname + '/../../audits' + '/municipality/security/domainNameCheckAudit.js',
+        municipalityAuditsFolder + '/security/domainNameCheckAudit.js',
 
-        __dirname + '/../../audits' + '/municipality/ux-ui-consistency/fontsCheckAudit.js',
-        __dirname + '/../../audits' + '/municipality/ux-ui-consistency/bootstrapCheckAudit.js',
+        municipalityAuditsFolder + '/ux-ui-consistency/fontsCheckAudit.js',
+        municipalityAuditsFolder + '/ux-ui-consistency/bootstrapCheckAudit.js',
 
-        __dirname + '/../../audits' + '/municipality/legislation/cookieAmountCheckAudit.js',
-        __dirname + '/../../audits' + '/municipality/legislation/cookieDomainCheckAudit.js',
-        __dirname + '/../../audits' + '/municipality/legislation/accessibilityDeclarationIsPresentAudit.js',
-        __dirname + '/../../audits' + '/municipality/legislation/privacyAudit.js',
+        municipalityAuditsFolder + '/legislation/accessibilityDeclarationIsPresentAudit.js',
+        municipalityAuditsFolder + '/legislation/privacyAudit.js',
 
-        __dirname + '/../../audits' + '/municipality/informationArchitecture/menuAudit.js'
+        municipalityAuditsFolder + '/informationArchitecture/menuAudit.js',
+
+        commonAuditsFolder + '/legislation/cookieAmountCheckAudit.js',
+        commonAuditsFolder + '/legislation/cookieDomainCheckAudit.js',
+
+        commonAuditsFolder + '/security/certificateExpirationAudit.js',
+        commonAuditsFolder + '/security/httpsIsPresentAudit.js',
+        commonAuditsFolder + '/security/tlsCheckAudit.js',
+        commonAuditsFolder + '/security/ipLocationAudit.js',
+        commonAuditsFolder + '/security/cipherCheckAudit.js'
     ],
 
     categories: {
@@ -50,12 +60,13 @@ module.exports = {
             title: 'Test di sicurezza',
             description: 'Lista degli audit di sicurezza eseguiti',
             auditRefs: [
-                { id: 'municipality-security-https-is-present', weight: 10 },
-                { id: 'municipality-security-certificate-expiration', weight: 10 },
-                { id: 'municipality-security-tls-check', weight: 10 },
-                { id: 'municipality-security-ip-location', weight: 10 },
-                { id: 'municipality-security-cipher-check', weight: 10 },
-                { id: 'municipality-security-domain-name-check', weight: 10 }
+                { id: 'municipality-security-domain-name-check', weight: 10 },
+
+                { id: 'common-security-https-is-present', weight: 10 },
+                { id: 'common-security-certificate-expiration', weight: 10 },
+                { id: 'common-security-tls-check', weight: 10 },
+                { id: 'common-security-ip-location', weight: 10 },
+                { id: 'common-security-cipher-check', weight: 10 }
             ],
         },
         uxuiconsistency: {
@@ -70,10 +81,11 @@ module.exports = {
             title: 'Test di normativa',
             description: 'Lista degli audit di normativa eseguiti',
             auditRefs: [
-                { id: 'municipality-legislation-cookie-amount-check', weight: 10 },
-                { id: 'municipality-legislation-cookie-domain-check', weight: 10 },
                 { id: 'municipality-legislation-accessibility-declaration-is-present', weight: 10 },
-                { id: 'municipality-legislation-privacy-is-present', weight: 10 }
+                { id: 'municipality-legislation-privacy-is-present', weight: 10 },
+
+                { id: 'common-legislation-cookie-amount-check', weight: 10 },
+                { id: 'common-legislation-cookie-domain-check', weight: 10 }
             ],
         },
         informationArchitecture: {

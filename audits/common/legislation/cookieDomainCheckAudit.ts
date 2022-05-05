@@ -13,7 +13,7 @@ const Audit = require('lighthouse').Audit
 import * as fs from "fs"
 
 // @ts-ignore
-const storageFolder = __dirname + '/../../../storage/school'
+const storageFolder = __dirname + '/../../../storage/common'
 
 // @ts-ignore
 const cookieAllowedBtnNamesFile = 'allowedCookieBtnNames.json'
@@ -25,7 +25,7 @@ import puppeteer from "puppeteer"
 class LoadAudit extends Audit {
     static get meta() {
         return {
-            id: 'school-legislation-cookie-domain-check',
+            id: 'common-legislation-cookie-domain-check',
             title: 'Domini dei cookie',
             failureTitle: 'Alcuni Cookie hanno un dominio diverso da quello del sito',
             scoreDisplayMode: Audit.SCORING_MODES.BINARY,

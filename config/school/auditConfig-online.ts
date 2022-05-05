@@ -1,3 +1,9 @@
+import { schoolGatherersFolder } from "../configFolderingConstants"
+import { schoolAuditsFolder } from "../configFolderingConstants"
+
+import { commonGatherersFolder } from "../configFolderingConstants"
+import { commonAuditsFolder } from "../configFolderingConstants"
+
 module.exports = {
     extends: 'lighthouse:default',
     settings: {
@@ -6,56 +12,60 @@ module.exports = {
     passes: [
         {
             gatherers: [
-                __dirname + '/../../gatherers' + '/school/security/certificateExpirationGatherer.js',
-                __dirname + '/../../gatherers' + '/school/security/httpsIsPresentGatherer.js',
-                __dirname + '/../../gatherers' + '/school/security/tlsCheckGatherer.js',
-                __dirname + '/../../gatherers' + '/school/security/ipLocationGatherer.js',
-                __dirname + '/../../gatherers' + '/school/security/cipherCheckGatherer.js',
-                __dirname + '/../../gatherers' + '/school/security/domainNameCheckGatherer.js',
+                schoolGatherersFolder + '/security/domainNameCheckGatherer.js',
 
-                __dirname + '/../../gatherers' + '/school/ux-ui-consistency/fontsCheckGatherer.js',
-                __dirname + '/../../gatherers' + '/school/ux-ui-consistency/bootstrapCheckGatherer.js',
-                __dirname + '/../../gatherers' + '/school/ux-ui-consistency/bootstrapItaliaCheckGatherer.js',
-                __dirname + '/../../gatherers' + '/school/ux-ui-consistency/themeCheckGatherer.js',
-                __dirname + '/../../gatherers' + '/school/ux-ui-consistency/themeVersionCheckGatherer.js',
+                schoolGatherersFolder + '/ux-ui-consistency/fontsCheckGatherer.js',
+                schoolGatherersFolder + '/ux-ui-consistency/bootstrapCheckGatherer.js',
+                schoolGatherersFolder + '/ux-ui-consistency/bootstrapItaliaCheckGatherer.js',
+                schoolGatherersFolder + '/ux-ui-consistency/themeCheckGatherer.js',
+                schoolGatherersFolder + '/ux-ui-consistency/themeVersionCheckGatherer.js',
 
-                __dirname + '/../../gatherers' + '/school/legislation/cookieAmountCheckGatherer.js',
-                __dirname + '/../../gatherers' + '/school/legislation/cookieDomainCheckGatherer.js',
-                __dirname + '/../../gatherers' + '/school/legislation/accessibilityDeclarationIsPresentGatherer.js',
-                __dirname + '/../../gatherers' + '/school/legislation/privacyGatherer.js',
+                schoolGatherersFolder + '/legislation/accessibilityDeclarationIsPresentGatherer.js',
+                schoolGatherersFolder + '/legislation/privacyGatherer.js',
 
-                __dirname + '/../../gatherers' + '/school/informationArchitecture/menuGatherer.js',
-                __dirname + '/../../gatherers' + '/school/informationArchitecture/menuScuolaSecondLevelGatherer.js',
-                __dirname + '/../../gatherers' + '/school/informationArchitecture/serviziGatherer.js',
-                __dirname + '/../../gatherers' + '/school/informationArchitecture/controlledVocabulariesGatherer.js'
+                schoolGatherersFolder + '/informationArchitecture/menuGatherer.js',
+                schoolGatherersFolder + '/informationArchitecture/menuScuolaSecondLevelGatherer.js',
+                schoolGatherersFolder + '/informationArchitecture/serviziGatherer.js',
+                schoolGatherersFolder + '/informationArchitecture/controlledVocabulariesGatherer.js',
+
+                commonGatherersFolder + '/legislation/cookieAmountCheckGatherer.js',
+                commonGatherersFolder + '/legislation/cookieDomainCheckGatherer.js',
+
+                commonGatherersFolder + '/security/certificateExpirationGatherer.js',
+                commonGatherersFolder + '/security/httpsIsPresentGatherer.js',
+                commonGatherersFolder + '/security/tlsCheckGatherer.js',
+                commonGatherersFolder + '/security/ipLocationGatherer.js',
+                commonGatherersFolder + '/security/cipherCheckGatherer.js'
 
             ],
         },
     ],
 
     audits: [
-        __dirname + '/../../audits' + '/school/security/certificateExpirationAudit.js',
-        __dirname + '/../../audits' + '/school/security/httpsIsPresentAudit.js',
-        __dirname + '/../../audits' + '/school/security/tlsCheckAudit.js',
-        __dirname + '/../../audits' + '/school/security/ipLocationAudit.js',
-        __dirname + '/../../audits' + '/school/security/cipherCheckAudit.js',
-        __dirname + '/../../audits' + '/school/security/domainNameCheckAudit.js',
+        schoolAuditsFolder + '/security/domainNameCheckAudit.js',
 
-        __dirname + '/../../audits' + '/school/ux-ui-consistency/fontsCheckAudit.js',
-        __dirname + '/../../audits' + '/school/ux-ui-consistency/bootstrapCheckAudit.js',
-        __dirname + '/../../audits' + '/school/ux-ui-consistency/bootstrapItaliaCheckAudit.js',
-        __dirname + '/../../audits' + '/school/ux-ui-consistency/themeCheckAudit.js',
-        __dirname + '/../../audits' + '/school/ux-ui-consistency/themeVersionCheckAudit.js',
+        schoolAuditsFolder + '/ux-ui-consistency/fontsCheckAudit.js',
+        schoolAuditsFolder + '/ux-ui-consistency/bootstrapCheckAudit.js',
+        schoolAuditsFolder + '/ux-ui-consistency/bootstrapItaliaCheckAudit.js',
+        schoolAuditsFolder + '/ux-ui-consistency/themeCheckAudit.js',
+        schoolAuditsFolder + '/ux-ui-consistency/themeVersionCheckAudit.js',
 
-        __dirname + '/../../audits' + '/school/legislation/cookieAmountCheckAudit.js',
-        __dirname + '/../../audits' + '/school/legislation/cookieDomainCheckAudit.js',
-        __dirname + '/../../audits' + '/school/legislation/accessibilityDeclarationIsPresentAudit.js',
-        __dirname + '/../../audits' + '/school/legislation/privacyAudit.js',
+        schoolAuditsFolder + '/legislation/accessibilityDeclarationIsPresentAudit.js',
+        schoolAuditsFolder + '/legislation/privacyAudit.js',
 
-        __dirname + '/../../audits' + '/school/informationArchitecture/menuAudit.js',
-        __dirname + '/../../audits' + '/school/informationArchitecture/menuScuolaSecondLevelAudit.js',
-        __dirname + '/../../audits' + '/school/informationArchitecture/serviziAudit.js',
-        __dirname + '/../../audits' + '/school/informationArchitecture/controlledVocabulariesAudit.js'
+        schoolAuditsFolder + '/informationArchitecture/menuAudit.js',
+        schoolAuditsFolder + '/informationArchitecture/menuScuolaSecondLevelAudit.js',
+        schoolAuditsFolder + '/informationArchitecture/serviziAudit.js',
+        schoolAuditsFolder + '/informationArchitecture/controlledVocabulariesAudit.js',
+
+        commonAuditsFolder + '/legislation/cookieAmountCheckAudit.js',
+        commonAuditsFolder + '/legislation/cookieDomainCheckAudit.js',
+
+        commonAuditsFolder + '/security/certificateExpirationAudit.js',
+        commonAuditsFolder + '/security/httpsIsPresentAudit.js',
+        commonAuditsFolder + '/security/tlsCheckAudit.js',
+        commonAuditsFolder + '/security/ipLocationAudit.js',
+        commonAuditsFolder + '/security/cipherCheckAudit.js'
     ],
 
     categories: {
@@ -63,12 +73,13 @@ module.exports = {
             title: 'Test di sicurezza',
             description: 'Lista degli audit di sicurezza eseguiti',
             auditRefs: [
-                { id: 'school-security-https-is-present', weight: 10 },
-                { id: 'school-security-certificate-expiration', weight: 10 },
-                { id: 'school-security-tls-check', weight: 10 },
-                { id: 'school-security-ip-location', weight: 10 },
-                { id: 'school-security-cipher-check', weight: 10 },
-                { id: 'school-security-domain-name-check', weight: 10 }
+                { id: 'school-security-domain-name-check', weight: 10 },
+
+                { id: 'common-security-https-is-present', weight: 10 },
+                { id: 'common-security-certificate-expiration', weight: 10 },
+                { id: 'common-security-tls-check', weight: 10 },
+                { id: 'common-security-ip-location', weight: 10 },
+                { id: 'common-security-cipher-check', weight: 10 }
             ],
         },
         uxuiconsistency: {
@@ -86,10 +97,11 @@ module.exports = {
             title: 'Test di normativa',
             description: 'Lista degli audit di normativa eseguiti',
             auditRefs: [
-                { id: 'school-legislation-cookie-amount-check', weight: 10 },
-                { id: 'school-legislation-cookie-domain-check', weight: 10 },
                 { id: 'school-legislation-accessibility-declaration-is-present', weight: 10 },
-                { id: 'school-legislation-privacy-is-present', weight: 10 }
+                { id: 'school-legislation-privacy-is-present', weight: 10 },
+
+                { id: 'common-legislation-cookie-amount-check', weight: 10 },
+                { id: 'common-legislation-cookie-domain-check', weight: 10 }
             ],
         },
         informationArchitecture: {
