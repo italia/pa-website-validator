@@ -20,7 +20,7 @@ class LoadAudit extends Audit {
             id: 'school-ux-ui-consistency-theme-version-check',
             title: 'Versione tema wordpress',
             failureTitle: 'La versione del tema wordpress non è allineata alla più recente',
-            scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
+            scoreDisplayMode: Audit.SCORING_MODES.BINARY,
             description: "Test per verificare la corretta versione del tema",
             requiredArtifacts: ['themeVersionCheck']
         }

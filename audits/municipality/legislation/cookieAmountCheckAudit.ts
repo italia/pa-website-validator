@@ -30,7 +30,7 @@ class LoadAudit extends Audit {
             id: 'municipality-legislation-cookie-amount-check',
             title: 'Quantità di Cookie',
             failureTitle: 'La quantità di Cookie non è appropriata',
-            scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
+            scoreDisplayMode: Audit.SCORING_MODES.BINARY,
             description: 'Test per controllare la quantità di Cookie',
             requiredArtifacts: ['legislationCookieAmount']
         }

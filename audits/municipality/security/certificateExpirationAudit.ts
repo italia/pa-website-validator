@@ -14,7 +14,7 @@ class LoadAudit extends Audit {
             id: 'municipality-security-certificate-expiration',
             title: 'Scadenza del certificato',
             failureTitle: 'Il certificato è scaduto',
-            scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
+            scoreDisplayMode: Audit.SCORING_MODES.BINARY,
             description: 'Test per controllare se il certificato è scaduto',
             requiredArtifacts: ['securityCertificateExpiration'],
         }

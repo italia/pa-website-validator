@@ -12,7 +12,7 @@ class LoadAudit extends Audit {
             id: 'school-security-https-is-present',
             title: 'Presenza protocollo HTTPS',
             failureTitle: 'Il protocollo HTTPS non è presente',
-            scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
+            scoreDisplayMode: Audit.SCORING_MODES.BINARY,
             description: 'Test per controllare che il dominio utilizzi il protocollo HTTPS',
             requiredArtifacts: ['securityHttpsIsPresent']
         }

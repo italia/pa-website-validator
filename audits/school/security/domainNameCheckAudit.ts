@@ -20,7 +20,7 @@ class LoadAudit extends Audit {
             id: 'school-security-domain-name-check',
             title: 'Nome del dominio',
             failureTitle: 'Il dominio non rispetta le regole del dominio istituzionale',
-            scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
+            scoreDisplayMode: Audit.SCORING_MODES.BINARY,
             description: 'Test per controllare se il dominio rispetti le regole del dominio istituzionale',
             requiredArtifacts: ['securityDomainNameCheck']
         }

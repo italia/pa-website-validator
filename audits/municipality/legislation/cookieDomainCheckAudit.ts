@@ -28,7 +28,7 @@ class LoadAudit extends Audit {
             id: 'municipality-legislation-cookie-domain-check',
             title: 'Domini dei cookie',
             failureTitle: 'Alcuni Cookie hanno un dominio diverso da quello del sito',
-            scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
+            scoreDisplayMode: Audit.SCORING_MODES.BINARY,
             description: 'Test per controllare se ci sono Cookie con domini non consentiti',
             requiredArtifacts: ['legislationCookieDomain']
         }

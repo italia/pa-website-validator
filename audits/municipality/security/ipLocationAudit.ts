@@ -23,7 +23,7 @@ class LoadAudit extends Audit {
             id: 'municipality-security-ip-location',
             title: 'Localizzazione indirizzo IP',
             failureTitle: "L'indirizzo IP non rientra in uno stato membro dell'UE",
-            scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
+            scoreDisplayMode: Audit.SCORING_MODES.BINARY,
             description: "Test per verificare l'area geografica dell'IP della macchina su cui è hostato il sito web",
             requiredArtifacts: ['securityIpLocation']
         }

@@ -21,7 +21,7 @@ class LoadAudit extends Audit {
             id: 'school-ux-ui-consistency-theme-check',
             title: 'Tema wordpress',
             failureTitle: 'Non è presente il tema wordpress richiesto o il tema è stato rinominato',
-            scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
+            scoreDisplayMode: Audit.SCORING_MODES.BINARY,
             description: "Test per verificare l'utilizzo del tema wordpress corretto",
             requiredArtifacts: ['themeCheck']
         }

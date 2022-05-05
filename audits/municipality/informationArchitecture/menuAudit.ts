@@ -22,7 +22,7 @@ class LoadAudit extends Audit {
             id: 'municipality-menu-structure-match-model',
             title: 'Il menu rispetta le indicazioni fornite dal modello',
             failureTitle: 'Il menu non rispetta le indicazioni fornite dal modello',
-            scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
+            scoreDisplayMode: Audit.SCORING_MODES.BINARY,
             description: 'Test per verificare il rispetto delle regole per la costruzione del menu principale',
             requiredArtifacts: ['menuStructureMatchModel'],
         };

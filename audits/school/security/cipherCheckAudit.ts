@@ -25,7 +25,7 @@ class LoadAudit extends Audit {
             id: 'school-security-cipher-check',
             title: 'Versione della suite di cifratura',
             failureTitle: 'La versione della suite di cifratura non è valida',
-            scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
+            scoreDisplayMode: Audit.SCORING_MODES.BINARY,
             description: 'Test per controllare se la versione della suite di cifratura',
             requiredArtifacts: ['securityCipherCheck']
         }

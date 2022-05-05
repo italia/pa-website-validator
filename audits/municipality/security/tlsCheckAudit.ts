@@ -19,7 +19,7 @@ class LoadAudit extends Audit {
             id: 'municipality-security-tls-check',
             title: 'Versione del TLS',
             failureTitle: 'La versione del TLS non è valida, sono valide: TLSv1.2 e TLSv1.3',
-            scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
+            scoreDisplayMode: Audit.SCORING_MODES.BINARY,
             description: 'Test per controllare se la versione del TLS è corretta',
             requiredArtifacts: ['securityTlsCheck']
         }

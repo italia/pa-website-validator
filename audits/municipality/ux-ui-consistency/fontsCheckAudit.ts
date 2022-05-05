@@ -20,7 +20,7 @@ class LoadAudit extends Audit {
             id: 'municipality-ux-ui-consistency-fonts-check',
             title: 'Font in pagina',
             failureTitle: 'Non sono presenti alcuni font richiesti',
-            scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
+            scoreDisplayMode: Audit.SCORING_MODES.BINARY,
             description: "Test per verificare l'utilizzo di font validi",
             requiredArtifacts: ['fontsCheck']
         }

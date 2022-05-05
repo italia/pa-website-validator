@@ -28,7 +28,7 @@ class LoadAudit extends Audit {
             id: 'municipality-legislation-privacy-is-present',
             title: 'Presenza del link per la privacy policy',
             failureTitle: 'Non è presente il link per la privacy policy',
-            scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
+            scoreDisplayMode: Audit.SCORING_MODES.BINARY,
             description: 'Test per verificare la presenza del link per la privacy policy',
             requiredArtifacts: ['legislationPrivacyIsPresent'],
         }

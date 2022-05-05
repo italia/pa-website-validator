@@ -12,7 +12,7 @@ class LoadAudit extends Audit {
             id: 'school-ux-ui-consistency-bootstrap-check',
             title: 'Versione di bootstrap',
             failureTitle: 'La versione di bootstrap è troppo vecchia o non è stata trovata, versioni supportate: >=4',
-            scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
+            scoreDisplayMode: Audit.SCORING_MODES.BINARY,
             description: "Test per verificare la versione della libreria bootstrap",
             requiredArtifacts: ['bootstrapCheck']
         }

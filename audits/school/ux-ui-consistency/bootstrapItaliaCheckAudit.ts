@@ -20,7 +20,7 @@ class LoadAudit extends Audit {
             id: 'school-ux-ui-consistency-bootstrap-italia-check',
             title: 'Libreria bootstrap italia',
             failureTitle: 'Non è presente la libreria bootstap italia o la versione è obsoleta (richiesta >= 4.*.*)',
-            scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
+            scoreDisplayMode: Audit.SCORING_MODES.BINARY,
             description: "Test per verificare la presenza della libreria bootstrap italia",
             requiredArtifacts: ['bootstrapItaliaCheck']
         }
