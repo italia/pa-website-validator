@@ -60,21 +60,19 @@ class LoadAudit extends Audit {
         const schoolModelCheck = areAllElementsInVocabulary(argumentsElements, vocabularies.schoolModelVocabulary)
         const eurovocModelCheck = areAllElementsInVocabulary(argumentsElements, vocabularies.eurovocVocabulary)
 
-        let numberOfElementsNotInEurovocModelPercentage: any = (( eurovocModelCheck.elementNotIncluded.length / argumentsElements.length) * 100).toFixed(0)
-        let numberOfElementsNotInScuoleModelPercentage: any = (( schoolModelCheck.elementNotIncluded.length / argumentsElements.length) * 100).toFixed(0)
 
-        if (isNaN(numberOfElementsNotInEurovocModelPercentage)) {
-            numberOfElementsNotInEurovocModelPercentage = 0
-        }
+        let numberOfElementsNotInEurovocModelPercentage: any = 100
+        let numberOfElementsNotInScuoleModelPercentage: any = 100
 
-        if (isNaN(numberOfElementsNotInScuoleModelPercentage)) {
-            numberOfElementsNotInScuoleModelPercentage = 0
+        if (argumentsElements.length > 0) {
+            numberOfElementsNotInEurovocModelPercentage = (( eurovocModelCheck.elementNotIncluded.length / argumentsElements.length) * 100).toFixed(0)
+            numberOfElementsNotInScuoleModelPercentage = (( schoolModelCheck.elementNotIncluded.length / argumentsElements.length) * 100).toFixed(0)
         }
 
         let score = 0
         if (schoolModelCheck.allArgumentsInVocabulary) {
             score = 1
-        } else if (eurovocModelCheck.allArgumentsInVocabulary || numberOfElementsNotInEurovocModelPercentage > 50) {
+        } else if (eurovocModelCheck.allArgumentsInVocabulary || numberOfElementsNotInEurovocModelPercentage < 50) {
             score = 0.5
         }
 
