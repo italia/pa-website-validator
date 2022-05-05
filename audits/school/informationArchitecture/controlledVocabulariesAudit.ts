@@ -56,13 +56,21 @@ class LoadAudit extends Audit {
         const schoolModelCheck = areAllElementsInVocabulary(argumentsElements, vocabularies.schoolModelVocabulary)
         const eurovocModelCheck = areAllElementsInVocabulary(argumentsElements, vocabularies.eurovocVocabulary)
 
-        const numberOfElementsNotInEurovocModelPercentage: any = (( eurovocModelCheck.elementNotIncluded.length / argumentsElements.length) * 100).toFixed(0)
-        const numberOfElementsNotInScuoleModelPercentage: any = (( schoolModelCheck.elementNotIncluded.length / argumentsElements.length) * 100).toFixed(0)
+        let numberOfElementsNotInEurovocModelPercentage: any = (( eurovocModelCheck.elementNotIncluded.length / argumentsElements.length) * 100).toFixed(0)
+        let numberOfElementsNotInScuoleModelPercentage: any = (( schoolModelCheck.elementNotIncluded.length / argumentsElements.length) * 100).toFixed(0)
+
+        if (isNaN(numberOfElementsNotInEurovocModelPercentage)) {
+            numberOfElementsNotInEurovocModelPercentage = 0
+        }
+
+        if (isNaN(numberOfElementsNotInScuoleModelPercentage)) {
+            numberOfElementsNotInScuoleModelPercentage = 0
+        }
 
         let score = 0
         if (schoolModelCheck.allArgumentsInVocabulary) {
             score = 1
-        } else if (eurovocModelCheck.allArgumentsInVocabulary || numberOfElementsNotInEurovocModelPercentage < 50) {
+        } else if (eurovocModelCheck.allArgumentsInVocabulary || numberOfElementsNotInEurovocModelPercentage > 50) {
             score = 0.5
         }
 
@@ -99,6 +107,10 @@ function getArgumentsElements($: CheerioAPI) : string[] {
 
 function areAllElementsInVocabulary(pageArguments: string [], vocabularyElements: string []) : vocabularyResult {
     let result = true
+
+    if (pageArguments.length <= 0) {
+        result = false
+    }
 
     let elementNotIncluded = []
     for (let pageArgument of pageArguments) {
