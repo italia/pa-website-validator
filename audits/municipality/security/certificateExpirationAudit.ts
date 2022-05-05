@@ -5,7 +5,7 @@ import { LH } from "lighthouse"
 // @ts-ignore
 const Audit = require('lighthouse').Audit
 
-const sslCertificate = require('get-ssl-certificate')
+import * as sslCertificate from "get-ssl-certificate"
 
 // @ts-ignore
 class LoadAudit extends Audit {

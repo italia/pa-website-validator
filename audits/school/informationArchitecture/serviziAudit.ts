@@ -7,21 +7,24 @@ import { CheerioAPI } from "cheerio"
 const Audit = require('lighthouse').Audit
 
 // @ts-ignore
-const got = require('got')
+import got from "got"
 
 // @ts-ignore
-const cheerio = require('cheerio')
+import * as cheerio from "cheerio"
 
 // @ts-ignore
-const fs = require('fs')
+import * as fs from "fs"
+
+// @ts-ignore
+import { checkOrder } from "../../../utils/utils"
 
 // @ts-ignore
 const storageFolder = __dirname + '/../../../storage/school'
 
 // @ts-ignore
-const utils = require('../../../utils/utils')
-
 const contentTypeItemsFile = 'contentTypeItems.json'
+
+// @ts-ignore
 const modelReferenceUrl = 'https://docs.google.com/spreadsheets/d/1MoayTY05SE4ixtgBsfsdngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=0'
 
 // @ts-ignore
@@ -78,6 +81,7 @@ class LoadAudit extends Audit {
         ]
 
         let score = 1
+        // @ts-ignore
         const contentTypeItems = await JSON.parse(await fs.readFileSync(storageFolder + '/' + contentTypeItemsFile))
         const mandatoryVoices = contentTypeItems.Servizio
         const mandatoryHeaderVoices = contentTypeItems.Header
@@ -91,7 +95,7 @@ class LoadAudit extends Audit {
         const $ = cheerio.load(response.body)
 
         const indexElements = await getServicesFromIndex($)
-        const orderResult = await utils.checkOrder(mandatoryVoices, indexElements)
+        const orderResult = await checkOrder(mandatoryVoices, indexElements)
 
         let foundElements = indexElements
         const missingMandatoryItems = mandatoryVoices.filter(val => !indexElements.includes(val))

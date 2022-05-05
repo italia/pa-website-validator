@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import { LH } from "lighthouse"
 
@@ -42,4 +42,4 @@ class LoadAudit extends Audit {
     }
 }
 
-module.exports = LoadAudit;
+module.exports = LoadAudit

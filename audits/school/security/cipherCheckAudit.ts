@@ -11,11 +11,12 @@ const Audit = require('lighthouse').Audit
 const https = require('https')
 
 // @ts-ignore
-const fs = require('fs')
+import * as fs from "fs"
 
 // @ts-ignore
 const storageFolder = __dirname + '/../../../storage/school'
 
+// @ts-ignore
 const allowedCiphersFile = 'allowedCiphers.json'
 
 // @ts-ignore
@@ -33,6 +34,8 @@ class LoadAudit extends Audit {
 
     static async audit(artifacts: any) : Promise<{ score: number, details: LH.Audit.Details.Table }> {
         const hostname = artifacts.securityCipherCheck
+
+        // @ts-ignore
         const allowedCiphersItems = JSON.parse(fs.readFileSync(storageFolder + '/' + allowedCiphersFile))
 
         let score = 0

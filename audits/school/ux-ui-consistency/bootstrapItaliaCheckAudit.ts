@@ -1,16 +1,19 @@
-'use strict';
+'use strict'
 
 import { LH } from "lighthouse"
-import { CheerioAPI } from "cheerio";
+import { CheerioAPI } from "cheerio"
 
 // @ts-ignore
 const Audit = require('lighthouse').Audit
+
 // @ts-ignore
-const cheerio = require('cheerio')
+import * as cheerio from "cheerio"
+
 // @ts-ignore
 const themePossibleNames = [
     'design-scuole-wordpress'
 ]
+
 const bootstrapItaliaLibraryName = 'bootstrap-italia.css'
 
 // @ts-ignore

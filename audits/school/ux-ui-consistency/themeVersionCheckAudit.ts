@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import { LH } from "lighthouse"
 
@@ -6,10 +6,10 @@ import { LH } from "lighthouse"
 const Audit = require('lighthouse').Audit
 
 // @ts-ignore
-const cheerio = require('cheerio')
+import * as cheerio from "cheerio"
 
 // @ts-ignore
-const https = require("https")
+import * as https from "https"
 
 const currentVersion = '1.1.0'
 
@@ -73,14 +73,14 @@ module.exports = LoadAudit
 async function getCSS(hostname: string) : Promise<string> {
     return new Promise(function(resolve, reject) {
         https.request(hostname,  function(res) {
-            let data = '';
+            let data = ''
             res.on('data', function (chunk) {
-                data += chunk;
-            });
+                data += chunk
+            })
 
             res.on('end', function () {
                 resolve(data)
-            });
+            })
         }).end()
     })
 }

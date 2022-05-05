@@ -6,11 +6,12 @@ import { LH } from "lighthouse"
 const Audit = require('lighthouse').Audit
 
 // @ts-ignore
-const fs = require('fs')
+import * as fs from "fs"
 
 // @ts-ignore
 const storageFolder = __dirname + '/../../../storage/municipality'
 
+// @ts-ignore
 const allowedFontsFile = 'allowedFonts.json'
 
 // @ts-ignore
@@ -36,6 +37,7 @@ class LoadAudit extends Audit {
             { key: 'allowed_fonts', itemType: 'text', text: "Font richiesti" }
         ]
 
+        // @ts-ignore
         const allowedFonts = JSON.parse(fs.readFileSync(storageFolder + '/' + allowedFontsFile))
         let allowedFontsPrint = ''
         allowedFonts.fonts.forEach(font => {

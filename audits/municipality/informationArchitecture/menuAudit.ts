@@ -10,10 +10,10 @@ import secondaryModelMenu = crawlerTypes.secondaryModelMenu
 const Audit = require('lighthouse').Audit
 
 // @ts-ignore
-const got = require('got')
+import got from "got"
 
 // @ts-ignore
-const cheerio = require('cheerio')
+import * as cheerio from "cheerio"
 
 // @ts-ignore
 class LoadAudit extends Audit {
@@ -25,7 +25,7 @@ class LoadAudit extends Audit {
             scoreDisplayMode: Audit.SCORING_MODES.BINARY,
             description: 'Test per verificare il rispetto delle regole per la costruzione del menu principale',
             requiredArtifacts: ['menuStructureMatchModel'],
-        };
+        }
     }
 
     static async audit(artifacts: any) : Promise<{ score: number, details: LH.Audit.Details.Table }> {

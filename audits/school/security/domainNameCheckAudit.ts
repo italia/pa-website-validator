@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import { LH } from "lighthouse"
 
@@ -6,11 +6,12 @@ import { LH } from "lighthouse"
 const Audit = require('lighthouse').Audit
 
 // @ts-ignore
-const fs = require('fs')
+import * as fs from "fs"
 
 // @ts-ignore
 const storageFolder = __dirname + '/../../../storage/school'
 
+// @ts-ignore
 const allowedDomainsFile = 'allowedDomains.json'
 
 // @ts-ignore
@@ -36,6 +37,7 @@ class LoadAudit extends Audit {
             { key: 'domain_rule', itemType: 'text', text: "Regola: deve contenere" }
         ]
 
+        // @ts-ignore
         const allowedDomains = JSON.parse(fs.readFileSync(storageFolder + '/' + allowedDomainsFile));
 
         for (let domain of allowedDomains.domains) {

@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 
-const yargs = require("yargs")
 const { spawn } = require('child_process')
 
 // @ts-ignore
-const fs = require("fs")
+import * as fs from "fs"
+
+// @ts-ignore
+import * as yargs from "yargs"
 
 const crawelerCommand = yargs
     .usage("Usage: --type <type> --destination <folder> --report <report_name> --website <url> --scope <scope> --view <view>")
@@ -34,12 +36,12 @@ const view = crawelerCommand.view === 'yes' ? '--view' : ''
 console.log('[INFO] Try to execute: ' + `node ${__dirname}/node_modules/lighthouse/lighthouse-cli/index.js --locale it --config-path=${configPath} --chrome-flags="--headless" --output json --output html --output-path ${savePath} ${crawelerCommand.website} ${view}`)
 const child = spawn(`node ${__dirname}/node_modules/lighthouse/lighthouse-cli/index.js --locale it --config-path=${configPath} --chrome-flags="--headless" --output json --output html --output-path ${savePath} ${crawelerCommand.website} ${view}`, {
     shell: true
-});
+})
 
 child.stderr.on('data', (data) => {
-    process.stdout.write('[INFO]: ' + data);
+    process.stdout.write('[INFO]: ' + data)
 });
 
 child.on('close', (code) => {
-    console.log(`Process exited with code ${code}`);
-});
+    console.log(`Process exited with code ${code}`)
+})

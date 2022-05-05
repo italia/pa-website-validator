@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import { LH } from "lighthouse"
 
@@ -6,7 +6,7 @@ import { LH } from "lighthouse"
 const Audit = require('lighthouse').Audit
 
 // @ts-ignore
-const fs = require('fs')
+import * as fs from "fs"
 
 // @ts-ignore
 const storageFolder = __dirname + '/../../../storage/school'
@@ -36,7 +36,8 @@ class LoadAudit extends Audit {
             { key: 'allowed_fonts', itemType: 'text', text: "Font richiesti" }
         ]
 
-        const allowedFonts = JSON.parse(fs.readFileSync(storageFolder + '/' + allowedFontsFile));
+        // @ts-ignore
+        const allowedFonts = JSON.parse(fs.readFileSync(storageFolder + '/' + allowedFontsFile))
 
         let cleanFontsSplitted = []
         fontsSplitted.forEach(font => {

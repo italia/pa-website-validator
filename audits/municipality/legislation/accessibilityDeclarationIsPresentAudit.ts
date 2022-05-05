@@ -6,10 +6,10 @@ import { CheerioAPI } from "cheerio"
 const Audit = require('lighthouse').Audit
 
 // @ts-ignore
-const got = require('got')
+import got from "got"
 
 // @ts-ignore
-const cheerio = require('cheerio')
+import * as cheerio from "cheerio"
 
 // @ts-ignore
 class LoadAudit extends Audit {

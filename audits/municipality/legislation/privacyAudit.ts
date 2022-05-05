@@ -4,19 +4,19 @@
 const Audit = require('lighthouse').Audit
 
 // @ts-ignore
-const fs = require('fs')
+import * as fs from "fs"
+
+//@ts-ignore
+const storageFolder = __dirname + '/../../../storage/municipality'
 
 // @ts-ignore
-const got = require('got')
+import got from "got"
 
 // @ts-ignore
-const jsdom = require("jsdom")
+import * as jsdom from "jsdom"
 
 // @ts-ignore
 const { JSDOM } = jsdom
-
-// @ts-ignore
-const storageFolder = __dirname + '/../../../storage/municipality'
 
 // @ts-ignore
 const allowedPrivacyPolicyWordsFile = 'allowedPrivacyPolicyWords.json'
@@ -58,6 +58,7 @@ module.exports = LoadAudit
 
 // @ts-ignore
 function includesPrivacyPolicyWords(text: string) : boolean {
+    // @ts-ignore
     const allowedPrivacyPolicyItems = JSON.parse(fs.readFileSync(storageFolder + '/' + allowedPrivacyPolicyWordsFile))
     const allowedPrivacyPolicyWords = allowedPrivacyPolicyItems.allowedNames
 

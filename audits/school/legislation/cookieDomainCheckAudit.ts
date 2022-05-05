@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import { Page, Protocol } from "puppeteer"
 import { LH } from "lighthouse"
@@ -10,7 +10,7 @@ import cookie = crawlerTypes.cookie
 const Audit = require('lighthouse').Audit
 
 // @ts-ignore
-const fs = require('fs')
+import * as fs from "fs"
 
 // @ts-ignore
 const storageFolder = __dirname + '/../../../storage/school'
@@ -19,7 +19,7 @@ const storageFolder = __dirname + '/../../../storage/school'
 const cookieAllowedBtnNamesFile = 'allowedCookieBtnNames.json'
 
 // @ts-ignore
-const puppeteer = require('puppeteer')
+import puppeteer from "puppeteer"
 
 // @ts-ignore
 class LoadAudit extends Audit {
@@ -107,7 +107,8 @@ async function clickOnAcceptCookiesButtonIfExists(page: Page, links: links[]) {
 }
 
 function containsCookieWord(text: string) : boolean {
-    const btnWords = (JSON.parse(fs.readFileSync(storageFolder + '/' + cookieAllowedBtnNamesFile))).allowedNames;
+    // @ts-ignore
+    const btnWords = (JSON.parse(fs.readFileSync(storageFolder + '/' + cookieAllowedBtnNamesFile))).allowedNames
     const splittedText = text.split(' ')
 
     for (let word of btnWords) {

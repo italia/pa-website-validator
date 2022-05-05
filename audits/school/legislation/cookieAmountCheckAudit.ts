@@ -9,13 +9,13 @@ import links = crawlerTypes.links
 const Audit = require('lighthouse').Audit
 
 // @ts-ignore
-const fs = require('fs')
+import * as fs from "fs"
 
 // @ts-ignore
 const storageFolder = __dirname + '/../../../storage/school'
 
 // @ts-ignore
-const puppeteer = require('puppeteer')
+import puppeteer from "puppeteer"
 
 // @ts-ignore
 const cookieAllowedBtnNamesFile = 'allowedCookieBtnNames.json'
@@ -73,6 +73,7 @@ class LoadAudit extends Audit {
 module.exports = LoadAudit;
 
 function containsCookieWord(text: string) : boolean {
+    // @ts-ignore
     const btnWords = (JSON.parse(fs.readFileSync(storageFolder + '/' + cookieAllowedBtnNamesFile))).allowedNames
 
     for (let word of btnWords) {

@@ -1,24 +1,27 @@
 'use strict'
 
 import { LH } from "lighthouse"
-import {CheerioAPI} from "cheerio";
+import { CheerioAPI } from "cheerio"
 
 // @ts-ignore
 const Audit = require('lighthouse').Audit
 
 // @ts-ignore
-const got = require('got')
+import got from "got"
 
 // @ts-ignore
-const cheerio = require('cheerio')
+import * as cheerio from "cheerio"
 
 // @ts-ignore
-const fs = require('fs')
+import * as fs from "fs"
 
 // @ts-ignore
-const utils = require('../../../utils/utils')
+import { checkOrder } from "../../../utils/utils"
 
+// @ts-ignore
 const storageFolder = __dirname + '/../../../storage/school'
+
+// @ts-ignore
 const menuItemsFile = 'menuItems.json'
 
 class LoadAudit extends Audit {
@@ -49,6 +52,7 @@ class LoadAudit extends Audit {
         const response = await got(url)
 	    const $ : CheerioAPI = cheerio.load(response.body)
 
+        // @ts-ignore
         const menuItems = JSON.parse(fs.readFileSync(storageFolder + '/' + menuItemsFile))
         const secondaryMenuScuolaItems = menuItems.secondaryMenuItems.Scuola
 
@@ -66,7 +70,7 @@ class LoadAudit extends Audit {
         const missingVoicesPercentage: any = (((secondaryMenuScuolaItems.length - numberOfMandatoryVoicesPresent) / secondaryMenuScuolaItems.length) * 100).toFixed(0)
 
         let correctOrder = true
-        const correctOrderResult = await utils.checkOrder(secondaryMenuScuolaItems, elementsFound)
+        const correctOrderResult = await checkOrder(secondaryMenuScuolaItems, elementsFound)
         if (correctOrderResult.numberOfElementsNotInSequence > 0) {
             correctOrder = false
         }

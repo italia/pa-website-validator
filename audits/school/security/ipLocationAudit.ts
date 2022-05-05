@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 import { LH } from "lighthouse"
 
@@ -6,16 +6,22 @@ import { LH } from "lighthouse"
 const Audit = require('lighthouse').Audit
 
 // @ts-ignore
-const fs = require('fs')
+const geoip = require('geoip-lite')
+
+// @ts-ignore
+import * as fs from "fs"
+
+// @ts-ignore
+import * as dns from "dns"
+
+// @ts-ignore
+import * as util from "util"
 
 // @ts-ignore
 const storageFolder = __dirname + '/../../../storage/school'
 
-const geoip = require('geoip-lite')
-const dns = require('dns')
-const util = require('util')
+// @ts-ignore
 const allowedCountriesFiles = 'allowedCountries.json'
-
 
 // @ts-ignore
 class LoadAudit extends Audit {
@@ -32,6 +38,8 @@ class LoadAudit extends Audit {
 
     static async audit(artifacts: any) : Promise<{ score: number, details: LH.Audit.Details.Table }> {
         const hostname = artifacts.securityIpLocation
+
+        // @ts-ignore
         const allowedCountriesItems = JSON.parse(fs.readFileSync(storageFolder + '/' + allowedCountriesFiles))
         const allowedCountries = allowedCountriesItems.allowedCountries
 
@@ -67,4 +75,4 @@ class LoadAudit extends Audit {
     }
 }
 
-module.exports = LoadAudit;
+module.exports = LoadAudit

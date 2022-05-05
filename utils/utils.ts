@@ -2,7 +2,7 @@
 import crawlerTypes from "../types/crawler-types"
 import orderType = crawlerTypes.orderResult
 
-exports.checkOrder = async (mandatoryElements: string[], foundElements: string[]) : Promise<orderType> => {
+module.exports.checkOrder = async (mandatoryElements: string[], foundElements: string[]) : Promise<orderType> => {
     let newMandatoryElements = []
     let newFoundElements = []
     let numberOfElementsNotInSequence = 0

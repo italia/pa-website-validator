@@ -7,7 +7,7 @@ import { CheerioAPI } from "cheerio";
 const Audit = require('lighthouse').Audit
 
 // @ts-ignore
-const cheerio = require('cheerio')
+import * as cheerio from "cheerio"
 
 // @ts-ignore
 const themePossibleNames = [

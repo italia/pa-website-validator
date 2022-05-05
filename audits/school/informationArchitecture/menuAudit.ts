@@ -7,15 +7,18 @@ import { CheerioAPI } from "cheerio"
 const Audit = require('lighthouse').Audit
 
 // @ts-ignore
-const got = require('got')
+import got from "got"
 
 // @ts-ignore
-const fs = require('fs')
+import * as fs from "fs"
+
+// @ts-ignore
+import * as cheerio from "cheerio"
 
 // @ts-ignore
 const storageFolder = __dirname + '/../../../storage/school'
 
-const cheerio = require('cheerio')
+// @ts-ignore
 const menuItemsFile = 'menuItems.json'
 
 // @ts-ignore
@@ -43,6 +46,7 @@ class LoadAudit extends Audit {
             { key: 'model_link', itemType: 'text', text: "Link al modello di riferimento" },
         ]
 
+        // @ts-ignore
         const menuItems = JSON.parse(fs.readFileSync(storageFolder + '/' + menuItemsFile))
         const primaryMenuMandatoryElements = menuItems.primaryMenuItems
 

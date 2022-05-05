@@ -9,15 +9,18 @@ import vocabularyResult = crawlerTypes.vocabularyResult
 const Audit = require('lighthouse').Audit
 
 // @ts-ignore
-const got = require('got')
+import got from "got"
 
 // @ts-ignore
-const fs = require('fs')
+import * as fs from "fs"
 
 // @ts-ignore
-const cheerio = require('cheerio')
+import * as cheerio from "cheerio"
 
+// @ts-ignore
 const storageFolder = __dirname + '/../../../storage/school'
+
+// @ts-ignore
 const vocabularyFile = 'controlledVocabulary.json'
 
 // @ts-ignore
@@ -45,6 +48,7 @@ class LoadAudit extends Audit {
             { key: 'element_not_in_eurovoc_model', itemType: 'text', text: 'Elementi non presenti nel modello EuroVOC' }
         ]
 
+        // @ts-ignore
         const vocabularies = JSON.parse(fs.readFileSync(storageFolder + '/' + vocabularyFile))
         const queryUrl = '/?s'
         const searchUrl = url + queryUrl
