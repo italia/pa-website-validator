@@ -29,9 +29,9 @@ class LoadAudit extends Audit {
         return {
             id: 'school-controlled-vocabularies',
             title: 'I vocaboli appartengono al vocabolario scuole',
-            failureTitle: 'Più del 50% dei vocaboli non appartiene ad EuroVOC',
+            failureTitle: 'Più del 50% dei vocaboli non appartiene ad EuroVOC o al Modello Scuole',
             scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
-            description: 'Test per verificare la presenza dei vocaboli sotto ARGOMENTI nei vocabolari scuole ed EuroVOC - Verde se tutti gli argomenti appartengono al vocabolario scuole, % elementi mancanti in Eurovoc < 50%. Modello scuole: https://docs.google.com/spreadsheets/d/1MoayTY05SE4ixtgBsfsdngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=2135815526',
+            description: 'Test per verificare la presenza dei vocaboli sotto ARGOMENTI nei vocabolari scuole ed EuroVOC - Verde se tutti gli argomenti appartengono al vocabolario scuole. Modello scuole: https://docs.google.com/spreadsheets/d/1MoayTY05SE4ixtgBsfsdngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=2135815526',
             requiredArtifacts: ['controlledVocabularies']
         }
     }
@@ -72,7 +72,11 @@ class LoadAudit extends Audit {
         let score = 0
         if (schoolModelCheck.allArgumentsInVocabulary) {
             score = 1
-        } else if (eurovocModelCheck.allArgumentsInVocabulary || numberOfElementsNotInEurovocModelPercentage < 50) {
+        } else if ( schoolModelCheck.allArgumentsInVocabulary ||
+                    eurovocModelCheck.allArgumentsInVocabulary ||
+                    numberOfElementsNotInEurovocModelPercentage < 50 ||
+                    numberOfElementsNotInScuoleModelPercentage < 50
+        ) {
             score = 0.5
         }
 
