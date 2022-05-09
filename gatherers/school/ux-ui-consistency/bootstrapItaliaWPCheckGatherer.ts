@@ -6,9 +6,9 @@ import LoadData = gatherer.LoadData
 
 const { Gatherer } = require('lighthouse')
 
-class bootstrapItaliaCheck extends Gatherer {
+class bootstrapItaliaWPCheck extends Gatherer {
     afterPass(options: PassContext, loadData: LoadData) {
-        const expression = `window.BOOTSTRAP_ITALIA_VERSION || null`
+        const expression = `document.getElementsByTagName('head')[0].innerHTML`
 
         const driver = options.driver
 
@@ -16,4 +16,4 @@ class bootstrapItaliaCheck extends Gatherer {
     }
 }
 
-module.exports = bootstrapItaliaCheck
+module.exports = bootstrapItaliaWPCheck

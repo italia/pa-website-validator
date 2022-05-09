@@ -13,6 +13,7 @@ module.exports = {
                 schoolGatherersFolder + '/ux-ui-consistency/bootstrapCheckGatherer.js',
                 schoolGatherersFolder + '/ux-ui-consistency/themeCheckGatherer.js',
                 schoolGatherersFolder + '/ux-ui-consistency/themeVersionCheckGatherer.js',
+                schoolGatherersFolder + '/ux-ui-consistency/bootstrapItaliaWPCheckGatherer.js',
                 schoolGatherersFolder + '/ux-ui-consistency/bootstrapItaliaCheckGatherer.js',
 
                 schoolGatherersFolder + '/legislation/accessibilityDeclarationIsPresentGatherer.js',
@@ -30,7 +31,7 @@ module.exports = {
         schoolAuditsFolder + '/ux-ui-consistency/bootstrapCheckAudit.js',
         schoolAuditsFolder + '/ux-ui-consistency/themeCheckAudit.js',
         schoolAuditsFolder + '/ux-ui-consistency/themeVersionCheckAudit.js',
-        schoolAuditsFolder + '/ux-ui-consistency/bootstrapItaliaCheckAudit.js',
+        schoolAuditsFolder + '/ux-ui-consistency/bootstrapItaliaDoubleCheckAudit.js',
 
         schoolAuditsFolder + '/legislation/accessibilityDeclarationIsPresentAudit.js',
         schoolAuditsFolder + '/legislation/privacyAudit.js',
@@ -47,7 +48,7 @@ module.exports = {
             auditRefs: [
                 { id: 'school-ux-ui-consistency-fonts-check', weight: 10 },
                 { id: 'school-ux-ui-consistency-bootstrap-check', weight: 10 },
-                { id: 'school-ux-ui-consistency-bootstrap-italia-check', weight: 10 },
+                { id: 'school-ux-ui-consistency-bootstrap-italia-double-check', weight: 10 },
                 { id: 'school-ux-ui-consistency-theme-check', weight: 10 },
                 { id: 'school-ux-ui-consistency-theme-version-check', weight: 10 }
             ],
