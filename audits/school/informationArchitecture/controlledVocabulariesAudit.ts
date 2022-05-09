@@ -1,6 +1,5 @@
 'use strict'
 
-import { LH } from "lighthouse"
 import { CheerioAPI } from "cheerio"
 import crawlerTypes from "../../../types/crawler-types"
 import vocabularyResult = crawlerTypes.vocabularyResult

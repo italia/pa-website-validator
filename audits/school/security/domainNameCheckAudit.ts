@@ -1,7 +1,5 @@
 'use strict'
 
-import { LH } from "lighthouse"
-
 // @ts-ignore
 const Audit = require('lighthouse').Audit
 

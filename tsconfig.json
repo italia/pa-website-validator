@@ -6,15 +6,13 @@
     "moduleResolution": "node",
     "sourceMap": false,
     "outDir": "distribution",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "strict": true
   },
   "lib": [
     "esnext",
     "ES2021.String",
     "ESNext.String"
   ],
-  "exclude": [
-    "node_modules",
-    "node_modules/lighthouse/types"
-  ]
+  "include": ["**/*.ts", "./node_modules/lighthouse/types/**/*.d.ts"]
 }

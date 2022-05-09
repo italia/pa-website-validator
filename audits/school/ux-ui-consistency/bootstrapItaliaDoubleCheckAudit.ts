@@ -1,6 +1,5 @@
 'use strict'
 
-import { LH } from "lighthouse"
 import { CheerioAPI } from "cheerio"
 
 // @ts-ignore

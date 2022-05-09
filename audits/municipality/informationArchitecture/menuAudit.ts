@@ -1,6 +1,5 @@
 'use strict'
 
-import { LH } from "lighthouse"
 import { Cheerio, CheerioAPI, Element } from "cheerio"
 import crawlerTypes from "../../../types/crawler-types"
 import primaryModelMenu = crawlerTypes.primaryModelMenu

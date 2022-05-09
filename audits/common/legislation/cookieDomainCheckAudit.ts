@@ -1,7 +1,6 @@
 'use strict'
 
 import { Page, Protocol } from "puppeteer"
-import { LH } from "lighthouse"
 import crawlerTypes from "../../../types/crawler-types"
 import links = crawlerTypes.links
 import cookie = crawlerTypes.cookie

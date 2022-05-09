@@ -1,6 +1,5 @@
 'use strict'
 
-import { LH } from "lighthouse"
 import crawlerTypes from "../../../types/crawler-types"
 import cipher = crawlerTypes.cipher
 
