@@ -44,7 +44,7 @@ class LoadAudit extends Audit {
             'rawText' : [],
             'missingItems': []
         }
-        let headerFirstLevelMissingItems = []
+        let headerFirstLevelMissingItems: Array<string> = []
         let headerFirstLevelOrder = false
         let footerFirstLevelOrder = false
         let footerFirstLevelMissingItems = []
@@ -179,7 +179,7 @@ function listMatchPrimaryMenuModel(list: Cheerio<Element>, $: CheerioAPI) : prim
 }
 
 function listMatchSecondaryMenuModel(item: Element, list: Cheerio<Element>, $: CheerioAPI) : secondaryModelMenu {
-    const secondaryMenuItems = {
+    const secondaryMenuItems: Record<string, Array<string>> = {
         'Amministrazione' : [
             'Organi di governo',
             'Aree amministrative',
@@ -221,7 +221,9 @@ function listMatchSecondaryMenuModel(item: Element, list: Cheerio<Element>, $: C
             'Rapporti (tecnici)',
             'Dataset',
         ],
-        'Argomenti' : 'Lista argomenti',
+        'Argomenti' : [
+            'Lista argomenti'
+        ],
         'Area personale' : [
             'Le mie pratiche',
             'Pagamenti',
@@ -238,14 +240,14 @@ function listMatchSecondaryMenuModel(item: Element, list: Cheerio<Element>, $: C
     let passedItems = []
     let passedRawText : Array<string> = []
     for (let i =0; i < list.length; i++){
-        if (Boolean(secondaryMenuItems[h4Text]) && secondaryMenuItems[h4Text].includes($(list[i]).text().trim())) {
+        if (secondaryMenuItems[h4Text] !== undefined && secondaryMenuItems[h4Text].includes($(list[i]).text().trim())) {
             count++
             passedItems.push(list[i])
             passedRawText.push($(list[i]).text().trim())
         }
     }
 
-    if (Boolean(secondaryMenuItems[h4Text]) && count >= (secondaryMenuItems[h4Text].length/2)) {
+    if (secondaryMenuItems[h4Text] !== undefined && count >= (secondaryMenuItems[h4Text].length/2)) {
         return {
             'passed' : true,
             'items' : passedItems,

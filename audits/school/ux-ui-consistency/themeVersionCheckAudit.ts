@@ -49,7 +49,7 @@ class LoadAudit extends Audit {
                     score = 1
                 }
 
-                themeManifest = CSS.split('/*!').pop().split('*/')[0]
+                themeManifest = CSS.split('/*!').pop()!.split('*/')[0]
             }
         }
 

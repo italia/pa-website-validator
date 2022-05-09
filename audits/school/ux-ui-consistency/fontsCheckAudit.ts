@@ -37,13 +37,13 @@ class LoadAudit extends Audit {
         // @ts-ignore
         const allowedFonts = JSON.parse(fs.readFileSync(storageFolder + '/' + allowedFontsFile))
 
-        let cleanFontsSplitted = []
-        fontsSplitted.forEach(font => {
+        let cleanFontsSplitted: Array<string> = []
+        fontsSplitted.forEach((font: string) => {
             let cleanFont = font.replaceAll('"','')
             cleanFontsSplitted.push(cleanFont)
         })
 
-        const checker = (arr, target) => target.every(v => arr.includes(v));
+        const checker = (arr: Array<string>, target: Array<string>) => target.every(v => arr.includes(v));
         if (checker(cleanFontsSplitted, allowedFonts.fonts)) {
             score = 1
         }

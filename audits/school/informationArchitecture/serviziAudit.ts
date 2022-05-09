@@ -82,7 +82,7 @@ class LoadAudit extends Audit {
         let score = 1
         // @ts-ignore
         const contentTypeItems = await JSON.parse(await fs.readFileSync(storageFolder + '/' + contentTypeItemsFile))
-        const mandatoryVoices = contentTypeItems.Servizio
+        const mandatoryVoices: Array<string> = contentTypeItems.Servizio
         const mandatoryHeaderVoices = contentTypeItems.Header
         const totalMandatoryVoices = mandatoryVoices.length + mandatoryHeaderVoices.length
 
@@ -166,11 +166,11 @@ async function getAllServicesPagesToBeScanned(initialUrl: string) : Promise<stri
 
         for (let cheerioElement of cheerioElements) {
             let url = $(cheerioElement).attr('href')
-            if (Boolean(url) && url.includes('/page/') && !pageScanned.includes(url)) {
+            if (url !== undefined && url.includes('/page/') && !pageScanned.includes(url)) {
                 pageScanned.push(url)
 
                 pageToBeScan = url
-            } else if (Boolean(url) && !url.includes('/page/')) {
+            } else if (url !== undefined && !url.includes('/page/')) {
                 noMorePageToScan = true
             }
         }
@@ -188,7 +188,7 @@ async function getAllServicesUrl(pagesToScan: string[], initialUrl: string) : Pr
 
         for (let cheerioElement of cheerioElements) {
             let url = $(cheerioElement).attr('href')
-            if (Boolean(url) && url.includes('/servizio/') && url !== initialUrl && !url.includes('/page/')) {
+            if (url !== undefined && url.includes('/servizio/') && url !== initialUrl && !url.includes('/page/')) {
                 servicesUrl.push(url)
             }
         }
@@ -220,7 +220,7 @@ async function getDescription($: CheerioAPI) : Promise<string> {
 }
 
 async function getBreadcrumb($: CheerioAPI) : Promise<string[]> {
-    let resultElements = []
+    let resultElements: Array<string> = []
 
     const breadcrumbContent = $('.breadcrumb')
     const breadcrumbElements = $(breadcrumbContent).find('span')

@@ -2,12 +2,11 @@
 
 import crawlerTypes from "../../../types/crawler-types"
 import cipher = crawlerTypes.cipher
+import https from 'https'
+import {TLSSocket} from 'tls'
 
 // @ts-ignore
 const Audit = require('lighthouse').Audit
-
-// @ts-ignore
-const https = require('https')
 
 const allowedTlsVersions = ['TLSv1.2', 'TLSv1.3']
 
@@ -58,7 +57,7 @@ module.exports = LoadAudit;
 async function getCipherVersion(hostname: string) : Promise<string> {
     return new Promise(function(resolve, reject) {
         https.request(hostname,  function(res) {
-            resolve(res.socket.getCipher().version)
+            resolve((res.socket as TLSSocket).getCipher().version)
         }).end()
     })
 }

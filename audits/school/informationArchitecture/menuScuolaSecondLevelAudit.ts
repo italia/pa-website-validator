@@ -53,11 +53,11 @@ class LoadAudit extends Audit {
 
         // @ts-ignore
         const menuItems = JSON.parse(fs.readFileSync(storageFolder + '/' + menuItemsFile))
-        const secondaryMenuScuolaItems = menuItems.secondaryMenuItems.Scuola
+        const secondaryMenuScuolaItems: Array<string> = menuItems.secondaryMenuItems.Scuola
 
         const headerUl = $('#menu-la-scuola').find('li')
         let numberOfMandatoryVoicesPresent = 0
-        let elementsFound = []
+        let elementsFound: Array<string> = []
         for (let element of headerUl) {
             if (secondaryMenuScuolaItems.includes($(element).text().trim())) {
                 numberOfMandatoryVoicesPresent++

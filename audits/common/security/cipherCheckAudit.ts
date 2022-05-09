@@ -2,12 +2,11 @@
 
 import crawlerTypes from "../../../types/crawler-types"
 import cipherInfo = crawlerTypes.cipherInfo
+import https from 'https'
+import {TLSSocket} from 'tls'
 
 // @ts-ignore
 const Audit = require('lighthouse').Audit
-
-// @ts-ignore
-const https = require('https')
 
 // @ts-ignore
 import * as fs from "fs"
@@ -92,7 +91,7 @@ module.exports = LoadAudit
 async function getCipherVersion(hostname: string) : Promise<string> {
     return new Promise(function(resolve, reject) {
         https.request(hostname,  function(res) {
-            resolve(res.socket.getCipher().version)
+            resolve((res.socket as TLSSocket).getCipher().version)
         }).end()
     })
 }
@@ -100,7 +99,7 @@ async function getCipherVersion(hostname: string) : Promise<string> {
 async function getCipherStandardName(hostname: string) : Promise<string> {
     return new Promise(function(resolve, reject) {
         https.request(hostname,  function(res) {
-            resolve(res.socket.getCipher().standardName)
+            resolve((res.socket as TLSSocket).getCipher().standardName)
         }).end()
     })
 }

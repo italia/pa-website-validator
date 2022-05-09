@@ -103,7 +103,7 @@ async function clickOnAcceptCookiesButtonIfExists(page: Page, links: links[]) {
         if (containsCookieWord(link.text) || link.className == '.ginger_btn.ginger-accept.ginger_btn_accept_all') {
             try {
                 let element = await page.$(link.className)
-                await element.click()
+                await element!.click()
                 await sleep(750)
                 await page.reload({ waitUntil: ["networkidle0", "domcontentloaded"] })
                 break

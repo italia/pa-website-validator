@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { spawn } = require('child_process')
+import { spawn } from "child_process"
 
 // @ts-ignore
 import * as fs from "fs"

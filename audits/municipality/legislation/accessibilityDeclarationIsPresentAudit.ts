@@ -33,13 +33,13 @@ class LoadAudit extends Audit {
 
         try {
             const $ : CheerioAPI = cheerio.load(DOM)
-            const footer : string = $('footer').prop('outerHTML')
+            const footer : string = $('footer').prop('outerHTML')!
 
             if (Boolean(footer)) {
                 const aTags = $(footer).find('a')
 
                 for (let a of aTags) {
-                    if (Boolean($(a).attr('href')) && $(a).attr('href').includes('form.agid.gov.it') && $(a).text().toLowerCase().includes('accessibilit')) {
+                    if (Boolean($(a).attr('href')) && $(a).attr('href')!.includes('form.agid.gov.it') && $(a).text().toLowerCase().includes('accessibilit')) {
                         score = 1
                         break;
                     }
