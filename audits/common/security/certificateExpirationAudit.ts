@@ -3,6 +3,7 @@
 // @ts-ignore
 const Audit = require('lighthouse').Audit
 
+// @ts-ignore
 import * as sslCertificate from "get-ssl-certificate"
 
 // @ts-ignore
