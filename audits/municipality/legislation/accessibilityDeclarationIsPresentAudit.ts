@@ -33,9 +33,9 @@ class LoadAudit extends Audit {
 
         try {
             const $ : CheerioAPI = cheerio.load(DOM)
-            const footer : string = $('footer').prop('outerHTML')!
+            const footer = $('footer').prop('outerHTML')
 
-            if (Boolean(footer)) {
+            if (footer !== null) {
                 const aTags = $(footer).find('a')
 
                 for (let a of aTags) {
