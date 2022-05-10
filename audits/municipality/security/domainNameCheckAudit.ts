@@ -4,14 +4,15 @@
 const Audit = require('lighthouse').Audit
 
 // @ts-ignore
-import * as fs from "fs"
-
-// @ts-ignore
 const storageFolder = __dirname + '/../../../storage/municipality'
 
 // @ts-ignore
 const allowedDomainsFile = 'allowedDomains.json'
 
+// @ts-ignore
+const allowedDomains = require(storageFolder + '/' + allowedDomainsFile)
+
+// @ts-ignore
 class LoadAudit extends Audit {
     static get meta() {
         return {
@@ -29,9 +30,6 @@ class LoadAudit extends Audit {
 
         let score = 0
         const headings = [ { key: 'domain_name', itemType: 'text', text: "Dominio corrente" } ]
-
-        // @ts-ignore
-        const allowedDomains = JSON.parse(fs.readFileSync(storageFolder + '/' + allowedDomainsFile))
 
         for (let domain of allowedDomains.domains) {
             if (hostname.includes(domain)) {

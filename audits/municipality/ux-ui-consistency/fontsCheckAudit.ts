@@ -13,6 +13,9 @@ const storageFolder = __dirname + '/../../../storage/municipality'
 const allowedFontsFile = 'allowedFonts.json'
 
 // @ts-ignore
+const allowedFonts = require(storageFolder+ '/' + allowedFontsFile)
+
+// @ts-ignore
 class LoadAudit extends Audit {
     static get meta() {
         return {
@@ -35,8 +38,6 @@ class LoadAudit extends Audit {
             { key: 'allowed_fonts', itemType: 'text', text: "Font richiesti" }
         ]
 
-        // @ts-ignore
-        const allowedFonts = JSON.parse(fs.readFileSync(storageFolder + '/' + allowedFontsFile))
         let allowedFontsPrint = ''
         allowedFonts.fonts.forEach((font: string) => {
             allowedFontsPrint += font.replace('"','')

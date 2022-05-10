@@ -9,9 +9,6 @@ const Audit = require('lighthouse').Audit
 import got from "got"
 
 // @ts-ignore
-import * as fs from "fs"
-
-// @ts-ignore
 import * as cheerio from "cheerio"
 
 // @ts-ignore
@@ -19,6 +16,9 @@ const storageFolder = __dirname + '/../../../storage/school'
 
 // @ts-ignore
 const menuItemsFile = 'menuItems.json'
+
+// @ts-ignore
+const menuItems = require(storageFolder + '/' + menuItemsFile)
 
 // @ts-ignore
 class LoadAudit extends Audit {
@@ -45,8 +45,6 @@ class LoadAudit extends Audit {
             { key: 'model_link', itemType: 'text', text: "Link al modello di riferimento" },
         ]
 
-        // @ts-ignore
-        const menuItems = JSON.parse(fs.readFileSync(storageFolder + '/' + menuItemsFile))
         const primaryMenuMandatoryElements = menuItems.primaryMenuItems
 
         const response = await got(url)
@@ -66,8 +64,8 @@ class LoadAudit extends Audit {
             {
                 menu_elements: menuElements.join(', '),
                 required_menu_elements: primaryMenuMandatoryElements.join(', '),
-                required_menu_elements_presence: containsMandatoryElementsResult === true ? 'Sì' : 'No',
-                required_menu_elements_correct_order: mandatoryElementsCorrectOrder === true ? 'Sì' : 'No',
+                required_menu_elements_presence: containsMandatoryElementsResult ? 'Sì' : 'No',
+                required_menu_elements_correct_order: mandatoryElementsCorrectOrder ? 'Sì' : 'No',
                 model_link: 'https://docs.google.com/drawings/d/1qzpCZrTc1x7IxdQ9WEw_wO0qn-mUk6mIRtSgJlmIz7g/edit'
             }
         ]

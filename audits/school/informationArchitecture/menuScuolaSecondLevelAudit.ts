@@ -12,9 +12,6 @@ import got from "got"
 import * as cheerio from "cheerio"
 
 // @ts-ignore
-import * as fs from "fs"
-
-// @ts-ignore
 import { checkOrder } from "../../../utils/utils"
 
 // @ts-ignore
@@ -22,6 +19,9 @@ const storageFolder = __dirname + '/../../../storage/school'
 
 // @ts-ignore
 const menuItemsFile = 'menuItems.json'
+
+// @ts-ignore
+const menuItems = require (storageFolder + '/' + menuItemsFile)
 
 class LoadAudit extends Audit {
     static get meta() {
@@ -51,8 +51,6 @@ class LoadAudit extends Audit {
         const response = await got(url)
 	    const $ : CheerioAPI = cheerio.load(response.body)
 
-        // @ts-ignore
-        const menuItems = JSON.parse(fs.readFileSync(storageFolder + '/' + menuItemsFile))
         const secondaryMenuScuolaItems: Array<string> = menuItems.secondaryMenuItems.Scuola
 
         const headerUl = $('#menu-la-scuola').find('li')

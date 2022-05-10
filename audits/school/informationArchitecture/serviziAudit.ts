@@ -12,9 +12,6 @@ import got from "got"
 import * as cheerio from "cheerio"
 
 // @ts-ignore
-import * as fs from "fs"
-
-// @ts-ignore
 import { checkOrder } from "../../../utils/utils"
 
 // @ts-ignore
@@ -25,6 +22,9 @@ const contentTypeItemsFile = 'contentTypeItems.json'
 
 // @ts-ignore
 const modelReferenceUrl = 'https://docs.google.com/spreadsheets/d/1MoayTY05SE4ixtgBsfsdngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=0'
+
+// @ts-ignore
+const contentTypeItems = require(storageFolder + '/' + contentTypeItemsFile)
 
 // @ts-ignore
 class LoadAudit extends Audit {
@@ -80,8 +80,6 @@ class LoadAudit extends Audit {
         ]
 
         let score = 1
-        // @ts-ignore
-        const contentTypeItems = await JSON.parse(await fs.readFileSync(storageFolder + '/' + contentTypeItemsFile))
         const mandatoryVoices: Array<string> = contentTypeItems.Servizio
         const mandatoryHeaderVoices = contentTypeItems.Header
         const totalMandatoryVoices = mandatoryVoices.length + mandatoryHeaderVoices.length

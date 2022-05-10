@@ -4,12 +4,6 @@
 const Audit = require('lighthouse').Audit
 
 // @ts-ignore
-import * as fs from "fs"
-
-//@ts-ignore
-const storageFolder = __dirname + '/../../../storage/school'
-
-// @ts-ignore
 import got from "got"
 
 // @ts-ignore
@@ -18,8 +12,14 @@ import * as jsdom from "jsdom"
 // @ts-ignore
 const { JSDOM } = jsdom
 
+//@ts-ignore
+const storageFolder = __dirname + '/../../../storage/school'
+
 // @ts-ignore
 const allowedPrivacyPolicyWordsFile = 'allowedPrivacyPolicyWords.json'
+
+// @ts-ignore
+const allowedPrivacyPolicyItems = require(storageFolder + '/' + allowedPrivacyPolicyWordsFile)
 
 // @ts-ignore
 class LoadAudit extends Audit {
@@ -58,11 +58,7 @@ module.exports = LoadAudit
 
 // @ts-ignore
 function includesPrivacyPolicyWords(text: string) : boolean {
-    // @ts-ignore
-    const allowedPrivacyPolicyItems = JSON.parse(fs.readFileSync(storageFolder + '/' + allowedPrivacyPolicyWordsFile))
-    const allowedPrivacyPolicyWords = allowedPrivacyPolicyItems.allowedNames
-
-    for (let word of allowedPrivacyPolicyWords) {
+    for (let word of allowedPrivacyPolicyItems.allowedNames) {
         if (text.includes(word)) {
             return true
         }

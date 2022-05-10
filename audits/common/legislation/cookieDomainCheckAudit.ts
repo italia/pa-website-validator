@@ -9,7 +9,7 @@ import cookie = crawlerTypes.cookie
 const Audit = require('lighthouse').Audit
 
 // @ts-ignore
-import * as fs from "fs"
+import puppeteer from "puppeteer"
 
 // @ts-ignore
 const storageFolder = __dirname + '/../../../storage/common'
@@ -18,7 +18,7 @@ const storageFolder = __dirname + '/../../../storage/common'
 const cookieAllowedBtnNamesFile = 'allowedCookieBtnNames.json'
 
 // @ts-ignore
-import puppeteer from "puppeteer"
+const btnWords = require(storageFolder + '/' + cookieAllowedBtnNamesFile)
 
 // @ts-ignore
 class LoadAudit extends Audit {
@@ -106,11 +106,9 @@ async function clickOnAcceptCookiesButtonIfExists(page: Page, links: links[]) {
 }
 
 function containsCookieWord(text: string) : boolean {
-    // @ts-ignore
-    const btnWords = (JSON.parse(fs.readFileSync(storageFolder + '/' + cookieAllowedBtnNamesFile))).allowedNames
     const splittedText = text.split(' ')
 
-    for (let word of btnWords) {
+    for (let word of btnWords.allowedNames) {
         for (let item of splittedText) {
             if (item.toLowerCase().trim() == word) {
                 return true

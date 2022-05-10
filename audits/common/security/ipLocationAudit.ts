@@ -7,9 +7,6 @@ const Audit = require('lighthouse').Audit
 const geoip = require('geoip-lite')
 
 // @ts-ignore
-import * as fs from "fs"
-
-// @ts-ignore
 import * as dns from "dns"
 
 // @ts-ignore
@@ -20,6 +17,9 @@ const storageFolder = __dirname + '/../../../storage/common'
 
 // @ts-ignore
 const allowedCountriesFiles = 'allowedCountries.json'
+
+// @ts-ignore
+const allowedCountriesItems = require(storageFolder + '/' + allowedCountriesFiles)
 
 // @ts-ignore
 class LoadAudit extends Audit {
@@ -37,8 +37,6 @@ class LoadAudit extends Audit {
     static async audit(artifacts: any) : Promise<{ score: number, details: LH.Audit.Details.Table }> {
         const hostname = artifacts.securityIpLocation
 
-        // @ts-ignore
-        const allowedCountriesItems = JSON.parse(fs.readFileSync(storageFolder + '/' + allowedCountriesFiles))
         const allowedCountries = allowedCountriesItems.allowedCountries
 
         let score = 0
