@@ -42,30 +42,9 @@ class LoadAudit extends Audit {
     static async audit(artifacts: any) : Promise<{ score: number, details: LH.Audit.Details.Table }> {
         const url = artifacts.serviziStructure
 
-        let allServicesUrl = url + '/servizio/'
-        let secondaryUrlTry = false
-
-        try {
-            await got(allServicesUrl)
-        } catch (e) {
-            console.error('Pagina servizio non trovata ... provando un altro URL')
-            secondaryUrlTry = true
-        }
-
-        if (secondaryUrlTry) {
-            try {
-                allServicesUrl = url + '/index.php/servizio/'
-                await got(allServicesUrl)
-            } catch (e) {
-                const pageNotFoundHeadings = [ { key: 'result_info', itemType: 'text', text: "Info" } ]
-                const pageNotFoundItems = [ { result_info: "Non è stato possibile eseguire il test. Pagina tutti i servizi non trovata." } ]
-
-                return {
-                    score: 0,
-                    details: Audit.makeTableDetails(pageNotFoundHeadings, pageNotFoundItems)
-                }
-            }
-        }
+        const infoHeadings = [ { key: 'result_info', itemType: 'text', text: "Info" } ]
+        const pageNotFoundItems = [ { result_info: "Non è stato possibile eseguire il test. Pagina tutti i servizi non trovata. Il listato di tutti i servizi deve essere esposto alla pagina: {{base_url}}/servizio" } ]
+        const servicesNotFoundItems = [ { result_info: "Non è stato possibile eseguire il test: Non sono state trovate schede servizio" } ]
 
         const headings = [
             { key: 'number_of_mandatory_elements', itemType: 'text', text: "Numero di voci trovate" },
@@ -79,13 +58,31 @@ class LoadAudit extends Audit {
             { key: 'inspected_page', itemType: 'text', text: "Scheda servizio ispezionata" }
         ]
 
+        let allServicesUrl = url + '/servizio/'
+
+        try {
+            await got(allServicesUrl)
+        } catch (e) {
+            return {
+                score: 0,
+                details: Audit.makeTableDetails(infoHeadings, pageNotFoundItems)
+            }
+        }
+
         let score = 1
         const mandatoryVoices: Array<string> = contentTypeItems.Servizio
-        const mandatoryHeaderVoices = contentTypeItems.Header
+        const mandatoryHeaderVoices: Array<string> = contentTypeItems.Header
         const totalMandatoryVoices = mandatoryVoices.length + mandatoryHeaderVoices.length
 
         const pagesToBeScanned = await getAllServicesPagesToBeScanned(allServicesUrl)
         const servicesUrl = await getAllServicesUrl(pagesToBeScanned, allServicesUrl)
+        if (servicesUrl.length <= 0) {
+            return {
+                score: 0,
+                details: Audit.makeTableDetails(infoHeadings, servicesNotFoundItems)
+            }
+        }
+
         const randomServiceToBeScanned = servicesUrl[Math.floor(Math.random() * (servicesUrl.length - 1 + 1) + 1)]
 
         const response = await got(randomServiceToBeScanned)
@@ -148,19 +145,23 @@ class LoadAudit extends Audit {
     }
 }
 
-
 module.exports = LoadAudit
 
 async function getAllServicesPagesToBeScanned(initialUrl: string) : Promise<string[]> {
     let pageScanned = [
         initialUrl
     ]
+
     let noMorePageToScan = false
     let pageToBeScan = initialUrl
+
     while (!noMorePageToScan) {
         let tempResponse = await got(pageToBeScan)
         const $ = cheerio.load(tempResponse.body)
         const cheerioElements = $('body').find('a')
+        if (cheerioElements.length <= 0) {
+            noMorePageToScan = true
+        }
 
         for (let cheerioElement of cheerioElements) {
             let url = $(cheerioElement).attr('href')
@@ -168,7 +169,7 @@ async function getAllServicesPagesToBeScanned(initialUrl: string) : Promise<stri
                 pageScanned.push(url)
 
                 pageToBeScan = url
-            } else if (url !== undefined && !url.includes('/page/')) {
+            } else {
                 noMorePageToScan = true
             }
         }
@@ -183,6 +184,9 @@ async function getAllServicesUrl(pagesToScan: string[], initialUrl: string) : Pr
         const pageResponse = await got(pageToScan)
         const $ = cheerio.load(pageResponse.body)
         const cheerioElements = $('body').find('a')
+        if (cheerioElements.length <= 0) {
+            continue
+        }
 
         for (let cheerioElement of cheerioElements) {
             let url = $(cheerioElement).attr('href')
