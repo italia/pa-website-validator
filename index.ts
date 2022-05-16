@@ -30,7 +30,7 @@ const savePath = crawelerCommand.destination + '/' + crawelerCommand.report
 
 const view = crawelerCommand.view === 'yes' ? '--view' : ''
 console.log('[INFO] Try to execute: ' + `node ${__dirname}/node_modules/lighthouse/lighthouse-cli/index.js --locale it --config-path=${configPath} --chrome-flags="--headless" --output json --output html --output-path ${savePath} ${crawelerCommand.website} ${view}`)
-const child = spawn(`node ${__dirname}/node_modules/lighthouse/lighthouse-cli/index.js --locale it --config-path=${configPath} --chrome-flags="--headless" --output json --output html --output-path ${savePath} ${crawelerCommand.website} ${view}`, {
+const child = spawn(`npx lighthouse --locale it --config-path=${configPath} --chrome-flags="--headless" --output json --output html --output-path ${savePath} ${crawelerCommand.website} ${view}`, {
     shell: true
 })
 

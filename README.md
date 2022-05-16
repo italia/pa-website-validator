@@ -35,7 +35,7 @@ Per l'installazione in locale partendo dalla repository effettuare prima la buil
 ```sh
 cd pa-website-validator
 npm install
-npm run distribution
+npm run build
 ```
 
 ## Installazione
