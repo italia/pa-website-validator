@@ -1,12 +1,10 @@
 'use strict'
-
-// @ts-ignore
-const Audit = require('lighthouse').Audit
-
-// @ts-ignore
 import * as sslCertificate from "get-ssl-certificate"
-
 // @ts-ignore
+import lighthouse from "lighthouse"
+
+const Audit = lighthouse.Audit
+
 class LoadAudit extends Audit {
     static get meta() {
         return {

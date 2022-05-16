@@ -1,27 +1,14 @@
 'use strict'
-
-// @ts-ignore
-const Audit = require('lighthouse').Audit
-
-// @ts-ignore
 import got from "got"
-
+import { JSDOM } from "jsdom"
 // @ts-ignore
-import * as jsdom from "jsdom"
+import lighthouse from "lighthouse"
 
-// @ts-ignore
-const { JSDOM } = jsdom
-
-//@ts-ignore
+const Audit = lighthouse.Audit
 const storageFolder = __dirname + '/../../../storage/municipality'
-
-// @ts-ignore
 const allowedPrivacyPolicyWordsFile = 'allowedPrivacyPolicyWords.json'
-
-// @ts-ignore
 const allowedPrivacyPolicyItems = require(storageFolder + '/' + allowedPrivacyPolicyWordsFile)
 
-// @ts-ignore
 class LoadAudit extends Audit {
     static get meta() {
         return {
@@ -42,6 +29,7 @@ class LoadAudit extends Audit {
         let score = 0
         const footerLinks = dom.window.document.querySelectorAll('footer a')
         for (let a of footerLinks) {
+            // @ts-ignore
             const text = a.text.toLowerCase()
             if (includesPrivacyPolicyWords(text)){
                 score = 1
@@ -56,7 +44,6 @@ class LoadAudit extends Audit {
 
 module.exports = LoadAudit
 
-// @ts-ignore
 function includesPrivacyPolicyWords(text: string) : boolean {
     const allowedPrivacyPolicyWords = allowedPrivacyPolicyItems.allowedNames
 

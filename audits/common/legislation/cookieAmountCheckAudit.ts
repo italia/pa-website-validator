@@ -3,26 +3,19 @@
 import { Page, Protocol } from "puppeteer"
 import crawlerTypes from "../../../types/crawler-types"
 import links = crawlerTypes.links
-
 // @ts-ignore
-const Audit = require('lighthouse').Audit
-
-// @ts-ignore
+import lighthouse from "lighthouse"
 import puppeteer from "puppeteer"
 
-// @ts-ignore
+const Audit = lighthouse.Audit
 const storageFolder = __dirname + '/../../../storage/common'
 
-// @ts-ignore
 const cookieAllowedBtnNamesFile = 'allowedCookieBtnNames.json'
 
-// @ts-ignore
 const btnWords = require(storageFolder + '/' + cookieAllowedBtnNamesFile)
 
-// @ts-ignore
 const COOKIES_MIN_AMOUNT = 1
 
-// @ts-ignore
 class LoadAudit extends Audit {
     static get meta() {
         return {

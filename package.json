@@ -35,7 +35,10 @@
     "lighthouse"
   ],
   "devDependencies": {
+    "@types/geoip-lite": "^1.4.1",
     "@types/get-ssl-certificate": "^2.3.0",
+    "@types/jsdom": "^16.2.14",
+    "@types/yargs": "^17.0.10",
     "typescript": "^4.6.3"
   },
   "bundleDependencies": [

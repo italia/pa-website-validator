@@ -1,9 +1,9 @@
 'use strict'
-
 // @ts-ignore
-const Audit = require('lighthouse').Audit
+import lighthouse from "lighthouse"
 
-// @ts-ignore
+const Audit = lighthouse.Audit
+
 class LoadAudit extends Audit {
     static get meta() {
         return {

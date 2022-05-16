@@ -1,19 +1,16 @@
 'use strict';
 
 import { CheerioAPI } from "cheerio";
-
 // @ts-ignore
-const Audit = require('lighthouse').Audit
-
-// @ts-ignore
+import lighthouse from "lighthouse"
 import * as cheerio from "cheerio"
 
-// @ts-ignore
+const Audit = lighthouse.Audit
+
 const themePossibleNames = [
     'design-scuole-wordpress'
 ]
 
-// @ts-ignore
 class LoadAudit extends Audit {
     static get meta() {
         return {
@@ -65,7 +62,6 @@ class LoadAudit extends Audit {
 
 module.exports = LoadAudit;
 
-// @ts-ignore
 function containsPossibleThemeName(array: Array<string>) : boolean {
     for (let element of array) {
         for (let name of themePossibleNames) {

@@ -1,14 +1,10 @@
 'use strict'
-
 // @ts-ignore
-const Audit = require('lighthouse').Audit
-
-// @ts-ignore
+import lighthouse from "lighthouse"
 import * as cheerio from "cheerio"
-
-// @ts-ignore
 import * as https from "https"
 
+const Audit = lighthouse.Audit
 const currentVersion = '1.1.0'
 
 // @ts-ignore
