@@ -14,5 +14,6 @@
     "ES2021.String",
     "ESNext.String"
   ],
+  "exclude": ["test"],
   "include": ["**/*.ts", "./node_modules/lighthouse/types/**/*.d.ts"]
 }
