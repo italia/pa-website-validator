@@ -4,7 +4,7 @@ import { spawn } from "child_process"
 import * as fs from "fs"
 
 const run = async (website: string, type: string, scope: string, destination: string, reportName: string) => {
-    let configPath = __dirname + `/config/${type}/auditConfig-${scope}.js`
+    let configPath = __dirname + `/../config/${type}/auditConfig-${scope}.js`
 
     fs.access(destination, function(error) {
         if (error) {
@@ -16,7 +16,7 @@ const run = async (website: string, type: string, scope: string, destination: st
 
     const savePath = destination + '/' + reportName
 
-    return spawn(`node ${__dirname}/node_modules/lighthouse/lighthouse-cli/index.js --locale it --config-path=${configPath} --chrome-flags="--headless" --output json --output html --output-path ${savePath} ${website} `, {
+    return spawn(`npx lighthouse --locale it --config-path=${configPath} --chrome-flags="--headless" --output json --output html --output-path ${savePath} ${website}`, {
         shell: true
     })
 }
