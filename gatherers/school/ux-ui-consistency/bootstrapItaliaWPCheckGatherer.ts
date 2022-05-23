@@ -3,10 +3,10 @@
 import gatherer from "lighthouse/types/gatherer"
 import PassContext = gatherer.PassContext
 import LoadData = gatherer.LoadData
+// @ts-ignore
+import lighthouse from "lighthouse"
 
-const { Gatherer } = require('lighthouse')
-
-class bootstrapItaliaWPCheck extends Gatherer {
+class bootstrapItaliaWPCheck extends lighthouse.Gatherer {
     afterPass(options: PassContext, loadData: LoadData) {
         const expression = `document.getElementsByTagName('head')[0].innerHTML`
 

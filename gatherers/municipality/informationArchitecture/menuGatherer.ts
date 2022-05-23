@@ -3,10 +3,10 @@
 import gatherer from "lighthouse/types/gatherer"
 import PassContext = gatherer.PassContext
 import LoadData = gatherer.LoadData
+// @ts-ignore
+import lighthouse from "lighthouse"
 
-const { Gatherer } = require('lighthouse')
-
-class menuStructureMatchModel extends Gatherer {
+class menuStructureMatchModel extends lighthouse.Gatherer {
     afterPass(options: PassContext, loadData: LoadData) {
        const expression = `window.location.origin`
        const driver = options.driver

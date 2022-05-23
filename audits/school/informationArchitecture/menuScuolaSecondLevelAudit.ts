@@ -1,26 +1,17 @@
 'use strict'
 
 import { CheerioAPI } from "cheerio"
-
 // @ts-ignore
-const Audit = require('lighthouse').Audit
-
-// @ts-ignore
+import lighthouse from "lighthouse"
 import got from "got"
-
-// @ts-ignore
 import * as cheerio from "cheerio"
 
 // @ts-ignore
 import { checkOrder } from "../../../utils/utils"
 
-// @ts-ignore
+const Audit = lighthouse.Audit
 const storageFolder = __dirname + '/../../../storage/school'
-
-// @ts-ignore
 const menuItemsFile = 'menuItems.json'
-
-// @ts-ignore
 const menuItems = require (storageFolder + '/' + menuItemsFile)
 
 class LoadAudit extends Audit {

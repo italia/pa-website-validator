@@ -4,13 +4,12 @@ import crawlerTypes from "../../../types/crawler-types"
 import cipher = crawlerTypes.cipher
 import https from 'https'
 import {TLSSocket} from 'tls'
-
 // @ts-ignore
-const Audit = require('lighthouse').Audit
+import lighthouse from "lighthouse"
 
+const Audit = lighthouse.Audit
 const allowedTlsVersions = ['TLSv1.2', 'TLSv1.3']
 
-// @ts-ignore
 class LoadAudit extends Audit {
     static get meta() {
         return {

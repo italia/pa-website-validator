@@ -1,27 +1,15 @@
 'use strict'
-
-// @ts-ignore
-const Audit = require('lighthouse').Audit
-
-// @ts-ignore
-const geoip = require('geoip-lite')
-
-// @ts-ignore
 import * as dns from "dns"
-
-// @ts-ignore
 import * as util from "util"
-
+import geoip from "geoip-lite"
 // @ts-ignore
+import lighthouse from "lighthouse"
+
+const Audit = lighthouse.Audit
 const storageFolder = __dirname + '/../../../storage/common'
-
-// @ts-ignore
 const allowedCountriesFiles = 'allowedCountries.json'
-
-// @ts-ignore
 const allowedCountriesItems = require(storageFolder + '/' + allowedCountriesFiles)
 
-// @ts-ignore
 class LoadAudit extends Audit {
     static get meta() {
         return {
@@ -51,9 +39,9 @@ class LoadAudit extends Audit {
             const ip = await lookup(hostname)
 
             if (Boolean(ip) && Boolean(ip.address)) {
-                const ipInformation = await geoip.lookup(ip.address)
+                const ipInformation = geoip.lookup(ip.address)
 
-                if (Boolean(ipInformation) && Boolean(ipInformation.country)) {
+                if (ipInformation !== null) {
                     if (allowedCountries.includes(ipInformation.country)) {
                         score = 1
                     }

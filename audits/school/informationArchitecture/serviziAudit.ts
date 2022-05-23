@@ -1,32 +1,20 @@
 'use strict'
 
 import { CheerioAPI } from "cheerio"
-
 // @ts-ignore
-const Audit = require('lighthouse').Audit
-
-// @ts-ignore
+import lighthouse from "lighthouse"
 import got from "got"
-
-// @ts-ignore
 import * as cheerio from "cheerio"
 
 // @ts-ignore
 import { checkOrder } from "../../../utils/utils"
 
-// @ts-ignore
+const Audit = lighthouse.Audit
 const storageFolder = __dirname + '/../../../storage/school'
-
-// @ts-ignore
 const contentTypeItemsFile = 'contentTypeItems.json'
-
-// @ts-ignore
 const modelReferenceUrl = 'https://docs.google.com/spreadsheets/d/1MoayTY05SE4ixtgBsfsdngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=0'
-
-// @ts-ignore
 const contentTypeItems = require(storageFolder + '/' + contentTypeItemsFile)
 
-// @ts-ignore
 class LoadAudit extends Audit {
     static get meta() {
         return {

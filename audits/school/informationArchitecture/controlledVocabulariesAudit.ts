@@ -3,27 +3,17 @@
 import { CheerioAPI } from "cheerio"
 import crawlerTypes from "../../../types/crawler-types"
 import vocabularyResult = crawlerTypes.vocabularyResult
-
 // @ts-ignore
-const Audit = require('lighthouse').Audit
-
-// @ts-ignore
+import lighthouse from "lighthouse"
 import got from "got"
-
-// @ts-ignore
 import * as cheerio from "cheerio"
 
-// @ts-ignore
+const Audit = lighthouse.Audit
 const storageFolder = __dirname + '/../../../storage/school'
-
-// @ts-ignore
 const vocabularyFile = 'controlledVocabulary.json'
-
-// @ts-ignore
 const vocabularies = require(storageFolder + '/' + vocabularyFile)
 
-// @ts-ignore
-class LoadAudit extends Audit {
+class LoadAudit extends lighthouse.Audit {
     static get meta() {
         return {
             id: 'school-controlled-vocabularies',

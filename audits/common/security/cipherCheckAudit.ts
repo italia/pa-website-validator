@@ -4,19 +4,16 @@ import crawlerTypes from "../../../types/crawler-types"
 import cipherInfo = crawlerTypes.cipherInfo
 import https from 'https'
 import {TLSSocket} from 'tls'
-
 // @ts-ignore
-const Audit = require('lighthouse').Audit
+import lighthouse from "lighthouse"
 
-// @ts-ignore
+const Audit = lighthouse.Audit
 const storageFolder = __dirname + '/../../../storage/common'
 
-// @ts-ignore
 const allowedCiphersFile = 'allowedCiphers.json'
 
 const allowedCiphersItems = require(storageFolder + '/' + allowedCiphersFile)
 
-// @ts-ignore
 class LoadAudit extends Audit {
     static get meta() {
         return {
@@ -83,7 +80,6 @@ class LoadAudit extends Audit {
 
 module.exports = LoadAudit
 
-// @ts-ignore
 async function getCipherVersion(hostname: string) : Promise<string> {
     return new Promise(function(resolve, reject) {
         https.request(hostname,  function(res) {

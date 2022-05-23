@@ -1,18 +1,12 @@
 'use strict'
-
 // @ts-ignore
-const Audit = require('lighthouse').Audit
+import lighthouse from "lighthouse"
 
-// @ts-ignore
+const Audit = lighthouse.Audit
 const storageFolder = __dirname + '/../../../storage/school'
-
-// @ts-ignore
 const allowedFontsFile = 'allowedFonts.json'
-
-// @ts-ignore
 const allowedFonts = require(storageFolder + '/' + allowedFontsFile)
 
-// @ts-ignore
 class LoadAudit extends Audit {
     static get meta() {
         return {

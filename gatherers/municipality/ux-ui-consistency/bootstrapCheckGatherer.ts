@@ -3,10 +3,10 @@
 import gatherer from "lighthouse/types/gatherer"
 import PassContext = gatherer.PassContext
 import LoadData = gatherer.LoadData
+// @ts-ignore
+import lighthouse from "lighthouse"
 
-const { Gatherer } = require('lighthouse')
-
-class bootstrapCheck extends Gatherer {
+class bootstrapCheck extends lighthouse.Gatherer {
     async afterPass(options: PassContext, loadData: LoadData) {
         try {
             const expression = `(window.bootstrap !== undefined) ? window.bootstrap.Tooltip.VERSION : "0"`

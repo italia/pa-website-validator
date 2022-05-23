@@ -1,12 +1,8 @@
 #!/usr/bin/env node
 
 import { spawn } from "child_process"
-
-// @ts-ignore
 import * as fs from "fs"
-
-// @ts-ignore
-import * as yargs from "yargs"
+import yargs from "yargs"
 
 const crawelerCommand = yargs
     .usage("Usage: --type <type> --destination <folder> --report <report_name> --website <url> --scope <scope> --view <view>")
@@ -16,7 +12,7 @@ const crawelerCommand = yargs
     .option("website", { describe: "Website where to run the crawler", type: "string", demandOption: true })
     .option("scope", { describe: "Execution scope", type: "string", demandOption: true , default: "online", choices: ['local', 'online']})
     .option("view", { describe: "Autolaunch reports in browser", type: "string", demandOption: true , default: "no", choices: ['yes', 'no']})
-    .argv;
+    .parseSync();
 
 let configPath = __dirname + `/config/${crawelerCommand.type}/auditConfig-${crawelerCommand.scope}.js`
 
@@ -34,7 +30,7 @@ const savePath = crawelerCommand.destination + '/' + crawelerCommand.report
 
 const view = crawelerCommand.view === 'yes' ? '--view' : ''
 console.log('[INFO] Try to execute: ' + `node ${__dirname}/node_modules/lighthouse/lighthouse-cli/index.js --locale it --config-path=${configPath} --chrome-flags="--headless" --output json --output html --output-path ${savePath} ${crawelerCommand.website} ${view}`)
-const child = spawn(`node ${__dirname}/node_modules/lighthouse/lighthouse-cli/index.js --locale it --config-path=${configPath} --chrome-flags="--headless" --output json --output html --output-path ${savePath} ${crawelerCommand.website} ${view}`, {
+const child = spawn(`npx lighthouse --locale it --config-path=${configPath} --chrome-flags="--headless" --output json --output html --output-path ${savePath} ${crawelerCommand.website} ${view}`, {
     shell: true
 })
 
