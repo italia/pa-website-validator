@@ -1,0 +1,24 @@
+name: Static checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - develop
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install modules
+        run: npm ci
+      - name: TypeScript
+        run: npm run type:check
+      - name: ESLint
+        run: npm run lint:check
+      - name: Prettier
+        run: npm run format:check
