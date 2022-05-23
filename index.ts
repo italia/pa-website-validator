@@ -25,7 +25,7 @@ console.log('[INFO] Loaded config: ' + configPath)
 fs.access(crawelerCommand.destination, function(error) {
     if (error) {
         console.log("[WARNING] Directory does not exist..")
-        fs.mkdirSync(crawelerCommand.destination)
+        fs.mkdirSync(crawelerCommand.destination, { recursive: true })
         console.log("[INFO] Directory created at: " + crawelerCommand.destination)
     }
 })
