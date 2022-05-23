@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "tsc && cp -r storage dist",
-    "prepack": "npm run build"
+    "prepare": "npm run build"
   },
   "bin": {
     "pa-website-validator": "dist/index.js"
