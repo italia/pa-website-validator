@@ -20,7 +20,7 @@ export const logLevels = {
     display_verbose: "verbose"
 }
 
-const run = async (website: string, type: string, scope: string, destination: string, reportName: string, logLevel: string = logLevels.display_none) => {
+const run = async (website: string, type: string, scope: string, logLevel: string = logLevels.display_none, saveFile: boolean = true, destination: string, reportName: string) => {
     //L'oggetto chrome non è incluso nel try-catch in modo tale che la sua istanza venga killata anche in caso di eccezione lanciata da altri processi
     const chrome = await chromeLauncher.launch({chromeFlags: ['--headless']})
 
@@ -49,6 +49,18 @@ const run = async (website: string, type: string, scope: string, destination: st
         const reportHtml: string = runnerResult.report[0]
         const reportJSON: string = runnerResult.report[1]
 
+        await chrome.kill()
+
+        if (!saveFile) {
+            return {
+                status: true,
+                data: {
+                    htmlReport: reportHtml,
+                    jsonReport: reportJSON
+                }
+            }
+        }
+
         if (!fs.existsSync(destination)){
             console.log("[WARNING] Directory does not exist..")
             fs.mkdirSync(destination, {recursive: true})
@@ -59,8 +71,6 @@ const run = async (website: string, type: string, scope: string, destination: st
         const jsonPath: string = destination + '/' + reportName + '.json'
         fs.writeFileSync(htmlPath, reportHtml)
         fs.writeFileSync(jsonPath, reportJSON)
-
-        await chrome.kill()
 
         return {
             status: true,

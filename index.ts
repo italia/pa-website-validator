@@ -19,7 +19,7 @@ if (!fs.existsSync(crawelerCommand.destination)){
     console.log("[INFO] Directory created at: " + crawelerCommand.destination)
 }
 
-Promise.resolve(run(crawelerCommand.website, crawelerCommand.type, crawelerCommand.scope, crawelerCommand.destination, crawelerCommand.report, logLevels.display_info)).then((result) => {
+Promise.resolve(run(crawelerCommand.website, crawelerCommand.type, crawelerCommand.scope, logLevels.display_info, true, crawelerCommand.destination, crawelerCommand.report)).then((result) => {
     console.log('[INFO] Status result:', result.status)
     console.log('[INFO] HTML report file:', result.data.htmlResultPath)
     console.log('[INFO] JSON report file:', result.data.jsonResultPath)
