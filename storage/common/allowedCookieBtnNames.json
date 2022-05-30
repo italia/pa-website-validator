@@ -1,9 +1,3 @@
 {
-    "allowedNames":  [
-        "accetta",
-        "accetto",
-        "accept",
-        "acconsento",
-        "ok"
-    ]
+  "allowedNames": ["accetta", "accetto", "accept", "acconsento", "ok"]
 }
