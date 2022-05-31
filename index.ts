@@ -35,6 +35,12 @@ const crawelerCommand = yargs
     demandOption: true,
     default: "online",
     choices: ["local", "online"],
+  }).option("view", {
+    describe: "View report after scan",
+    type: "string",
+    demandOption: true,
+    default: "no",
+    choices: ["yes", "no"],
   })
   .parseSync();
 
@@ -52,7 +58,8 @@ Promise.resolve(
     logLevels.display_info,
     true,
     crawelerCommand.destination,
-    crawelerCommand.report
+    crawelerCommand.report,
+crawelerCommand.view === 'yes'
   )
 ).then((result) => {
   console.log("[INFO] Status result:", result.status);

@@ -5,6 +5,7 @@ import lighthouse from "lighthouse";
 
 import * as fs from "fs";
 import * as chromeLauncher from "chrome-launcher";
+import open from "open";
 
 import * as schoolOnlineConfig from "../config/school/auditConfig-online";
 import * as schoolLocalConfig from "../config/school/auditConfig-local";
@@ -27,7 +28,8 @@ const run = async (
   logLevel: string = logLevels.display_none,
   saveFile = true,
   destination: string,
-  reportName: string
+  reportName: string,
+  view: boolean = false
 ) => {
   //L'oggetto chrome non è incluso nel try-catch in modo tale che la sua istanza venga killata anche in caso di eccezione lanciata da altri processi
   const chrome = await chromeLauncher.launch({ chromeFlags: ["--headless"] });
@@ -87,6 +89,10 @@ const run = async (
     const jsonPath: string = destination + "/" + reportName + ".json";
     fs.writeFileSync(htmlPath, reportHtml);
     fs.writeFileSync(jsonPath, reportJSON);
+
+    if (view) {
+      await open(htmlPath)
+    }
 
     return {
       status: true,
