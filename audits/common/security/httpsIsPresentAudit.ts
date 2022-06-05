@@ -1,4 +1,5 @@
 "use strict";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
 
@@ -18,7 +19,7 @@ class LoadAudit extends Audit {
   }
 
   static async audit(
-    artifacts: any
+    artifacts: LH.Artifacts & { securityHttpsIsPresent: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const protocol = artifacts.securityHttpsIsPresent.replace(":", "") ?? "";
     let score = 1;

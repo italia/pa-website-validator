@@ -4,6 +4,7 @@ import crawlerTypes from "../../../types/crawler-types";
 import cipher = crawlerTypes.cipher;
 import https from "https";
 import { TLSSocket } from "tls";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
 
@@ -24,7 +25,7 @@ class LoadAudit extends Audit {
   }
 
   static async audit(
-    artifacts: any
+    artifacts: LH.Artifacts & { securityTlsCheck: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const hostname = artifacts.securityTlsCheck;
 
@@ -58,9 +59,8 @@ class LoadAudit extends Audit {
 
 module.exports = LoadAudit;
 
-// @ts-ignore
 async function getCipherVersion(hostname: string): Promise<string> {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve) {
     https
       .request(hostname, function (res) {
         resolve((res.socket as TLSSocket).getCipher().version);

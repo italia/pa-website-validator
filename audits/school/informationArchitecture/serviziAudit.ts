@@ -1,12 +1,12 @@
 "use strict";
 
 import { CheerioAPI } from "cheerio";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
 import got from "got";
 import * as cheerio from "cheerio";
 
-// @ts-ignore
 import { checkOrder } from "../../../utils/utils";
 import { contentTypeItems } from "../../../storage/school/contentTypeItems";
 
@@ -30,7 +30,7 @@ class LoadAudit extends Audit {
   }
 
   static async audit(
-    artifacts: any
+    artifacts: LH.Artifacts & { serviziStructure: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.serviziStructure;
 
@@ -167,14 +167,10 @@ class LoadAudit extends Audit {
       foundElements.push(mandatoryHeaderVoices[2]);
     }
 
-    const foundMandatoryVoicesPercentage: any = (
-      (foundElements.length / totalMandatoryVoices) *
-      100
-    ).toFixed(0);
-    const foundMandatoryVoicesNotCorrectOrderPercentage: any = (
-      (orderResult.numberOfElementsNotInSequence / totalMandatoryVoices) *
-      100
-    ).toFixed(0);
+    const foundMandatoryVoicesPercentage =
+      (foundElements.length / totalMandatoryVoices) * 100;
+    const foundMandatoryVoicesNotCorrectOrderPercentage =
+      (orderResult.numberOfElementsNotInSequence / totalMandatoryVoices) * 100;
 
     if (
       foundMandatoryVoicesPercentage < 90 ||
@@ -200,9 +196,10 @@ class LoadAudit extends Audit {
           orderResult.numberOfElementsNotInSequence,
         mandatory_elements_not_right_order:
           orderResult.elementsNotInSequence.join(", "),
-        mandatory_voices_found_percentage: foundMandatoryVoicesPercentage + "%",
+        mandatory_voices_found_percentage:
+          foundMandatoryVoicesPercentage.toFixed(0) + "%",
         mandatory_voices_not_right_order_found_percentage:
-          foundMandatoryVoicesNotCorrectOrderPercentage + "%",
+          foundMandatoryVoicesNotCorrectOrderPercentage.toFixed(0) + "%",
         inspected_page: randomServiceToBeScanned,
       },
     ];

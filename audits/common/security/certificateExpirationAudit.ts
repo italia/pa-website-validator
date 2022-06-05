@@ -1,5 +1,6 @@
 "use strict";
 import * as sslCertificate from "get-ssl-certificate";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
 
@@ -18,7 +19,7 @@ class LoadAudit extends Audit {
   }
 
   static async audit(
-    artifacts: any
+    artifacts: LH.Artifacts & { securityCertificateExpiration: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const hostname = artifacts.securityCertificateExpiration;
 

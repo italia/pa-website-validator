@@ -3,11 +3,15 @@
 import { CheerioAPI } from "cheerio";
 import crawlerTypes from "../../../types/crawler-types";
 import vocabularyResult = crawlerTypes.vocabularyResult;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
 import got from "got";
 import * as cheerio from "cheerio";
-import { eurovocVocabulary, schoolModelVocabulary } from "../../../storage/school/controlledVocabulary";
+import {
+  eurovocVocabulary,
+  schoolModelVocabulary,
+} from "../../../storage/school/controlledVocabulary";
 
 const Audit = lighthouse.Audit;
 
@@ -26,7 +30,7 @@ class LoadAudit extends lighthouse.Audit {
   }
 
   static async audit(
-    artifacts: any
+    artifacts: LH.Artifacts & { controlledVocabularies: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.controlledVocabularies;
 
@@ -79,20 +83,18 @@ class LoadAudit extends lighthouse.Audit {
       eurovocVocabulary
     );
 
-    let numberOfElementsNotInEurovocModelPercentage: any = 100;
-    let numberOfElementsNotInScuoleModelPercentage: any = 100;
+    let numberOfElementsNotInEurovocModelPercentage = 100;
+    let numberOfElementsNotInScuoleModelPercentage = 100;
 
     if (argumentsElements.length > 0) {
-      numberOfElementsNotInEurovocModelPercentage = (
+      numberOfElementsNotInEurovocModelPercentage =
         (eurovocModelCheck.elementNotIncluded.length /
           argumentsElements.length) *
-        100
-      ).toFixed(0);
-      numberOfElementsNotInScuoleModelPercentage = (
+        100;
+      numberOfElementsNotInScuoleModelPercentage =
         (schoolModelCheck.elementNotIncluded.length /
           argumentsElements.length) *
-        100
-      ).toFixed(0);
+        100;
     }
 
     let score = 0;
@@ -115,9 +117,9 @@ class LoadAudit extends lighthouse.Audit {
         all_arguments_in_eurovoc_model:
           eurovocModelCheck.allArgumentsInVocabulary ? "Sì" : "No",
         eurovoc_element_percentage:
-          numberOfElementsNotInEurovocModelPercentage + "%",
+          numberOfElementsNotInEurovocModelPercentage.toFixed(0) + "%",
         scuole_element_percentage:
-          numberOfElementsNotInScuoleModelPercentage + "%",
+          numberOfElementsNotInScuoleModelPercentage.toFixed(0) + "%",
         element_not_in_school_model:
           schoolModelCheck.elementNotIncluded.join(", "),
         element_not_in_eurovoc_model:

@@ -1,6 +1,7 @@
 "use strict";
 
 import { CheerioAPI } from "cheerio";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
 import got from "got";
@@ -24,7 +25,7 @@ class LoadAudit extends lighthouse.Audit {
   }
 
   static async audit(
-    artifacts: any
+    artifacts: LH.Artifacts & { menuStructureMatchModel: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.menuStructureMatchModel;
 

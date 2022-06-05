@@ -1,4 +1,5 @@
 "use strict";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
 import got from "got";
@@ -20,7 +21,9 @@ class LoadAudit extends Audit {
     };
   }
 
-  static async audit(artifacts: any): Promise<{ score: number }> {
+  static async audit(
+    artifacts: LH.Artifacts & { legislationPrivacyIsPresent: string }
+  ): Promise<{ score: number }> {
     const url = artifacts.legislationPrivacyIsPresent;
     const response = await got(url);
     const dom = new JSDOM(response.body);
@@ -28,8 +31,8 @@ class LoadAudit extends Audit {
     let score = 0;
     const footerLinks = dom.window.document.querySelectorAll("footer a");
     for (const a of footerLinks) {
-      // @ts-ignore
-      if (includesPrivacyPolicyWords(a.text.toLowerCase())) {
+      const text = a.textContent;
+      if (text && includesPrivacyPolicyWords(text.toLowerCase())) {
         score = 1;
         break;
       }

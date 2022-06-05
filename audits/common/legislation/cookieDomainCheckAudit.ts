@@ -4,6 +4,7 @@ import { Page, Protocol } from "puppeteer";
 import crawlerTypes from "../../../types/crawler-types";
 import links = crawlerTypes.links;
 import cookie = crawlerTypes.cookie;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
 import puppeteer from "puppeteer";
@@ -25,7 +26,7 @@ class LoadAudit extends Audit {
   }
 
   static async audit(
-    artifacts: any
+    artifacts: LH.Artifacts & { legislationCookieDomain: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.legislationCookieDomain;
 
@@ -75,9 +76,8 @@ async function getLinksFromHTMLPage(page: Page): Promise<links[]> {
     (
       await page.$$("a,button")
     ).map(async (a) => {
-      // @ts-ignore
-      const className: string = (
-        await (await a.getProperty("className")).jsonValue()
+      const className = (
+        (await (await a.getProperty("className")).jsonValue()) as string
       )
         .replaceAll(" ", ".")
         .trim();
@@ -98,7 +98,10 @@ async function clickOnAcceptCookiesButtonIfExists(page: Page, links: links[]) {
     ) {
       try {
         const element = await page.$(link.className);
-        await element!.click();
+        if (!element) {
+          throw new Error("null element");
+        }
+        await element.click();
         await sleep(750);
         await page.reload({ waitUntil: ["networkidle0", "domcontentloaded"] });
         break;

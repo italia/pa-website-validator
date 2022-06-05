@@ -1,5 +1,6 @@
 "use strict";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import lighthouse from "lighthouse";
 
@@ -29,7 +30,7 @@ const run = async (
   saveFile = true,
   destination: string,
   reportName: string,
-  view: boolean = false
+  view = false
 ) => {
   //L'oggetto chrome non è incluso nel try-catch in modo tale che la sua istanza venga killata anche in caso di eccezione lanciata da altri processi
   const chrome = await chromeLauncher.launch({ chromeFlags: ["--headless"] });
@@ -91,7 +92,7 @@ const run = async (
     fs.writeFileSync(jsonPath, reportJSON);
 
     if (view) {
-      await open(htmlPath)
+      await open(htmlPath);
     }
 
     return {

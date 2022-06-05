@@ -1,4 +1,5 @@
 "use strict";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
 import * as cheerio from "cheerio";
@@ -7,7 +8,6 @@ import * as https from "https";
 const Audit = lighthouse.Audit;
 const currentVersion = "1.1.0";
 
-// @ts-ignore
 class LoadAudit extends Audit {
   static get meta() {
     return {
@@ -22,7 +22,7 @@ class LoadAudit extends Audit {
   }
 
   static async audit(
-    artifacts: any
+    artifacts: LH.Artifacts & { themeVersionCheck: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const headHtml = artifacts.themeVersionCheck;
 
@@ -60,6 +60,7 @@ class LoadAudit extends Audit {
           score = 1;
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         themeManifest = CSS.split("/*!").pop()!.split("*/")[0];
       }
     }
@@ -80,7 +81,7 @@ class LoadAudit extends Audit {
 module.exports = LoadAudit;
 
 async function getCSS(hostname: string): Promise<string> {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve) {
     https
       .request(hostname, function (res) {
         let data = "";

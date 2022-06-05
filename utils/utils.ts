@@ -2,7 +2,7 @@
 import crawlerTypes from "../types/crawler-types";
 import orderType = crawlerTypes.orderResult;
 
-module.exports.checkOrder = async (
+export const checkOrder = async (
   mandatoryElements: string[],
   foundElements: string[]
 ): Promise<orderType> => {

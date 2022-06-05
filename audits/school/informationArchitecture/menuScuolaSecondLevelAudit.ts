@@ -1,12 +1,12 @@
 "use strict";
 
 import { CheerioAPI } from "cheerio";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
 import got from "got";
 import * as cheerio from "cheerio";
 
-// @ts-ignore
 import { checkOrder } from "../../../utils/utils";
 import { secondaryMenuItems } from "../../../storage/school/menuItems";
 
@@ -27,7 +27,9 @@ class LoadAudit extends Audit {
   }
 
   static async audit(
-    artifacts: any
+    artifacts: LH.Artifacts & {
+      menuStructureScuolaSecondLevelMatchModel: string;
+    }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.menuStructureScuolaSecondLevelMatchModel;
 
@@ -64,8 +66,7 @@ class LoadAudit extends Audit {
     const response = await got(url);
     const $: CheerioAPI = cheerio.load(response.body);
 
-    const secondaryMenuScuolaItems: Array<string> =
-      secondaryMenuItems.Scuola;
+    const secondaryMenuScuolaItems: Array<string> = secondaryMenuItems.Scuola;
 
     const headerUl = $("#menu-la-scuola").find("li");
     let numberOfMandatoryVoicesPresent = 0;
@@ -78,11 +79,10 @@ class LoadAudit extends Audit {
       elementsFound.push($(element).text().trim());
     }
 
-    const missingVoicesPercentage: any = (
+    const missingVoicesPercentage =
       ((secondaryMenuScuolaItems.length - numberOfMandatoryVoicesPresent) /
         secondaryMenuScuolaItems.length) *
-      100
-    ).toFixed(0);
+      100;
 
     let correctOrder = true;
     const correctOrderResult = await checkOrder(
@@ -106,7 +106,7 @@ class LoadAudit extends Audit {
         missing_voices: secondaryMenuScuolaItems
           .filter((val) => !elementsFound.includes(val))
           .join(", "),
-        missing_voices_percentage: missingVoicesPercentage + "%",
+        missing_voices_percentage: missingVoicesPercentage.toFixed(0) + "%",
         correct_order: correctOrder,
         elements_not_in_correct_order:
           correctOrderResult.elementsNotInSequence.join(", "),

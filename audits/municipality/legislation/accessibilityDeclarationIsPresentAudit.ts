@@ -1,6 +1,7 @@
 "use strict";
 
 import { CheerioAPI } from "cheerio";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
 import got from "got";
@@ -21,7 +22,11 @@ class LoadAudit extends Audit {
     };
   }
 
-  static async audit(artifacts: any): Promise<{ score: number }> {
+  static async audit(
+    artifacts: LH.Artifacts & {
+      legislationAccessibilityDeclarationIsPresent: string;
+    }
+  ): Promise<{ score: number }> {
     const origin = artifacts.legislationAccessibilityDeclarationIsPresent;
 
     const request = await got(origin);
@@ -36,9 +41,10 @@ class LoadAudit extends Audit {
         const aTags = $(footer).find("a");
 
         for (const a of aTags) {
+          const href = $(a).attr("href");
           if (
-            Boolean($(a).attr("href")) &&
-            $(a).attr("href")!.includes("form.agid.gov.it") &&
+            href &&
+            href.includes("form.agid.gov.it") &&
             $(a).text().toLowerCase().includes("accessibilit")
           ) {
             score = 1;

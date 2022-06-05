@@ -4,6 +4,7 @@ import { Cheerio, CheerioAPI, Element } from "cheerio";
 import crawlerTypes from "../../../types/crawler-types";
 import primaryModelMenu = crawlerTypes.primaryModelMenu;
 import secondaryModelMenu = crawlerTypes.secondaryModelMenu;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
 import got from "got";
@@ -25,7 +26,7 @@ class LoadAudit extends Audit {
   }
 
   static async audit(
-    artifacts: any
+    artifacts: LH.Artifacts & { menuStructureMatchModel: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.menuStructureMatchModel;
     const response = await got(url);

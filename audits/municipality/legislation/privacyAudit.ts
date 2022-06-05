@@ -1,6 +1,7 @@
 "use strict";
 import got from "got";
 import { JSDOM } from "jsdom";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { allowedNames } from "../../../storage/common/allowedPrivacyPolicyWords";
@@ -20,7 +21,9 @@ class LoadAudit extends Audit {
     };
   }
 
-  static async audit(artifacts: any): Promise<{ score: number }> {
+  static async audit(
+    artifacts: LH.Artifacts & { legislationPrivacyIsPresent: string }
+  ): Promise<{ score: number }> {
     const url = artifacts.legislationPrivacyIsPresent;
     const response = await got(url);
     const dom = new JSDOM(response.body);
@@ -28,9 +31,8 @@ class LoadAudit extends Audit {
     let score = 0;
     const footerLinks = dom.window.document.querySelectorAll("footer a");
     for (const a of footerLinks) {
-      // @ts-ignore
-      const text = a.text.toLowerCase();
-      if (includesPrivacyPolicyWords(text)) {
+      const text = a.textContent;
+      if (text && includesPrivacyPolicyWords(text.toLowerCase())) {
         score = 1;
       }
     }
