@@ -6,13 +6,9 @@ import https from "https";
 import { TLSSocket } from "tls";
 // @ts-ignore
 import lighthouse from "lighthouse";
+import { allowedCiphers } from "../../../storage/common/allowedCiphers";
 
 const Audit = lighthouse.Audit;
-const storageFolder = __dirname + "/../../../storage/common";
-
-const allowedCiphersFile = "allowedCiphers.json";
-
-const allowedCiphersItems = require(storageFolder + "/" + allowedCiphersFile);
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -60,8 +56,8 @@ class LoadAudit extends Audit {
       {
         tls_version: "",
         cipher_version: "",
-        allowed_tls12_versions: allowedCiphersItems.tls12.join(" | "),
-        allowed_tls13_versions: allowedCiphersItems.tls13.join(" | "),
+        allowed_tls12_versions: allowedCiphers.tls12.join(" | "),
+        allowed_tls13_versions: allowedCiphers.tls13.join(" | "),
       },
     ];
 
@@ -73,12 +69,12 @@ class LoadAudit extends Audit {
     if (Boolean(cipherInfo) && Boolean(cipherInfo.version)) {
       switch (cipherInfo.version) {
         case "TLSv1.2":
-          if (allowedCiphersItems.tls12.includes(cipherInfo.standardName)) {
+          if (allowedCiphers.tls12.includes(cipherInfo.standardName)) {
             score = 1;
           }
           break;
         case "TLSv1.3":
-          if (allowedCiphersItems.tls13.includes(cipherInfo.standardName)) {
+          if (allowedCiphers.tls13.includes(cipherInfo.standardName)) {
             score = 1;
           }
           break;

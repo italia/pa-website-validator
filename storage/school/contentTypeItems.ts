@@ -1,5 +1,5 @@
-{
-  "Servizio": [
+export const contentTypeItems = {
+  Servizio: [
     "Cos'è",
     "A cosa serve",
     "Come si accede al servizio",
@@ -7,7 +7,7 @@
     "Cosa serve",
     "Tempi e scadenze",
     "Contatti",
-    "Ulteriori informazioni"
+    "Ulteriori informazioni",
   ],
-  "Header": ["Titolo", "Descrizione", "Tipologia servizio"]
-}
+  Header: ["Titolo", "Descrizione", "Tipologia servizio"],
+};

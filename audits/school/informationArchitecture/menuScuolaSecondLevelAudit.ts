@@ -8,11 +8,9 @@ import * as cheerio from "cheerio";
 
 // @ts-ignore
 import { checkOrder } from "../../../utils/utils";
+import { secondaryMenuItems } from "../../../storage/school/menuItems";
 
 const Audit = lighthouse.Audit;
-const storageFolder = __dirname + "/../../../storage/school";
-const menuItemsFile = "menuItems.json";
-const menuItems = require(storageFolder + "/" + menuItemsFile);
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -67,7 +65,7 @@ class LoadAudit extends Audit {
     const $: CheerioAPI = cheerio.load(response.body);
 
     const secondaryMenuScuolaItems: Array<string> =
-      menuItems.secondaryMenuItems.Scuola;
+      secondaryMenuItems.Scuola;
 
     const headerUl = $("#menu-la-scuola").find("li");
     let numberOfMandatoryVoicesPresent = 0;

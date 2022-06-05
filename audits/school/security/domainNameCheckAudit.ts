@@ -2,11 +2,9 @@
 
 // @ts-ignore
 import lighthouse from "lighthouse";
+import { domains } from "../../../storage/school/allowedDomains";
 
 const Audit = lighthouse.Audit;
-const storageFolder = __dirname + "/../../../storage/school";
-const allowedDomainsFile = "allowedDomains.json";
-const allowedDomains = require(storageFolder + "/" + allowedDomainsFile);
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -34,7 +32,7 @@ class LoadAudit extends Audit {
       { key: "domain_rule", itemType: "text", text: "Regola: deve contenere" },
     ];
 
-    for (const domain of allowedDomains.domains) {
+    for (const domain of domains) {
       if (hostname.includes(domain)) {
         score = 1;
         break;

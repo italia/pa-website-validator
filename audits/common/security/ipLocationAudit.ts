@@ -4,13 +4,9 @@ import * as util from "util";
 import geoip from "geoip-lite";
 // @ts-ignore
 import lighthouse from "lighthouse";
+import { allowedCountries } from "../../../storage/common/allowedCountries";
 
 const Audit = lighthouse.Audit;
-const storageFolder = __dirname + "/../../../storage/common";
-const allowedCountriesFiles = "allowedCountries.json";
-const allowedCountriesItems = require(storageFolder +
-  "/" +
-  allowedCountriesFiles);
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -29,8 +25,6 @@ class LoadAudit extends Audit {
     artifacts: any
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const hostname = artifacts.securityIpLocation;
-
-    const allowedCountries = allowedCountriesItems.allowedCountries;
 
     let score = 0;
     const headings = [

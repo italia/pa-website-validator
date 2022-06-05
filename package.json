@@ -8,7 +8,7 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "build": "tsc && cp -r storage dist",
+    "build": "tsc",
     "format:check": "prettier -c .",
     "lint:check": "eslint --ext .js,.ts --max-warnings 0 .",
     "prepare": "npm run build",

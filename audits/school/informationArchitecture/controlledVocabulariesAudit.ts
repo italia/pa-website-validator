@@ -7,11 +7,9 @@ import vocabularyResult = crawlerTypes.vocabularyResult;
 import lighthouse from "lighthouse";
 import got from "got";
 import * as cheerio from "cheerio";
+import { eurovocVocabulary, schoolModelVocabulary } from "../../../storage/school/controlledVocabulary";
 
 const Audit = lighthouse.Audit;
-const storageFolder = __dirname + "/../../../storage/school";
-const vocabularyFile = "controlledVocabulary.json";
-const vocabularies = require(storageFolder + "/" + vocabularyFile);
 
 class LoadAudit extends lighthouse.Audit {
   static get meta() {
@@ -74,11 +72,11 @@ class LoadAudit extends lighthouse.Audit {
     const argumentsElements = getArgumentsElements($);
     const schoolModelCheck = areAllElementsInVocabulary(
       argumentsElements,
-      vocabularies.schoolModelVocabulary
+      schoolModelVocabulary
     );
     const eurovocModelCheck = areAllElementsInVocabulary(
       argumentsElements,
-      vocabularies.eurovocVocabulary
+      eurovocVocabulary
     );
 
     let numberOfElementsNotInEurovocModelPercentage: any = 100;

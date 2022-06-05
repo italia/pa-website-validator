@@ -7,14 +7,9 @@ import cookie = crawlerTypes.cookie;
 // @ts-ignore
 import lighthouse from "lighthouse";
 import puppeteer from "puppeteer";
+import { allowedNames } from "../../../storage/common/allowedCookieBtnNames";
 
 const Audit = lighthouse.Audit;
-
-const storageFolder = __dirname + "/../../../storage/common";
-
-const cookieAllowedBtnNamesFile = "allowedCookieBtnNames.json";
-
-const btnWords = require(storageFolder + "/" + cookieAllowedBtnNamesFile);
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -117,7 +112,7 @@ async function clickOnAcceptCookiesButtonIfExists(page: Page, links: links[]) {
 function containsCookieWord(text: string): boolean {
   const splittedText = text.split(" ");
 
-  for (const word of btnWords.allowedNames) {
+  for (const word of allowedNames) {
     for (const item of splittedText) {
       if (item.toLowerCase().trim() == word) {
         return true;

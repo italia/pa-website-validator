@@ -5,11 +5,9 @@ import { CheerioAPI } from "cheerio";
 import lighthouse from "lighthouse";
 import got from "got";
 import * as cheerio from "cheerio";
+import { primaryMenuItems } from "../../../storage/school/menuItems";
 
 const Audit = lighthouse.Audit;
-const storageFolder = __dirname + "/../../../storage/school";
-const menuItemsFile = "menuItems.json";
-const menuItems = require(storageFolder + "/" + menuItemsFile);
 
 class LoadAudit extends lighthouse.Audit {
   static get meta() {
@@ -55,19 +53,17 @@ class LoadAudit extends lighthouse.Audit {
       },
     ];
 
-    const primaryMenuMandatoryElements = menuItems.primaryMenuItems;
-
     const response = await got(url);
     const $ = cheerio.load(response.body);
 
     const menuElements = getMenuElements($);
     const containsMandatoryElementsResult = containsMandatoryElements(
       menuElements,
-      primaryMenuMandatoryElements
+      primaryMenuItems
     );
     const mandatoryElementsCorrectOrder = correctOrderMandatoryElements(
       menuElements,
-      primaryMenuMandatoryElements
+      primaryMenuItems
     );
 
     if (
@@ -88,7 +84,7 @@ class LoadAudit extends lighthouse.Audit {
     const items = [
       {
         menu_elements: menuElements.join(", "),
-        required_menu_elements: primaryMenuMandatoryElements.join(", "),
+        required_menu_elements: primaryMenuItems.join(", "),
         required_menu_elements_presence: containsMandatoryElementsResult
           ? "Sì"
           : "No",

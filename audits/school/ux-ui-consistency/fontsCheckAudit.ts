@@ -1,11 +1,9 @@
 "use strict";
 // @ts-ignore
 import lighthouse from "lighthouse";
+import { allowedFonts } from "../../../storage/school/allowedFonts";
 
 const Audit = lighthouse.Audit;
-const storageFolder = __dirname + "/../../../storage/school";
-const allowedFontsFile = "allowedFonts.json";
-const allowedFonts = require(storageFolder + "/" + allowedFontsFile);
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -39,7 +37,7 @@ class LoadAudit extends Audit {
 
     const checker = (arr: Array<string>, target: Array<string>) =>
       target.every((v) => arr.includes(v));
-    if (checker(cleanFontsSplitted, allowedFonts.fonts)) {
+    if (checker(cleanFontsSplitted, allowedFonts)) {
       score = 1;
     }
 
@@ -48,7 +46,7 @@ class LoadAudit extends Audit {
       details: Audit.makeTableDetails(headings, [
         {
           font_in_page: fonts.replaceAll('"', ""),
-          allowed_fonts: allowedFonts.fonts.join(", "),
+          allowed_fonts: allowedFonts.join(", "),
         },
       ]),
     };

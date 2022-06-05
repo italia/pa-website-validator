@@ -2,11 +2,9 @@
 import * as fs from "fs";
 // @ts-ignore
 import lighthouse from "lighthouse";
+import { allowedFonts } from "../../../storage/municipality/allowedFonts";
 
 const Audit = lighthouse.Audit;
-const storageFolder = __dirname + "/../../../storage/municipality";
-const allowedFontsFile = "allowedFonts.json";
-const allowedFonts = require(storageFolder + "/" + allowedFontsFile);
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -33,7 +31,7 @@ class LoadAudit extends Audit {
     ];
 
     let allowedFontsPrint = "";
-    allowedFonts.fonts.forEach((font: string) => {
+    allowedFonts.forEach((font: string) => {
       allowedFontsPrint += font.replace('"', "");
     });
 
@@ -45,7 +43,7 @@ class LoadAudit extends Audit {
 
     const checker = (arr: Array<string>, target: Array<string>) =>
       target.every((v) => arr.includes(v));
-    if (checker(cleanFontsSplitted, allowedFonts.fonts)) {
+    if (checker(cleanFontsSplitted, allowedFonts)) {
       score = 1;
     }
 

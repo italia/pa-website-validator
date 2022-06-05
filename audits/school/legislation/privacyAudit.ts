@@ -3,13 +3,9 @@
 import lighthouse from "lighthouse";
 import got from "got";
 import { JSDOM } from "jsdom";
+import { allowedNames } from "../../../storage/common/allowedPrivacyPolicyWords";
 
 const Audit = lighthouse.Audit;
-const storageFolder = __dirname + "/../../../storage/school";
-const allowedPrivacyPolicyWordsFile = "allowedPrivacyPolicyWords.json";
-const allowedPrivacyPolicyItems = require(storageFolder +
-  "/" +
-  allowedPrivacyPolicyWordsFile);
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -48,7 +44,7 @@ class LoadAudit extends Audit {
 module.exports = LoadAudit;
 
 function includesPrivacyPolicyWords(text: string): boolean {
-  for (const word of allowedPrivacyPolicyItems.allowedNames) {
+  for (const word of allowedNames) {
     if (text.includes(word)) {
       return true;
     }

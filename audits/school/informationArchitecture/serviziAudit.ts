@@ -8,13 +8,11 @@ import * as cheerio from "cheerio";
 
 // @ts-ignore
 import { checkOrder } from "../../../utils/utils";
+import { contentTypeItems } from "../../../storage/school/contentTypeItems";
 
 const Audit = lighthouse.Audit;
-const storageFolder = __dirname + "/../../../storage/school";
-const contentTypeItemsFile = "contentTypeItems.json";
 const modelReferenceUrl =
   "https://docs.google.com/spreadsheets/d/1MoayTY05SE4ixtgBsfsdngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=0";
-const contentTypeItems = require(storageFolder + "/" + contentTypeItemsFile);
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -112,8 +110,8 @@ class LoadAudit extends Audit {
     }
 
     let score = 1;
-    const mandatoryVoices: Array<string> = contentTypeItems.Servizio;
-    const mandatoryHeaderVoices: Array<string> = contentTypeItems.Header;
+    const mandatoryVoices = contentTypeItems.Servizio;
+    const mandatoryHeaderVoices = contentTypeItems.Header;
     const totalMandatoryVoices =
       mandatoryVoices.length + mandatoryHeaderVoices.length;
 
