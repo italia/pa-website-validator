@@ -31,7 +31,7 @@ module.exports = {
           "/informationArchitecture/controlledVocabulariesGatherer.js",
 
         commonGatherersFolder +
-        "/ux-ui-consistency/bootstrapItaliaCheckGatherer.js",
+          "/ux-ui-consistency/bootstrapItaliaCheckGatherer.js",
 
         commonGatherersFolder + "/legislation/cookieAmountCheckGatherer.js",
         commonGatherersFolder + "/legislation/cookieDomainCheckGatherer.js",

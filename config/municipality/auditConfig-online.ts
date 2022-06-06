@@ -32,7 +32,7 @@ module.exports = {
         commonGatherersFolder + "/security/ipLocationGatherer.js",
         commonGatherersFolder + "/security/cipherCheckGatherer.js",
         commonGatherersFolder +
-        "/ux-ui-consistency/bootstrapItaliaCheckGatherer.js",
+          "/ux-ui-consistency/bootstrapItaliaCheckGatherer.js",
       ],
     },
   ],
@@ -41,7 +41,8 @@ module.exports = {
     municipalityAuditsFolder + "/security/domainNameCheckAudit.js",
 
     municipalityAuditsFolder + "/ux-ui-consistency/fontsCheckAudit.js",
-    municipalityAuditsFolder + "/ux-ui-consistency/bootstrapItaliaCheckAudit.js",
+    municipalityAuditsFolder +
+      "/ux-ui-consistency/bootstrapItaliaCheckAudit.js",
 
     municipalityAuditsFolder +
       "/legislation/accessibilityDeclarationIsPresentAudit.js",
@@ -78,7 +79,10 @@ module.exports = {
       description: "Lista degli audit di consistenza eseguiti",
       auditRefs: [
         { id: "municipality-ux-ui-consistency-fonts-check", weight: 10 },
-        { id: "municipality-ux-ui-consistency-bootstrap-italia-check", weight: 10 },
+        {
+          id: "municipality-ux-ui-consistency-bootstrap-italia-check",
+          weight: 10,
+        },
       ],
     },
     legislation: {

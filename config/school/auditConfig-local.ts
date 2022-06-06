@@ -1,4 +1,7 @@
-import {commonGatherersFolder, schoolGatherersFolder} from "../configFolderingConstants";
+import {
+  commonGatherersFolder,
+  schoolGatherersFolder,
+} from "../configFolderingConstants";
 import { schoolAuditsFolder } from "../configFolderingConstants";
 
 module.exports = {
@@ -25,7 +28,7 @@ module.exports = {
           "/informationArchitecture/controlledVocabulariesGatherer.js",
 
         commonGatherersFolder +
-        "/ux-ui-consistency/bootstrapItaliaCheckGatherer.js",
+          "/ux-ui-consistency/bootstrapItaliaCheckGatherer.js",
       ],
     },
   ],

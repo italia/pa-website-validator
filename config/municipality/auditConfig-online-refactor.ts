@@ -7,7 +7,7 @@ import { commonAuditsFolder } from "../configFolderingConstants";
 module.exports = {
   extends: "lighthouse:default",
   settings: {
-    onlyCategories: ["modelCompliance", "recommendations"]
+    onlyCategories: ["modelCompliance", "recommendations"],
   },
 
   passes: [
@@ -18,7 +18,7 @@ module.exports = {
         municipalityGatherersFolder +
           "/ux-ui-consistency/fontsCheckGatherer.js",
         municipalityGatherersFolder +
-        "/ux-ui-consistency/fontsCheckGatherer.js",
+          "/ux-ui-consistency/fontsCheckGatherer.js",
 
         municipalityGatherersFolder +
           "/legislation/accessibilityDeclarationIsPresentGatherer.js",
@@ -63,17 +63,19 @@ module.exports = {
   categories: {
     modelCompliance: {
       title: "Test di conformità al modello di sito comunale",
-      description: "Il validatore mostra i risultati degli audit per i singoli parametri di conformità in riferimento all'allegato 2 dell'Avviso 1.4.1.",
+      description:
+        "Il validatore mostra i risultati degli audit per i singoli parametri di conformità in riferimento all'allegato 2 dell'Avviso 1.4.1.",
       auditRefs: [
         { id: "municipality-ux-ui-consistency-fonts-check", weight: 10 },
-      ]
+      ],
     },
 
     recommendations: {
-      title: "Raccomandazioni progettuali al modello di sito comunale e altri test",
-      description: "Il validatore mostra i risultati degli audit per le raccomandazioni in riferimento all'allegato 2 dell'Avviso 1.4.1. A questi sono aggiunti ulteriori test per facilitare le attività di sviluppo e garantire un buon risultato.",
+      title:
+        "Raccomandazioni progettuali al modello di sito comunale e altri test",
+      description:
+        "Il validatore mostra i risultati degli audit per le raccomandazioni in riferimento all'allegato 2 dell'Avviso 1.4.1. A questi sono aggiunti ulteriori test per facilitare le attività di sviluppo e garantire un buon risultato.",
     },
-
 
     security: {
       title: "Test di sicurezza",
