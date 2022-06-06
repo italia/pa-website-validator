@@ -8,15 +8,17 @@ import { allowedNames } from "../../../storage/common/allowedPrivacyPolicyWords"
 
 const Audit = lighthouse.Audit;
 
-const greenResult = "Il link è corretto e nella posizione corretta."
-const redResult = "Il link è errato o non è nella posizione corretta."
+const greenResult = "Il link è corretto e nella posizione corretta.";
+const redResult = "Il link è errato o non è nella posizione corretta.";
 
 class LoadAudit extends Audit {
   static get meta() {
     return {
       id: "school-legislation-privacy-is-present",
-      title: "INFORMATIVA PRIVACY - Il sito scuola deve presentare l'informativa sul trattamento dei dati personali, secondo quanto previsto dalla normativa vigente.",
-      failureTitle: "INFORMATIVA PRIVACY - Il sito scuola deve presentare l'informativa sul trattamento dei dati personali, secondo quanto previsto dalla normativa vigente.",
+      title:
+        "INFORMATIVA PRIVACY - Il sito scuola deve presentare l'informativa sul trattamento dei dati personali, secondo quanto previsto dalla normativa vigente.",
+      failureTitle:
+        "INFORMATIVA PRIVACY - Il sito scuola deve presentare l'informativa sul trattamento dei dati personali, secondo quanto previsto dalla normativa vigente.",
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
         "CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta alla privacy policy; MODALITÀ DI VERIFICA: viene verificata la presenza e posizione del link nel footer e che riporti correttamente alla privacy policy; RIFERIMENTI TECNICI E NORMATIVI: GDPR Artt. 13 e 14, Reg. UE n. 679/2016.",
@@ -42,21 +44,23 @@ class LoadAudit extends Audit {
         key: "link_destination",
         itemType: "text",
         text: "Destinazione link",
-      }
-    ]
+      },
+    ];
 
-    let items = [{
-      result: redResult,
-      link_destination: ""
-    }]
+    let items = [
+      {
+        result: redResult,
+        link_destination: "",
+      },
+    ];
 
     const footerLinks = dom.window.document.querySelectorAll("footer a");
     for (const a of footerLinks) {
       const text = a.textContent;
       if (text && includesPrivacyPolicyWords(text.toLowerCase())) {
-        score = 1
-        items[0].result = greenResult
-        items[0].link_destination = a.getAttribute('href') ?? ""
+        score = 1;
+        items[0].result = greenResult;
+        items[0].link_destination = a.getAttribute("href") ?? "";
 
         break;
       }

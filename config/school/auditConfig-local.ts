@@ -2,7 +2,7 @@ import {
   schoolGatherersFolder,
   schoolAuditsFolder,
   commonGatherersFolder,
-  commonAuditsFolder
+  commonAuditsFolder,
 } from "../configFolderingConstants";
 
 import {
@@ -11,26 +11,58 @@ import {
   accessibilityAudits,
   bestPracticeAudits,
   seoAudits,
-  pwaAudits
+  pwaAudits,
 } from "../commonAuditsParts";
 
 const customModelComplianceAudits = [
-  { id: "school-ux-ui-consistency-fonts-check", weight: 100, group: "user-experience" },
-  { id: "school-ux-ui-consistency-bootstrap-italia-double-check", weight: 100, group: "user-experience" },
-  { id: "school-ux-ui-consistency-theme-version-check", weight: 100, group: "user-experience" },
-  { id: "school-menu-structure-match-model", weight: 100, group: "user-experience" },
-  { id: "school-menu-scuola-second-level-structure-match-model", weight: 100, group: "user-experience" },
-  { id: "school-legislation-accessibility-declaration-is-present", weight: 100, group: "legislation" },
-  { id: "school-legislation-privacy-is-present", weight: 100, group: "legislation" },
-  { id: "school-controlled-vocabularies", weight: 100, group: "user-experience" },
-]
+  {
+    id: "school-ux-ui-consistency-fonts-check",
+    weight: 100,
+    group: "user-experience",
+  },
+  {
+    id: "school-ux-ui-consistency-bootstrap-italia-double-check",
+    weight: 100,
+    group: "user-experience",
+  },
+  {
+    id: "school-ux-ui-consistency-theme-version-check",
+    weight: 100,
+    group: "user-experience",
+  },
+  {
+    id: "school-menu-structure-match-model",
+    weight: 100,
+    group: "user-experience",
+  },
+  {
+    id: "school-menu-scuola-second-level-structure-match-model",
+    weight: 100,
+    group: "user-experience",
+  },
+  {
+    id: "school-legislation-accessibility-declaration-is-present",
+    weight: 100,
+    group: "legislation",
+  },
+  {
+    id: "school-legislation-privacy-is-present",
+    weight: 100,
+    group: "legislation",
+  },
+  {
+    id: "school-controlled-vocabularies",
+    weight: 100,
+    group: "user-experience",
+  },
+];
 
-const customReccomendationsAudits: [] = []
+const customReccomendationsAudits: [] = [];
 
 module.exports = {
   extends: "lighthouse:default",
   settings: {
-    onlyCategories: ["modelCompliance", "recommendations"]
+    onlyCategories: ["modelCompliance", "recommendations"],
   },
 
   passes: [
@@ -90,7 +122,13 @@ module.exports = {
         "Raccomandazioni progettuali al modello di sito per le scuole e altri test",
       description:
         "Il validatore mostra i risultati degli audit per le raccomandazioni in riferimento all'allegato 2 dell'Avviso 1.4.1. A questi sono aggiunti ulteriori test per facilitare le attività di sviluppo e garantire un buon risultato.",
-      auditRefs: [...customReccomendationsAudits, ...accessibilityAudits, ...bestPracticeAudits, ...seoAudits, ...pwaAudits],
+      auditRefs: [
+        ...customReccomendationsAudits,
+        ...accessibilityAudits,
+        ...bestPracticeAudits,
+        ...seoAudits,
+        ...pwaAudits,
+      ],
     },
   },
 };

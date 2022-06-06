@@ -11,15 +11,18 @@ const themePossibleNames = ["design-scuole-wordpress"];
 
 const bootstrapItaliaLibraryName = "bootstrap-italia.css";
 
-const greenResult = "Il sito utilizza la libreria Bootstrap Italia in una versione più recente o uguale di 1.6."
-const redResult = "Il sito non utilizza la libreria Bootstrap Italia o ne utilizza una versione precedente a 1.6"
-const libraryName = "Bootstrap-italia"
+const greenResult =
+  "Il sito utilizza la libreria Bootstrap Italia in una versione più recente o uguale di 1.6.";
+const redResult =
+  "Il sito non utilizza la libreria Bootstrap Italia o ne utilizza una versione precedente a 1.6";
+const libraryName = "Bootstrap-italia";
 
 class LoadAudit extends Audit {
   static get meta() {
     return {
       id: "school-ux-ui-consistency-bootstrap-italia-double-check",
-      title: "LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito scuola deve utilizzare la libreria Bootstrap Italia.",
+      title:
+        "LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito scuola deve utilizzare la libreria Bootstrap Italia.",
       failureTitle:
         "LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito scuola deve utilizzare la libreria Bootstrap Italia.",
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
@@ -59,8 +62,8 @@ class LoadAudit extends Audit {
       {
         result: redResult,
         library_name: "",
-        library_version: ""
-      }
+        library_version: "",
+      },
     ];
     let score = 0;
 
@@ -73,9 +76,9 @@ class LoadAudit extends Audit {
         score = 1;
       }
 
-      items[0].result = greenResult
-      items[0].library_name = libraryName
-      items[0].library_version = bootstrapItaliaVariableVersion
+      items[0].result = greenResult;
+      items[0].library_name = libraryName;
+      items[0].library_version = bootstrapItaliaVariableVersion;
     } else {
       const $: CheerioAPI = cheerio.load(headHtml);
       const linkTags = $("html").find("link");
@@ -94,9 +97,9 @@ class LoadAudit extends Audit {
               const majorLibraryVersion = libraryVersion.split(".");
               if (parseInt(majorLibraryVersion[0]) >= 4) {
                 score = 1;
-                items[0].result = greenResult
-                items[0].library_name = libraryName
-                items[0].library_version = libraryVersion
+                items[0].result = greenResult;
+                items[0].library_name = libraryName;
+                items[0].library_version = libraryVersion;
 
                 break;
               }

@@ -25,8 +25,8 @@ export const groups = {
   },
   pwa: {
     title: "PWA",
-  }
-}
+  },
+};
 
 export const performanceAudits = [
   { id: "first-contentful-paint", weight: 10, group: "performance" },
@@ -67,7 +67,7 @@ export const performanceAudits = [
   { id: "resource-summary", weight: 0, group: "performance" },
   { id: "third-party-summary", weight: 0, group: "performance" },
   { id: "third-party-facades", weight: 0, group: "performance" },
-  { id: "largest-contentful-paint-element", weight: 0, group: "performance"},
+  { id: "largest-contentful-paint-element", weight: 0, group: "performance" },
   { id: "lcp-lazy-loaded", weight: 0, group: "performance" },
   { id: "layout-shift-elements", weight: 0, group: "performance" },
   { id: "uses-passive-event-listeners", weight: 0, group: "performance" },
@@ -87,8 +87,8 @@ export const performanceAudits = [
   { id: "metrics", weight: 0, group: "performance" },
   { id: "screenshot-thumbnails", weight: 0, group: "performance" },
   { id: "final-screenshot", weight: 0, group: "performance" },
-  { id: "script-treemap-data", weight: 0, group: "performance" }
-]
+  { id: "script-treemap-data", weight: 0, group: "performance" },
+];
 
 export const accessibilityAudits = [
   { id: "accesskeys", weight: 3, group: "accessibility" },
@@ -137,15 +137,15 @@ export const accessibilityAudits = [
   { id: "video-caption", weight: 10, group: "accessibility" },
   { id: "logical-tab-order", weight: 0, group: "accessibility" },
   { id: "focusable-controls", weight: 0, group: "accessibility" },
-  { id: "interactive-element-affordance", weight: 0,  group: "accessibility"},
+  { id: "interactive-element-affordance", weight: 0, group: "accessibility" },
   { id: "managed-focus", weight: 0, group: "accessibility" },
   { id: "focus-traps", weight: 0, group: "accessibility" },
   { id: "custom-controls-labels", weight: 0, group: "accessibility" },
   { id: "custom-controls-roles", weight: 0, group: "accessibility" },
   { id: "visual-order-follows-dom", weight: 0, group: "accessibility" },
   { id: "offscreen-content-hidden", weight: 0, group: "accessibility" },
-  { id: "use-landmarks", weight: 0, group: "accessibility" }
-]
+  { id: "use-landmarks", weight: 0, group: "accessibility" },
+];
 
 export const bestPracticeAudits = [
   { id: "is-on-https", weight: 1, group: "best-practice" },
@@ -153,7 +153,11 @@ export const bestPracticeAudits = [
   { id: "notification-on-start", weight: 1, group: "best-practice" },
   { id: "no-vulnerable-libraries", weight: 1, group: "best-practice" },
   { id: "csp-xss", weight: 0, group: "best-practice" },
-  { id: "password-inputs-can-be-pasted-into", weight: 1, group: "best-practice"},
+  {
+    id: "password-inputs-can-be-pasted-into",
+    weight: 1,
+    group: "best-practice",
+  },
   { id: "image-aspect-ratio", weight: 1, group: "best-practice" },
   { id: "image-size-responsive", weight: 1, group: "best-practice" },
   { id: "preload-fonts", weight: 1, group: "best-practice" },
@@ -163,8 +167,8 @@ export const bestPracticeAudits = [
   { id: "deprecations", weight: 1, group: "best-practice" },
   { id: "errors-in-console", weight: 1, group: "best-practice" },
   { id: "valid-source-maps", weight: 0, group: "best-practice" },
-  { id: "inspector-issues", weight: 1, group: "best-practice" }
-]
+  { id: "inspector-issues", weight: 1, group: "best-practice" },
+];
 
 export const seoAudits = [
   { id: "viewport", weight: 1, group: "seo" },
@@ -181,8 +185,8 @@ export const seoAudits = [
   { id: "font-size", weight: 1, group: "seo" },
   { id: "plugins", weight: 1, group: "seo" },
   { id: "tap-targets", weight: 1, group: "seo" },
-  { id: "structured-data", weight: 0, group: "seo" }
-]
+  { id: "structured-data", weight: 0, group: "seo" },
+];
 
 export const pwaAudits = [
   { id: "installable-manifest", weight: 2, group: "pwa" },
@@ -195,5 +199,5 @@ export const pwaAudits = [
   { id: "maskable-icon", weight: 1, group: "pwa" },
   { id: "pwa-cross-browser", weight: 0, group: "pwa" },
   { id: "pwa-page-transitions", weight: 0, group: "pwa" },
-  { id: "pwa-each-page-has-url", weight: 0, group: "pwa" }
-]
+  { id: "pwa-each-page-has-url", weight: 0, group: "pwa" },
+];

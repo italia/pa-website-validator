@@ -9,15 +9,17 @@ import { allowedCountries } from "../../../storage/common/allowedCountries";
 
 const Audit = lighthouse.Audit;
 
-const greenResult = "L'hosting è su territorio europeo."
-const redResult = "L'hosting non è su territorio europeo."
+const greenResult = "L'hosting è su territorio europeo.";
+const redResult = "L'hosting non è su territorio europeo.";
 
 class LoadAudit extends Audit {
   static get meta() {
     return {
       id: "common-security-ip-location",
-      title: "LOCALIZZAZIONE IP - Il sito deve essere hostato su datacenter localizzati su territorio europeo.",
-      failureTitle: "LOCALIZZAZIONE IP - Il sito deve essere hostato su datacenter localizzati su territorio europeo.",
+      title:
+        "LOCALIZZAZIONE IP - Il sito deve essere hostato su datacenter localizzati su territorio europeo.",
+      failureTitle:
+        "LOCALIZZAZIONE IP - Il sito deve essere hostato su datacenter localizzati su territorio europeo.",
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
         "CONDIZIONI DI SUCCESSO: l'indirizzo IP fa riferimento a un datacenter localizzato su territorio europeo; MODALITÀ DI VERIFICA: verifica che la localizzazione dell'IP rientri all'interno di uno dei confini degli stati membri dell'UE; RIFERIMENTI TECNICI E NORMATIVI: GDPR",
@@ -50,7 +52,7 @@ class LoadAudit extends Audit {
             score = 1;
           }
 
-          items[0].result = greenResult
+          items[0].result = greenResult;
           items[0].ip_city = ipInformation.city ?? "";
           items[0].ip_country = ipInformation.country ?? "";
         }

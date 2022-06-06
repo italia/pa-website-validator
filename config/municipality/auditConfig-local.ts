@@ -2,7 +2,7 @@ import {
   municipalityGatherersFolder,
   municipalityAuditsFolder,
   commonGatherersFolder,
-  commonAuditsFolder
+  commonAuditsFolder,
 } from "../configFolderingConstants";
 
 import {
@@ -11,7 +11,7 @@ import {
   accessibilityAudits,
   bestPracticeAudits,
   seoAudits,
-  pwaAudits
+  pwaAudits,
 } from "../commonAuditsParts";
 
 const customModelComplianceAudits = [
@@ -49,9 +49,9 @@ const customModelComplianceAudits = [
     id: "municipality-legislation-privacy-is-present",
     weight: 100,
     group: "legislation",
-  }
-]
-const customReccomendationsAudits: [] = []
+  },
+];
+const customReccomendationsAudits: [] = [];
 
 module.exports = {
   extends: "lighthouse:default",
@@ -103,7 +103,13 @@ module.exports = {
         "Raccomandazioni progettuali al modello di sito comunale e altri test",
       description:
         "Il validatore mostra i risultati degli audit per le raccomandazioni in riferimento all'allegato 2 dell'Avviso 1.4.1. A questi sono aggiunti ulteriori test per facilitare le attività di sviluppo e garantire un buon risultato.",
-      auditRefs: [...customReccomendationsAudits, ...accessibilityAudits, ...bestPracticeAudits, ...seoAudits, ...pwaAudits],
+      auditRefs: [
+        ...customReccomendationsAudits,
+        ...accessibilityAudits,
+        ...bestPracticeAudits,
+        ...seoAudits,
+        ...pwaAudits,
+      ],
     },
   },
 };
