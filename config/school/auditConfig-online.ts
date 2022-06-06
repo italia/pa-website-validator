@@ -1,12 +1,46 @@
-import { schoolGatherersFolder } from "../configFolderingConstants";
-import { schoolAuditsFolder } from "../configFolderingConstants";
+import {
+  schoolGatherersFolder,
+  schoolAuditsFolder,
+  commonGatherersFolder,
+  commonAuditsFolder
+} from "../configFolderingConstants";
 
-import { commonGatherersFolder } from "../configFolderingConstants";
-import { commonAuditsFolder } from "../configFolderingConstants";
+import {
+  groups,
+  performanceAudits,
+  accessibilityAudits,
+  bestPracticeAudits,
+  seoAudits,
+  pwaAudits
+} from "../commonAuditsParts";
+
+const customModelComplianceAudits = [
+  { id: "school-ux-ui-consistency-fonts-check", weight: 100, group: "user-experience" },
+  { id: "school-ux-ui-consistency-bootstrap-italia-double-check", weight: 100, group: "user-experience" },
+  { id: "school-ux-ui-consistency-theme-version-check", weight: 100, group: "user-experience" },
+  { id: "school-menu-structure-match-model", weight: 100, group: "user-experience" },
+  { id: "school-menu-scuola-second-level-structure-match-model", weight: 100, group: "user-experience" },
+  { id: "common-legislation-cookie-amount-check", weight: 100, group: "legislation" },
+  { id: "common-legislation-cookie-domain-check", weight: 100, group: "legislation" },
+  { id: "school-legislation-accessibility-declaration-is-present", weight: 100, group: "legislation" },
+  { id: "school-legislation-privacy-is-present", weight: 100, group: "legislation" },
+  { id: "common-security-https-is-present", weight: 100, group: "legislation" },
+  { id: "common-security-certificate-expiration", weight: 100, group: "security" },
+  { id: "common-security-tls-check", weight: 100, group: "security" },
+  { id: "common-security-cipher-check", weight: 100, group: "security" },
+  { id: "school-security-domain-name-check", weight: 100, group: "security" },
+]
+const customReccomendationsAudits = [
+  { id: "school-servizi-structure-match-model", weight: 100, group: "user-experience" },
+  { id: "school-controlled-vocabularies", weight: 100, group: "user-experience" },
+  { id: "common-security-ip-location", weight: 100, group: "security" },
+]
 
 module.exports = {
   extends: "lighthouse:default",
-  settings: {},
+  settings: {
+    onlyCategories: ["modelCompliance", "recommendations"]
+  },
 
   passes: [
     {
@@ -74,59 +108,22 @@ module.exports = {
     commonAuditsFolder + "/security/cipherCheckAudit.js",
   ],
 
+  groups: groups,
+
   categories: {
-    security: {
-      title: "Test di sicurezza",
-      description: "Lista degli audit di sicurezza eseguiti",
-      auditRefs: [
-        { id: "school-security-domain-name-check", weight: 10 },
-
-        { id: "common-security-https-is-present", weight: 10 },
-        { id: "common-security-certificate-expiration", weight: 10 },
-        { id: "common-security-tls-check", weight: 10 },
-        { id: "common-security-ip-location", weight: 10 },
-        { id: "common-security-cipher-check", weight: 10 },
-      ],
-    },
-    uxuiconsistency: {
-      title: "Test di consistenza UX/UI",
-      description: "Lista degli audit di consistenza eseguiti",
-      auditRefs: [
-        { id: "school-ux-ui-consistency-fonts-check", weight: 10 },
-        {
-          id: "school-ux-ui-consistency-bootstrap-italia-double-check",
-          weight: 10,
-        },
-        { id: "school-ux-ui-consistency-theme-version-check", weight: 10 },
-      ],
-    },
-    legislation: {
-      title: "Test di normativa",
-      description: "Lista degli audit di normativa eseguiti",
-      auditRefs: [
-        {
-          id: "school-legislation-accessibility-declaration-is-present",
-          weight: 10,
-        },
-        { id: "school-legislation-privacy-is-present", weight: 10 },
-
-        { id: "common-legislation-cookie-amount-check", weight: 10 },
-        { id: "common-legislation-cookie-domain-check", weight: 10 },
-      ],
-    },
-    informationArchitecture: {
-      title: "Test di architettura delle informazioni",
+    modelCompliance: {
+      title: "Test di conformità al modello di sito scuole",
       description:
-        "Lista degli audit di architettura delle informazioni eseguiti",
-      auditRefs: [
-        { id: "school-menu-structure-match-model", weight: 10 },
-        {
-          id: "school-menu-scuola-second-level-structure-match-model",
-          weight: 10,
-        },
-        { id: "school-servizi-structure-match-model", weight: 10 },
-        { id: "school-controlled-vocabularies", weight: 10 },
-      ],
+        "Il validatore mostra i risultati degli audit per i singoli parametri di conformità in riferimento all'allegato 2 dell'Avviso 1.4.1.",
+      auditRefs: [...customModelComplianceAudits, ...performanceAudits],
+    },
+
+    recommendations: {
+      title:
+        "Raccomandazioni progettuali al modello di sito per le scuole e altri test",
+      description:
+        "Il validatore mostra i risultati degli audit per le raccomandazioni in riferimento all'allegato 2 dell'Avviso 1.4.1. A questi sono aggiunti ulteriori test per facilitare le attività di sviluppo e garantire un buon risultato.",
+      auditRefs: [...customReccomendationsAudits, ...accessibilityAudits, ...bestPracticeAudits, ...seoAudits, ...pwaAudits],
     },
   },
 };

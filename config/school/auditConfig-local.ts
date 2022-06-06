@@ -1,12 +1,37 @@
 import {
-  commonGatherersFolder,
   schoolGatherersFolder,
+  schoolAuditsFolder,
+  commonGatherersFolder,
+  commonAuditsFolder
 } from "../configFolderingConstants";
-import { schoolAuditsFolder } from "../configFolderingConstants";
+
+import {
+  groups,
+  performanceAudits,
+  accessibilityAudits,
+  bestPracticeAudits,
+  seoAudits,
+  pwaAudits
+} from "../commonAuditsParts";
+
+const customModelComplianceAudits = [
+  { id: "school-ux-ui-consistency-fonts-check", weight: 100, group: "user-experience" },
+  { id: "school-ux-ui-consistency-bootstrap-italia-double-check", weight: 100, group: "user-experience" },
+  { id: "school-ux-ui-consistency-theme-version-check", weight: 100, group: "user-experience" },
+  { id: "school-menu-structure-match-model", weight: 100, group: "user-experience" },
+  { id: "school-menu-scuola-second-level-structure-match-model", weight: 100, group: "user-experience" },
+  { id: "school-legislation-accessibility-declaration-is-present", weight: 100, group: "legislation" },
+  { id: "school-legislation-privacy-is-present", weight: 100, group: "legislation" },
+  { id: "school-controlled-vocabularies", weight: 100, group: "user-experience" },
+]
+
+const customReccomendationsAudits: [] = []
 
 module.exports = {
   extends: "lighthouse:default",
-  settings: {},
+  settings: {
+    onlyCategories: ["modelCompliance", "recommendations"]
+  },
 
   passes: [
     {
@@ -50,42 +75,22 @@ module.exports = {
       "/informationArchitecture/controlledVocabulariesAudit.js",
   ],
 
+  groups: groups,
+
   categories: {
-    uxuiconsistency: {
-      title: "Test di consistenza UX/UI",
-      description: "Lista degli audit di consistenza eseguiti",
-      auditRefs: [
-        { id: "school-ux-ui-consistency-fonts-check", weight: 10 },
-        {
-          id: "school-ux-ui-consistency-bootstrap-italia-double-check",
-          weight: 10,
-        },
-        { id: "school-ux-ui-consistency-theme-version-check", weight: 10 },
-      ],
-    },
-    legislation: {
-      title: "Test di normativa",
-      description: "Lista degli audit di normativa eseguiti",
-      auditRefs: [
-        {
-          id: "school-legislation-accessibility-declaration-is-present",
-          weight: 10,
-        },
-        { id: "school-legislation-privacy-is-present", weight: 10 },
-      ],
-    },
-    informationArchitecture: {
-      title: "Test di architettura delle informazioni",
+    modelCompliance: {
+      title: "Test di conformità al modello di sito scuole",
       description:
-        "Lista degli audit di architettura delle informazioni eseguiti",
-      auditRefs: [
-        { id: "school-menu-structure-match-model", weight: 10 },
-        {
-          id: "school-menu-scuola-second-level-structure-match-model",
-          weight: 10,
-        },
-        { id: "school-controlled-vocabularies", weight: 10 },
-      ],
+        "Il validatore mostra i risultati degli audit per i singoli parametri di conformità in riferimento all'allegato 2 dell'Avviso 1.4.1.",
+      auditRefs: [...customModelComplianceAudits, ...performanceAudits],
+    },
+
+    recommendations: {
+      title:
+        "Raccomandazioni progettuali al modello di sito per le scuole e altri test",
+      description:
+        "Il validatore mostra i risultati degli audit per le raccomandazioni in riferimento all'allegato 2 dell'Avviso 1.4.1. A questi sono aggiunti ulteriori test per facilitare le attività di sviluppo e garantire un buon risultato.",
+      auditRefs: [...customReccomendationsAudits, ...accessibilityAudits, ...bestPracticeAudits, ...seoAudits, ...pwaAudits],
     },
   },
 };
