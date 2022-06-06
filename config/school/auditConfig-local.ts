@@ -1,4 +1,4 @@
-import { schoolGatherersFolder } from "../configFolderingConstants";
+import {commonGatherersFolder, schoolGatherersFolder} from "../configFolderingConstants";
 import { schoolAuditsFolder } from "../configFolderingConstants";
 
 module.exports = {
@@ -13,8 +13,6 @@ module.exports = {
           "/ux-ui-consistency/themeVersionCheckGatherer.js",
         schoolGatherersFolder +
           "/ux-ui-consistency/bootstrapItaliaWPCheckGatherer.js",
-        schoolGatherersFolder +
-          "/ux-ui-consistency/bootstrapItaliaCheckGatherer.js",
 
         schoolGatherersFolder +
           "/legislation/accessibilityDeclarationIsPresentGatherer.js",
@@ -25,6 +23,9 @@ module.exports = {
           "/informationArchitecture/menuScuolaSecondLevelGatherer.js",
         schoolGatherersFolder +
           "/informationArchitecture/controlledVocabulariesGatherer.js",
+
+        commonGatherersFolder +
+        "/ux-ui-consistency/bootstrapItaliaCheckGatherer.js",
       ],
     },
   ],

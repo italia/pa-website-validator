@@ -1,4 +1,4 @@
-import { municipalityGatherersFolder } from "../configFolderingConstants";
+import {commonGatherersFolder, municipalityGatherersFolder} from "../configFolderingConstants";
 import { municipalityAuditsFolder } from "../configFolderingConstants";
 
 module.exports = {
@@ -17,12 +17,16 @@ module.exports = {
 
         municipalityGatherersFolder +
           "/informationArchitecture/menuGatherer.js",
+
+        commonGatherersFolder +
+        "/ux-ui-consistency/bootstrapItaliaCheckGatherer.js",
       ],
     },
   ],
 
   audits: [
     municipalityAuditsFolder + "/ux-ui-consistency/fontsCheckAudit.js",
+    municipalityAuditsFolder + "/ux-ui-consistency/bootstrapItaliaCheckAudit.js",
 
     municipalityAuditsFolder +
       "/legislation/accessibilityDeclarationIsPresentAudit.js",
@@ -37,6 +41,7 @@ module.exports = {
       description: "Lista degli audit di consistenza eseguiti",
       auditRefs: [
         { id: "municipality-ux-ui-consistency-fonts-check", weight: 10 },
+        { id: "municipality-ux-ui-consistency-bootstrap-italia-check", weight: 10 },
       ],
     },
     legislation: {

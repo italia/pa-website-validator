@@ -6,7 +6,9 @@ import { commonAuditsFolder } from "../configFolderingConstants";
 
 module.exports = {
   extends: "lighthouse:default",
-  settings: {},
+  settings: {
+    onlyCategories: ["modelCompliance", "recommendations"]
+  },
 
   passes: [
     {
@@ -15,6 +17,8 @@ module.exports = {
 
         municipalityGatherersFolder +
           "/ux-ui-consistency/fontsCheckGatherer.js",
+        municipalityGatherersFolder +
+        "/ux-ui-consistency/fontsCheckGatherer.js",
 
         municipalityGatherersFolder +
           "/legislation/accessibilityDeclarationIsPresentGatherer.js",
@@ -31,8 +35,6 @@ module.exports = {
         commonGatherersFolder + "/security/tlsCheckGatherer.js",
         commonGatherersFolder + "/security/ipLocationGatherer.js",
         commonGatherersFolder + "/security/cipherCheckGatherer.js",
-        commonGatherersFolder +
-        "/ux-ui-consistency/bootstrapItaliaCheckGatherer.js",
       ],
     },
   ],
@@ -41,7 +43,6 @@ module.exports = {
     municipalityAuditsFolder + "/security/domainNameCheckAudit.js",
 
     municipalityAuditsFolder + "/ux-ui-consistency/fontsCheckAudit.js",
-    municipalityAuditsFolder + "/ux-ui-consistency/bootstrapItaliaCheckAudit.js",
 
     municipalityAuditsFolder +
       "/legislation/accessibilityDeclarationIsPresentAudit.js",
@@ -60,6 +61,20 @@ module.exports = {
   ],
 
   categories: {
+    modelCompliance: {
+      title: "Test di conformità al modello di sito comunale",
+      description: "Il validatore mostra i risultati degli audit per i singoli parametri di conformità in riferimento all'allegato 2 dell'Avviso 1.4.1.",
+      auditRefs: [
+        { id: "municipality-ux-ui-consistency-fonts-check", weight: 10 },
+      ]
+    },
+
+    recommendations: {
+      title: "Raccomandazioni progettuali al modello di sito comunale e altri test",
+      description: "Il validatore mostra i risultati degli audit per le raccomandazioni in riferimento all'allegato 2 dell'Avviso 1.4.1. A questi sono aggiunti ulteriori test per facilitare le attività di sviluppo e garantire un buon risultato.",
+    },
+
+
     security: {
       title: "Test di sicurezza",
       description: "Lista degli audit di sicurezza eseguiti",
@@ -73,14 +88,7 @@ module.exports = {
         { id: "common-security-cipher-check", weight: 10 },
       ],
     },
-    uxuiconsistency: {
-      title: "Test di consistenza UX/UI",
-      description: "Lista degli audit di consistenza eseguiti",
-      auditRefs: [
-        { id: "municipality-ux-ui-consistency-fonts-check", weight: 10 },
-        { id: "municipality-ux-ui-consistency-bootstrap-italia-check", weight: 10 },
-      ],
-    },
+
     legislation: {
       title: "Test di normativa",
       description: "Lista degli audit di normativa eseguiti",

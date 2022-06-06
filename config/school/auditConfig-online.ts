@@ -17,8 +17,6 @@ module.exports = {
         schoolGatherersFolder +
           "/ux-ui-consistency/bootstrapItaliaWPCheckGatherer.js",
         schoolGatherersFolder +
-          "/ux-ui-consistency/bootstrapItaliaCheckGatherer.js",
-        schoolGatherersFolder +
           "/ux-ui-consistency/themeVersionCheckGatherer.js",
 
         schoolGatherersFolder +
@@ -31,6 +29,9 @@ module.exports = {
         schoolGatherersFolder + "/informationArchitecture/serviziGatherer.js",
         schoolGatherersFolder +
           "/informationArchitecture/controlledVocabulariesGatherer.js",
+
+        commonGatherersFolder +
+        "/ux-ui-consistency/bootstrapItaliaCheckGatherer.js",
 
         commonGatherersFolder + "/legislation/cookieAmountCheckGatherer.js",
         commonGatherersFolder + "/legislation/cookieDomainCheckGatherer.js",
