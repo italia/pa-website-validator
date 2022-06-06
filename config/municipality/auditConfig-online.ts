@@ -15,8 +15,6 @@ module.exports = {
 
         municipalityGatherersFolder +
           "/ux-ui-consistency/fontsCheckGatherer.js",
-        municipalityGatherersFolder +
-          "/ux-ui-consistency/bootstrapCheckGatherer.js",
 
         municipalityGatherersFolder +
           "/legislation/accessibilityDeclarationIsPresentGatherer.js",
@@ -41,7 +39,6 @@ module.exports = {
     municipalityAuditsFolder + "/security/domainNameCheckAudit.js",
 
     municipalityAuditsFolder + "/ux-ui-consistency/fontsCheckAudit.js",
-    municipalityAuditsFolder + "/ux-ui-consistency/bootstrapCheckAudit.js",
 
     municipalityAuditsFolder +
       "/legislation/accessibilityDeclarationIsPresentAudit.js",
@@ -77,8 +74,7 @@ module.exports = {
       title: "Test di consistenza UX/UI",
       description: "Lista degli audit di consistenza eseguiti",
       auditRefs: [
-        { id: "municipality-ux-ui-consistency-fonts-check", weight: 10 },
-        { id: "municipality-ux-ui-consistency-bootstrap-check", weight: 10 },
+        { id: "municipality-ux-ui-consistency-fonts-check", weight: 10 }
       ],
     },
     legislation: {

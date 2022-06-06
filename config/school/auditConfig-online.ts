@@ -14,7 +14,6 @@ module.exports = {
         schoolGatherersFolder + "/security/domainNameCheckGatherer.js",
 
         schoolGatherersFolder + "/ux-ui-consistency/fontsCheckGatherer.js",
-        schoolGatherersFolder + "/ux-ui-consistency/bootstrapCheckGatherer.js",
         schoolGatherersFolder +
           "/ux-ui-consistency/bootstrapItaliaWPCheckGatherer.js",
         schoolGatherersFolder +
@@ -50,7 +49,6 @@ module.exports = {
     schoolAuditsFolder + "/security/domainNameCheckAudit.js",
 
     schoolAuditsFolder + "/ux-ui-consistency/fontsCheckAudit.js",
-    schoolAuditsFolder + "/ux-ui-consistency/bootstrapCheckAudit.js",
     schoolAuditsFolder +
       "/ux-ui-consistency/bootstrapItaliaDoubleCheckAudit.js",
     schoolAuditsFolder + "/ux-ui-consistency/themeCheckAudit.js",
@@ -96,7 +94,6 @@ module.exports = {
       description: "Lista degli audit di consistenza eseguiti",
       auditRefs: [
         { id: "school-ux-ui-consistency-fonts-check", weight: 10 },
-        { id: "school-ux-ui-consistency-bootstrap-check", weight: 10 },
         {
           id: "school-ux-ui-consistency-bootstrap-italia-double-check",
           weight: 10,

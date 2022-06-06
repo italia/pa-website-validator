@@ -9,7 +9,6 @@ module.exports = {
     {
       gatherers: [
         schoolGatherersFolder + "/ux-ui-consistency/fontsCheckGatherer.js",
-        schoolGatherersFolder + "/ux-ui-consistency/bootstrapCheckGatherer.js",
         schoolGatherersFolder + "/ux-ui-consistency/themeCheckGatherer.js",
         schoolGatherersFolder +
           "/ux-ui-consistency/themeVersionCheckGatherer.js",
@@ -33,7 +32,6 @@ module.exports = {
 
   audits: [
     schoolAuditsFolder + "/ux-ui-consistency/fontsCheckAudit.js",
-    schoolAuditsFolder + "/ux-ui-consistency/bootstrapCheckAudit.js",
     schoolAuditsFolder + "/ux-ui-consistency/themeCheckAudit.js",
     schoolAuditsFolder + "/ux-ui-consistency/themeVersionCheckAudit.js",
     schoolAuditsFolder +
@@ -56,7 +54,6 @@ module.exports = {
       description: "Lista degli audit di consistenza eseguiti",
       auditRefs: [
         { id: "school-ux-ui-consistency-fonts-check", weight: 10 },
-        { id: "school-ux-ui-consistency-bootstrap-check", weight: 10 },
         {
           id: "school-ux-ui-consistency-bootstrap-italia-double-check",
           weight: 10,
