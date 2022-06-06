@@ -9,7 +9,6 @@ module.exports = {
     {
       gatherers: [
         schoolGatherersFolder + "/ux-ui-consistency/fontsCheckGatherer.js",
-        schoolGatherersFolder + "/ux-ui-consistency/themeCheckGatherer.js",
         schoolGatherersFolder +
           "/ux-ui-consistency/themeVersionCheckGatherer.js",
         schoolGatherersFolder +
@@ -32,7 +31,6 @@ module.exports = {
 
   audits: [
     schoolAuditsFolder + "/ux-ui-consistency/fontsCheckAudit.js",
-    schoolAuditsFolder + "/ux-ui-consistency/themeCheckAudit.js",
     schoolAuditsFolder + "/ux-ui-consistency/themeVersionCheckAudit.js",
     schoolAuditsFolder +
       "/ux-ui-consistency/bootstrapItaliaDoubleCheckAudit.js",
@@ -58,7 +56,6 @@ module.exports = {
           id: "school-ux-ui-consistency-bootstrap-italia-double-check",
           weight: 10,
         },
-        { id: "school-ux-ui-consistency-theme-check", weight: 10 },
         { id: "school-ux-ui-consistency-theme-version-check", weight: 10 },
       ],
     },

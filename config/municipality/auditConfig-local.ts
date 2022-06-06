@@ -36,7 +36,7 @@ module.exports = {
       title: "Test di consistenza UX/UI",
       description: "Lista degli audit di consistenza eseguiti",
       auditRefs: [
-        { id: "municipality-ux-ui-consistency-fonts-check", weight: 10 }
+        { id: "municipality-ux-ui-consistency-fonts-check", weight: 10 },
       ],
     },
     legislation: {
