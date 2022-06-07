@@ -12,16 +12,20 @@ import { secondaryMenuItems } from "../../../storage/school/menuItems";
 
 const Audit = lighthouse.Audit;
 
+const greenResult = "Almeno il 30% delle voci del menù di secondo livello sono corrette e si trovano nella posizione giusta."
+const yellowResult = "Almeno il 30% delle voci del menù di secondo livello sono corrette ma l'ordine è sbagliato."
+const redResult = "Non è presente nessuna voce corretta nel menù di secondo livello."
+
 class LoadAudit extends Audit {
   static get meta() {
     return {
       id: "school-menu-scuola-second-level-structure-match-model",
-      title: 'Le voci di secondo livello per "La scuola" rispettano il modello',
+      title: 'VOCI DI MENÙ DI SECONDO LIVELLO - Il sito presenta almeno il 30% delle voci di menu di secondo livello in base a quanto descritto dal modello di sito per le scuole.',
       failureTitle:
-        "Il menu di secondo livello non contiene almeno il 30% delle voci obbligatorie del modello con nome corretto",
+        "VOCI DI MENÙ DI SECONDO LIVELLO - Il sito presenta almeno il 30% delle voci di menu di secondo livello in base a quanto descritto dal modello di sito per le scuole.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        'Test per verificare la conformità delle voci di secondo livello per la voce "La scuola" del menù',
+        'CONDIZIONI DI SUCCESSO: almeno il 30% delle voci del menù di secondo livello verificati corrispondono a quelli indicati nel documento di architettura dell\'informazione del modello scuole e sono nell\'ordine corretto; MODALITÀ DI VERIFICA: viene verificata la correttezza delle voci del menù di secondo livello presenti all\'interno della pagina "La scuola" e il loro ordine; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)',
       requiredArtifacts: ["menuStructureScuolaSecondLevelMatchModel"],
     };
   }
@@ -34,32 +38,20 @@ class LoadAudit extends Audit {
     const url = artifacts.menuStructureScuolaSecondLevelMatchModel;
 
     const headings = [
-      {
-        key: "missing_voices",
-        itemType: "text",
-        text: "Voci di secondo livello per 'Scuola' mancanti o con nome errato",
-      },
-      {
-        key: "missing_voices_percentage",
-        itemType: "text",
-        text: "Percentuale voci mancanti",
-      },
-      {
-        key: "correct_order",
-        itemType: "text",
-        text: "Sequenzialità delle voci obbligatorie (tra quelle presenti) rispettato",
-      },
-      {
-        key: "elements_not_in_correct_order",
-        itemType: "text",
-        text: "Voci (tra quelle presenti) obbligatorie che non rispettano la sequenzialità",
-      },
-      {
-        key: "model_link",
-        itemType: "url",
-        text: "Link al modello di riferimento",
-      },
+      { key: "result", itemType: "text", text: "Risultato" },
+      { key: "correct_voices_percentage", itemType: "text", text: "% Voci corrette identificate" },
+      { key: "correct_voices", itemType: "text", text: "Voci di menù corrette identificate" },
+      { key: "missing_voices", itemType: "text", text: "Voci di menù mancanti" },
+      { key: "wrong_voices_order", itemType: "text", text: "Voci di menù corrette ma in ordine errato" },
     ];
+
+    let items = [{
+      result: redResult,
+      correct_voices_percentage: "",
+      correct_voices: "",
+      wrong_voices_order: "",
+      missing_voices: ""
+    }]
 
     let score = 0;
 
@@ -71,9 +63,11 @@ class LoadAudit extends Audit {
     const headerUl = $("#menu-la-scuola").find("li");
     let numberOfMandatoryVoicesPresent = 0;
     const elementsFound: Array<string> = [];
+    let correctElementsFound: Array<string> = [];
     for (const element of headerUl) {
       if (secondaryMenuScuolaItems.includes($(element).text().trim())) {
         numberOfMandatoryVoicesPresent++;
+        correctElementsFound.push($(element).text().trim())
       }
 
       elementsFound.push($(element).text().trim());
@@ -97,23 +91,16 @@ class LoadAudit extends Audit {
       score = 0;
     } else if (missingVoicesPercentage <= 30 && !correctOrder) {
       score = 0.5;
+      items[0].result = yellowResult
     } else if (missingVoicesPercentage <= 30 && correctOrder) {
       score = 1;
+      items[0].result = greenResult
     }
 
-    const items = [
-      {
-        missing_voices: secondaryMenuScuolaItems
-          .filter((val) => !elementsFound.includes(val))
-          .join(", "),
-        missing_voices_percentage: missingVoicesPercentage.toFixed(0) + "%",
-        correct_order: correctOrder,
-        elements_not_in_correct_order:
-          correctOrderResult.elementsNotInSequence.join(", "),
-        model_link:
-          "https://docs.google.com/drawings/d/1qzpCZrTc1x7IxdQ9WEw_wO0qn-mUk6mIRtSgJlmIz7g/edit",
-      },
-    ];
+    items[0].correct_voices = correctElementsFound.join(', ')
+    items[0].correct_voices_percentage = (100 - missingVoicesPercentage).toFixed(0).toString()
+    items[0].wrong_voices_order = correctOrderResult.elementsNotInSequence.join(', ')
+    items[0].missing_voices = secondaryMenuScuolaItems.filter(x => !correctElementsFound.includes(x)).join(', ')
 
     return {
       score: score,
