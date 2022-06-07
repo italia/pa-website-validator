@@ -41,11 +41,6 @@ const customModelComplianceAudits = [
     group: "user-experience",
   },
   {
-    id: "common-legislation-cookie-amount-check",
-    weight: 100,
-    group: "legislation",
-  },
-  {
     id: "common-legislation-cookie-domain-check",
     weight: 100,
     group: "legislation",
@@ -115,7 +110,6 @@ module.exports = {
         commonGatherersFolder +
           "/ux-ui-consistency/bootstrapItaliaCheckGatherer.js",
 
-        commonGatherersFolder + "/legislation/cookieAmountCheckGatherer.js",
         commonGatherersFolder + "/legislation/cookieDomainCheckGatherer.js",
 
         commonGatherersFolder + "/security/certificateExpirationGatherer.js",
@@ -146,7 +140,6 @@ module.exports = {
     schoolAuditsFolder +
       "/informationArchitecture/controlledVocabulariesAudit.js",
 
-    commonAuditsFolder + "/legislation/cookieAmountCheckAudit.js",
     commonAuditsFolder + "/legislation/cookieDomainCheckAudit.js",
 
     commonAuditsFolder + "/security/certificateExpirationAudit.js",

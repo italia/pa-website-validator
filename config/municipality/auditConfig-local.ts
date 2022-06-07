@@ -31,16 +31,6 @@ const customModelComplianceAudits = [
     group: "user-experience",
   },
   {
-    id: "common-legislation-cookie-amount-check",
-    weight: 100,
-    group: "legislation",
-  },
-  {
-    id: "common-legislation-cookie-domain-check",
-    weight: 100,
-    group: "legislation",
-  },
-  {
     id: "municipality-legislation-accessibility-declaration-is-present",
     weight: 100,
     group: "legislation",

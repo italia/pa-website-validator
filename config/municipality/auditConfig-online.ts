@@ -31,11 +31,6 @@ const customModelComplianceAudits = [
     group: "user-experience",
   },
   {
-    id: "common-legislation-cookie-amount-check",
-    weight: 100,
-    group: "legislation",
-  },
-  {
     id: "common-legislation-cookie-domain-check",
     weight: 100,
     group: "legislation",
@@ -93,7 +88,6 @@ module.exports = {
         municipalityGatherersFolder +
           "/informationArchitecture/menuGatherer.js",
 
-        commonGatherersFolder + "/legislation/cookieAmountCheckGatherer.js",
         commonGatherersFolder + "/legislation/cookieDomainCheckGatherer.js",
 
         commonGatherersFolder + "/security/certificateExpirationGatherer.js",
@@ -120,7 +114,6 @@ module.exports = {
 
     municipalityAuditsFolder + "/informationArchitecture/menuAudit.js",
 
-    commonAuditsFolder + "/legislation/cookieAmountCheckAudit.js",
     commonAuditsFolder + "/legislation/cookieDomainCheckAudit.js",
 
     commonAuditsFolder + "/security/certificateExpirationAudit.js",
