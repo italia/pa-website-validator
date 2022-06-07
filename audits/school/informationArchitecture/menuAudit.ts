@@ -7,19 +7,24 @@ import lighthouse from "lighthouse";
 import got from "got";
 import * as cheerio from "cheerio";
 import { primaryMenuItems } from "../../../storage/school/menuItems";
+import { checkOrder } from "../../../utils/utils";
 
 const Audit = lighthouse.Audit;
+
+const greenResult = "Le voci del menù del sito e il loro ordine è corretto."
+const yellowResult = "Sono presenti fino a 2 voci aggiuntive nel menù del sito."
+const redResult = "Almeno una delle voci obbligatorie è assente o inesatta e/o le voci sono in ordine errato e/o sono presenti 7 o più voci nel menù del sito."
 
 class LoadAudit extends lighthouse.Audit {
   static get meta() {
     return {
       id: "school-menu-structure-match-model",
-      title: "Le voci del menù rispettano il modello",
+      title: "VOCI DI MENÙ DI PRIMO LIVELLO - Il sito scuola deve presentare tutte le voci di menù di primo livello, nell'esatto ordine descritto dalla documentazione del modello di sito scuola.",
       failureTitle:
-        "Il menu non rispetta le indicazioni fornite dal modello: non sono presenti le voci obbligatorie oppure sono in ordine scorretto prima delle non obbligatorie",
+        "VOCI DI MENÙ DI PRIMO LIVELLO - Il sito scuola deve presentare tutte le voci di menù di primo livello, nell'esatto ordine descritto dalla documentazione del modello di sito scuola.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        "Test per verificare il rispetto delle regole per la costruzione del menu principale",
+        "CONDIZIONI DI SUCCESSO: le voci di menù del sito sono esattamente quelle indicate nel documento di architettura dell'informazione e sono nell'ordine indicato, ovvero La scuola, Servizi, Novità, Didattica; MODALITÀ DI VERIFICA: vengono identificate le voci presenti nel menù del sito e il loro ordine, confrontandole con quanto indicato nel documento di architettura dell'informazione, applicando una tolleranza di 2 voci aggiuntive; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",
       requiredArtifacts: ["menuStructureMatchModel"],
     };
   }
@@ -31,33 +36,34 @@ class LoadAudit extends lighthouse.Audit {
 
     let score = 0;
     const headings = [
-      { key: "menu_elements", itemType: "text", text: "Elementi del menù" },
-      {
-        key: "required_menu_elements",
-        itemType: "text",
-        text: "Elementi richiesti (in questo ordine)",
-      },
-      {
-        key: "required_menu_elements_presence",
-        itemType: "text",
-        text: "Elementi obbligatori presenti",
-      },
-      {
-        key: "required_menu_elements_correct_order",
-        itemType: "text",
-        text: "Elementi obbligatori presenti e ordinati correttamente",
-      },
-      {
-        key: "model_link",
-        itemType: "text",
-        text: "Link al modello di riferimento",
-      },
+      { key: "result", itemType: "text", text: "Risultato" },
+      { key: "found_menu_voices", itemType: "text", text: "Voci del menù identificate" },
+      { key: "missing_menu_voices", itemType: "text", text: "Voci del menù mancanti" },
+      { key: "wrong_order_menu_voices", itemType: "text", text: "Voci del menù in ordine errato" }
     ];
+
+    let items = [{
+      result: redResult,
+      found_menu_voices: "",
+      missing_menu_voices: "",
+      wrong_order_menu_voices: ""
+    }]
 
     const response = await got(url);
     const $ = cheerio.load(response.body);
 
     const menuElements = getMenuElements($);
+    items[0].found_menu_voices = menuElements.join(', ')
+
+    const missingMandatoryElements = missingMandatoryItems(menuElements, primaryMenuItems)
+    items[0].missing_menu_voices = missingMandatoryElements.join(', ')
+
+    const orderResult = await checkOrder(
+      primaryMenuItems,
+      menuElements
+    );
+    items[0].wrong_order_menu_voices = orderResult.elementsNotInSequence.join(', ')
+
     const containsMandatoryElementsResult = containsMandatoryElements(
       menuElements,
       primaryMenuItems
@@ -73,6 +79,7 @@ class LoadAudit extends lighthouse.Audit {
       mandatoryElementsCorrectOrder
     ) {
       score = 1;
+      items[0].result = greenResult
     } else if (
       menuElements.length > 4 &&
       menuElements.length < 7 &&
@@ -80,22 +87,8 @@ class LoadAudit extends lighthouse.Audit {
       mandatoryElementsCorrectOrder
     ) {
       score = 0.5;
+      items[0].result = yellowResult
     }
-
-    const items = [
-      {
-        menu_elements: menuElements.join(", "),
-        required_menu_elements: primaryMenuItems.join(", "),
-        required_menu_elements_presence: containsMandatoryElementsResult
-          ? "Sì"
-          : "No",
-        required_menu_elements_correct_order: mandatoryElementsCorrectOrder
-          ? "Sì"
-          : "No",
-        model_link:
-          "https://docs.google.com/drawings/d/1qzpCZrTc1x7IxdQ9WEw_wO0qn-mUk6mIRtSgJlmIz7g/edit",
-      },
-    ];
 
     return {
       score: score,
@@ -145,4 +138,16 @@ function correctOrderMandatoryElements(
   }
 
   return result;
+}
+
+function missingMandatoryItems (menuElements: string[], mandatoryElements: string[]) : string [] {
+  let missingItems: string[] = []
+
+  for (const mandatoryElement of mandatoryElements ) {
+    if (!menuElements.includes(mandatoryElement)) {
+      missingItems.push(mandatoryElement)
+    }
+  }
+
+  return missingItems
 }
