@@ -11,15 +11,18 @@ import { checkOrder } from "../../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
-const greenResult = "Le voci del menù del sito e il loro ordine è corretto."
-const yellowResult = "Sono presenti fino a 2 voci aggiuntive nel menù del sito."
-const redResult = "Almeno una delle voci obbligatorie è assente o inesatta e/o le voci sono in ordine errato e/o sono presenti 7 o più voci nel menù del sito."
+const greenResult = "Le voci del menù del sito e il loro ordine è corretto.";
+const yellowResult =
+  "Sono presenti fino a 2 voci aggiuntive nel menù del sito.";
+const redResult =
+  "Almeno una delle voci obbligatorie è assente o inesatta e/o le voci sono in ordine errato e/o sono presenti 7 o più voci nel menù del sito.";
 
 class LoadAudit extends lighthouse.Audit {
   static get meta() {
     return {
       id: "school-menu-structure-match-model",
-      title: "VOCI DI MENÙ DI PRIMO LIVELLO - Il sito scuola deve presentare tutte le voci di menù di primo livello, nell'esatto ordine descritto dalla documentazione del modello di sito scuola.",
+      title:
+        "VOCI DI MENÙ DI PRIMO LIVELLO - Il sito scuola deve presentare tutte le voci di menù di primo livello, nell'esatto ordine descritto dalla documentazione del modello di sito scuola.",
       failureTitle:
         "VOCI DI MENÙ DI PRIMO LIVELLO - Il sito scuola deve presentare tutte le voci di menù di primo livello, nell'esatto ordine descritto dalla documentazione del modello di sito scuola.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
@@ -37,32 +40,47 @@ class LoadAudit extends lighthouse.Audit {
     let score = 0;
     const headings = [
       { key: "result", itemType: "text", text: "Risultato" },
-      { key: "found_menu_voices", itemType: "text", text: "Voci del menù identificate" },
-      { key: "missing_menu_voices", itemType: "text", text: "Voci del menù mancanti" },
-      { key: "wrong_order_menu_voices", itemType: "text", text: "Voci del menù in ordine errato" }
+      {
+        key: "found_menu_voices",
+        itemType: "text",
+        text: "Voci del menù identificate",
+      },
+      {
+        key: "missing_menu_voices",
+        itemType: "text",
+        text: "Voci del menù mancanti",
+      },
+      {
+        key: "wrong_order_menu_voices",
+        itemType: "text",
+        text: "Voci del menù in ordine errato",
+      },
     ];
 
-    let items = [{
-      result: redResult,
-      found_menu_voices: "",
-      missing_menu_voices: "",
-      wrong_order_menu_voices: ""
-    }]
+    let items = [
+      {
+        result: redResult,
+        found_menu_voices: "",
+        missing_menu_voices: "",
+        wrong_order_menu_voices: "",
+      },
+    ];
 
     const response = await got(url);
     const $ = cheerio.load(response.body);
 
     const menuElements = getMenuElements($);
-    items[0].found_menu_voices = menuElements.join(', ')
+    items[0].found_menu_voices = menuElements.join(", ");
 
-    const missingMandatoryElements = missingMandatoryItems(menuElements, primaryMenuItems)
-    items[0].missing_menu_voices = missingMandatoryElements.join(', ')
-
-    const orderResult = await checkOrder(
-      primaryMenuItems,
-      menuElements
+    const missingMandatoryElements = missingMandatoryItems(
+      menuElements,
+      primaryMenuItems
     );
-    items[0].wrong_order_menu_voices = orderResult.elementsNotInSequence.join(', ')
+    items[0].missing_menu_voices = missingMandatoryElements.join(", ");
+
+    const orderResult = await checkOrder(primaryMenuItems, menuElements);
+    items[0].wrong_order_menu_voices =
+      orderResult.elementsNotInSequence.join(", ");
 
     const containsMandatoryElementsResult = containsMandatoryElements(
       menuElements,
@@ -79,7 +97,7 @@ class LoadAudit extends lighthouse.Audit {
       mandatoryElementsCorrectOrder
     ) {
       score = 1;
-      items[0].result = greenResult
+      items[0].result = greenResult;
     } else if (
       menuElements.length > 4 &&
       menuElements.length < 7 &&
@@ -87,7 +105,7 @@ class LoadAudit extends lighthouse.Audit {
       mandatoryElementsCorrectOrder
     ) {
       score = 0.5;
-      items[0].result = yellowResult
+      items[0].result = yellowResult;
     }
 
     return {
@@ -140,14 +158,17 @@ function correctOrderMandatoryElements(
   return result;
 }
 
-function missingMandatoryItems (menuElements: string[], mandatoryElements: string[]) : string [] {
-  let missingItems: string[] = []
+function missingMandatoryItems(
+  menuElements: string[],
+  mandatoryElements: string[]
+): string[] {
+  let missingItems: string[] = [];
 
-  for (const mandatoryElement of mandatoryElements ) {
+  for (const mandatoryElement of mandatoryElements) {
     if (!menuElements.includes(mandatoryElement)) {
-      missingItems.push(mandatoryElement)
+      missingItems.push(mandatoryElement);
     }
   }
 
-  return missingItems
+  return missingItems;
 }

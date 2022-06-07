@@ -45,7 +45,9 @@ const customReccomendationsAudits: [] = [];
 
 module.exports = {
   extends: "lighthouse:default",
-  settings: {},
+  settings: {
+    onlyCategories: ["modelCompliance", "recommendations", "customPerformance"],
+  },
 
   passes: [
     {
@@ -100,6 +102,13 @@ module.exports = {
         ...seoAudits,
         ...pwaAudits,
       ],
+    },
+
+    customPerformance: {
+      title: "Test di conformità: C.SI.4.1 - Velocità e tempi di risposta",
+      description:
+        'Nel caso in cui il sito presenti livelli di prestazioni inferiori a 50, il Comune deve pubblicare sul sito comunale un "Piano di miglioramento del sito" che mostri, per ciascuna voce che impatta negativamente la performance, le azioni future di miglioramento della performance stessa, e le relative tempistiche di realizzazione attese. [RIFERIMENTI TECNICI E NORMATIVI: Docs Italia](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [LIGHTHOUSE performance scoring guide](https://web.dev/performance-scoring/)',
+      auditRefs: [...performanceAudits],
     },
   },
 };
