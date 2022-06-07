@@ -77,6 +77,17 @@ const customReccomendationsAudits = [
     group: "user-experience",
   },
   { id: "common-security-ip-location", weight: 100, group: "security" },
+  { id: "school-informative-reuse", weight: 100, group: "legislation" },
+  {
+    id: "school-informative-license-and-attribution",
+    weight: 100,
+    group: "legislation",
+  },
+  {
+    id: "school-informative-cloud-infrastructure",
+    weight: 100,
+    group: "legislation",
+  },
 ];
 
 module.exports = {
@@ -139,6 +150,10 @@ module.exports = {
     schoolAuditsFolder + "/informationArchitecture/serviziAudit.js",
     schoolAuditsFolder +
       "/informationArchitecture/controlledVocabulariesAudit.js",
+
+    schoolAuditsFolder + "/informative/reuseAudit.js",
+    schoolAuditsFolder + "/informative/licenseAndAttributionAudit.js",
+    schoolAuditsFolder + "/informative/cloudInfrastructureAudit.js",
 
     commonAuditsFolder + "/legislation/cookieDomainCheckAudit.js",
 

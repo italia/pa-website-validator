@@ -57,7 +57,19 @@ const customModelComplianceAudits = [
   },
 ];
 
-const customReccomendationsAudits: [] = [];
+const customReccomendationsAudits = [
+  { id: "school-informative-reuse", weight: 100, group: "legislation" },
+  {
+    id: "school-informative-license-and-attribution",
+    weight: 100,
+    group: "legislation",
+  },
+  {
+    id: "school-informative-cloud-infrastructure",
+    weight: 100,
+    group: "legislation",
+  },
+];
 
 module.exports = {
   extends: "lighthouse:default",
@@ -105,6 +117,10 @@ module.exports = {
       "/informationArchitecture/menuScuolaSecondLevelAudit.js",
     schoolAuditsFolder +
       "/informationArchitecture/controlledVocabulariesAudit.js",
+
+    schoolAuditsFolder + "/informative/reuseAudit.js",
+    schoolAuditsFolder + "/informative/licenseAndAttributionAudit.js",
+    schoolAuditsFolder + "/informative/cloudInfrastructureAudit.js",
   ],
 
   groups: groups,
