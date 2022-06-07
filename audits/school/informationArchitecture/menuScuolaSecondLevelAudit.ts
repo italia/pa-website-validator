@@ -46,22 +46,22 @@ class LoadAudit extends Audit {
       {
         key: "correct_voices_percentage",
         itemType: "text",
-        text: "% Voci corrette identificate",
+        text: "% di voci obbligatorie identificate",
       },
       {
         key: "correct_voices",
         itemType: "text",
-        text: "Voci di menù corrette identificate",
+        text: "Voci di menù obbligatorie identificate",
       },
       {
         key: "missing_voices",
         itemType: "text",
-        text: "Voci di menù mancanti",
+        text: "Voci di menù obbligatorie mancanti",
       },
       {
         key: "wrong_voices_order",
         itemType: "text",
-        text: "Voci di menù corrette ma in ordine errato",
+        text: "Voci di menù obbligatorie in ordine errato",
       },
     ];
 
