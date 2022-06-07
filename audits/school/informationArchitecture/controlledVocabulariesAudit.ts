@@ -15,16 +15,24 @@ import {
 
 const Audit = lighthouse.Audit;
 
+const greenResult =
+  "Tutti gli argomenti appartengono all’elenco di voci del modello scuole.";
+const yellowResult =
+  "Tutti gli argomenti appartengono al vocabolario di EuroVoc ma non all'elenco di voci del modello scuole.";
+const redResult =
+  "Più del 50% degli argomenti non appartengono alle voci del modello scuole o al vocabolario di EuroVoc.";
+
 class LoadAudit extends lighthouse.Audit {
   static get meta() {
     return {
       id: "school-controlled-vocabularies",
-      title: "I vocaboli appartengono al vocabolario scuole",
+      title:
+        "VOCABOLARI CONTROLLATI - Il sito scuola deve utilizzare argomenti forniti dal modello di sito scuola o appartenenti al vocabolario controllato europeo EuroVoc.",
       failureTitle:
-        "Più del 50% dei vocaboli non appartiene ad EuroVOC o al Modello Scuole",
+        "VOCABOLARI CONTROLLATI - Il sito scuola deve utilizzare argomenti forniti dal modello di sito scuola o appartenenti al vocabolario controllato europeo EuroVoc.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        "Test per verificare la presenza dei vocaboli sotto ARGOMENTI nei vocabolari scuole ed EuroVOC - Verde se tutti gli argomenti appartengono al vocabolario scuole. Modello scuole: https://docs.google.com/spreadsheets/d/1MoayTY05SE4ixtgBsfsdngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=2135815526",
+        "CONDIZIONI DI SUCCESSO: almeno il 50% degli argomenti presenti appartiene alla lista indicata all'interno del documento di architettura dell'informazione del modello scuole alla voce \"Tassonomia ARGOMENTI\" o, almeno, appartiene al vocabolario controllato EuroVoc; MODALITÀ DI VERIFICA: gli argomenti identificati all'interno della funzione di ricerca del sito vengono confrontati con l'elenco di voci presente nel documento di architettura dell'informazione e con l'elenco di voci presente nel vocabolario controllato EuroVoc; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Elenco degli argomenti del Modello scuole](https://docs.google.com/spreadsheets/d/1D4KbaA__xO9x_iBm08KvZASjrrFLYLKX/edit?usp=sharing&ouid=115576940975219606169&rtpof=true&sd=true), [Vocabolario EuroVoc](https://eur-lex.europa.eu/browse/eurovoc.html?locale=it)",
       requiredArtifacts: ["controlledVocabularies"],
     };
   }
@@ -35,35 +43,36 @@ class LoadAudit extends lighthouse.Audit {
     const url = artifacts.controlledVocabularies;
 
     const headings = [
+      { key: "result", itemType: "text", text: "Risultato" },
       {
-        key: "all_arguments_in_school_model",
+        key: "element_in_school_model_percentage",
         itemType: "text",
-        text: "Tutti gli elementi sotto ARGOMENTI sono nel vocabolario scuole",
-      },
-      {
-        key: "all_arguments_in_eurovoc_model",
-        itemType: "text",
-        text: "Tutti gli elementi sotto ARGOMENTI sono nel vocabolario EuroVOC",
-      },
-      {
-        key: "eurovoc_element_percentage",
-        itemType: "text",
-        text: "% elementi mancanti in vocabolario eurovoc",
-      },
-      {
-        key: "scuole_element_percentage",
-        itemType: "text",
-        text: "% elementi mancanti in vocabolario scuole",
+        text: "% di argomenti inclusi nell'elenco del modello scuole",
       },
       {
         key: "element_not_in_school_model",
         itemType: "text",
-        text: "Elementi non presenti nel modello scuole",
+        text: "Argomenti non inclusi nell'elenco del modello scuole",
+      },
+      {
+        key: "element_in_eurovoc_model_percentage",
+        itemType: "text",
+        text: "% di argomenti inclusi nell'elenco EuroVoc",
       },
       {
         key: "element_not_in_eurovoc_model",
         itemType: "text",
-        text: "Elementi non presenti nel modello EuroVOC",
+        text: "Argomenti non inclusi nell'elenco EuroVoc",
+      },
+    ];
+
+    let item = [
+      {
+        result: redResult,
+        element_in_school_model_percentage: "",
+        element_not_in_school_model: "",
+        element_in_eurovoc_model_percentage: "",
+        element_not_in_eurovoc_model: "",
       },
     ];
 
@@ -99,6 +108,7 @@ class LoadAudit extends lighthouse.Audit {
 
     let score = 0;
     if (schoolModelCheck.allArgumentsInVocabulary) {
+      item[0].result = greenResult;
       score = 1;
     } else if (
       schoolModelCheck.allArgumentsInVocabulary ||
@@ -106,30 +116,28 @@ class LoadAudit extends lighthouse.Audit {
       numberOfElementsNotInEurovocModelPercentage < 50 ||
       numberOfElementsNotInScuoleModelPercentage < 50
     ) {
+      item[0].result = yellowResult;
       score = 0.5;
     }
 
-    const items = [
-      {
-        all_arguments_in_school_model: schoolModelCheck.allArgumentsInVocabulary
-          ? "Sì"
-          : "No",
-        all_arguments_in_eurovoc_model:
-          eurovocModelCheck.allArgumentsInVocabulary ? "Sì" : "No",
-        eurovoc_element_percentage:
-          numberOfElementsNotInEurovocModelPercentage.toFixed(0) + "%",
-        scuole_element_percentage:
-          numberOfElementsNotInScuoleModelPercentage.toFixed(0) + "%",
-        element_not_in_school_model:
-          schoolModelCheck.elementNotIncluded.join(", "),
-        element_not_in_eurovoc_model:
-          eurovocModelCheck.elementNotIncluded.join(", "),
-      },
-    ];
+    item[0].element_in_school_model_percentage = (
+      100 - numberOfElementsNotInScuoleModelPercentage
+    )
+      .toFixed(0)
+      .toString();
+    item[0].element_not_in_school_model =
+      schoolModelCheck.elementNotIncluded.join(", ");
+    item[0].element_in_eurovoc_model_percentage = (
+      100 - numberOfElementsNotInEurovocModelPercentage
+    )
+      .toFixed(0)
+      .toString();
+    item[0].element_not_in_eurovoc_model =
+      eurovocModelCheck.elementNotIncluded.join(", ");
 
     return {
       score: score,
-      details: Audit.makeTableDetails(headings, items),
+      details: Audit.makeTableDetails(headings, item),
     };
   }
 }
