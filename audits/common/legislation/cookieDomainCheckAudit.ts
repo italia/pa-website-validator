@@ -12,15 +12,20 @@ import { allowedNames } from "../../../storage/common/allowedCookieBtnNames";
 
 const Audit = lighthouse.Audit;
 
+const greenResult = "Cookie idoneo.";
+const redResult = "Cookie non idoneo.";
+
 class LoadAudit extends Audit {
   static get meta() {
     return {
       id: "common-legislation-cookie-domain-check",
-      title: "Domini dei cookie",
-      failureTitle: "Alcuni Cookie hanno un dominio diverso da quello del sito",
+      title:
+        "COOKIE - Il sito deve presentare cookie tecnici in linea con la normativa vigente.",
+      failureTitle:
+        "COOKIE - Il sito deve presentare cookie tecnici in linea con la normativa vigente.",
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
-        "Test per controllare se ci sono Cookie con domini non consentiti",
+        "CONDIZIONI DI SUCCESSO: il sito presenta solo cookie idonei come definito dalla normativa; MODALITÀ DI VERIFICA: viene verificato che il dominio dei cookie identificati sia corrispondente al dominio del sito web; RIFERIMENTI TECNICI E NORMATIVI: [Linee guida cookie e altri strumenti di tracciamento - 10 giugno 2021](https://www.garanteprivacy.it/home/docweb/-/docweb-display/docweb/9677876)",
       requiredArtifacts: ["legislationCookieDomain"],
     };
   }
@@ -34,7 +39,7 @@ class LoadAudit extends Audit {
       { key: "cookie_name", itemType: "text", text: "Nome del Cookie" },
       { key: "cookie_value", itemType: "text", text: "Valore del Cookie" },
       { key: "cookie_domain", itemType: "text", text: "Dominio del cookie" },
-      { key: "allowed_cookie", itemType: "text", text: "Cookie consentito" },
+      { key: "result", itemType: "text", text: "Risultato" },
     ];
 
     const items = [];
@@ -55,7 +60,7 @@ class LoadAudit extends Audit {
 
     const resultCookies = await checkCookieDomain(url, cookies);
     for (const resultCookie of resultCookies) {
-      if (resultCookie.allowed_cookie === "No") {
+      if (resultCookie.result === redResult) {
         score = 0;
       }
 
@@ -141,11 +146,11 @@ async function checkCookieDomain(
       cookie_name: cookie.name,
       cookie_value: cookie.value,
       cookie_domain: cookie.domain,
-      allowed_cookie: "No",
+      result: redResult,
     };
 
     if (url.includes(cookie.domain)) {
-      cookieValues.allowed_cookie = "Sì";
+      cookieValues.result = greenResult;
     }
 
     returnValue.push(cookieValues);

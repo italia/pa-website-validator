@@ -40,7 +40,7 @@ declare namespace crawlerTypes {
     cookie_name: string;
     cookie_value: string;
     cookie_domain: string;
-    allowed_cookie: string;
+    result: string;
   }
 
   interface orderResult {
