@@ -9,6 +9,7 @@ import * as cheerio from "cheerio";
 
 import { checkOrder } from "../../../utils/utils";
 import { contentTypeItems } from "../../../storage/school/contentTypeItems";
+import { getAllServicesPagesToBeScanned, getAllServicesUrl, getRandomServicesToBeScanned} from "../../../utils/utils"
 
 const Audit = lighthouse.Audit;
 const modelReferenceUrl =
@@ -129,8 +130,7 @@ class LoadAudit extends Audit {
       };
     }
 
-    const randomServiceToBeScanned =
-      servicesUrl[Math.floor(Math.random() * (servicesUrl.length - 1 + 1) + 1)];
+    const randomServiceToBeScanned: string = await getRandomServicesToBeScanned(servicesUrl)
 
     const response = await got(randomServiceToBeScanned);
     const $ = cheerio.load(response.body);
@@ -212,70 +212,6 @@ class LoadAudit extends Audit {
 }
 
 module.exports = LoadAudit;
-
-async function getAllServicesPagesToBeScanned(
-  initialUrl: string
-): Promise<string[]> {
-  const pageScanned = [initialUrl];
-
-  let noMorePageToScan = false;
-  let pageToBeScan = initialUrl;
-
-  while (!noMorePageToScan) {
-    const tempResponse = await got(pageToBeScan);
-    const $ = cheerio.load(tempResponse.body);
-    const cheerioElements = $("body").find("a");
-    if (cheerioElements.length <= 0) {
-      noMorePageToScan = true;
-    }
-
-    for (const cheerioElement of cheerioElements) {
-      const url = $(cheerioElement).attr("href");
-      if (
-        url !== undefined &&
-        url.includes("/page/") &&
-        !pageScanned.includes(url)
-      ) {
-        pageScanned.push(url);
-
-        pageToBeScan = url;
-      } else {
-        noMorePageToScan = true;
-      }
-    }
-  }
-
-  return pageScanned;
-}
-
-async function getAllServicesUrl(
-  pagesToScan: string[],
-  initialUrl: string
-): Promise<string[]> {
-  const servicesUrl = [];
-  for (const pageToScan of pagesToScan) {
-    const pageResponse = await got(pageToScan);
-    const $ = cheerio.load(pageResponse.body);
-    const cheerioElements = $("body").find("a");
-    if (cheerioElements.length <= 0) {
-      continue;
-    }
-
-    for (const cheerioElement of cheerioElements) {
-      const url = $(cheerioElement).attr("href");
-      if (
-        url !== undefined &&
-        url.includes("/servizio/") &&
-        url !== initialUrl &&
-        !url.includes("/page/")
-      ) {
-        servicesUrl.push(url);
-      }
-    }
-  }
-
-  return servicesUrl;
-}
 
 async function getTitle($: CheerioAPI): Promise<string> {
   let title = "";

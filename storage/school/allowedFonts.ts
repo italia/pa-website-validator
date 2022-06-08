@@ -1,1 +1,1 @@
-export const allowedFonts = ["Titillium Web", "Geneva", "Tahoma", "sans-serif"];
+export const allowedFonts = ["Titillium Web", "Lora"];

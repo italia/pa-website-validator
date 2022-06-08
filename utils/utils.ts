@@ -1,6 +1,8 @@
 "use strict";
 import crawlerTypes from "../types/crawler-types";
 import orderType = crawlerTypes.orderResult;
+import got from "got";
+import * as cheerio from "cheerio";
 
 export const checkOrder = async (
   mandatoryElements: string[],
@@ -58,3 +60,67 @@ export const checkOrder = async (
     elementsNotInSequence: elementsNotInSequence,
   };
 };
+
+export const getAllServicesPagesToBeScanned = async (allServicesUrl: string) : Promise<string[]> => {
+  const pageScanned = [allServicesUrl];
+
+  let noMorePageToScan = false;
+  let pageToBeScan = allServicesUrl;
+
+  while (!noMorePageToScan) {
+    const tempResponse = await got(pageToBeScan);
+    const $ = cheerio.load(tempResponse.body);
+    const cheerioElements = $("body").find("a");
+    if (cheerioElements.length <= 0) {
+      noMorePageToScan = true;
+    }
+
+    for (const cheerioElement of cheerioElements) {
+      const url = $(cheerioElement).attr("href");
+      if (
+        url !== undefined &&
+        url.includes("/page/") &&
+        !pageScanned.includes(url)
+      ) {
+        pageScanned.push(url);
+
+        pageToBeScan = url;
+      } else {
+        noMorePageToScan = true;
+      }
+    }
+  }
+
+  return pageScanned;
+}
+
+export const getAllServicesUrl = async (pagesToBeScanned: string[], allServicesUrl: string) : Promise<string[]> => {
+  const servicesUrl = [];
+  for (const pageToScan of pagesToBeScanned) {
+    const pageResponse = await got(pageToScan);
+    const $ = cheerio.load(pageResponse.body);
+    const cheerioElements = $("body").find("a");
+    if (cheerioElements.length <= 0) {
+      continue;
+    }
+
+    for (const cheerioElement of cheerioElements) {
+      const url = $(cheerioElement).attr("href");
+      if (
+        url !== undefined &&
+        url.includes("/servizio/") &&
+        url !== allServicesUrl &&
+        !url.includes("/page/")
+      ) {
+        servicesUrl.push(url);
+      }
+    }
+  }
+
+  return servicesUrl;
+}
+
+export const getRandomServicesToBeScanned = async (servicesUrls: string[]) : Promise<string> => {
+  const randomIndex = Math.floor(Math.random() * (servicesUrls.length - 1 + 1) + 1)
+  return servicesUrls[randomIndex]
+}

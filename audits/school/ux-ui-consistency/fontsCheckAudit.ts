@@ -3,17 +3,23 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { allowedFonts } from "../../../storage/school/allowedFonts";
+import got from "got";
+import {CheerioAPI} from "cheerio";
+import * as cheerio from "cheerio";
 
 const Audit = lighthouse.Audit;
+
+const greenResult = "Il sito non utilizza tutte le font del modello."
+const redResult = "Il sito utilizza tutte le font del modello."
 
 class LoadAudit extends Audit {
   static get meta() {
     return {
       id: "school-ux-ui-consistency-fonts-check",
-      title: "Font in pagina",
-      failureTitle: "Non sono presenti alcuni font richiesti",
+      title: "CONSISTENZA DELL'UTILIZZO DELLE FONT (librerie di caratteri) - Il sito scuola deve utilizzare le font indicate dalla documentazione del modello di sito scuola.",
+      failureTitle: "CONSISTENZA DELL'UTILIZZO DELLE FONT (librerie di caratteri) - Il sito scuola deve utilizzare le font indicate dalla documentazione del modello di sito scuola.",
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
-      description: "Test per verificare l'utilizzo di font validi",
+      description: "CONDIZIONI DI SUCCESSO: il sito utilizza almeno le font Titillium Web e Lora; MODALITÀ DI VERIFICA: viene verificata la presenza delle font all'interno della Homepage del sito; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",
       requiredArtifacts: ["fontsCheck"],
     };
   }
@@ -21,35 +27,37 @@ class LoadAudit extends Audit {
   static async audit(
     artifacts: LH.Artifacts & { fontsCheck: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    const fonts = artifacts.fontsCheck;
-    const fontsSplitted = fonts.split(", ");
+    const url = artifacts.fontsCheck;
 
     let score = 0;
     const headings = [
-      { key: "font_in_page", itemType: "text", text: "Font utilizzati" },
-      { key: "allowed_fonts", itemType: "text", text: "Font richiesti" },
+      { key: "result", itemType: "text", text: "Risultato" },
+      { key: "found_fonts", itemType: "text", text: "Font trovati" },
+      { key: "missing_fonts", itemType: "text", text: "Font mancanti" },
     ];
 
-    const cleanFontsSplitted: Array<string> = [];
-    fontsSplitted.forEach((font: string) => {
-      const cleanFont = font.replaceAll('"', "");
-      cleanFontsSplitted.push(cleanFont);
-    });
+    let item = [{
+      result: redResult,
+      found_fonts: "",
+      missing_fonts: ""
+    }]
 
-    const checker = (arr: Array<string>, target: Array<string>) =>
-      target.every((v) => arr.includes(v));
-    if (checker(cleanFontsSplitted, allowedFonts)) {
-      score = 1;
+    const allServicesUrl = url + "/servizio/"
+    try {
+      await got(allServicesUrl);
+    } catch (e) {
+      return {
+        score: 0,
+        details: Audit.makeTableDetails(
+   [ { key: "result_info", itemType: "text", text: "Info" } ],
+     [ { result_info: "Non è stato possibile eseguire il test. Pagina tutti i servizi non trovata. Il listato di tutti i servizi deve essere esposto alla pagina: {{base_url}}/servizio" } ]
+        ),
+      };
     }
 
     return {
       score: score,
-      details: Audit.makeTableDetails(headings, [
-        {
-          font_in_page: fonts.replaceAll('"', ""),
-          allowed_fonts: allowedFonts.join(", "),
-        },
-      ]),
+      details: Audit.makeTableDetails(headings, item),
     };
   }
 }
