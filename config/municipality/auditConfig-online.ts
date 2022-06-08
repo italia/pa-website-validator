@@ -46,22 +46,10 @@ const customModelComplianceAudits = [
     group: "legislation",
   },
   {
-    id: "common-security-https-is-present",
+    id: "common-security",
     weight: 100,
     group: "security",
-  },
-  {
-    id: "common-security-certificate-expiration",
-    weight: 100,
-    group: "security",
-  },
-  { id: "common-security-tls-check", weight: 100, group: "security" },
-  { id: "common-security-cipher-check", weight: 100, group: "security" },
-  {
-    id: "municipality-security-domain-name-check",
-    weight: 100,
-    group: "security",
-  },
+  }
 ];
 const customReccomendationsAudits = [
   { id: "common-security-ip-location", weight: 100 },
@@ -90,13 +78,8 @@ module.exports = {
 
         commonGatherersFolder + "/legislation/cookieDomainCheckGatherer.js",
 
-        commonGatherersFolder + "/security/certificateExpirationGatherer.js",
-        commonGatherersFolder + "/security/httpsIsPresentGatherer.js",
-        commonGatherersFolder + "/security/tlsCheckGatherer.js",
+        commonGatherersFolder + "/security/originGatherer.js",
         commonGatherersFolder + "/security/ipLocationGatherer.js",
-        commonGatherersFolder + "/security/cipherCheckGatherer.js",
-        commonGatherersFolder +
-          "/ux-ui-consistency/bootstrapItaliaCheckGatherer.js",
       ],
     },
   ],
@@ -116,11 +99,8 @@ module.exports = {
 
     commonAuditsFolder + "/legislation/cookieDomainCheckAudit.js",
 
-    commonAuditsFolder + "/security/certificateExpirationAudit.js",
-    commonAuditsFolder + "/security/httpsIsPresentAudit.js",
-    commonAuditsFolder + "/security/tlsCheckAudit.js",
+    commonAuditsFolder + "/security/securityAudit.js",
     commonAuditsFolder + "/security/ipLocationAudit.js",
-    commonAuditsFolder + "/security/cipherCheckAudit.js",
   ],
 
   groups: groups,

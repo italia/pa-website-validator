@@ -55,15 +55,11 @@ const customModelComplianceAudits = [
     weight: 100,
     group: "legislation",
   },
-  { id: "common-security-https-is-present", weight: 100, group: "legislation" },
   {
-    id: "common-security-certificate-expiration",
+    id: "common-security",
     weight: 100,
     group: "security",
-  },
-  { id: "common-security-tls-check", weight: 100, group: "security" },
-  { id: "common-security-cipher-check", weight: 100, group: "security" },
-  { id: "school-security-domain-name-check", weight: 100, group: "security" },
+  }
 ];
 const customReccomendationsAudits = [
   {
@@ -93,7 +89,7 @@ const customReccomendationsAudits = [
 module.exports = {
   extends: "lighthouse:default",
   settings: {
-    onlyCategories: ["modelCompliance", "recommendations", "customPerformance"],
+    onlyCategories: ["modelCompliance", "recommendations", "customPerformance"]
   },
 
   passes: [
@@ -123,11 +119,8 @@ module.exports = {
 
         commonGatherersFolder + "/legislation/cookieDomainCheckGatherer.js",
 
-        commonGatherersFolder + "/security/certificateExpirationGatherer.js",
-        commonGatherersFolder + "/security/httpsIsPresentGatherer.js",
-        commonGatherersFolder + "/security/tlsCheckGatherer.js",
         commonGatherersFolder + "/security/ipLocationGatherer.js",
-        commonGatherersFolder + "/security/cipherCheckGatherer.js",
+        commonGatherersFolder + "/security/originGatherer.js",
       ],
     },
   ],
@@ -157,11 +150,8 @@ module.exports = {
 
     commonAuditsFolder + "/legislation/cookieDomainCheckAudit.js",
 
-    commonAuditsFolder + "/security/certificateExpirationAudit.js",
-    commonAuditsFolder + "/security/httpsIsPresentAudit.js",
-    commonAuditsFolder + "/security/tlsCheckAudit.js",
+    commonAuditsFolder + "/security/securityAudit.js",
     commonAuditsFolder + "/security/ipLocationAudit.js",
-    commonAuditsFolder + "/security/cipherCheckAudit.js",
   ],
 
   groups: groups,

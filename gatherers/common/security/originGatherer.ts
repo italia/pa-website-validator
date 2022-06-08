@@ -6,13 +6,13 @@ import PassContext = gatherer.PassContext;
 // @ts-ignore
 import lighthouse from "lighthouse";
 
-class securityCertificateExpiration extends lighthouse.Gatherer {
+class origin extends lighthouse.Gatherer {
   afterPass(options: PassContext) {
-    const expression = `window.location.hostname`;
+    const expression = `window.location.origin`;
     const driver = options.driver;
 
     return driver.evaluateAsync(expression);
   }
 }
 
-module.exports = securityCertificateExpiration;
+module.exports = origin;

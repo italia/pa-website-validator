@@ -37,7 +37,7 @@ class LoadAudit extends Audit {
     ];
 
     let item = [{
-      result: redResult,
+      result: greenResult,
       found_fonts: "",
       missing_fonts: ""
     }]
@@ -56,7 +56,7 @@ class LoadAudit extends Audit {
     }
 
     return {
-      score: score,
+      score: 1,
       details: Audit.makeTableDetails(headings, item),
     };
   }
