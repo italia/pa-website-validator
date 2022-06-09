@@ -1,13 +1,11 @@
 export const contentTypeItems = {
-  Servizio: [
+  Indice: [
     "Cos'è",
-    "A cosa serve",
     "Come si accede al servizio",
-    "Accedi al servizio",
     "Cosa serve",
     "Tempi e scadenze",
     "Contatti",
-    "Ulteriori informazioni",
   ],
-  Header: ["Titolo", "Descrizione", "Tipologia servizio"],
+  Header: ["Titolo", "Descrizione", "Tipologia servizio", "Tassonomie argomenti"],
+  Body: ["Indirizzo", "Orari", "Posizione GPS", "CAP", "Struttura responsabile del servizio", "Metadati"],
 };

@@ -1,6 +1,6 @@
 "use strict";
 
-import { CheerioAPI } from "cheerio";
+import {Cheerio, CheerioAPI} from "cheerio";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
@@ -12,20 +12,21 @@ import { contentTypeItems } from "../../../storage/school/contentTypeItems";
 import { getAllServicesPagesToBeScanned, getAllServicesUrl, getRandomServicesToBeScanned} from "../../../utils/utils"
 
 const Audit = lighthouse.Audit;
-const modelReferenceUrl =
-  "https://docs.google.com/spreadsheets/d/1MoayTY05SE4ixtgBsfsdngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=0";
+
+const greenResult = "Tutte le voci obbligatorie sono presenti e nell'ordine corretto."
+const yellowResult = "Non sono presenti tutte le voci obbligatorie o non tutte le voci obbligatorie sono nell'ordine corretto."
+const redResult = "Non sono presenti tutte le voci voci obbligatorie e non tutte le voci obbligatorie sono nell'ordine corretto."
 
 class LoadAudit extends Audit {
   static get meta() {
     return {
       id: "school-servizi-structure-match-model",
-      title: "La scheda di servizio analizzata rispetta il modello",
+      title: "SCHEDE INFORMATIVE DI SERVIZIO - Tutte le schede informative dei servizi devono mostrare le voci segnalate come obbligatorie all'interno dell'architettura dell'informazione, nell'ordine segnalato dal modello.",
       failureTitle:
-        "La scheda non rispetta il modello: Ci sono meno del 90% delle voci obbligatorie oppure più del 10% delle voci obbligatorie è presente in ordine scorretto. Vedi il modello di riferimento per più informazioni: " +
-        modelReferenceUrl,
+        "SCHEDE INFORMATIVE DI SERVIZIO - Tutte le schede informative dei servizi devono mostrare le voci segnalate come obbligatorie all'interno dell'architettura dell'informazione, nell'ordine segnalato dal modello.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        "Test per la verificare se una scheda di servizio rispetta il modello",
+        "CONDIZIONI DI SUCCESSO: nella scheda servizio sono presenti almeno 7 su 8 delle voci obbligatorie e almeno 7 su 8 delle voci obbligatorie sono nell'ordine corretto; MODALITÀ DI VERIFICA: viene verificato quali voci sono presenti all'interno di una scheda servizio casualmente selezionata e il loro ordine; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",
       requiredArtifacts: ["serviziStructure"],
     };
   }
@@ -34,114 +35,59 @@ class LoadAudit extends Audit {
     artifacts: LH.Artifacts & { serviziStructure: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.serviziStructure;
+    let score = 0
 
-    const infoHeadings = [
-      { key: "result_info", itemType: "text", text: "Info" },
-    ];
-    const pageNotFoundItems = [
-      {
-        result_info:
-          "Non è stato possibile eseguire il test. Pagina tutti i servizi non trovata. Il listato di tutti i servizi deve essere esposto alla pagina: {{base_url}}/servizio",
-      },
-    ];
-    const servicesNotFoundItems = [
-      {
-        result_info:
-          "Non è stato possibile eseguire il test: Non sono state trovate schede servizio",
-      },
-    ];
+    const testNotFoundHeadings = [ { key: "result", itemType: "text", text: "Risultato" } ]
+    const testNotFoundItem = [ { result: "Non è stato possibile condurre il test. Controlla le \"Modalità di verifica\" per scoprire di più." } ]
+    const testNotFoundReturnObj = {
+      score: score,
+      details: Audit.makeTableDetails(testNotFoundHeadings, testNotFoundItem),
+    }
 
     const headings = [
-      {
-        key: "number_of_mandatory_elements",
-        itemType: "text",
-        text: "Numero di voci trovate",
-      },
-      {
-        key: "mandatory_elements_found",
-        itemType: "text",
-        text: "Voci trovate",
-      },
-      {
-        key: "number_of_missing_mandatory_elements",
-        itemType: "text",
-        text: "Numero di voci obbligatorie mancanti",
-      },
-      {
-        key: "missing_mandatory_elements_found",
-        itemType: "text",
-        text: "Voci obbligatorie mancanti",
-      },
-      {
-        key: "number_of_mandatory_elements_not_right_order",
-        itemType: "text",
-        text: "Numero di voci obbligatorie che non rispettano la sequenzialità",
-      },
-      {
-        key: "mandatory_elements_not_right_order",
-        itemType: "text",
-        text: "Voci obbligatorie che non rispettano la sequenzialità",
-      },
-      {
-        key: "mandatory_voices_found_percentage",
-        itemType: "text",
-        text: "% Voci obbligatorie trovate",
-      },
-      {
-        key: "mandatory_voices_not_right_order_found_percentage",
-        itemType: "text",
-        text: "% Voci obbligatorie che non rispettano la sequenzialità trovate",
-      },
-      {
-        key: "inspected_page",
-        itemType: "text",
-        text: "Scheda servizio ispezionata",
-      },
+      { key: "result", itemType: "text", text: "Risultato" },
+      { key: "inspected_page", itemType: "text", text: "Scheda di servizio ispezionata"},
+      { key: "missing_mandatory_elements_found", itemType: "text", text: "Voci obbligatorie mancanti" },
+      { key: "mandatory_elements_not_right_order", itemType: "text", text: "Voci obbligatorie che non rispettano l'ordine corretto" },
     ];
 
-    const allServicesUrl = url + "/servizio/";
+    let item = [{
+      result: greenResult,
+      missing_mandatory_elements_found: "",
+      mandatory_elements_not_right_order: "",
+      inspected_page: "",
+    }]
 
+    /*const allServicesUrl = url + "/servizio/";
     try {
       await got(allServicesUrl);
     } catch (e) {
-      return {
-        score: 0,
-        details: Audit.makeTableDetails(infoHeadings, pageNotFoundItems),
-      };
-    }
+      return testNotFoundReturnObj
+    }*/
 
-    let score = 1;
-    const mandatoryVoices = contentTypeItems.Servizio;
+    score = 1;
+    const mandatoryVoices = contentTypeItems.Indice;
     const mandatoryHeaderVoices = contentTypeItems.Header;
-    const totalMandatoryVoices =
-      mandatoryVoices.length + mandatoryHeaderVoices.length;
+    const totalMandatoryVoices = mandatoryVoices.length + mandatoryHeaderVoices.length;
 
-    const pagesToBeScanned = await getAllServicesPagesToBeScanned(
-      allServicesUrl
-    );
-    const servicesUrl = await getAllServicesUrl(
-      pagesToBeScanned,
-      allServicesUrl
-    );
-    if (servicesUrl.length <= 0) {
-      return {
-        score: 0,
-        details: Audit.makeTableDetails(infoHeadings, servicesNotFoundItems),
-      };
-    }
+    //const pagesToBeScanned = await getAllServicesPagesToBeScanned(allServicesUrl);
+    //const servicesUrl = await getAllServicesUrl(pagesToBeScanned, allServicesUrl);
 
-    const randomServiceToBeScanned: string = await getRandomServicesToBeScanned(servicesUrl)
+    /*if (servicesUrl.length <= 0) {
+      return testNotFoundReturnObj
+    }*/
+
+    const randomServiceToBeScanned: string = 'http://wp-scuole.local/?servizio=servizio-mensa' //await getRandomServicesToBeScanned(servicesUrl)
+    item[0].inspected_page = randomServiceToBeScanned
 
     const response = await got(randomServiceToBeScanned);
     const $ = cheerio.load(response.body);
 
-    const indexElements = await getServicesFromIndex($);
+    const indexElements = await getServicesFromIndex($, mandatoryVoices);
     const orderResult = await checkOrder(mandatoryVoices, indexElements);
 
     const foundElements = indexElements;
-    const missingMandatoryItems = mandatoryVoices.filter(
-      (val) => !indexElements.includes(val)
-    );
+    const missingMandatoryItems = mandatoryVoices.filter((val) => !indexElements.includes(val));
 
     const title = await getTitle($);
     if (!title) {
@@ -158,55 +104,34 @@ class LoadAudit extends Audit {
     }
 
     const breadcrumb = await getBreadcrumb($);
-    if (
-      !breadcrumb.includes("Famiglie e studenti") &&
-      !breadcrumb.includes("Personale scolastico")
-    ) {
+    if (!breadcrumb.includes("Famiglie e studenti") && !breadcrumb.includes("Personale scolastico")) {
       missingMandatoryItems.push(mandatoryHeaderVoices[2]);
     } else {
       foundElements.push(mandatoryHeaderVoices[2]);
     }
 
-    const foundMandatoryVoicesPercentage =
-      (foundElements.length / totalMandatoryVoices) * 100;
-    const foundMandatoryVoicesNotCorrectOrderPercentage =
-      (orderResult.numberOfElementsNotInSequence / totalMandatoryVoices) * 100;
+    const argumentsList = await getArguments($)
 
-    if (
-      foundMandatoryVoicesPercentage < 90 ||
-      foundMandatoryVoicesNotCorrectOrderPercentage > 10
-    ) {
+    const placesList = await getPlaceInfo($)
+
+    const foundMandatoryVoicesPercentage = (foundElements.length / totalMandatoryVoices) * 100;
+    const foundMandatoryVoicesNotCorrectOrderPercentage = (orderResult.numberOfElementsNotInSequence / totalMandatoryVoices) * 100;
+
+    if (foundMandatoryVoicesPercentage < 90 || foundMandatoryVoicesNotCorrectOrderPercentage > 10) {
       score = 0;
-    } else if (
-      (foundMandatoryVoicesPercentage > 90 &&
-        foundMandatoryVoicesPercentage < 100) ||
-      (foundMandatoryVoicesNotCorrectOrderPercentage > 0 &&
-        foundMandatoryVoicesNotCorrectOrderPercentage < 10)
-    ) {
+      item[0].result = redResult
+    } else if ((foundMandatoryVoicesPercentage > 90 && foundMandatoryVoicesPercentage < 100) ||
+               (foundMandatoryVoicesNotCorrectOrderPercentage > 0 && foundMandatoryVoicesNotCorrectOrderPercentage < 10)) {
       score = 0.5;
+      item[0].result = yellowResult
     }
 
-    const items = [
-      {
-        number_of_mandatory_elements: foundElements.length,
-        mandatory_elements_found: foundElements.join(", "),
-        number_of_missing_mandatory_elements: missingMandatoryItems.length,
-        missing_mandatory_elements_found: missingMandatoryItems.join(", "),
-        number_of_mandatory_elements_not_right_order:
-          orderResult.numberOfElementsNotInSequence,
-        mandatory_elements_not_right_order:
-          orderResult.elementsNotInSequence.join(", "),
-        mandatory_voices_found_percentage:
-          foundMandatoryVoicesPercentage.toFixed(0) + "%",
-        mandatory_voices_not_right_order_found_percentage:
-          foundMandatoryVoicesNotCorrectOrderPercentage.toFixed(0) + "%",
-        inspected_page: randomServiceToBeScanned,
-      },
-    ];
+    item[0].missing_mandatory_elements_found = missingMandatoryItems.join(", ")
+    item[0].mandatory_elements_not_right_order = orderResult.elementsNotInSequence.join(", ")
 
     return {
       score: score,
-      details: Audit.makeTableDetails(headings, items),
+      details: Audit.makeTableDetails(headings, item),
     };
   }
 }
@@ -254,13 +179,62 @@ async function getBreadcrumb($: CheerioAPI): Promise<string[]> {
   return resultElements;
 }
 
-async function getServicesFromIndex($: CheerioAPI): Promise<string[]> {
+async function getArguments($: CheerioAPI) {
+  const resultElements: Array<string> = [];
+
+  const badgesContent = $(".badges");
+  const argumentsElements = $(badgesContent).find("a");
+
+  if (Object.keys(argumentsElements).length === 0) {
+    return resultElements;
+  }
+
+  for (let i = 0; i < argumentsElements.length; i++) {
+    if ($(argumentsElements[i]).text().trim()) {
+      resultElements.push($(argumentsElements[i]).text().trim());
+    }
+  }
+
+  return [...new Set(resultElements)]
+}
+
+async function getPlaceInfo($: CheerioAPI) {
+  const resultElements: any = [];
+
+  const badgesContent = $(".location-list");
+  console.log(badgesContent.length) //TODO: sulla base della quantità suddividere poi il raccoglimento valori sottostante
+  const argumentsElementsLabel = $(badgesContent).find("span");
+  const argumentsElementsValue = $(badgesContent).find("p");
+
+  if (Object.keys(argumentsElementsLabel).length === 0) {
+    return resultElements;
+  }
+
+  for (let i = 0; i < argumentsElementsLabel.length; i++) {
+    if ($(argumentsElementsLabel[i]).text().trim()) {
+      resultElements.push({
+        label: $(argumentsElementsLabel[i]).text().trim(),
+        value: $(argumentsElementsValue[i]).text().trim()
+      })
+    }
+  }
+
+  //TODO: prendersi valori di google maps per coordinate GPS con tag <a>
+
+  console.log('ELEMENTS', resultElements)
+
+  return [...new Set(resultElements)]
+}
+
+async function getServicesFromIndex($: CheerioAPI, mandatoryElements: string[]): Promise<string[]> {
   const paragraphList = $("#lista-paragrafi");
   const indexElements = $(paragraphList).find("a");
 
   const returnValues = [];
   for (const indexElement of indexElements) {
-    returnValues.push($(indexElement).text().trim());
+    if (mandatoryElements.includes($(indexElement).text().trim())) {
+      returnValues.push($(indexElement).text().trim());
+    }
   }
 
   return returnValues;
