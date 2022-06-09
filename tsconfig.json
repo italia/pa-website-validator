@@ -11,5 +11,5 @@
   },
   "lib": ["esnext", "ES2021.String", "ESNext.String"],
   "exclude": ["test"],
-  "include": ["**/*.ts", "./node_modules/lighthouse/types/**/*.d.ts"]
+  "include": ["**/*.ts", "./node_modules/lighthouse/types/**/*.d.ts", "node_modules/@types/puppeteer/index.d.ts"]
 }
