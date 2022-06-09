@@ -15,7 +15,13 @@ import cipherInfo = crawlerTypes.cipherInfo
 const Audit = lighthouse.Audit;
 
 let greenResult = "Il certificato del sito [url] è attivo e valido."
-let redResult = "Il certificato del sito [url] non è attivo o valido."
+let redResult = "Il certificato del sito [url] non è attivo o valido: "
+
+let redResultHttps = "Il sito non utilizza il protocollo HTTPS"
+let redResultCertificateValidation = "Il certificato è scaduto"
+let redResultTLSVersion = "La versione del TLS richiesta è TLSv1.2 o TLSv1.3"
+let redResultCipherSuiteTLS12 = "La versione della suite di cifratura richiesta è: " + allowedCiphers.tls12.join(', ')
+let redResultCipherSuiteTLS13 = "La versione della suite di cifratura richiesta è: " + allowedCiphers.tls13.join(', ')
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -65,6 +71,27 @@ class LoadAudit extends Audit {
 
     if (protocol === 'https' && certificate.valid && tls.valid && cipherSuite.valid) {
       score = 1
+      item[0].result = greenResult
+    } else {
+      if (protocol !== 'https') {
+        item[0].result += redResultHttps
+      }
+
+      if (!certificate.valid) {
+        item[0].result += redResultCertificateValidation
+      }
+
+      if (!tls.valid) {
+        item[0].result += redResultTLSVersion
+      }
+
+      if (tls.tls_version === allowedTlsVersions[0] && !cipherSuite.valid) {
+        item[0].result += redResultCipherSuiteTLS12
+      }
+
+      if (tls.tls_version === allowedTlsVersions[1] && !cipherSuite.valid) {
+        item[0].result += redResultCipherSuiteTLS13
+      }
     }
 
     return  {
