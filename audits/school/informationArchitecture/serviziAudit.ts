@@ -66,9 +66,19 @@ class LoadAudit extends Audit {
     }*/
 
     score = 1;
-    const mandatoryVoices = contentTypeItems.Indice;
-    const mandatoryHeaderVoices = contentTypeItems.Header;
-    const totalMandatoryVoices = mandatoryVoices.length + mandatoryHeaderVoices.length;
+    const mandatoryVoices = contentTypeItems.Indice
+    const mandatoryHeaderVoices = contentTypeItems.Header
+    const mandatoryPlaceInfo = contentTypeItems.Luogo
+    const mandatoryBodyVoices = contentTypeItems.Body
+    const mandatoryMetadata = contentTypeItems.Metadati
+    const breadcrumbMandatoryElements = contentTypeItems.Breadcrumb
+    const totalMandatoryVoices =
+      mandatoryVoices.length +
+      mandatoryHeaderVoices.length +
+      mandatoryPlaceInfo.length +
+      mandatoryBodyVoices.length +
+      mandatoryMetadata.length +
+      (breadcrumbMandatoryElements.length - 1)
 
     //const pagesToBeScanned = await getAllServicesPagesToBeScanned(allServicesUrl);
     //const servicesUrl = await getAllServicesUrl(pagesToBeScanned, allServicesUrl);
@@ -86,35 +96,12 @@ class LoadAudit extends Audit {
     const indexElements = await getServicesFromIndex($, mandatoryVoices);
     const orderResult = await checkOrder(mandatoryVoices, indexElements);
 
-    const foundElements = indexElements;
+    const foundElementsAmount = indexElements.length;
     const missingMandatoryItems = mandatoryVoices.filter((val) => !indexElements.includes(val));
 
-    const title = await getTitle($);
-    if (!title) {
-      missingMandatoryItems.push(mandatoryHeaderVoices[0]);
-    } else {
-      foundElements.push(mandatoryHeaderVoices[0]);
-    }
+    //TODO: integrazione metodi di scraping
 
-    const description = await getDescription($);
-    if (!description) {
-      missingMandatoryItems.push(mandatoryHeaderVoices[1]);
-    } else {
-      foundElements.push(mandatoryHeaderVoices[1]);
-    }
-
-    const breadcrumb = await getBreadcrumb($);
-    if (!breadcrumb.includes("Famiglie e studenti") && !breadcrumb.includes("Personale scolastico")) {
-      missingMandatoryItems.push(mandatoryHeaderVoices[2]);
-    } else {
-      foundElements.push(mandatoryHeaderVoices[2]);
-    }
-
-    const argumentsList = await getArguments($)
-
-    const placesList = await getPlaceInfo($)
-
-    const foundMandatoryVoicesPercentage = (foundElements.length / totalMandatoryVoices) * 100;
+    const foundMandatoryVoicesPercentage = (foundElementsAmount / totalMandatoryVoices) * 100;
     const foundMandatoryVoicesNotCorrectOrderPercentage = (orderResult.numberOfElementsNotInSequence / totalMandatoryVoices) * 100;
 
     if (foundMandatoryVoicesPercentage < 90 || foundMandatoryVoicesNotCorrectOrderPercentage > 10) {
@@ -138,36 +125,37 @@ class LoadAudit extends Audit {
 
 module.exports = LoadAudit;
 
-async function getTitle($: CheerioAPI): Promise<string> {
-  let title = "";
+async function isTitlePresent($: CheerioAPI): Promise<boolean> {
+  let titlePresent = false
   const titleContent = $(".section-title");
 
   if ($(titleContent).find("h2").text()) {
-    title = $(titleContent).find("h2").text();
+    titlePresent = true
   }
 
-  return title;
+  return titlePresent;
 }
 
-async function getDescription($: CheerioAPI): Promise<string> {
-  let description = "";
+async function isDescriptionPresent($: CheerioAPI): Promise<boolean> {
+  let descriptionPresent = false
   const titleContent = $(".section-title");
 
   if ($(titleContent).find("p").text()) {
-    description = $(titleContent).find("p").text();
+    descriptionPresent = true
   }
 
-  return description;
+  return descriptionPresent
 }
 
-async function getBreadcrumb($: CheerioAPI): Promise<string[]> {
+async function isBreadcrumbCorrect($: CheerioAPI, breadcrumbMandatoryElements: string[]): Promise<boolean> {
+  let breadcrumbCorrect = false
   const resultElements: Array<string> = [];
 
   const breadcrumbContent = $(".breadcrumb");
   const breadcrumbElements = $(breadcrumbContent).find("span");
 
   if (Object.keys(breadcrumbElements).length === 0) {
-    return resultElements;
+    return breadcrumbCorrect
   }
 
   for (let i = 0; i < breadcrumbElements.length; i++) {
@@ -176,17 +164,24 @@ async function getBreadcrumb($: CheerioAPI): Promise<string[]> {
     }
   }
 
-  return resultElements;
+  for (let element of breadcrumbMandatoryElements) {
+    if (resultElements.includes(element)) {
+      breadcrumbCorrect = true
+    }
+  }
+
+  return breadcrumbCorrect
 }
 
-async function getArguments($: CheerioAPI) {
+async function areArgumentsPresent($: CheerioAPI): Promise<boolean> {
+  let argumentsCorrect = false
   const resultElements: Array<string> = [];
 
   const badgesContent = $(".badges");
   const argumentsElements = $(badgesContent).find("a");
 
   if (Object.keys(argumentsElements).length === 0) {
-    return resultElements;
+    return argumentsCorrect
   }
 
   for (let i = 0; i < argumentsElements.length; i++) {
@@ -195,35 +190,104 @@ async function getArguments($: CheerioAPI) {
     }
   }
 
-  return [...new Set(resultElements)]
+  if (resultElements.length > 0) {
+    argumentsCorrect = true
+  }
+
+  return argumentsCorrect
 }
 
-async function getPlaceInfo($: CheerioAPI) {
-  const resultElements: any = [];
+async function placeInfo($: CheerioAPI, placeInfo: string[]): Promise<{address: boolean, zip: boolean, time: boolean, gps: boolean}> {
+  let correctPlaceInfo = {
+    address: false,
+    zip: false,
+    time: false,
+    gps: false
+  }
 
+  const resultElements: any = [];
   const badgesContent = $(".location-list");
-  console.log(badgesContent.length) //TODO: sulla base della quantità suddividere poi il raccoglimento valori sottostante
+  const numberOfPlaces = badgesContent.length
   const argumentsElementsLabel = $(badgesContent).find("span");
   const argumentsElementsValue = $(badgesContent).find("p");
 
-  if (Object.keys(argumentsElementsLabel).length === 0) {
-    return resultElements;
+  if (Object.keys(argumentsElementsLabel).length === 0 || Object.keys(argumentsElementsValue).length === 0) {
+    return correctPlaceInfo
   }
 
   for (let i = 0; i < argumentsElementsLabel.length; i++) {
-    if ($(argumentsElementsLabel[i]).text().trim()) {
-      resultElements.push({
-        label: $(argumentsElementsLabel[i]).text().trim(),
-        value: $(argumentsElementsValue[i]).text().trim()
-      })
+    const label = $(argumentsElementsLabel[i]).text().trim() ?? null
+    const value = $(argumentsElementsValue[i]).text().trim() ?? null
+    if (Boolean(label) && Boolean(value) && placeInfo.includes(label)) {
+      resultElements.push(label)
     }
   }
 
-  //TODO: prendersi valori di google maps per coordinate GPS con tag <a>
+  const argumentsGPSValue = $(badgesContent).find("a");
+  for (let i = 0; i < argumentsGPSValue.length; i++) {
+    const gpsUrl = $(argumentsGPSValue[i]).attr().href ?? null
+     if (Boolean(gpsUrl) && gpsUrl.includes('google')) {
+       resultElements.push('gps')
+     }
+  }
 
-  console.log('ELEMENTS', resultElements)
+  const numOfAddress = resultElements.filter((x: string) => x === placeInfo[0]).length
+  const numOfZIP = resultElements.filter((x: string) => x === placeInfo[1]).length
+  const numOfTimes = resultElements.filter((x: string) => x === placeInfo[2]).length
+  const numOfGPS = resultElements.filter((x: string) => x === placeInfo[3]).length
 
-  return [...new Set(resultElements)]
+  correctPlaceInfo.address = (numOfAddress === numberOfPlaces)
+  correctPlaceInfo.zip = (numOfZIP === numberOfPlaces)
+  correctPlaceInfo.time = (numOfTimes === numberOfPlaces)
+  correctPlaceInfo.gps = (numOfGPS === numberOfPlaces)
+
+  return correctPlaceInfo
+}
+
+async function isStructureResponsiblePresent($: CheerioAPI, checkString: string): Promise<boolean> {
+  let structureResponsiblePresent = false
+  let h6Elements = []
+
+  const badgesContent = $("h6");
+  if (badgesContent.length <= 0) {
+    return structureResponsiblePresent
+  }
+
+  for (let i = 0; i < badgesContent.length; i++) {
+    if($(badgesContent[i]).text().trim()) {
+      h6Elements.push($(badgesContent[i]).text().trim())
+    }
+  }
+
+  if (h6Elements.includes(checkString)) {
+    structureResponsiblePresent = true
+  }
+
+  return structureResponsiblePresent
+}
+
+async function areMetadataPresent($: CheerioAPI, metadata: string[]): Promise<boolean> {
+  let returnValues: string[] = []
+
+  const badgesContent = $(".article-footer");
+  const metadataValues = $(badgesContent).find("p");
+
+  if (Object.keys(metadataValues).length === 0) {
+    return false;
+  }
+
+  for (let i = 0; i < metadataValues.length; i++) {
+    const label = $(metadataValues[i]).text().trim() ?? null
+    if (Boolean(label)) {
+      for (let element of metadata) {
+        if (label.includes(element)) {
+          returnValues.push(element)
+        }
+      }
+    }
+  }
+
+  return metadata.every(v => returnValues.includes(v))
 }
 
 async function getServicesFromIndex($: CheerioAPI, mandatoryElements: string[]): Promise<string[]> {

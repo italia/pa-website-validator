@@ -6,6 +6,9 @@ export const contentTypeItems = {
     "Tempi e scadenze",
     "Contatti",
   ],
-  Header: ["Titolo", "Descrizione", "Tipologia servizio", "Tassonomie argomenti"],
-  Body: ["Indirizzo", "Orari", "Posizione GPS", "CAP", "Struttura responsabile del servizio", "Metadati"],
+  Header:   ["Titolo", "Descrizione", "Tipologia servizio", "Tassonomie argomenti"],
+  Body:     ["Struttura responsabile del servizio"],
+  Luogo:    ["indirizzo", "CAP", "Orari", "gps"],
+  Metadati: ["Pubblicato", "Revisione"],
+  Breadcrumb : ["Famiglie e studenti", "Personale scolastico"]
 };
