@@ -4,8 +4,8 @@ import { CheerioAPI } from "cheerio";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import got from "got";
 import * as cheerio from "cheerio";
+import puppeteer from "puppeteer"
 
 const Audit = lighthouse.Audit;
 
@@ -32,11 +32,8 @@ class LoadAudit extends Audit {
       legislationAccessibilityDeclarationIsPresent: string;
     }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    const origin = artifacts.legislationAccessibilityDeclarationIsPresent;
-
-    const request = await got(origin);
-    const DOM = request.body;
-    let score = 0;
+    const url = artifacts.legislationAccessibilityDeclarationIsPresent;
+    let score = 0
 
     const headings = [
       {
@@ -58,30 +55,20 @@ class LoadAudit extends Audit {
       },
     ];
 
-    try {
-      const $: CheerioAPI = cheerio.load(DOM);
-      const footer: string | null = $("footer").prop("outerHTML");
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto(url);
+    const data = await page.content();
+    await browser.close();
 
-      if (footer !== null) {
-        const aTags = $(footer).find("a");
+    const $: CheerioAPI = cheerio.load(data);
+    const accessibilityDeclarationElement = $("#dichiarazione-accessibilita")
+    const elementObj = $(accessibilityDeclarationElement).attr()
 
-        for (const a of aTags) {
-          const href = $(a).attr("href");
-          if (
-            href &&
-            href.includes("form.agid.gov.it") &&
-            $(a).text().toLowerCase().includes("accessibilit")
-          ) {
-            score = 1;
-            items[0].result = greenResult;
-            items[0].link_destination = href;
-
-            break;
-          }
-        }
-      }
-    } catch (e) {
-      score = 0;
+    if (Boolean(elementObj) && ("href" in elementObj) && elementObj.href !== '#' && elementObj.href !== '' && elementObj.href.includes("form.agid.gov.it")) {
+      items[0].result = greenResult
+      items[0].link_destination = elementObj.href
+      score = 1
     }
 
     return {

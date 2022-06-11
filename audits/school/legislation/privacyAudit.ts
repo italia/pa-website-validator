@@ -54,7 +54,7 @@ class LoadAudit extends Audit {
 
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.goto('http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-home.html');
+    await page.goto(url);
     const data = await page.content();
     await browser.close();
 
@@ -62,7 +62,7 @@ class LoadAudit extends Audit {
     const privacyPolicyElement = $("#privacy-policy")
     const elementObj = $(privacyPolicyElement).attr()
 
-    if (("href" in elementObj) && elementObj.href !== '#' && elementObj.href !== '') {
+    if (Boolean(elementObj) && ("href" in elementObj) && elementObj.href !== '#' && elementObj.href !== '') {
       items[0].result = greenResult
       items[0].link_destination = elementObj.href
       score = 1
