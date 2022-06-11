@@ -2,9 +2,9 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import got from "got";
-import { JSDOM } from "jsdom";
-import { allowedNames } from "../../../storage/common/allowedPrivacyPolicyWords";
+import * as cheerio from "cheerio";
+import puppeteer from "puppeteer"
+import {CheerioAPI} from "cheerio";
 
 const Audit = lighthouse.Audit;
 
@@ -30,8 +30,6 @@ class LoadAudit extends Audit {
     artifacts: LH.Artifacts & { legislationPrivacyIsPresent: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.legislationPrivacyIsPresent;
-    const response = await got(url);
-    const dom = new JSDOM(response.body);
 
     let score = 0;
     const headings = [
@@ -54,16 +52,20 @@ class LoadAudit extends Audit {
       },
     ];
 
-    const footerLinks = dom.window.document.querySelectorAll("footer a");
-    for (const a of footerLinks) {
-      const text = a.textContent;
-      if (text && includesPrivacyPolicyWords(text.toLowerCase())) {
-        score = 1;
-        items[0].result = greenResult;
-        items[0].link_destination = a.getAttribute("href") ?? "";
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto('http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-home.html');
+    const data = await page.content();
+    await browser.close();
 
-        break;
-      }
+    const $: CheerioAPI = cheerio.load(data);
+    const privacyPolicyElement = $("#privacy-policy")
+    const elementObj = $(privacyPolicyElement).attr()
+
+    if (("href" in elementObj) && elementObj.href !== '#' && elementObj.href !== '') {
+      items[0].result = greenResult
+      items[0].link_destination = elementObj.href
+      score = 1
     }
 
     return {
@@ -74,13 +76,3 @@ class LoadAudit extends Audit {
 }
 
 module.exports = LoadAudit;
-
-function includesPrivacyPolicyWords(text: string): boolean {
-  for (const word of allowedNames) {
-    if (text.includes(word)) {
-      return true;
-    }
-  }
-
-  return false;
-}

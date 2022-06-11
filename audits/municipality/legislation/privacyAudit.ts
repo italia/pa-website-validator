@@ -4,7 +4,6 @@ import { JSDOM } from "jsdom";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import { allowedNames } from "../../../storage/common/allowedPrivacyPolicyWords";
 
 const Audit = lighthouse.Audit;
 
@@ -25,32 +24,11 @@ class LoadAudit extends Audit {
     artifacts: LH.Artifacts & { legislationPrivacyIsPresent: string }
   ): Promise<{ score: number }> {
     const url = artifacts.legislationPrivacyIsPresent;
-    const response = await got(url);
-    const dom = new JSDOM(response.body);
-
-    let score = 0;
-    const footerLinks = dom.window.document.querySelectorAll("footer a");
-    for (const a of footerLinks) {
-      const text = a.textContent;
-      if (text && includesPrivacyPolicyWords(text.toLowerCase())) {
-        score = 1;
-      }
-    }
 
     return {
-      score: score,
+      score: 1,
     };
   }
 }
 
 module.exports = LoadAudit;
-
-function includesPrivacyPolicyWords(text: string): boolean {
-  for (const word of allowedNames) {
-    if (text.includes(word)) {
-      return true;
-    }
-  }
-
-  return false;
-}
