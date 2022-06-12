@@ -4,10 +4,8 @@ import { CheerioAPI } from "cheerio";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import got from "got";
-import * as cheerio from "cheerio";
 
-import { checkOrder } from "../../../utils/utils";
+import {checkOrder, loadPageData} from "../../../utils/utils";
 import { secondaryMenuItems } from "../../../storage/school/menuItems";
 
 const Audit = lighthouse.Audit;
@@ -77,8 +75,7 @@ class LoadAudit extends Audit {
 
     let score = 0;
 
-    const response = await got(url);
-    const $: CheerioAPI = cheerio.load(response.body);
+    const $: CheerioAPI = await loadPageData(url)
 
     const secondaryMenuScuolaItems: Array<string> = secondaryMenuItems.Scuola;
 

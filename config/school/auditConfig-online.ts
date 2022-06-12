@@ -95,7 +95,6 @@ module.exports = {
   passes: [
     {
       gatherers: [
-        schoolGatherersFolder + "/security/domainNameCheckGatherer.js",
 
         schoolGatherersFolder + "/ux-ui-consistency/fontsCheckGatherer.js",
         schoolGatherersFolder +
@@ -126,8 +125,6 @@ module.exports = {
   ],
 
   audits: [
-    schoolAuditsFolder + "/security/domainNameCheckAudit.js",
-
     schoolAuditsFolder + "/ux-ui-consistency/fontsCheckAudit.js",
     schoolAuditsFolder +
       "/ux-ui-consistency/bootstrapItaliaDoubleCheckAudit.js",

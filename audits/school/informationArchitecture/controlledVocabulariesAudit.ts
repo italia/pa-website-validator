@@ -6,12 +6,11 @@ import vocabularyResult = crawlerTypes.vocabularyResult;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import got from "got";
-import * as cheerio from "cheerio";
 import {
   eurovocVocabulary,
   schoolModelVocabulary,
 } from "../../../storage/school/controlledVocabulary";
+import {loadPageData} from "../../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -79,8 +78,7 @@ class LoadAudit extends lighthouse.Audit {
     const queryUrl = "/?s";
     const searchUrl = url + queryUrl;
 
-    const response = await got(searchUrl);
-    const $ = cheerio.load(response.body);
+    const $: CheerioAPI = await loadPageData(searchUrl)
 
     const argumentsElements = getArgumentsElements($);
     const schoolModelCheck = areAllElementsInVocabulary(

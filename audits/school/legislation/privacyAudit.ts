@@ -2,9 +2,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import * as cheerio from "cheerio";
-import puppeteer from "puppeteer"
-import {CheerioAPI} from "cheerio";
+import { CheerioAPI } from "cheerio";
+import { loadPageData } from "../../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -52,13 +51,7 @@ class LoadAudit extends Audit {
       },
     ];
 
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto(url);
-    const data = await page.content();
-    await browser.close();
-
-    const $: CheerioAPI = cheerio.load(data);
+    const $: CheerioAPI = await loadPageData(url)
     const privacyPolicyElement = $("#privacy-policy")
     const elementObj = $(privacyPolicyElement).attr()
 

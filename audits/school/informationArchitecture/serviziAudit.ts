@@ -1,13 +1,11 @@
 "use strict";
 
-import {Cheerio, CheerioAPI} from "cheerio";
+import { CheerioAPI } from "cheerio";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import got from "got";
-import * as cheerio from "cheerio";
 
-import { checkOrder } from "../../../utils/utils";
+import {checkOrder, loadPageData} from "../../../utils/utils";
 import { contentTypeItems } from "../../../storage/school/contentTypeItems";
 import { getAllServicesPagesToBeScanned, getAllServicesUrl, getRandomServicesToBeScanned} from "../../../utils/utils"
 
@@ -90,8 +88,7 @@ class LoadAudit extends Audit {
     const randomServiceToBeScanned: string = 'http://wp-scuole.local/?servizio=servizio-mensa' //await getRandomServicesToBeScanned(servicesUrl)
     item[0].inspected_page = randomServiceToBeScanned
 
-    const response = await got(randomServiceToBeScanned);
-    const $ = cheerio.load(response.body);
+    const $: CheerioAPI = await loadPageData(randomServiceToBeScanned)
 
     const indexElements = await getServicesFromIndex($, mandatoryVoices);
     const orderResult = await checkOrder(mandatoryVoices, indexElements);

@@ -3,8 +3,21 @@ import crawlerTypes from "../types/crawler-types";
 import orderType = crawlerTypes.orderResult;
 import got from "got";
 import * as cheerio from "cheerio";
+import puppeteer from "puppeteer"
+import {CheerioAPI} from "cheerio";
 
-export const checkOrder = async (
+const loadPageData = async (url: string) : Promise<CheerioAPI> => {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.goto(url);
+  const data = await page.content();
+  await browser.close();
+
+  return cheerio.load(data);
+}
+
+
+const checkOrder = async (
   mandatoryElements: string[],
   foundElements: string[]
 ): Promise<orderType> => {
@@ -61,7 +74,7 @@ export const checkOrder = async (
   };
 };
 
-export const getAllServicesPagesToBeScanned = async (allServicesUrl: string) : Promise<string[]> => {
+const getAllServicesPagesToBeScanned = async (allServicesUrl: string) : Promise<string[]> => {
   const pageScanned = [allServicesUrl];
 
   let noMorePageToScan = false;
@@ -94,7 +107,7 @@ export const getAllServicesPagesToBeScanned = async (allServicesUrl: string) : P
   return pageScanned;
 }
 
-export const getAllServicesUrl = async (pagesToBeScanned: string[], allServicesUrl: string) : Promise<string[]> => {
+const getAllServicesUrl = async (pagesToBeScanned: string[], allServicesUrl: string) : Promise<string[]> => {
   const servicesUrl = [];
   for (const pageToScan of pagesToBeScanned) {
     const pageResponse = await got(pageToScan);
@@ -120,7 +133,9 @@ export const getAllServicesUrl = async (pagesToBeScanned: string[], allServicesU
   return servicesUrl;
 }
 
-export const getRandomServicesToBeScanned = async (servicesUrls: string[]) : Promise<string> => {
+const getRandomServicesToBeScanned = async (servicesUrls: string[]) : Promise<string> => {
   const randomIndex = Math.floor(Math.random() * (servicesUrls.length - 1 + 1) + 1)
   return servicesUrls[randomIndex]
 }
+
+export { checkOrder, getAllServicesPagesToBeScanned, getAllServicesUrl, getRandomServicesToBeScanned, loadPageData }

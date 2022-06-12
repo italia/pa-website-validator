@@ -4,10 +4,8 @@ import { CheerioAPI } from "cheerio";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import got from "got";
-import * as cheerio from "cheerio";
 import { primaryMenuItems } from "../../../storage/school/menuItems";
-import { checkOrder } from "../../../utils/utils";
+import { checkOrder, loadPageData } from "../../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -66,8 +64,7 @@ class LoadAudit extends lighthouse.Audit {
       },
     ];
 
-    const response = await got(url);
-    const $ = cheerio.load(response.body);
+    const $: CheerioAPI = await loadPageData(url)
 
     const menuElements = getMenuElements($);
     items[0].found_menu_voices = menuElements.join(", ");
