@@ -2,7 +2,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import { domains } from "../../../storage/municipality/allowedDomains";
+import { domains } from "../../storage/municipality/allowedDomains";
 
 const Audit = lighthouse.Audit;
 
@@ -16,14 +16,14 @@ class LoadAudit extends Audit {
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
         "Test per controllare se il dominio rispetti le regole del dominio istituzionale",
-      requiredArtifacts: ["securityDomainNameCheck"],
+      requiredArtifacts: ["hostname"],
     };
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { securityDomainNameCheck: string }
+    artifacts: LH.Artifacts & { hostname: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    const hostname = artifacts.securityDomainNameCheck;
+    const hostname = artifacts.hostname;
 
     let score = 0;
     const headings = [

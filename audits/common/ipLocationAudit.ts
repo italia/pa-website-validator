@@ -5,7 +5,7 @@ import geoip from "geoip-lite";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import { allowedCountries } from "../../../storage/common/allowedCountries";
+import { allowedCountries } from "../../storage/common/allowedCountries";
 
 const Audit = lighthouse.Audit;
 
@@ -23,14 +23,14 @@ class LoadAudit extends Audit {
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
         "CONDIZIONI DI SUCCESSO: l'indirizzo IP fa riferimento a un datacenter localizzato su territorio europeo; MODALITÀ DI VERIFICA: verifica che la localizzazione dell'IP rientri all'interno di uno dei confini degli stati membri dell'UE; RIFERIMENTI TECNICI E NORMATIVI: GDPR",
-      requiredArtifacts: ["securityIpLocation"],
+      requiredArtifacts: ["hostname"],
     };
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { securityIpLocation: string }
+    artifacts: LH.Artifacts & { hostname: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    const hostname = artifacts.securityIpLocation;
+    const hostname = artifacts.hostname;
 
     let score = 0;
     const headings = [

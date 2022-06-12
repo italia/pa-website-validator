@@ -64,43 +64,31 @@ module.exports = {
   passes: [
     {
       gatherers: [
-        municipalityGatherersFolder + "/security/domainNameCheckGatherer.js",
-
-        municipalityGatherersFolder +
-          "/ux-ui-consistency/fontsCheckGatherer.js",
-
-        municipalityGatherersFolder +
-          "/legislation/accessibilityDeclarationIsPresentGatherer.js",
-        municipalityGatherersFolder + "/legislation/privacyGatherer.js",
-
-        municipalityGatherersFolder +
-          "/informationArchitecture/menuGatherer.js",
-
-        commonGatherersFolder + "/legislation/cookieDomainCheckGatherer.js",
-
-        commonGatherersFolder + "/security/originGatherer.js",
-        commonGatherersFolder + "/security/ipLocationGatherer.js",
+        municipalityGatherersFolder + "/fontsCheckGatherer.js",
+        commonGatherersFolder + "/originGatherer.js",
+        commonGatherersFolder + "/bootstrapItaliaCheckGatherer.js",
+        commonGatherersFolder + "/hostnameGatherer.js",
       ],
     },
   ],
 
   audits: [
-    municipalityAuditsFolder + "/security/domainNameCheckAudit.js",
+    municipalityAuditsFolder + "/domainNameCheckAudit.js",
 
-    municipalityAuditsFolder + "/ux-ui-consistency/fontsCheckAudit.js",
+    municipalityAuditsFolder + "/fontsCheckAudit.js",
     municipalityAuditsFolder +
-      "/ux-ui-consistency/bootstrapItaliaCheckAudit.js",
+      "/bootstrapItaliaCheckAudit.js",
 
     municipalityAuditsFolder +
-      "/legislation/accessibilityDeclarationIsPresentAudit.js",
-    municipalityAuditsFolder + "/legislation/privacyAudit.js",
+      "/accessibilityDeclarationIsPresentAudit.js",
+    municipalityAuditsFolder + "/privacyAudit.js",
 
-    municipalityAuditsFolder + "/informationArchitecture/menuAudit.js",
+    municipalityAuditsFolder + "/menuAudit.js",
 
-    commonAuditsFolder + "/legislation/cookieDomainCheckAudit.js",
+    commonAuditsFolder + "/cookieDomainCheckAudit.js",
 
-    commonAuditsFolder + "/security/securityAudit.js",
-    commonAuditsFolder + "/security/ipLocationAudit.js",
+    commonAuditsFolder + "/securityAudit.js",
+    commonAuditsFolder + "/ipLocationAudit.js",
   ],
 
   groups: groups,

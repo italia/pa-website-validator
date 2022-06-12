@@ -1,14 +1,14 @@
 "use strict";
 
 import { Page, Protocol } from "puppeteer";
-import crawlerTypes from "../../../types/crawler-types";
+import crawlerTypes from "../../types/crawler-types";
 import links = crawlerTypes.links;
 import cookie = crawlerTypes.cookie;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
 import puppeteer from "puppeteer";
-import { allowedNames } from "../../../storage/common/allowedCookieBtnNames";
+import { allowedNames } from "../../storage/common/allowedCookieBtnNames";
 
 const Audit = lighthouse.Audit;
 
@@ -26,14 +26,14 @@ class LoadAudit extends Audit {
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
         "CONDIZIONI DI SUCCESSO: il sito presenta solo cookie idonei come definito dalla normativa; MODALITÀ DI VERIFICA: viene verificato che il dominio dei cookie identificati sia corrispondente al dominio del sito web; RIFERIMENTI TECNICI E NORMATIVI: [Linee guida cookie e altri strumenti di tracciamento - 10 giugno 2021](https://www.garanteprivacy.it/home/docweb/-/docweb-display/docweb/9677876)",
-      requiredArtifacts: ["legislationCookieDomain"],
+      requiredArtifacts: ["origin"],
     };
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { legislationCookieDomain: string }
+    artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    const url = artifacts.legislationCookieDomain;
+    const url = artifacts.origin;
 
     const headings = [
       { key: "cookie_name", itemType: "text", text: "Nome del Cookie" },

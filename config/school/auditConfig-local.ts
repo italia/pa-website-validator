@@ -80,47 +80,35 @@ module.exports = {
   passes: [
     {
       gatherers: [
-        schoolGatherersFolder + "/ux-ui-consistency/fontsCheckGatherer.js",
         schoolGatherersFolder +
-          "/ux-ui-consistency/themeVersionCheckGatherer.js",
-        schoolGatherersFolder +
-          "/ux-ui-consistency/bootstrapItaliaWPCheckGatherer.js",
-
-        schoolGatherersFolder +
-          "/legislation/accessibilityDeclarationIsPresentGatherer.js",
-        schoolGatherersFolder + "/legislation/privacyGatherer.js",
-
-        schoolGatherersFolder + "/informationArchitecture/menuGatherer.js",
-        schoolGatherersFolder +
-          "/informationArchitecture/menuScuolaSecondLevelGatherer.js",
-        schoolGatherersFolder +
-          "/informationArchitecture/controlledVocabulariesGatherer.js",
+        "/innerHeadHTMLGatherer.js",
 
         commonGatherersFolder +
-          "/ux-ui-consistency/bootstrapItaliaCheckGatherer.js",
+        "/bootstrapItaliaCheckGatherer.js",
+        commonGatherersFolder + "/originGatherer.js",
       ],
     },
   ],
 
   audits: [
-    schoolAuditsFolder + "/ux-ui-consistency/fontsCheckAudit.js",
-    schoolAuditsFolder + "/ux-ui-consistency/themeVersionCheckAudit.js",
+    schoolAuditsFolder + "/fontsCheckAudit.js",
+    schoolAuditsFolder + "/themeVersionCheckAudit.js",
     schoolAuditsFolder +
-      "/ux-ui-consistency/bootstrapItaliaDoubleCheckAudit.js",
+      "/bootstrapItaliaDoubleCheckAudit.js",
 
     schoolAuditsFolder +
-      "/legislation/accessibilityDeclarationIsPresentAudit.js",
-    schoolAuditsFolder + "/legislation/privacyAudit.js",
+      "/accessibilityDeclarationIsPresentAudit.js",
+    schoolAuditsFolder + "/privacyAudit.js",
 
-    schoolAuditsFolder + "/informationArchitecture/menuAudit.js",
+    schoolAuditsFolder + "/menuAudit.js",
     schoolAuditsFolder +
-      "/informationArchitecture/menuScuolaSecondLevelAudit.js",
+      "/menuScuolaSecondLevelAudit.js",
     schoolAuditsFolder +
-      "/informationArchitecture/controlledVocabulariesAudit.js",
+      "/controlledVocabulariesAudit.js",
 
-    schoolAuditsFolder + "/informative/reuseAudit.js",
-    schoolAuditsFolder + "/informative/licenseAndAttributionAudit.js",
-    schoolAuditsFolder + "/informative/cloudInfrastructureAudit.js",
+    schoolAuditsFolder + "/reuseAudit.js",
+    schoolAuditsFolder + "/licenseAndAttributionAudit.js",
+    schoolAuditsFolder + "/cloudInfrastructureAudit.js",
   ],
 
   groups: groups,

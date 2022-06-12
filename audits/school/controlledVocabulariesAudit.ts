@@ -1,7 +1,7 @@
 "use strict";
 
 import { CheerioAPI } from "cheerio";
-import crawlerTypes from "../../../types/crawler-types";
+import crawlerTypes from "../../types/crawler-types";
 import vocabularyResult = crawlerTypes.vocabularyResult;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -9,8 +9,8 @@ import lighthouse from "lighthouse";
 import {
   eurovocVocabulary,
   schoolModelVocabulary,
-} from "../../../storage/school/controlledVocabulary";
-import {loadPageData} from "../../../utils/utils";
+} from "../../storage/school/controlledVocabulary";
+import {loadPageData} from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -32,14 +32,14 @@ class LoadAudit extends lighthouse.Audit {
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
         "CONDIZIONI DI SUCCESSO: almeno il 50% degli argomenti presenti appartiene alla lista indicata all'interno del documento di architettura dell'informazione del modello scuole alla voce \"Tassonomia ARGOMENTI\" o, almeno, appartiene al vocabolario controllato EuroVoc; MODALITÀ DI VERIFICA: gli argomenti identificati all'interno della funzione di ricerca del sito vengono confrontati con l'elenco di voci presente nel documento di architettura dell'informazione e con l'elenco di voci presente nel vocabolario controllato EuroVoc; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Elenco degli argomenti del Modello scuole](https://docs.google.com/spreadsheets/d/1D4KbaA__xO9x_iBm08KvZASjrrFLYLKX/edit?usp=sharing&ouid=115576940975219606169&rtpof=true&sd=true), [Vocabolario EuroVoc](https://eur-lex.europa.eu/browse/eurovoc.html?locale=it)",
-      requiredArtifacts: ["controlledVocabularies"],
+      requiredArtifacts: ["origin"],
     };
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { controlledVocabularies: string }
+    artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    const url = artifacts.controlledVocabularies;
+    const url = artifacts.origin;
 
     const headings = [
       { key: "result", itemType: "text", text: "Risultato" },

@@ -5,8 +5,8 @@ import { CheerioAPI } from "cheerio";
 // @ts-ignore
 import lighthouse from "lighthouse";
 
-import {checkOrder, loadPageData} from "../../../utils/utils";
-import { secondaryMenuItems } from "../../../storage/school/menuItems";
+import {checkOrder, loadPageData} from "../../utils/utils";
+import { secondaryMenuItems } from "../../storage/school/menuItems";
 
 const Audit = lighthouse.Audit;
 
@@ -28,16 +28,16 @@ class LoadAudit extends Audit {
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
         "CONDIZIONI DI SUCCESSO: almeno il 30% delle voci del menù di secondo livello verificati corrispondono a quelli indicati nel documento di architettura dell'informazione del modello scuole e sono nell'ordine corretto; MODALITÀ DI VERIFICA: viene verificata la correttezza delle voci del menù di secondo livello presenti all'interno della pagina \"La scuola\" e il loro ordine; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",
-      requiredArtifacts: ["menuStructureScuolaSecondLevelMatchModel"],
+      requiredArtifacts: ["origin"],
     };
   }
 
   static async audit(
     artifacts: LH.Artifacts & {
-      menuStructureScuolaSecondLevelMatchModel: string;
+      origin: string;
     }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    const url = artifacts.menuStructureScuolaSecondLevelMatchModel;
+    const url = artifacts.origin;
 
     const headings = [
       { key: "result", itemType: "text", text: "Risultato" },

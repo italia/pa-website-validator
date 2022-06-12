@@ -5,9 +5,9 @@ import { CheerioAPI } from "cheerio";
 // @ts-ignore
 import lighthouse from "lighthouse";
 
-import {checkOrder, loadPageData} from "../../../utils/utils";
-import { contentTypeItems } from "../../../storage/school/contentTypeItems";
-import { getAllServicesPagesToBeScanned, getAllServicesUrl, getRandomServicesToBeScanned} from "../../../utils/utils"
+import {checkOrder, loadPageData} from "../../utils/utils";
+import { contentTypeItems } from "../../storage/school/contentTypeItems";
+import { getAllServicesPagesToBeScanned, getAllServicesUrl, getRandomServicesToBeScanned} from "../../utils/utils"
 
 const Audit = lighthouse.Audit;
 
@@ -25,14 +25,14 @@ class LoadAudit extends Audit {
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
         "CONDIZIONI DI SUCCESSO: nella scheda servizio sono presenti almeno 7 su 8 delle voci obbligatorie e almeno 7 su 8 delle voci obbligatorie sono nell'ordine corretto; MODALITÀ DI VERIFICA: viene verificato quali voci sono presenti all'interno di una scheda servizio casualmente selezionata e il loro ordine; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",
-      requiredArtifacts: ["serviziStructure"],
+      requiredArtifacts: ["origin"],
     };
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { serviziStructure: string }
+    artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    const url = artifacts.serviziStructure;
+    const url = artifacts.origin;
     let score = 0
 
     const testNotFoundHeadings = [ { key: "result", itemType: "text", text: "Risultato" } ]

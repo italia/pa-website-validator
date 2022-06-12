@@ -15,16 +15,16 @@ class LoadAudit extends Audit {
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
         "Test per controllare che il dominio presenti la Dichiarazione di Accessibilità",
-      requiredArtifacts: ["legislationAccessibilityDeclarationIsPresent"],
+      requiredArtifacts: ["origin"],
     };
   }
 
   static async audit(
     artifacts: LH.Artifacts & {
-      legislationAccessibilityDeclarationIsPresent: string;
+      origin: string;
     }
   ): Promise<{ score: number }> {
-    const origin = artifacts.legislationAccessibilityDeclarationIsPresent;
+    const origin = artifacts.origin;
 
     return {
       score: 1,

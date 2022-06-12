@@ -1,6 +1,5 @@
 "use strict";
-import got from "got";
-import { JSDOM } from "jsdom";
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
@@ -16,14 +15,14 @@ class LoadAudit extends Audit {
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
         "Test per verificare la presenza del link per la privacy policy",
-      requiredArtifacts: ["legislationPrivacyIsPresent"],
+      requiredArtifacts: ["origin"],
     };
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { legislationPrivacyIsPresent: string }
+    artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number }> {
-    const url = artifacts.legislationPrivacyIsPresent;
+    const url = artifacts.origin;
 
     return {
       score: 1,

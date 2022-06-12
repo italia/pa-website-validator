@@ -2,9 +2,9 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import { allowedFonts } from "../../../storage/school/allowedFonts";
+import { allowedFonts } from "../../storage/school/allowedFonts";
 import got from "got";
-import {getAllServicesPagesToBeScanned, getAllServicesUrl, getRandomServicesToBeScanned} from "../../../utils/utils";
+import {getAllServicesPagesToBeScanned, getAllServicesUrl, getRandomServicesToBeScanned} from "../../utils/utils";
 import puppeteer from "puppeteer"
 
 const Audit = lighthouse.Audit;
@@ -21,14 +21,14 @@ class LoadAudit extends Audit {
       failureTitle: "CONSISTENZA DELL'UTILIZZO DELLE FONT (librerie di caratteri) - Il sito scuola deve utilizzare le font indicate dalla documentazione del modello di sito scuola.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description: "CONDIZIONI DI SUCCESSO: il sito utilizza almeno le font Titillium Web e Lora; MODALITÀ DI VERIFICA: viene verificata la presenza delle font all'interno della Homepage del sito; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",
-      requiredArtifacts: ["fontsCheck"],
+      requiredArtifacts: ["origin"],
     };
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { fontsCheck: string }
+    artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    const url = artifacts.fontsCheck;
+    const url = artifacts.origin;
     let score = 0;
 
     const testNotFoundHeadings = [ { key: "result", itemType: "text", text: "Risultato" } ]

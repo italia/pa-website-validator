@@ -27,14 +27,14 @@ class LoadAudit extends Audit {
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
         'CONDIZIONI DI SUCCESSO: la versione di tema CMS del modello scuole in uso è superiore alla 1.1; MODALITÀ DI VERIFICA: viene verificata la versione indicata nel file style.css, nel caso sia presente la chiave "Text Domain: design_scuole_italia"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)',
-      requiredArtifacts: ["themeVersionCheck"],
+      requiredArtifacts: ["innerHeadHTMLGatherer"],
     };
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { themeVersionCheck: string }
+    artifacts: LH.Artifacts & { innerHeadHTMLGatherer: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    const headHtml = artifacts.themeVersionCheck;
+    const headHtml = artifacts.innerHeadHTMLGatherer;
 
     let score = 0;
     const headings = [

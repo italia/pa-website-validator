@@ -6,13 +6,14 @@ import PassContext = gatherer.PassContext;
 // @ts-ignore
 import lighthouse from "lighthouse";
 
-class legislationPrivacyIsPresent extends lighthouse.Gatherer {
+class innerHeadHTMLGatherer extends lighthouse.Gatherer {
   afterPass(options: PassContext) {
-    const expression = `window.location.origin`;
+    const expression = `document.getElementsByTagName('head')[0].innerHTML`;
+
     const driver = options.driver;
 
     return driver.evaluateAsync(expression);
   }
 }
 
-module.exports = legislationPrivacyIsPresent;
+module.exports = innerHeadHTMLGatherer;

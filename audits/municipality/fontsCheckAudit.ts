@@ -3,7 +3,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import { allowedFonts } from "../../../storage/municipality/allowedFonts";
 
 const Audit = lighthouse.Audit;
 

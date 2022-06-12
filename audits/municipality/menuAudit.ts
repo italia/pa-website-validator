@@ -15,14 +15,14 @@ class LoadAudit extends Audit {
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
         "Test per verificare il rispetto delle regole per la costruzione del menu principale",
-      requiredArtifacts: ["menuStructureMatchModel"],
+      requiredArtifacts: ["origin"],
     };
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { menuStructureMatchModel: string }
+    artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number }> {
-    const url = artifacts.menuStructureMatchModel;
+    const url = artifacts.origin;
 
     return {
       score: 1,

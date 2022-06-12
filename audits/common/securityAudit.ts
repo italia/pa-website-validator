@@ -5,10 +5,10 @@
 import lighthouse from "lighthouse";
 import https from "https";
 import { TLSSocket } from "tls";
-import { allowedCiphers } from "../../../storage/common/allowedCiphers";
+import { allowedCiphers } from "../../storage/common/allowedCiphers";
 const allowedTlsVersions = ["TLSv1.2", "TLSv1.3"];
 import * as sslCertificate from "get-ssl-certificate";
-import crawlerTypes from "../../../types/crawler-types";
+import crawlerTypes from "../../types/crawler-types";
 import cipher = crawlerTypes.cipher;
 import cipherInfo = crawlerTypes.cipherInfo
 

@@ -3,7 +3,7 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { CheerioAPI } from "cheerio";
-import { loadPageData } from "../../../utils/utils";
+import { loadPageData } from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -21,14 +21,14 @@ class LoadAudit extends Audit {
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
         "CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta alla privacy policy; MODALITÀ DI VERIFICA: viene verificata la presenza e posizione del link nel footer e che riporti correttamente alla privacy policy; RIFERIMENTI TECNICI E NORMATIVI: GDPR Artt. 13 e 14, Reg. UE n. 679/2016.",
-      requiredArtifacts: ["legislationPrivacyIsPresent"],
+      requiredArtifacts: ["origin"],
     };
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { legislationPrivacyIsPresent: string }
+    artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    const url = artifacts.legislationPrivacyIsPresent;
+    const url = artifacts.origin;
 
     let score = 0;
     const headings = [

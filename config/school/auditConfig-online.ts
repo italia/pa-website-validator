@@ -95,60 +95,42 @@ module.exports = {
   passes: [
     {
       gatherers: [
-
-        schoolGatherersFolder + "/ux-ui-consistency/fontsCheckGatherer.js",
         schoolGatherersFolder +
-          "/ux-ui-consistency/bootstrapItaliaWPCheckGatherer.js",
-        schoolGatherersFolder +
-          "/ux-ui-consistency/themeVersionCheckGatherer.js",
-
-        schoolGatherersFolder +
-          "/legislation/accessibilityDeclarationIsPresentGatherer.js",
-        schoolGatherersFolder + "/legislation/privacyGatherer.js",
-
-        schoolGatherersFolder + "/informationArchitecture/menuGatherer.js",
-        schoolGatherersFolder +
-          "/informationArchitecture/menuScuolaSecondLevelGatherer.js",
-        schoolGatherersFolder + "/informationArchitecture/serviziGatherer.js",
-        schoolGatherersFolder +
-          "/informationArchitecture/controlledVocabulariesGatherer.js",
+          "/innerHeadHTMLGatherer.js",
 
         commonGatherersFolder +
-          "/ux-ui-consistency/bootstrapItaliaCheckGatherer.js",
-
-        commonGatherersFolder + "/legislation/cookieDomainCheckGatherer.js",
-
-        commonGatherersFolder + "/security/ipLocationGatherer.js",
-        commonGatherersFolder + "/security/originGatherer.js",
+          "/bootstrapItaliaCheckGatherer.js",
+        commonGatherersFolder + "/originGatherer.js",
+        commonGatherersFolder + "/hostnameGatherer.js"
       ],
     },
   ],
 
   audits: [
-    schoolAuditsFolder + "/ux-ui-consistency/fontsCheckAudit.js",
+    schoolAuditsFolder + "/fontsCheckAudit.js",
     schoolAuditsFolder +
-      "/ux-ui-consistency/bootstrapItaliaDoubleCheckAudit.js",
-    schoolAuditsFolder + "/ux-ui-consistency/themeVersionCheckAudit.js",
+      "/bootstrapItaliaDoubleCheckAudit.js",
+    schoolAuditsFolder + "/themeVersionCheckAudit.js",
 
     schoolAuditsFolder +
-      "/legislation/accessibilityDeclarationIsPresentAudit.js",
-    schoolAuditsFolder + "/legislation/privacyAudit.js",
+      "/accessibilityDeclarationIsPresentAudit.js",
+    schoolAuditsFolder + "/privacyAudit.js",
 
-    schoolAuditsFolder + "/informationArchitecture/menuAudit.js",
+    schoolAuditsFolder + "/menuAudit.js",
     schoolAuditsFolder +
-      "/informationArchitecture/menuScuolaSecondLevelAudit.js",
-    schoolAuditsFolder + "/informationArchitecture/serviziAudit.js",
+      "/menuScuolaSecondLevelAudit.js",
+    schoolAuditsFolder + "/serviziAudit.js",
     schoolAuditsFolder +
-      "/informationArchitecture/controlledVocabulariesAudit.js",
+      "/controlledVocabulariesAudit.js",
 
-    schoolAuditsFolder + "/informative/reuseAudit.js",
-    schoolAuditsFolder + "/informative/licenseAndAttributionAudit.js",
-    schoolAuditsFolder + "/informative/cloudInfrastructureAudit.js",
+    schoolAuditsFolder + "/reuseAudit.js",
+    schoolAuditsFolder + "/licenseAndAttributionAudit.js",
+    schoolAuditsFolder + "/cloudInfrastructureAudit.js",
 
-    commonAuditsFolder + "/legislation/cookieDomainCheckAudit.js",
+    commonAuditsFolder + "/cookieDomainCheckAudit.js",
 
-    commonAuditsFolder + "/security/securityAudit.js",
-    commonAuditsFolder + "/security/ipLocationAudit.js",
+    commonAuditsFolder + "/securityAudit.js",
+    commonAuditsFolder + "/ipLocationAudit.js",
   ],
 
   groups: groups,

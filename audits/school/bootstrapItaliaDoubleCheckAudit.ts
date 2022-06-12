@@ -28,17 +28,17 @@ class LoadAudit extends Audit {
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
         "CONDIZIONI DI SUCCESSO: la versione di libreria Bootstrap Italia in uso è uguale o superiore alla 1.6; MODALITÀ DI VERIFICA: viene verificata la presenza della libreria Bootstrap Italia e la versione in uso individuando la variabile window.BOOTSTRAP_ITALIA_VERSION della libreria; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",
-      requiredArtifacts: ["bootstrapItaliaWPCheck", "bootstrapItaliaCheck"],
+      requiredArtifacts: ["innerHeadHTMLGatherer", "bootstrapItaliaCheck"],
     };
   }
 
   static async audit(
     artifacts: LH.Artifacts & {
       bootstrapItaliaCheck: string;
-      bootstrapItaliaWPCheck: string;
+      innerHeadHTMLGatherer: string;
     }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    const headHtml = artifacts.bootstrapItaliaWPCheck;
+    const headHtml = artifacts.innerHeadHTMLGatherer;
     const bootstrapItaliaVariableVersion = artifacts.bootstrapItaliaCheck;
 
     const headings = [

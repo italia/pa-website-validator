@@ -4,8 +4,8 @@ import { CheerioAPI } from "cheerio";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import { primaryMenuItems } from "../../../storage/school/menuItems";
-import { checkOrder, loadPageData } from "../../../utils/utils";
+import { primaryMenuItems } from "../../storage/school/menuItems";
+import { checkOrder, loadPageData } from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -26,14 +26,14 @@ class LoadAudit extends lighthouse.Audit {
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
         "CONDIZIONI DI SUCCESSO: le voci di menù del sito sono esattamente quelle indicate nel documento di architettura dell'informazione e sono nell'ordine indicato, ovvero La scuola, Servizi, Novità, Didattica; MODALITÀ DI VERIFICA: vengono identificate le voci presenti nel menù del sito e il loro ordine, confrontandole con quanto indicato nel documento di architettura dell'informazione, applicando una tolleranza di 2 voci aggiuntive; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",
-      requiredArtifacts: ["menuStructureMatchModel"],
+      requiredArtifacts: ["origin"],
     };
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { menuStructureMatchModel: string }
+    artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    const url = artifacts.menuStructureMatchModel;
+    const url = artifacts.origin;
 
     let score = 0;
     const headings = [
