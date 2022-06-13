@@ -76,7 +76,7 @@ class LoadAudit extends Audit {
     let score = 0;
 
     const secondaryMenuScuolaItems: string[] = secondaryMenuItems.Scuola;
-    const $: CheerioAPI = await loadPageData('http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-home.html')
+    const $: CheerioAPI = await loadPageData(url)
     const headerUlTest = await getPageElement($, "submenu-scuola", 'li')
 
     let numberOfMandatoryVoicesPresent = 0;
@@ -90,9 +90,6 @@ class LoadAudit extends Audit {
 
       elementsFound.push(element);
     }
-
-    console.log('ELEMENTS FOUND', elementsFound)
-    console.log('CORRECT ELEMENTS FOUND', correctElementsFound)
 
     const presentVoicesPercentage: number = parseInt(((correctElementsFound.length / secondaryMenuScuolaItems.length) * 100).toFixed(0))
     const missingVoicesPercentage: number = 100 - presentVoicesPercentage
