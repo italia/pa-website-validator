@@ -31,7 +31,7 @@ class LoadAudit extends lighthouse.Audit {
         "VOCABOLARI CONTROLLATI - Il sito scuola deve utilizzare argomenti forniti dal modello di sito scuola o appartenenti al vocabolario controllato europeo EuroVoc.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        "CONDIZIONI DI SUCCESSO: almeno il 50% degli argomenti presenti appartiene alla lista indicata all'interno del documento di architettura dell'informazione del modello scuole alla voce \"Tassonomia ARGOMENTI\" o, almeno, appartiene al vocabolario controllato EuroVoc; MODALITÀ DI VERIFICA: gli argomenti identificati all'interno della funzione di ricerca del sito vengono confrontati con l'elenco di voci presente nel documento di architettura dell'informazione e con l'elenco di voci presente nel vocabolario controllato EuroVoc; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Elenco degli argomenti del Modello scuole](https://docs.google.com/spreadsheets/d/1D4KbaA__xO9x_iBm08KvZASjrrFLYLKX/edit?usp=sharing&ouid=115576940975219606169&rtpof=true&sd=true), [Vocabolario EuroVoc](https://eur-lex.europa.eu/browse/eurovoc.html?locale=it)",
+        "CONDIZIONI DI SUCCESSO: almeno il 50% degli argomenti presenti appartiene alla lista indicata all'interno del documento di architettura dell'informazione del modello scuole alla voce \"Le parole della scuola\"; MODALITÀ DI VERIFICA: gli argomenti identificati all'interno della funzione di ricerca del sito vengono confrontati con l'elenco di voci presente nel documento di architettura dell'informazione; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Elenco degli argomenti del Modello scuole](https://docs.google.com/spreadsheets/d/1D4KbaA__xO9x_iBm08KvZASjrrFLYLKX/edit?usp=sharing&ouid=115576940975219606169&rtpof=true&sd=true)",
       requiredArtifacts: ["origin"],
     };
   }
@@ -53,16 +53,6 @@ class LoadAudit extends lighthouse.Audit {
         itemType: "text",
         text: "Argomenti non inclusi nell'elenco del modello scuole",
       },
-      {
-        key: "element_in_eurovoc_model_percentage",
-        itemType: "text",
-        text: "% di argomenti inclusi nell'elenco EuroVoc",
-      },
-      {
-        key: "element_not_in_eurovoc_model",
-        itemType: "text",
-        text: "Argomenti non inclusi nell'elenco EuroVoc",
-      },
     ];
 
     let item = [
@@ -70,8 +60,6 @@ class LoadAudit extends lighthouse.Audit {
         result: redResult,
         element_in_school_model_percentage: "",
         element_not_in_school_model: "",
-        element_in_eurovoc_model_percentage: "",
-        element_not_in_eurovoc_model: "",
       },
     ];
 
@@ -85,53 +73,24 @@ class LoadAudit extends lighthouse.Audit {
       argumentsElements,
       schoolModelVocabulary
     );
-    const eurovocModelCheck = areAllElementsInVocabulary(
-      argumentsElements,
-      eurovocVocabulary
-    );
 
-    let numberOfElementsNotInEurovocModelPercentage = 100;
     let numberOfElementsNotInScuoleModelPercentage = 100;
 
     if (argumentsElements.length > 0) {
-      numberOfElementsNotInEurovocModelPercentage =
-        (eurovocModelCheck.elementNotIncluded.length /
-          argumentsElements.length) *
-        100;
-      numberOfElementsNotInScuoleModelPercentage =
-        (schoolModelCheck.elementNotIncluded.length /
-          argumentsElements.length) *
-        100;
+      numberOfElementsNotInScuoleModelPercentage = (schoolModelCheck.elementNotIncluded.length / argumentsElements.length) * 100;
     }
 
     let score = 0;
     if (schoolModelCheck.allArgumentsInVocabulary) {
       item[0].result = greenResult;
       score = 1;
-    } else if (
-      schoolModelCheck.allArgumentsInVocabulary ||
-      eurovocModelCheck.allArgumentsInVocabulary ||
-      numberOfElementsNotInEurovocModelPercentage < 50 ||
-      numberOfElementsNotInScuoleModelPercentage < 50
-    ) {
+    } else if (numberOfElementsNotInScuoleModelPercentage < 50) {
       item[0].result = yellowResult;
       score = 0.5;
     }
 
-    item[0].element_in_school_model_percentage = (
-      100 - numberOfElementsNotInScuoleModelPercentage
-    )
-      .toFixed(0)
-      .toString();
-    item[0].element_not_in_school_model =
-      schoolModelCheck.elementNotIncluded.join(", ");
-    item[0].element_in_eurovoc_model_percentage = (
-      100 - numberOfElementsNotInEurovocModelPercentage
-    )
-      .toFixed(0)
-      .toString();
-    item[0].element_not_in_eurovoc_model =
-      eurovocModelCheck.elementNotIncluded.join(", ");
+    item[0].element_in_school_model_percentage = (100 - numberOfElementsNotInScuoleModelPercentage).toFixed(0).toString();
+    item[0].element_not_in_school_model = schoolModelCheck.elementNotIncluded.join(", ");
 
     return {
       score: score,

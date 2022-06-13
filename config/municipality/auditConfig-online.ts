@@ -116,7 +116,7 @@ module.exports = {
 
     performance: {
       title: "Raccomandazione progettuale: Velocità e tempi di risposta",
-      description: "Nel caso in cui il sito presenti livelli di performance (media pesata di 6 metriche standard), inferiori a 50 secondo quanto calcolato e verificato tramite le librerie Lighthouse, la scuola deve pubblicare sul sito comunale un “Piano di miglioramento del sito” che mostri, per ciascuna delle 6 voci voci che impatta negativamente la performance, le azioni future di miglioramento della performance stessa, e le relative tempistiche di realizzazione attese."
+      description: "Nel caso in cui il sito presenti livelli di prestazioni (media pesata di 6 metriche standard) inferiori a 50 secondo quanto calcolato e verificato tramite le librerie Lighthouse, il Comune deve pubblicare sul sito un “Piano di miglioramento del sito” che mostri, per ciascuna delle 6 metriche che impatta negativamente le prestazioni, le azioni future di miglioramento e le relative tempistiche di realizzazione attese. RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/)"
     }
   },
 };
