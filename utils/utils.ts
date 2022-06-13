@@ -43,24 +43,24 @@ const getPageElement = async ($: CheerioAPI, elementId: string, tag: string = ''
   return [...new Set(returnValues)];
 }
 
-const getElementHrefValues = async ($: CheerioAPI, elementId: string) => {
+const getElementHrefValues = async ($: CheerioAPI, elementId: string, tag: string = '') : Promise<Array<{label: string, url: string}> | []> => {
   let elements = $("#" + elementId)
 
   if (Object.keys(elements).length === 0) {
-    return null
+    return []
   }
 
-  const innerElements = $(elements).find('a')
+  const innerElements = $(elements).find(tag)
 
   if (Object.keys(innerElements).length === 0) {
-    return null
+    return []
   }
 
   let urls = []
   for (const innerElement of innerElements) {
     const label = $(innerElement).text().trim() ?? ''
     const url = $(innerElement).attr().href ?? null
-    if (url) {
+    if (url && url !== '#' && url !== '') {
       urls.push({
         label: label,
         url: url
@@ -69,6 +69,61 @@ const getElementHrefValues = async ($: CheerioAPI, elementId: string) => {
   }
 
   return urls
+}
+
+const getRandomServiceUrl = async (url: string): Promise<string> => {
+  let $ = await loadPageData(url)
+
+  const allowedIds = ['#servizio-personale-scolastico', '#servizi-famiglie-studenti']
+  let elements = $(allowedIds[Math.floor(Math.random() * allowedIds.length)])
+  const elementObj = $(elements).attr()
+
+  if (!Boolean(elementObj) || !("href" in elementObj) || elementObj.href === '#' || elementObj.href === '') {
+     return ""
+  }
+
+  let serviceUrl = elementObj.href
+  if (!serviceUrl.includes(url)) {
+    serviceUrl = await buildUrl(url, serviceUrl)
+  }
+
+  $ = await loadPageData(serviceUrl)
+  const pageServiceUrls = await getElementHrefValues($, 'lista-card-tipologia', 'a')
+
+  let servicesList = []
+  for (const pageServiceUrl of pageServiceUrls) {
+    if (Boolean(pageServiceUrl.url)) {
+      servicesList.push(pageServiceUrl.url)
+    }
+  }
+
+  if (servicesList.length <= 0) {
+    return ""
+  }
+
+  let serviceToInspect = servicesList[Math.floor(Math.random() * servicesList.length)]
+
+  if (!serviceToInspect.includes(url)) {
+    serviceToInspect = await buildUrl(url, serviceToInspect)
+  }
+
+  return serviceToInspect
+}
+
+const buildUrl = async (url: string, service: string) : Promise<string> => {
+  const urlParts = url.split('//')
+
+  if (urlParts.length <= 0) {
+    return ""
+  }
+
+  const hostname = urlParts[1].split('/')
+
+  if (hostname.length <= 0) {
+    return ""
+  }
+
+  return  urlParts[0] + '//' + hostname[0] + service
 }
 
 const checkOrder = async (
@@ -192,4 +247,4 @@ const getRandomServicesToBeScanned = async (servicesUrls: string[]) : Promise<st
   return servicesUrls[randomIndex]
 }
 
-export { checkOrder, getAllServicesPagesToBeScanned, getAllServicesUrl, getRandomServicesToBeScanned, loadPageData, getPageElement, getElementHrefValues }
+export { checkOrder, getAllServicesPagesToBeScanned, getAllServicesUrl, getRandomServicesToBeScanned, loadPageData, getPageElement, getElementHrefValues, getRandomServiceUrl }

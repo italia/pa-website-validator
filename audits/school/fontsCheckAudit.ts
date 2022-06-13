@@ -4,7 +4,12 @@
 import lighthouse from "lighthouse";
 import { allowedFonts } from "../../storage/school/allowedFonts";
 import got from "got";
-import {getAllServicesPagesToBeScanned, getAllServicesUrl, getRandomServicesToBeScanned} from "../../utils/utils";
+import {
+  getAllServicesPagesToBeScanned,
+  getAllServicesUrl,
+  getRandomServicesToBeScanned,
+  getRandomServiceUrl
+} from "../../utils/utils";
 import puppeteer from "puppeteer"
 
 const Audit = lighthouse.Audit;
@@ -12,6 +17,7 @@ const Audit = lighthouse.Audit;
 const greenResult = "Il sito non utilizza tutte le font del modello."
 const yellowResult = "Il sito non utilizza il font Lora."
 const redResult = "Il sito utilizza tutte le font del modello."
+const notExecuted = "Non è stato possibile condurre il test. Controlla le \"Modalità di verifica\" per scoprire di più."
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -50,26 +56,15 @@ class LoadAudit extends Audit {
       missing_fonts: allowedFonts.join(', ')
     }]
 
-    const allServicesUrl = url + "/servizio/"
-    try {
-      await got(allServicesUrl);
-    } catch (e) {
-      return testNotFoundReturnObj
+    const randomServiceToBeScanned: string = await getRandomServiceUrl('http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-home.html')
+
+    if (randomServiceToBeScanned === "") {
+      item[0].result = notExecuted + ': nessun servizio trovato'
+      return {
+        score: 0,
+        details: Audit.makeTableDetails(headings, item),
+      }
     }
-
-    const pagesToBeScanned = await getAllServicesPagesToBeScanned(
-      allServicesUrl
-    );
-    const servicesUrl = await getAllServicesUrl(
-      pagesToBeScanned,
-      allServicesUrl
-    );
-
-    if (servicesUrl.length <= 0) {
-      return testNotFoundReturnObj
-    }
-
-    const randomServiceToBeScanned: string = await getRandomServicesToBeScanned(servicesUrl)
 
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
