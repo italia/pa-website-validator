@@ -88,7 +88,8 @@ const customReccomendationsAudits = [
 module.exports = {
   extends: "lighthouse:default",
   settings: {
-    onlyCategories: ["modelCompliance", "recommendations", "performance"]
+    //onlyCategories: ["modelCompliance", "recommendations", "performance"]
+    onlyAudits: ['school-menu-scuola-second-level-structure-match-model']
   },
 
   passes: [

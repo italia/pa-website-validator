@@ -5,7 +5,7 @@ import { CheerioAPI } from "cheerio";
 // @ts-ignore
 import lighthouse from "lighthouse";
 
-import {checkOrder, loadPageData} from "../../utils/utils";
+import {checkOrder, getPageElement, loadPageData} from "../../utils/utils";
 import { secondaryMenuItems } from "../../storage/school/menuItems";
 
 const Audit = lighthouse.Audit;
@@ -75,27 +75,27 @@ class LoadAudit extends Audit {
 
     let score = 0;
 
-    const $: CheerioAPI = await loadPageData(url)
+    const secondaryMenuScuolaItems: string[] = secondaryMenuItems.Scuola;
+    const $: CheerioAPI = await loadPageData('http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-home.html')
+    const headerUlTest = await getPageElement($, "submenu-scuola", 'li')
 
-    const secondaryMenuScuolaItems: Array<string> = secondaryMenuItems.Scuola;
-
-    const headerUl = $("#menu-la-scuola").find("li");
     let numberOfMandatoryVoicesPresent = 0;
-    const elementsFound: Array<string> = [];
-    let correctElementsFound: Array<string> = [];
-    for (const element of headerUl) {
-      if (secondaryMenuScuolaItems.includes($(element).text().trim())) {
+    const elementsFound: string[] = [];
+    let correctElementsFound: string[] = [];
+    for (const element of headerUlTest) {
+      if (secondaryMenuScuolaItems.includes(element)) {
         numberOfMandatoryVoicesPresent++;
-        correctElementsFound.push($(element).text().trim());
+        correctElementsFound.push(element);
       }
 
-      elementsFound.push($(element).text().trim());
+      elementsFound.push(element);
     }
 
-    const missingVoicesPercentage =
-      ((secondaryMenuScuolaItems.length - numberOfMandatoryVoicesPresent) /
-        secondaryMenuScuolaItems.length) *
-      100;
+    console.log('ELEMENTS FOUND', elementsFound)
+    console.log('CORRECT ELEMENTS FOUND', correctElementsFound)
+
+    const presentVoicesPercentage: number = parseInt(((correctElementsFound.length / secondaryMenuScuolaItems.length) * 100).toFixed(0))
+    const missingVoicesPercentage: number = 100 - presentVoicesPercentage
 
     let correctOrder = true;
     const correctOrderResult = await checkOrder(
@@ -117,14 +117,9 @@ class LoadAudit extends Audit {
     }
 
     items[0].correct_voices = correctElementsFound.join(", ");
-    items[0].correct_voices_percentage = (100 - missingVoicesPercentage)
-      .toFixed(0)
-      .toString();
-    items[0].wrong_voices_order =
-      correctOrderResult.elementsNotInSequence.join(", ");
-    items[0].missing_voices = secondaryMenuScuolaItems
-      .filter((x) => !correctElementsFound.includes(x))
-      .join(", ");
+    items[0].correct_voices_percentage = presentVoicesPercentage.toString()
+    items[0].wrong_voices_order = correctOrderResult.elementsNotInSequence.join(", ");
+    items[0].missing_voices = secondaryMenuScuolaItems.filter((x) => !correctElementsFound.includes(x)).join(", ");
 
     return {
       score: score,
