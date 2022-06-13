@@ -66,6 +66,7 @@ module.exports = {
         municipalityGatherersFolder + "/fontsCheckGatherer.js",
         commonGatherersFolder + "/originGatherer.js",
         commonGatherersFolder + "/bootstrapItaliaCheckGatherer.js",
+        commonGatherersFolder + "/bootstrapItaliaSelectorCheckGatherer.js",
         commonGatherersFolder + "/hostnameGatherer.js",
       ],
     },
@@ -75,8 +76,6 @@ module.exports = {
     municipalityAuditsFolder + "/domainNameCheckAudit.js",
 
     municipalityAuditsFolder + "/fontsCheckAudit.js",
-    municipalityAuditsFolder +
-      "/bootstrapItaliaCheckAudit.js",
 
     municipalityAuditsFolder +
       "/accessibilityDeclarationIsPresentAudit.js",
@@ -88,6 +87,7 @@ module.exports = {
 
     commonAuditsFolder + "/securityAudit.js",
     commonAuditsFolder + "/ipLocationAudit.js",
+    commonAuditsFolder + "/bootstrapItaliaDoubleCheckAudit.js",
   ],
 
   groups: groups,

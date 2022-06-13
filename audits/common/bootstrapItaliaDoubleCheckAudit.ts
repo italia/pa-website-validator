@@ -7,9 +7,7 @@ import lighthouse from "lighthouse";
 import * as cheerio from "cheerio";
 
 const Audit = lighthouse.Audit;
-const themePossibleNames = ["design-scuole-wordpress"];
 
-const bootstrapItaliaLibraryName = "bootstrap-italia.css";
 
 const greenResult =
   "Il sito utilizza la libreria Bootstrap Italia in una versione più recente o uguale di 1.6.";
@@ -28,18 +26,21 @@ class LoadAudit extends Audit {
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
         "CONDIZIONI DI SUCCESSO: la versione di libreria Bootstrap Italia in uso è uguale o superiore alla 1.6; MODALITÀ DI VERIFICA: viene verificata la presenza della libreria Bootstrap Italia e la versione in uso individuando la variabile window.BOOTSTRAP_ITALIA_VERSION della libreria; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",
-      requiredArtifacts: ["innerHeadHTMLGatherer", "bootstrapItaliaCheck"],
+      requiredArtifacts: ["bootstrapItaliaSelectorCheck", "bootstrapItaliaCheck"],
     };
   }
 
   static async audit(
     artifacts: LH.Artifacts & {
       bootstrapItaliaCheck: string;
-      innerHeadHTMLGatherer: string;
+      bootstrapItaliaSelectorCheck: string;
     }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    const headHtml = artifacts.innerHeadHTMLGatherer;
-    const bootstrapItaliaVariableVersion = artifacts.bootstrapItaliaCheck;
+    const bootstrapItaliaVariableVersion = artifacts.bootstrapItaliaCheck.replaceAll('"', '');
+    const bootstrapItaliaSelectorVariableVersion = artifacts.bootstrapItaliaSelectorCheck.replaceAll('"', '');
+
+    console.log('1', bootstrapItaliaVariableVersion)
+    console.log('2', bootstrapItaliaSelectorVariableVersion)
 
     const headings = [
       {
@@ -67,46 +68,23 @@ class LoadAudit extends Audit {
     ];
     let score = 0;
 
-    if (bootstrapItaliaVariableVersion != null) {
-      const splittedVersion = bootstrapItaliaVariableVersion.split(".");
-      const majorVersion = splittedVersion[0];
-      const middleVersion = splittedVersion[1];
+    if (bootstrapItaliaVariableVersion !== null) {
+        items[0].library_version = bootstrapItaliaVariableVersion
 
-      if (parseInt(majorVersion) >= 1 && parseInt(middleVersion) >= 6) {
-        score = 1;
-      }
-
-      items[0].result = greenResult;
-      items[0].library_name = libraryName;
-      items[0].library_version = bootstrapItaliaVariableVersion;
-    } else {
-      const $: CheerioAPI = cheerio.load(headHtml);
-      const linkTags = $("html").find("link");
-
-      for (const linkTag of linkTags) {
-        const cleanLinkHref = linkTag.attribs.href
-          .replace("http://www.", "")
-          .replace("https://www.", "");
-        const splitCleanLinkHref = cleanLinkHref.split("/");
-        if (containsPossibleThemeName(splitCleanLinkHref)) {
-          for (const element of splitCleanLinkHref) {
-            if (element.includes(bootstrapItaliaLibraryName)) {
-              const splitElement = element.split("?");
-              const libraryVersion = splitElement[1].split("=")[1];
-
-              const majorLibraryVersion = libraryVersion.split(".");
-              if (parseInt(majorLibraryVersion[0]) >= 4) {
-                score = 1;
-                items[0].result = greenResult;
-                items[0].library_name = libraryName;
-                items[0].library_version = libraryVersion;
-
-                break;
-              }
-            }
-          }
+        if (await checkVersion(bootstrapItaliaVariableVersion)) {
+          score = 1
+          items[0].result = greenResult
+          items[0].library_name = libraryName
         }
-      }
+
+    } else if (bootstrapItaliaSelectorVariableVersion !== null) {
+      items[0].library_version = bootstrapItaliaSelectorVariableVersion
+
+        if (await checkVersion(bootstrapItaliaSelectorVariableVersion)) {
+          score = 1
+          items[0].result = greenResult
+          items[0].library_name = libraryName
+        }
     }
 
     return {
@@ -118,14 +96,19 @@ class LoadAudit extends Audit {
 
 module.exports = LoadAudit;
 
-function containsPossibleThemeName(array: Array<string>): boolean {
-  for (const element of array) {
-    for (const name of themePossibleNames) {
-      if (element.includes(name)) {
-        return true;
-      }
+const checkVersion = async (version: string) => {
+  let result = false
+
+  const versionValues = version.split('.')
+  if (versionValues.length === 3) {
+    const majorVersion = parseInt(versionValues[0])
+    const middleVersion = parseInt(versionValues[1])
+    const minorVersion = parseInt(versionValues[2])
+
+    if (majorVersion >= 1 && middleVersion >= 6 && minorVersion >= 3) {
+        result = true
     }
   }
 
-  return false;
+  return result
 }

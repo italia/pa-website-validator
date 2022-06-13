@@ -1,7 +1,7 @@
 import {
   municipalityGatherersFolder,
   municipalityAuditsFolder,
-  commonGatherersFolder,
+  commonGatherersFolder, commonAuditsFolder,
 } from "../configFolderingConstants";
 
 import {
@@ -53,22 +53,21 @@ module.exports = {
         municipalityGatherersFolder +
           "/fontsCheckGatherer.js",
 
-        commonGatherersFolder +
-          "/bootstrapItaliaCheckGatherer.js",
+        commonGatherersFolder + "/bootstrapItaliaCheckGatherer.js",
+        commonGatherersFolder + "/bootstrapItaliaSelectorCheckGatherer.js",
       ],
     },
   ],
 
   audits: [
     municipalityAuditsFolder + "/fontsCheckAudit.js",
-    municipalityAuditsFolder +
-      "/bootstrapItaliaCheckAudit.js",
 
     municipalityAuditsFolder +
       "/accessibilityDeclarationIsPresentAudit.js",
     municipalityAuditsFolder + "/legislation/privacyAudit.js",
 
     municipalityAuditsFolder + "/menuAudit.js",
+    commonAuditsFolder + "/bootstrapItaliaDoubleCheckAudit.js",
   ],
 
   groups: groups,

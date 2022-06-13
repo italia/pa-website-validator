@@ -97,8 +97,8 @@ module.exports = {
         schoolGatherersFolder +
           "/innerHeadHTMLGatherer.js",
 
-        commonGatherersFolder +
-          "/bootstrapItaliaCheckGatherer.js",
+        commonGatherersFolder + "/bootstrapItaliaCheckGatherer.js",
+        commonGatherersFolder + "/bootstrapItaliaSelectorCheckGatherer.js",
         commonGatherersFolder + "/originGatherer.js",
         commonGatherersFolder + "/hostnameGatherer.js"
       ],
@@ -107,8 +107,6 @@ module.exports = {
 
   audits: [
     schoolAuditsFolder + "/fontsCheckAudit.js",
-    schoolAuditsFolder +
-      "/bootstrapItaliaDoubleCheckAudit.js",
     schoolAuditsFolder + "/themeVersionCheckAudit.js",
 
     schoolAuditsFolder +
@@ -127,7 +125,7 @@ module.exports = {
     schoolAuditsFolder + "/cloudInfrastructureAudit.js",
 
     commonAuditsFolder + "/cookieDomainCheckAudit.js",
-
+    commonAuditsFolder + "/bootstrapItaliaDoubleCheckAudit.js",
     commonAuditsFolder + "/securityAudit.js",
     commonAuditsFolder + "/ipLocationAudit.js",
   ],
