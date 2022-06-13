@@ -3,13 +3,7 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { allowedFonts } from "../../storage/school/allowedFonts";
-import got from "got";
-import {
-  getAllServicesPagesToBeScanned,
-  getAllServicesUrl,
-  getRandomServicesToBeScanned,
-  getRandomServiceUrl
-} from "../../utils/utils";
+import { getRandomServiceUrl } from "../../utils/utils";
 import puppeteer from "puppeteer"
 
 const Audit = lighthouse.Audit;

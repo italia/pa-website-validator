@@ -89,7 +89,7 @@ module.exports = {
   extends: "lighthouse:default",
   settings: {
     //onlyCategories: ["modelCompliance", "recommendations", "performance"]
-    onlyAudits: ['school-ux-ui-consistency-fonts-check']
+    onlyAudits: ['school-servizi-structure-match-model']
   },
 
   passes: [

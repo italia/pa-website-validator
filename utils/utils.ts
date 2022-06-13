@@ -1,7 +1,6 @@
 "use strict";
 import crawlerTypes from "../types/crawler-types";
 import orderType = crawlerTypes.orderResult;
-import got from "got";
 import * as cheerio from "cheerio";
 import puppeteer from "puppeteer"
 import {CheerioAPI} from "cheerio";
@@ -183,68 +182,4 @@ const checkOrder = async (
   };
 };
 
-const getAllServicesPagesToBeScanned = async (allServicesUrl: string) : Promise<string[]> => {
-  const pageScanned = [allServicesUrl];
-
-  let noMorePageToScan = false;
-  let pageToBeScan = allServicesUrl;
-
-  while (!noMorePageToScan) {
-    const tempResponse = await got(pageToBeScan);
-    const $ = cheerio.load(tempResponse.body);
-    const cheerioElements = $("body").find("a");
-    if (cheerioElements.length <= 0) {
-      noMorePageToScan = true;
-    }
-
-    for (const cheerioElement of cheerioElements) {
-      const url = $(cheerioElement).attr("href");
-      if (
-        url !== undefined &&
-        url.includes("/page/") &&
-        !pageScanned.includes(url)
-      ) {
-        pageScanned.push(url);
-
-        pageToBeScan = url;
-      } else {
-        noMorePageToScan = true;
-      }
-    }
-  }
-
-  return pageScanned;
-}
-
-const getAllServicesUrl = async (pagesToBeScanned: string[], allServicesUrl: string) : Promise<string[]> => {
-  const servicesUrl = [];
-  for (const pageToScan of pagesToBeScanned) {
-    const pageResponse = await got(pageToScan);
-    const $ = cheerio.load(pageResponse.body);
-    const cheerioElements = $("body").find("a");
-    if (cheerioElements.length <= 0) {
-      continue;
-    }
-
-    for (const cheerioElement of cheerioElements) {
-      const url = $(cheerioElement).attr("href");
-      if (
-        url !== undefined &&
-        url.includes("/servizio/") &&
-        url !== allServicesUrl &&
-        !url.includes("/page/")
-      ) {
-        servicesUrl.push(url);
-      }
-    }
-  }
-
-  return servicesUrl;
-}
-
-const getRandomServicesToBeScanned = async (servicesUrls: string[]) : Promise<string> => {
-  const randomIndex = Math.floor(Math.random() * (servicesUrls.length - 1 + 1) + 1)
-  return servicesUrls[randomIndex]
-}
-
-export { checkOrder, getAllServicesPagesToBeScanned, getAllServicesUrl, getRandomServicesToBeScanned, loadPageData, getPageElement, getElementHrefValues, getRandomServiceUrl }
+export { checkOrder, loadPageData, getPageElement, getElementHrefValues, getRandomServiceUrl }
