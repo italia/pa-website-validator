@@ -7,7 +7,6 @@ import {
 
 import {
   groups,
-  performanceAudits,
   accessibilityAudits,
   bestPracticeAudits,
   seoAudits,
@@ -89,7 +88,7 @@ const customReccomendationsAudits = [
 module.exports = {
   extends: "lighthouse:default",
   settings: {
-    onlyCategories: ["modelCompliance", "recommendations", "customPerformance"]
+    onlyCategories: ["modelCompliance", "recommendations", "performance"]
   },
 
   passes: [
@@ -157,11 +156,10 @@ module.exports = {
       ],
     },
 
-    customPerformance: {
-      title: "Raccomandazione progettuale: Velocità e tempi di risposta",
-      description:
-        'Nel caso in cui il sito presenti livelli di prestazioni inferiori a 50, la scuola deve pubblicare sul sito della scuola un "Piano di miglioramento del sito" che mostri, per ciascuna voce che impatta negativamente la performance, le azioni future di miglioramento della performance stessa, e le relative tempistiche di realizzazione attese. RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html), [LIGHTHOUSE performance scoring guide](https://web.dev/performance-scoring/)',
-      auditRefs: [...performanceAudits],
+    performance: {
+      title:
+        "Raccomandazione progettuale: Velocità e tempi di risposta",
+      description: "Nel caso in cui il sito presenti livelli di prestazioni inferiori a 50, la scuola deve pubblicare sul sito della scuola un \"Piano di miglioramento del sito\" che mostri, per ciascuna voce che impatta negativamente la performance, le azioni future di miglioramento della performance stessa, e le relative tempistiche di realizzazione attese. RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html), [LIGHTHOUSE performance scoring guide](https://web.dev/performance-scoring/)"
     },
   },
 };
