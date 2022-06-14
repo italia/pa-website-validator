@@ -12,7 +12,7 @@ const Audit = lighthouse.Audit;
 
 const greenResult = "Tutte le voci obbligatorie sono presenti e nell'ordine corretto."
 const yellowResult = "Non sono presenti tutte le voci obbligatorie o non tutte le voci obbligatorie sono nell'ordine corretto."
-const redResult = "Non sono presenti tutte le voci voci obbligatorie e non tutte le voci obbligatorie sono nell'ordine corretto."
+const redResult = "Non sono presenti tutte le voci obbligatorie e non tutte le voci obbligatorie sono nell'ordine corretto."
 const notExecuted = "Non è stato possibile condurre il test. Controlla le \"Modalità di verifica\" per scoprire di più."
 
 class LoadAudit extends Audit {

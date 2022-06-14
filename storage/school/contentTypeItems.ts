@@ -3,11 +3,10 @@ export const contentTypeItems = {
     "Cos'è",
     "Come si accede al servizio",
     "Cosa serve",
-    "Tempi e scadenze",
-    "Contatti",
+    "Tempi e scadenze"
   ],
   Header:   ["Titolo", "Descrizione", "Tipologia servizio", "Tassonomie argomenti"],
-  Body:     ["Struttura responsabile del servizio"],
+  Body:     ["A cosa serve", "Struttura responsabile del servizio", "Sede canale fisico"],
   Luogo:    ["indirizzo", "CAP", "Orari", "gps"],
   Metadati: ["Pubblicato", "Revisione"],
   Breadcrumb : ["Famiglie e studenti", "Personale scolastico"]

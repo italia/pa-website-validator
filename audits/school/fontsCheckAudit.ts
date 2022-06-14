@@ -68,6 +68,7 @@ class LoadAudit extends Audit {
     });
     await browser.close();
 
+    //@ts-ignore
     const splittedFonts: string[] = fonts.replaceAll('"','').split(',')
 
     if (splittedFonts.length <= 0) {

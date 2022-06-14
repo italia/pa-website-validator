@@ -36,11 +36,10 @@ class LoadAudit extends Audit {
       bootstrapItaliaSelectorCheck: string;
     }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
+    //@ts-ignore
     const bootstrapItaliaVariableVersion = artifacts.bootstrapItaliaCheck.replaceAll('"', '');
+    //@ts-ignore
     const bootstrapItaliaSelectorVariableVersion = artifacts.bootstrapItaliaSelectorCheck.replaceAll('"', '');
-
-    console.log('1', bootstrapItaliaVariableVersion)
-    console.log('2', bootstrapItaliaSelectorVariableVersion)
 
     const headings = [
       {

@@ -41,6 +41,11 @@ class LoadAudit extends Audit {
         text: "Risultato",
       },
       {
+        key: "link_name",
+        itemType: "text",
+        text: "Nome del link",
+      },
+      {
         key: "link_destination",
         itemType: "text",
         text: "Destinazione link",
@@ -50,13 +55,15 @@ class LoadAudit extends Audit {
     let items = [
       {
         result: redResult,
+        link_name: "",
         link_destination: "",
       },
     ];
 
-    const $: CheerioAPI = await loadPageData(url)
+    const $: CheerioAPI = await loadPageData('http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-home.html')
     const accessibilityDeclarationElement = $("#dichiarazione-accessibilita")
     const elementObj = $(accessibilityDeclarationElement).attr()
+    items[0].link_name = accessibilityDeclarationElement.text() ?? ""
 
     if (Boolean(elementObj) && ("href" in elementObj) && elementObj.href !== '#' && elementObj.href !== '' && elementObj.href.includes("form.agid.gov.it")) {
       items[0].result = greenResult

@@ -81,11 +81,8 @@ async function getLinksFromHTMLPage(page: Page): Promise<links[]> {
     (
       await page.$$("a,button")
     ).map(async (a) => {
-      const className = (
-        (await (await a.getProperty("className")).jsonValue()) as string
-      )
-        .replaceAll(" ", ".")
-        .trim();
+      //@ts-ignore
+      const className = ((await (await a.getProperty("className")).jsonValue()) as string).replaceAll(" ", ".").trim();
       const text: string = await (await a.getProperty("innerText")).jsonValue();
       return {
         text: text,
