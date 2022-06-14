@@ -47,68 +47,91 @@ class LoadAudit extends Audit {
       inspected_page: "",
     }]
 
-    let score = 1;
+    let score = 1
+
     const mandatoryVoices = contentTypeItems.Indice
     const mandatoryHeaderVoices = contentTypeItems.Header
-    const mandatoryPlaceInfo = contentTypeItems.Luogo
     const mandatoryBodyVoices = contentTypeItems.Body
+    const mandatoryPlaceInfo = contentTypeItems.Luogo
+    const totalMandatoryVoices = mandatoryVoices.length + mandatoryHeaderVoices.length + mandatoryPlaceInfo.length + mandatoryBodyVoices.length
+
     const mandatoryMetadata = contentTypeItems.Metadati
     const breadcrumbMandatoryElements = contentTypeItems.Breadcrumb
-    const totalMandatoryVoices =
-      mandatoryVoices.length +
-      mandatoryHeaderVoices.length +
-      mandatoryPlaceInfo.length +
-      mandatoryBodyVoices.length +
-      mandatoryMetadata.length +
-      (breadcrumbMandatoryElements.length - 1)
 
-    const randomServiceToBeScanned: string = await getRandomServiceUrl('http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-home.html')
+    //const randomServiceToBeScanned: string = await getRandomServiceUrl('http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-servizio-generico.html')
+    const randomServiceToBeScanned = "http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-servizio-generico.html"
 
-    if (randomServiceToBeScanned === "") {
+    /*if (randomServiceToBeScanned === "") {
       item[0].result = notExecuted + ': nessun servizio trovato'
       return {
         score: 0,
         details: Audit.makeTableDetails(headings, item),
       }
-    }
+    }*/
 
     item[0].inspected_page = randomServiceToBeScanned
 
+    console.log('RANDOM SERVICE TO BE SCANNED', randomServiceToBeScanned)
     const $: CheerioAPI = await loadPageData(randomServiceToBeScanned)
-
     const indexElements = await getServicesFromIndex($, mandatoryVoices);
+    console.log('INDEX ELEMENTS', indexElements)
     const orderResult = await checkOrder(mandatoryVoices, indexElements);
-    const foundElementsAmount = indexElements.length;
-    const missingMandatoryItems = mandatoryVoices.filter((val) => !indexElements.includes(val));
+    console.log('ORDER RESULT', orderResult)
+    let missingMandatoryItems = mandatoryVoices.filter((val) => !indexElements.includes(val));
+    console.log('INITIAL MISSING MANDATORY ITEMS', missingMandatoryItems)
 
-    console.log('servizio: ', randomServiceToBeScanned)
+    const title = $("#titolo-servizio").text() ?? ""
+    console.log('TITLE', title)
+    if (!Boolean(title)) {
+      missingMandatoryItems.push(mandatoryHeaderVoices[0])
+    }
 
-    let title = $("#titolo-sevizio").text() ?? ""
-    console.log('title', title)
+    const description = $("#descrizione-servizio").text() ?? ""
+    console.log('DESCRIPTION', description)
+    if (!Boolean(description)) {
+      missingMandatoryItems.push(mandatoryHeaderVoices[1])
+    }
 
-    let description = $("#descrizione-servizio").text() ?? ""
-    console.log('test2', description)
+    const breadcrumbElements = await getPageElement($, 'breadcrumb-list', 'li')
+    console.log('BREADCRUMB', breadcrumbElements)
+    if (!breadcrumbElements.includes(breadcrumbMandatoryElements[0]) && !breadcrumbElements.includes(breadcrumbMandatoryElements[1])) {
+      missingMandatoryItems.push(mandatoryHeaderVoices[2])
+    }
 
-    let breadcrumbElements = await getPageElement($, 'breadcrumb-list', 'li')
-    console.log('breadcrumb-list', breadcrumbElements)
+    const argumentsTag = await getPageElement($, 'lista-argomenti', 'a')
+    console.log('ARGUMENTS', argumentsTag)
+    if (argumentsTag.length <= 0) {
+      missingMandatoryItems.push(mandatoryHeaderVoices[3])
+    }
 
-    let argumentsTag = await getPageElement($, 'lista-argomenti', 'a')
-    console.log('argomenti', argumentsTag)
+    const whatNeeds = $("#a-cosa-serve").text() ?? ""
+    console.log('A COSA SERVE', whatNeeds)
+    if (!Boolean(whatNeeds)) {
+      missingMandatoryItems.push(mandatoryBodyVoices[0])
+    }
 
-    let locationList = await getPageElement($, 'location-list', 'span')
-    console.log('location', locationList)
-    let locationListValues = await getPageElement($, 'location-list', 'p')
-    console.log('location values', locationListValues)
+    const responsibleStructure = await getElementHrefValues($, 'lista-strutture', 'a')
+    console.log('RESPONSIBLE STRUCTURE', responsibleStructure)
+    if (responsibleStructure.length <= 0) {
+      missingMandatoryItems.push(mandatoryBodyVoices[1])
+    }
 
-    let responsibleStructure = await getElementHrefValues($, 'lista-strutture', 'a')
-    console.log('strutture URL', responsibleStructure)
+    const placeInfo = await getPlaceInfo($, mandatoryPlaceInfo)
+    console.log('PLACE INFO', placeInfo)
+    if (placeInfo.length > 0) {
+      missingMandatoryItems = [...missingMandatoryItems, ...placeInfo]
+    }
 
     let metadata = $("#metadati").text() ?? ""
-    console.log('metadata', metadata)
+    console.log('METADATA', metadata)
+    if (!metadata.includes(mandatoryMetadata[0]) || !metadata.includes(mandatoryMetadata[1])) {
+      missingMandatoryItems.push(mandatoryBodyVoices[3])
+    }
 
-    const foundMandatoryVoicesPercentage = (foundElementsAmount / totalMandatoryVoices) * 100;
-
+    const foundMandatoryVoicesPercentage = (( totalMandatoryVoices - missingMandatoryItems.length ) / totalMandatoryVoices) * 100;
     const foundMandatoryVoicesNotCorrectOrderPercentage = (orderResult.numberOfElementsNotInSequence / totalMandatoryVoices) * 100;
+    console.log('FOUND MANDATORY VOICES PERCENTAGE', foundMandatoryVoicesPercentage)
+    console.log('FOUND MANDATORY VOICES PERCENTAGE NOT CORRECT ORDER', foundMandatoryVoicesNotCorrectOrderPercentage)
 
     if (foundMandatoryVoicesPercentage < 90 || foundMandatoryVoicesNotCorrectOrderPercentage > 10) {
       score = 0;
@@ -142,4 +165,74 @@ async function getServicesFromIndex($: CheerioAPI, mandatoryElements: string[]):
   }
 
   return returnValues;
+}
+
+async function getPlaceInfo($: CheerioAPI, mandatoryElements: string[]) {
+  let elements = $("#location-list");
+
+  if (elements.length <= 0) {
+    return []
+  }
+
+  console.log('NUMBER OF LUOGO CARDS', elements.length)
+
+  let placeCards = []
+  for (let element of elements) {
+    let innerElementLabels = $(element).find('span')
+    let innerElementValues = $(element).find('p')
+
+    console.log('NUMBER OF LABELS', innerElementLabels.length)
+    console.log('NUMBER OF VALUES', innerElementValues.length)
+
+    let placeCard = []
+    for (let i = 0, j = 0; i < innerElementLabels.length, j < innerElementValues.length; i++, j++) {
+       const labelText = $(innerElementLabels[i]).text().trim() ?? null
+       if (Boolean(labelText)) {
+           let labelValue = ""
+
+           if (Boolean($(innerElementValues[j]))) {
+               labelValue = $(innerElementValues[j]).text().trim() ?? ""
+
+               while (labelText !== 'Orari' && (labelValue.includes('dalle') || labelValue.includes('alle'))) {
+                  j++
+                  labelValue = $(innerElementValues[j]).text().trim() ?? ""
+               }
+           }
+
+           placeCard.push({
+              [labelText]: labelValue
+           })
+       }
+    }
+
+    placeCards.push(placeCard)
+  }
+
+  console.log('PLACE CARDS', placeCards)
+
+  if (placeCards.length <= 0) {
+    return []
+  }
+
+  let foundElements = []
+  for (const card of placeCards) {
+    for (const cardElement of placeCards) {
+      for (const cardElementObj of cardElement) {
+        const key = Object.keys(cardElementObj)
+        if (key.length <= 0) {
+          continue
+        }
+        const value = Object.values(cardElementObj) ?? []
+
+        if (Boolean(value[0]) && mandatoryElements.includes(key[0])) {
+          foundElements.push(key[0])
+        }
+      }
+    }
+  }
+
+  const removeDuplicates = [...new Set(foundElements)]
+  console.log('REMOVED DUPLICATES', removeDuplicates)
+
+  return mandatoryElements.filter((val) => !removeDuplicates.includes(val));
 }
