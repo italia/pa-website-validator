@@ -58,16 +58,15 @@ class LoadAudit extends Audit {
     const mandatoryMetadata = contentTypeItems.Metadati
     const breadcrumbMandatoryElements = contentTypeItems.Breadcrumb
 
-    //const randomServiceToBeScanned: string = await getRandomServiceUrl('http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-servizio-generico.html')
-    const randomServiceToBeScanned = "http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-servizio-generico.html"
+    const randomServiceToBeScanned: string = await getRandomServiceUrl(url)
 
-    /*if (randomServiceToBeScanned === "") {
+    if (randomServiceToBeScanned === "") {
       item[0].result = notExecuted + ': nessun servizio trovato'
       return {
         score: 0,
         details: Audit.makeTableDetails(headings, item),
       }
-    }*/
+    }
 
     item[0].inspected_page = randomServiceToBeScanned
 
@@ -186,16 +185,16 @@ async function getPlaceInfo($: CheerioAPI, mandatoryElements: string[]) {
 
     let placeCard = []
     for (let i = 0, j = 0; i < innerElementLabels.length, j < innerElementValues.length; i++, j++) {
-       const labelText = $(innerElementLabels[i]).text().trim() ?? null
+       const labelText = $(innerElementLabels[i]).text().trim().toLowerCase() ?? null
        if (Boolean(labelText)) {
            let labelValue = ""
 
            if (Boolean($(innerElementValues[j]))) {
-               labelValue = $(innerElementValues[j]).text().trim() ?? ""
+               labelValue = $(innerElementValues[j]).text().trim().toLowerCase() ?? ""
 
                while (labelText !== 'Orari' && (labelValue.includes('dalle') || labelValue.includes('alle'))) {
                   j++
-                  labelValue = $(innerElementValues[j]).text().trim() ?? ""
+                  labelValue = $(innerElementValues[j]).text().trim().toLowerCase() ?? ""
                }
            }
 
@@ -224,8 +223,8 @@ async function getPlaceInfo($: CheerioAPI, mandatoryElements: string[]) {
         }
         const value = Object.values(cardElementObj) ?? []
 
-        if (Boolean(value[0]) && mandatoryElements.includes(key[0])) {
-          foundElements.push(key[0])
+        if (Boolean(value[0].toLowerCase()) && mandatoryElements.includes(key[0].toLowerCase())) {
+          foundElements.push(key[0].toLowerCase())
         }
       }
     }
