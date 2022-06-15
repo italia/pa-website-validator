@@ -170,7 +170,7 @@ async function getPlaceInfo($: CheerioAPI, mandatoryElements: string[]) {
   let elements = $("#location-list");
 
   if (elements.length <= 0) {
-    return []
+    return mandatoryElements
   }
 
   console.log('NUMBER OF LUOGO CARDS', elements.length)
