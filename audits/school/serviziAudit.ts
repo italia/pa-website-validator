@@ -58,7 +58,7 @@ class LoadAudit extends Audit {
     const mandatoryMetadata = contentTypeItems.Metadati
     const breadcrumbMandatoryElements = contentTypeItems.Breadcrumb
 
-    const randomServiceToBeScanned: string = await getRandomServiceUrl(url)
+    /*const randomServiceToBeScanned: string = await getRandomServiceUrl(url)
 
     if (randomServiceToBeScanned === "") {
       item[0].result = notExecuted + ': nessun servizio trovato'
@@ -66,7 +66,8 @@ class LoadAudit extends Audit {
         score: 0,
         details: Audit.makeTableDetails(headings, item),
       }
-    }
+    } */
+    let randomServiceToBeScanned = 'http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-servizio-generico.html'
 
     item[0].inspected_page = randomServiceToBeScanned
 
@@ -177,15 +178,30 @@ async function getPlaceInfo($: CheerioAPI, mandatoryElements: string[]) {
 
   let placeCards = []
   for (let element of elements) {
+    let placeCard = []
     let innerElementLabels = $(element).find('span')
     let innerElementValues = $(element).find('p')
 
-    console.log('NUMBER OF LABELS', innerElementLabels.length)
-    console.log('NUMBER OF VALUES', innerElementValues.length)
+    let gps = await getElementHrefValues($, 'location-list', 'a')
+    let gpsLabel = ""
+    let gpsValue = ""
+    for (let gpsElement of gps) {
+      if (Boolean(gpsElement.label) && Boolean(gpsElement.url)) {
+        gpsLabel = gpsElement.label.toLowerCase()
+        gpsValue = gpsElement.url
+        break
+      }
+    }
 
-    let placeCard = []
+    if (Boolean(gpsLabel)) {
+      placeCard.push({
+        [gpsLabel] : gpsValue
+      })
+    }
+
     for (let i = 0, j = 0; i < innerElementLabels.length, j < innerElementValues.length; i++, j++) {
        const labelText = $(innerElementLabels[i]).text().trim().toLowerCase() ?? null
+       console.log('LABEL TEXT', labelText)
        if (Boolean(labelText)) {
            let labelValue = ""
 
