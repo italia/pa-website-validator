@@ -75,7 +75,9 @@ const getRandomServiceUrl = async (url: string): Promise<string> => {
 
   const allowedIds = ['#servizio-personale-scolastico', '#servizi-famiglie-studenti']
   let elements = $(allowedIds[Math.floor(Math.random() * allowedIds.length)])
+  console.log('ELEMENTS RANDOM', elements)
   const elementObj = $(elements).attr()
+  console.log('ELEMENT OBJ', elementObj)
 
   if (!Boolean(elementObj) || !("href" in elementObj) || elementObj.href === '#' || elementObj.href === '') {
      return ""
