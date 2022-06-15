@@ -42,6 +42,33 @@ const getPageElement = async ($: CheerioAPI, elementId: string, tag: string = ''
   return [...new Set(returnValues)];
 }
 
+const getPageElementDataAttribute = async ($: CheerioAPI, elementDataAttribute: string, tag: string = '') : Promise<string[]> => {
+  const returnValues: string[] = [];
+
+  let elements = $(elementDataAttribute);
+
+  if (tag !== '') {
+    if (Object.keys(elements).length === 0) {
+      return returnValues
+    }
+
+    elements = $(elements).find(tag);
+  }
+
+  if (Object.keys(elements).length === 0) {
+    return returnValues
+  }
+
+  for (const element of elements) {
+    const stringElement = $(element).text().trim() ?? null
+    if(stringElement) {
+      returnValues.push(stringElement)
+    }
+  }
+
+  return [...new Set(returnValues)];
+}
+
 const getElementHrefValues = async ($: CheerioAPI, elementId: string, tag: string = '') : Promise<Array<{label: string, url: string}> | []> => {
   let elements = $("#" + elementId)
 
@@ -184,4 +211,4 @@ const checkOrder = async (
   };
 };
 
-export { checkOrder, loadPageData, getPageElement, getElementHrefValues, getRandomServiceUrl }
+export { checkOrder, loadPageData, getPageElement, getElementHrefValues, getRandomServiceUrl, getPageElementDataAttribute }
