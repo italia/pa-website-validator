@@ -208,7 +208,7 @@ async function getPlaceInfo($: CheerioAPI, mandatoryElements: string[]) {
            if (Boolean($(innerElementValues[j]))) {
                labelValue = $(innerElementValues[j]).text().trim().toLowerCase() ?? ""
 
-               while (labelText !== 'Orari' && (labelValue.includes('dalle') || labelValue.includes('alle'))) {
+               while (labelText !== 'orari' && (labelValue.includes('dalle') || labelValue.includes('alle'))) {
                   j++
                   labelValue = $(innerElementValues[j]).text().trim().toLowerCase() ?? ""
                }
