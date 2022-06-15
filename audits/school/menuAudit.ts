@@ -5,7 +5,7 @@ import { CheerioAPI } from "cheerio";
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { primaryMenuItems } from "../../storage/school/menuItems";
-import { checkOrder, loadPageData } from "../../utils/utils";
+import {checkOrder, getPageElement, loadPageData} from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -64,9 +64,9 @@ class LoadAudit extends lighthouse.Audit {
       },
     ];
 
-    const $: CheerioAPI = await loadPageData(url)
+    const $: CheerioAPI = await loadPageData('http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-home.html')
 
-    const menuElements = getMenuElements($);
+    const menuElements = await getPageElement($, "menup", '> li > a')
     items[0].found_menu_voices = menuElements.join(", ");
 
     const missingMandatoryElements = missingMandatoryItems(
@@ -113,17 +113,6 @@ class LoadAudit extends lighthouse.Audit {
 }
 
 module.exports = LoadAudit;
-
-function getMenuElements($: CheerioAPI): string[] {
-  const headerUl = $("#menup").find("> li > a");
-
-  const elements = [];
-  for (const element of headerUl) {
-    elements.push($(element).text().trim());
-  }
-
-  return elements;
-}
 
 function containsMandatoryElements(
   menuElements: string[],
