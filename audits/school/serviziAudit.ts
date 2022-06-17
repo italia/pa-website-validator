@@ -58,7 +58,7 @@ class LoadAudit extends Audit {
     const mandatoryMetadata = contentTypeItems.Metadati
     const breadcrumbMandatoryElements = contentTypeItems.Breadcrumb
 
-    /*const randomServiceToBeScanned: string = await getRandomServiceUrl(url)
+    const randomServiceToBeScanned: string = await getRandomServiceUrl(url)
 
     if (randomServiceToBeScanned === "") {
       item[0].result = notExecuted + ': nessun servizio trovato'
@@ -66,8 +66,8 @@ class LoadAudit extends Audit {
         score: 0,
         details: Audit.makeTableDetails(headings, item),
       }
-    } */
-    let randomServiceToBeScanned = 'http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-servizio-generico.html'
+    }
+    //let randomServiceToBeScanned = 'http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-servizio-generico.html'
 
     item[0].inspected_page = randomServiceToBeScanned
 
@@ -186,8 +186,8 @@ async function getPlaceInfo($: CheerioAPI, mandatoryElements: string[]) {
     let gpsLabel = ""
     let gpsValue = ""
     for (let gpsElement of gps) {
-      if (Boolean(gpsElement.label) && Boolean(gpsElement.url)) {
-        gpsLabel = gpsElement.label.toLowerCase()
+      if (Boolean(gpsElement.label) && Boolean(gpsElement.url) && gpsElement.url.includes('map')) {
+        gpsLabel = 'gps'
         gpsValue = gpsElement.url
         break
       }
