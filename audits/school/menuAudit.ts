@@ -5,7 +5,7 @@ import { CheerioAPI } from "cheerio";
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { primaryMenuItems } from "../../storage/school/menuItems";
-import {checkOrder, getPageElement, getPageElementDataAttribute, loadPageData} from "../../utils/utils";
+import {checkOrder, getPageElementDataAttribute, loadPageData} from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 

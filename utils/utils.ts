@@ -15,61 +15,6 @@ const loadPageData = async (url: string) : Promise<CheerioAPI> => {
   return cheerio.load(data);
 }
 
-const getPageElement = async ($: CheerioAPI, elementId: string, tag: string = '') : Promise<string[]> => {
-  const returnValues: string[] = [];
-
-  let elements = $("#" + elementId);
-
-  if (tag !== '') {
-    if (Object.keys(elements).length === 0) {
-      return returnValues
-    }
-
-    elements = $(elements).find(tag);
-  }
-
-  if (Object.keys(elements).length === 0) {
-    return returnValues
-  }
-
-  for (const element of elements) {
-    const stringElement = $(element).text().trim() ?? null
-    if(stringElement) {
-      returnValues.push(stringElement)
-    }
-  }
-
-  return [...new Set(returnValues)];
-}
-
-const getElementHrefValues = async ($: CheerioAPI, elementId: string, tag: string = '') : Promise<Array<{label: string, url: string}> | []> => {
-  let elements = $("#" + elementId)
-
-  if (Object.keys(elements).length === 0) {
-    return []
-  }
-
-  const innerElements = $(elements).find(tag)
-
-  if (Object.keys(innerElements).length === 0) {
-    return []
-  }
-
-  let urls = []
-  for (const innerElement of innerElements) {
-    const label = $(innerElement).text().trim() ?? ''
-    const url = $(innerElement).attr().href ?? null
-    if (url && url !== '#' && url !== '') {
-      urls.push({
-        label: label,
-        url: url
-      })
-    }
-  }
-
-  return urls
-}
-
 const getPageElementDataAttribute = async ($: CheerioAPI, elementDataAttribute: string, tag: string = '') : Promise<string[]> => {
   const returnValues: string[] = [];
 
@@ -125,7 +70,7 @@ const getElementHrefValuesDataAttribute = async ($: CheerioAPI, elementDataAttri
   return urls
 }
 
-const getHREFValuesDataAttribute = async ($: CheerioAPI, elementDataAttribute: string) => {
+const getHREFValuesDataAttribute = async ($: CheerioAPI, elementDataAttribute: string) : Promise<string[]> => {
   let serviceUrls = []
 
   let elements = $(elementDataAttribute)
@@ -243,4 +188,4 @@ const checkOrder = async (
   };
 };
 
-export { checkOrder, loadPageData, getPageElement, getElementHrefValues, getRandomServiceUrl, getPageElementDataAttribute }
+export { checkOrder, loadPageData, getRandomServiceUrl, getPageElementDataAttribute, getHREFValuesDataAttribute, getElementHrefValuesDataAttribute }

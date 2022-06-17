@@ -5,7 +5,13 @@ import { CheerioAPI } from "cheerio";
 // @ts-ignore
 import lighthouse from "lighthouse";
 
-import {checkOrder, getElementHrefValues, getPageElement, getRandomServiceUrl, loadPageData} from "../../utils/utils";
+import {
+  checkOrder,
+  getElementHrefValuesDataAttribute,
+  getPageElementDataAttribute,
+  getRandomServiceUrl,
+  loadPageData
+} from "../../utils/utils";
 import { contentTypeItems } from "../../storage/school/contentTypeItems";
 
 const Audit = lighthouse.Audit;
@@ -73,6 +79,7 @@ class LoadAudit extends Audit {
 
     console.log('RANDOM SERVICE TO BE SCANNED', randomServiceToBeScanned)
     const $: CheerioAPI = await loadPageData(randomServiceToBeScanned)
+
     const indexElements = await getServicesFromIndex($, mandatoryVoices);
     console.log('INDEX ELEMENTS', indexElements)
     const orderResult = await checkOrder(mandatoryVoices, indexElements);
@@ -80,37 +87,37 @@ class LoadAudit extends Audit {
     let missingMandatoryItems = mandatoryVoices.filter((val) => !indexElements.includes(val));
     console.log('INITIAL MISSING MANDATORY ITEMS', missingMandatoryItems)
 
-    const title = $("#titolo-servizio").text() ?? ""
-    console.log('TITLE', title)
+    const title = $('[data-crawler="titolo-servizio"]').text() ?? ""
+    console.log('TITLE: ', title)
     if (!Boolean(title)) {
       missingMandatoryItems.push(mandatoryHeaderVoices[0])
     }
 
-    const description = $("#descrizione-servizio").text() ?? ""
-    console.log('DESCRIPTION', description)
+    const description = $('[data-crawler="descrizione-servizio"]').text() ?? ""
+    console.log('DESCRIPTION: ', description)
     if (!Boolean(description)) {
       missingMandatoryItems.push(mandatoryHeaderVoices[1])
     }
 
-    const breadcrumbElements = await getPageElement($, 'breadcrumb-list', 'li')
-    console.log('BREADCRUMB', breadcrumbElements)
+    const breadcrumbElements = await getPageElementDataAttribute($, '[data-crawler="breadcrumb-list"]', 'li')
+    console.log('BREADCRUMB: ', breadcrumbElements)
     if (!breadcrumbElements.includes(breadcrumbMandatoryElements[0]) && !breadcrumbElements.includes(breadcrumbMandatoryElements[1])) {
       missingMandatoryItems.push(mandatoryHeaderVoices[2])
     }
 
-    const argumentsTag = await getPageElement($, 'lista-argomenti', 'a')
+    const argumentsTag = await getPageElementDataAttribute($, '[data-crawler="lista-argomenti"]')
     console.log('ARGUMENTS', argumentsTag)
     if (argumentsTag.length <= 0) {
       missingMandatoryItems.push(mandatoryHeaderVoices[3])
     }
 
-    const whatNeeds = $("#a-cosa-serve").text() ?? ""
-    console.log('A COSA SERVE', whatNeeds)
+    const whatNeeds = $('[data-crawler="a-cosa-serve"]').text() ?? ""
+    console.log('A COSA SERVE: ', whatNeeds)
     if (!Boolean(whatNeeds)) {
       missingMandatoryItems.push(mandatoryBodyVoices[0])
     }
 
-    const responsibleStructure = await getElementHrefValues($, 'lista-strutture', 'a')
+    const responsibleStructure = await getPageElementDataAttribute($, '[data-crawler="lista-strutture"]', 'a')
     console.log('RESPONSIBLE STRUCTURE', responsibleStructure)
     if (responsibleStructure.length <= 0) {
       missingMandatoryItems.push(mandatoryBodyVoices[1])
@@ -122,8 +129,8 @@ class LoadAudit extends Audit {
       missingMandatoryItems = [...missingMandatoryItems, ...placeInfo]
     }
 
-    let metadata = $("#metadati").text() ?? ""
-    console.log('METADATA', metadata)
+    let metadata = $('[data-crawler="metadati"]').text() ?? ""
+    console.log('METADATA: ', metadata)
     if (!metadata.includes(mandatoryMetadata[0]) || !metadata.includes(mandatoryMetadata[1])) {
       missingMandatoryItems.push(mandatoryBodyVoices[3])
     }
@@ -155,7 +162,7 @@ class LoadAudit extends Audit {
 module.exports = LoadAudit;
 
 async function getServicesFromIndex($: CheerioAPI, mandatoryElements: string[]): Promise<string[]> {
-  const indexList = await getPageElement($, 'index-list', '> li > a')
+  const indexList = await getPageElementDataAttribute($, '[data-crawler="index-list"]', '> li > a')
 
   const returnValues = [];
   for (const indexElement of indexList) {
@@ -168,7 +175,7 @@ async function getServicesFromIndex($: CheerioAPI, mandatoryElements: string[]):
 }
 
 async function getPlaceInfo($: CheerioAPI, mandatoryElements: string[]) {
-  let elements = $("#location-list");
+  let elements = $('[data-crawler="location-list"]');
 
   if (elements.length <= 0) {
     return mandatoryElements
@@ -182,16 +189,16 @@ async function getPlaceInfo($: CheerioAPI, mandatoryElements: string[]) {
     let innerElementLabels = $(element).find('span')
     let innerElementValues = $(element).find('p')
 
-    let gps = await getElementHrefValues($, 'location-list', 'a')
+    let gps = await getElementHrefValuesDataAttribute($, '[data-crawler="location-list"]', 'a')
     let gpsLabel = ""
     let gpsValue = ""
     for (let gpsElement of gps) {
-      if (Boolean(gpsElement.label) && Boolean(gpsElement.url) && gpsElement.url.includes('map')) {
-        gpsLabel = 'gps'
-        gpsValue = gpsElement.url
-        break
+     if (Boolean(gpsElement.label) && Boolean(gpsElement.url) && gpsElement.url.includes('map')) {
+          gpsLabel = 'gps'
+          gpsValue = gpsElement.url
+          break
+        }
       }
-    }
 
     if (Boolean(gpsLabel)) {
       placeCard.push({
@@ -247,7 +254,6 @@ async function getPlaceInfo($: CheerioAPI, mandatoryElements: string[]) {
   }
 
   const removeDuplicates = [...new Set(foundElements)]
-  console.log('REMOVED DUPLICATES', removeDuplicates)
 
   return mandatoryElements.filter((val) => !removeDuplicates.includes(val));
 }
