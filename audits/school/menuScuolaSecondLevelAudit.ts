@@ -5,7 +5,7 @@ import { CheerioAPI } from "cheerio";
 // @ts-ignore
 import lighthouse from "lighthouse";
 
-import {checkOrder, getPageElement, loadPageData} from "../../utils/utils";
+import {checkOrder, getPageElement, getPageElementDataAttribute, loadPageData} from "../../utils/utils";
 import { secondaryMenuItems } from "../../storage/school/menuItems";
 
 const Audit = lighthouse.Audit;
@@ -76,8 +76,9 @@ class LoadAudit extends Audit {
     let score = 0;
 
     const secondaryMenuScuolaItems: string[] = secondaryMenuItems.Scuola;
-    const $: CheerioAPI = await loadPageData(url)
-    const headerUlTest = await getPageElement($, "submenu-scuola", 'li')
+    const $: CheerioAPI = await loadPageData('http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-home.html')
+    const headerUlTest = await getPageElementDataAttribute($, '[data-crawler="submenu-scuola"]', 'li')
+    console.log('HEADER UL', headerUlTest)
 
     let numberOfMandatoryVoicesPresent = 0;
     const elementsFound: string[] = [];
