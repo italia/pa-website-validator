@@ -89,7 +89,7 @@ module.exports = {
   extends: "lighthouse:default",
   settings: {
     //onlyCategories: ["modelCompliance", "recommendations", "performance"]
-    onlyAudits: ['school-servizi-structure-match-model']
+    onlyAudits: ['school-legislation-privacy-is-present', 'school-legislation-accessibility-declaration-is-present']
   },
 
   passes: [

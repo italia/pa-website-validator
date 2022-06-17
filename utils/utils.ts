@@ -42,6 +42,34 @@ const getPageElement = async ($: CheerioAPI, elementId: string, tag: string = ''
   return [...new Set(returnValues)];
 }
 
+const getElementHrefValues = async ($: CheerioAPI, elementId: string, tag: string = '') : Promise<Array<{label: string, url: string}> | []> => {
+  let elements = $("#" + elementId)
+
+  if (Object.keys(elements).length === 0) {
+    return []
+  }
+
+  const innerElements = $(elements).find(tag)
+
+  if (Object.keys(innerElements).length === 0) {
+    return []
+  }
+
+  let urls = []
+  for (const innerElement of innerElements) {
+    const label = $(innerElement).text().trim() ?? ''
+    const url = $(innerElement).attr().href ?? null
+    if (url && url !== '#' && url !== '') {
+      urls.push({
+        label: label,
+        url: url
+      })
+    }
+  }
+
+  return urls
+}
+
 const getPageElementDataAttribute = async ($: CheerioAPI, elementDataAttribute: string, tag: string = '') : Promise<string[]> => {
   const returnValues: string[] = [];
 
@@ -69,8 +97,8 @@ const getPageElementDataAttribute = async ($: CheerioAPI, elementDataAttribute: 
   return [...new Set(returnValues)];
 }
 
-const getElementHrefValues = async ($: CheerioAPI, elementId: string, tag: string = '') : Promise<Array<{label: string, url: string}> | []> => {
-  let elements = $("#" + elementId)
+const getElementHrefValuesDataAttribute = async ($: CheerioAPI, elementDataAttribute: string, tag: string = '') : Promise<Array<{label: string, url: string}> | []> => {
+  let elements = $(elementDataAttribute)
 
   if (Object.keys(elements).length === 0) {
     return []

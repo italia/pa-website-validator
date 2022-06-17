@@ -58,7 +58,7 @@ class LoadAudit extends Audit {
     ];
 
     const $: CheerioAPI = await loadPageData('http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-home.html')
-    const privacyPolicyElement = $("#privacy-policy")
+    const privacyPolicyElement = $('[data-crawler="privacy-policy-link"]')
     const elementObj = $(privacyPolicyElement).attr()
     items[0].link_name = privacyPolicyElement.text() ?? ""
 
