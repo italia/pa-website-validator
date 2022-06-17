@@ -125,40 +125,44 @@ const getElementHrefValuesDataAttribute = async ($: CheerioAPI, elementDataAttri
   return urls
 }
 
+const getHREFValuesDataAttribute = async ($: CheerioAPI, elementDataAttribute: string) => {
+  let serviceUrls = []
+
+  let elements = $(elementDataAttribute)
+  for (let element of elements) {
+    const elementObj = $(element).attr()
+    if (Boolean(elementObj) && ("href" in elementObj) && elementObj.href !== '#' && elementObj.href !== '') {
+      serviceUrls.push(elementObj.href)
+    }
+  }
+
+  if (serviceUrls.length <= 0) {
+    return []
+  }
+
+  return serviceUrls
+}
+
 const getRandomServiceUrl = async (url: string): Promise<string> => {
   let $ = await loadPageData(url)
 
-  const allowedIds = ['#servizio-personale-scolastico', '#servizi-famiglie-studenti']
-  let elements = $(allowedIds[Math.floor(Math.random() * allowedIds.length)])
-  console.log('ELEMENTS RANDOM', elements)
-  const elementObj = $(elements).attr()
-  console.log('ELEMENT OBJ', elementObj)
-
-  if (!Boolean(elementObj) || !("href" in elementObj) || elementObj.href === '#' || elementObj.href === '') {
-     return ""
+  let serviceUrls = await getHREFValuesDataAttribute($, '[data-crawler="service-type"]')
+  if (serviceUrls.length <= 0) {
+    return ""
   }
 
-  let serviceUrl = elementObj.href
+  let serviceUrl = serviceUrls[Math.floor(Math.random() * serviceUrls.length)]
   if (!serviceUrl.includes(url)) {
     serviceUrl = await buildUrl(url, serviceUrl)
   }
 
   $ = await loadPageData(serviceUrl)
-  const pageServiceUrls = await getElementHrefValues($, 'lista-card-tipologia', 'a')
-
-  let servicesList = []
-  for (const pageServiceUrl of pageServiceUrls) {
-    if (Boolean(pageServiceUrl.url)) {
-      servicesList.push(pageServiceUrl.url)
-    }
-  }
-
-  if (servicesList.length <= 0) {
+  let cardUrls = await getHREFValuesDataAttribute($, '[data-crawler="service-link"]')
+  if (cardUrls.length <= 0) {
     return ""
   }
 
-  let serviceToInspect = servicesList[Math.floor(Math.random() * servicesList.length)]
-
+  let serviceToInspect = cardUrls[Math.floor(Math.random() * cardUrls.length)]
   if (!serviceToInspect.includes(url)) {
     serviceToInspect = await buildUrl(url, serviceToInspect)
   }

@@ -58,7 +58,7 @@ class LoadAudit extends Audit {
     const mandatoryMetadata = contentTypeItems.Metadati
     const breadcrumbMandatoryElements = contentTypeItems.Breadcrumb
 
-    const randomServiceToBeScanned: string = await getRandomServiceUrl(url)
+    const randomServiceToBeScanned: string = await getRandomServiceUrl('http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-home.html')
 
     if (randomServiceToBeScanned === "") {
       item[0].result = notExecuted + ': nessun servizio trovato'
