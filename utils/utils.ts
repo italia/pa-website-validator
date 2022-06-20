@@ -91,7 +91,7 @@ const getHREFValuesDataAttribute = async ($: CheerioAPI, elementDataAttribute: s
 const getRandomServiceUrl = async (url: string): Promise<string> => {
   let $ = await loadPageData(url)
 
-  let serviceUrls = await getHREFValuesDataAttribute($, '[data-crawler="service-type"]')
+  let serviceUrls = await getHREFValuesDataAttribute($, '[data-structure="service-type"]')
   if (serviceUrls.length <= 0) {
     return ""
   }
@@ -102,7 +102,7 @@ const getRandomServiceUrl = async (url: string): Promise<string> => {
   }
 
   $ = await loadPageData(serviceUrl)
-  let cardUrls = await getHREFValuesDataAttribute($, '[data-crawler="service-link"]')
+  let cardUrls = await getHREFValuesDataAttribute($, '[data-structure="service-link"]')
   if (cardUrls.length <= 0) {
     return ""
   }

@@ -77,7 +77,7 @@ class LoadAudit extends Audit {
 
     const secondaryMenuScuolaItems: string[] = secondaryMenuItems.Scuola;
     const $: CheerioAPI = await loadPageData('http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-home.html')
-    const headerUlTest = await getPageElementDataAttribute($, '[data-crawler="submenu-scuola"]', 'li')
+    const headerUlTest = await getPageElementDataAttribute($, '[data-structure="school-submenu"]', 'li')
     console.log('HEADER UL', headerUlTest)
 
     let numberOfMandatoryVoicesPresent = 0;

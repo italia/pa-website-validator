@@ -64,7 +64,7 @@ class LoadAudit extends Audit {
     const mandatoryMetadata = contentTypeItems.Metadati
     const breadcrumbMandatoryElements = contentTypeItems.Breadcrumb
 
-    const randomServiceToBeScanned: string = await getRandomServiceUrl('http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-home.html')
+    const randomServiceToBeScanned: string = await getRandomServiceUrl(url)
 
     if (randomServiceToBeScanned === "") {
       item[0].result = notExecuted + ': nessun servizio trovato'
@@ -73,72 +73,58 @@ class LoadAudit extends Audit {
         details: Audit.makeTableDetails(headings, item),
       }
     }
-    //let randomServiceToBeScanned = 'http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-servizio-generico.html'
 
     item[0].inspected_page = randomServiceToBeScanned
 
-    console.log('RANDOM SERVICE TO BE SCANNED', randomServiceToBeScanned)
+
     const $: CheerioAPI = await loadPageData(randomServiceToBeScanned)
 
     const indexElements = await getServicesFromIndex($, mandatoryVoices);
-    console.log('INDEX ELEMENTS', indexElements)
     const orderResult = await checkOrder(mandatoryVoices, indexElements);
-    console.log('ORDER RESULT', orderResult)
     let missingMandatoryItems = mandatoryVoices.filter((val) => !indexElements.includes(val));
-    console.log('INITIAL MISSING MANDATORY ITEMS', missingMandatoryItems)
 
-    const title = $('[data-crawler="titolo-servizio"]').text() ?? ""
-    console.log('TITLE: ', title)
+    const title = $('[data-structure="service-title"]').text() ?? ""
     if (!Boolean(title)) {
       missingMandatoryItems.push(mandatoryHeaderVoices[0])
     }
 
-    const description = $('[data-crawler="descrizione-servizio"]').text() ?? ""
-    console.log('DESCRIPTION: ', description)
+    const description = $('[data-structure="service-description"]').text() ?? ""
     if (!Boolean(description)) {
       missingMandatoryItems.push(mandatoryHeaderVoices[1])
     }
 
-    const breadcrumbElements = await getPageElementDataAttribute($, '[data-crawler="breadcrumb-list"]', 'li')
-    console.log('BREADCRUMB: ', breadcrumbElements)
+    const breadcrumbElements = await getPageElementDataAttribute($, '[data-structure="breadcrumb"]', 'li')
     if (!breadcrumbElements.includes(breadcrumbMandatoryElements[0]) && !breadcrumbElements.includes(breadcrumbMandatoryElements[1])) {
       missingMandatoryItems.push(mandatoryHeaderVoices[2])
     }
 
-    const argumentsTag = await getPageElementDataAttribute($, '[data-crawler="lista-argomenti"]')
-    console.log('ARGUMENTS', argumentsTag)
+    const argumentsTag = await getPageElementDataAttribute($, '[data-structure="topic-list"]')
     if (argumentsTag.length <= 0) {
       missingMandatoryItems.push(mandatoryHeaderVoices[3])
     }
 
-    const whatNeeds = $('[data-crawler="a-cosa-serve"]').text() ?? ""
-    console.log('A COSA SERVE: ', whatNeeds)
+    const whatNeeds = $('[data-structure="used-for"]').text() ?? ""
     if (!Boolean(whatNeeds)) {
       missingMandatoryItems.push(mandatoryBodyVoices[0])
     }
 
-    const responsibleStructure = await getPageElementDataAttribute($, '[data-crawler="lista-strutture"]', 'a')
-    console.log('RESPONSIBLE STRUCTURE', responsibleStructure)
+    const responsibleStructure = await getPageElementDataAttribute($, '[data-structure="structures"]', 'a')
     if (responsibleStructure.length <= 0) {
       missingMandatoryItems.push(mandatoryBodyVoices[1])
     }
 
     const placeInfo = await getPlaceInfo($, mandatoryPlaceInfo)
-    console.log('PLACE INFO', placeInfo)
     if (placeInfo.length > 0) {
       missingMandatoryItems = [...missingMandatoryItems, ...placeInfo]
     }
 
-    let metadata = $('[data-crawler="metadati"]').text() ?? ""
-    console.log('METADATA: ', metadata)
+    let metadata = $('[data-structure="metadata"]').text() ?? ""
     if (!metadata.includes(mandatoryMetadata[0]) || !metadata.includes(mandatoryMetadata[1])) {
       missingMandatoryItems.push(mandatoryBodyVoices[3])
     }
 
     const foundMandatoryVoicesPercentage = (( totalMandatoryVoices - missingMandatoryItems.length ) / totalMandatoryVoices) * 100;
     const foundMandatoryVoicesNotCorrectOrderPercentage = (orderResult.numberOfElementsNotInSequence / totalMandatoryVoices) * 100;
-    console.log('FOUND MANDATORY VOICES PERCENTAGE', foundMandatoryVoicesPercentage)
-    console.log('FOUND MANDATORY VOICES PERCENTAGE NOT CORRECT ORDER', foundMandatoryVoicesNotCorrectOrderPercentage)
 
     if (foundMandatoryVoicesPercentage < 90 || foundMandatoryVoicesNotCorrectOrderPercentage > 10) {
       score = 0;
@@ -162,7 +148,7 @@ class LoadAudit extends Audit {
 module.exports = LoadAudit;
 
 async function getServicesFromIndex($: CheerioAPI, mandatoryElements: string[]): Promise<string[]> {
-  const indexList = await getPageElementDataAttribute($, '[data-crawler="index-list"]', '> li > a')
+  const indexList = await getPageElementDataAttribute($, '[data-structure="page-index"]', '> li > a')
 
   const returnValues = [];
   for (const indexElement of indexList) {
@@ -175,13 +161,11 @@ async function getServicesFromIndex($: CheerioAPI, mandatoryElements: string[]):
 }
 
 async function getPlaceInfo($: CheerioAPI, mandatoryElements: string[]) {
-  let elements = $('[data-crawler="location-list"]');
+  let elements = $('[data-structure="places"]');
 
   if (elements.length <= 0) {
     return mandatoryElements
   }
-
-  console.log('NUMBER OF LUOGO CARDS', elements.length)
 
   let placeCards = []
   for (let element of elements) {
@@ -189,7 +173,7 @@ async function getPlaceInfo($: CheerioAPI, mandatoryElements: string[]) {
     let innerElementLabels = $(element).find('span')
     let innerElementValues = $(element).find('p')
 
-    let gps = await getElementHrefValuesDataAttribute($, '[data-crawler="location-list"]', 'a')
+    let gps = await getElementHrefValuesDataAttribute($, '[data-structure="places"]', 'a')
     let gpsLabel = ""
     let gpsValue = ""
     for (let gpsElement of gps) {
@@ -208,14 +192,19 @@ async function getPlaceInfo($: CheerioAPI, mandatoryElements: string[]) {
 
     for (let i = 0, j = 0; i < innerElementLabels.length, j < innerElementValues.length; i++, j++) {
        const labelText = $(innerElementLabels[i]).text().trim().toLowerCase() ?? null
-       console.log('LABEL TEXT', labelText)
        if (Boolean(labelText)) {
            let labelValue = ""
 
            if (Boolean($(innerElementValues[j]))) {
                labelValue = $(innerElementValues[j]).text().trim().toLowerCase() ?? ""
 
-               while (labelText !== 'orari' && (labelValue.includes('dalle') || labelValue.includes('alle'))) {
+               while ( !labelText.match('(ora)') &&
+                      (
+                         labelValue.match('(alle)') ||
+                         labelValue.match('^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$') ||
+                         labelValue.match('^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$')
+                      )
+                 ){
                   j++
                   labelValue = $(innerElementValues[j]).text().trim().toLowerCase() ?? ""
                }
@@ -229,8 +218,6 @@ async function getPlaceInfo($: CheerioAPI, mandatoryElements: string[]) {
 
     placeCards.push(placeCard)
   }
-
-  console.log('PLACE CARDS', placeCards)
 
   if (placeCards.length <= 0) {
     return []
