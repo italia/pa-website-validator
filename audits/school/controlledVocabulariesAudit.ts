@@ -6,11 +6,11 @@ import vocabularyResult = crawlerTypes.vocabularyResult;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import {
-  eurovocVocabulary,
-  schoolModelVocabulary,
-} from "../../storage/school/controlledVocabulary";
-import {loadPageData} from "../../utils/utils";
+import { schoolModelVocabulary } from "../../storage/school/controlledVocabulary";
+import { getPageElementDataAttribute } from "../../utils/utils";
+import puppeteer from "puppeteer"
+import cheerio from "cheerio"
+import {HTMLElement} from "node-html-parser";
 
 const Audit = lighthouse.Audit;
 
@@ -63,13 +63,8 @@ class LoadAudit extends lighthouse.Audit {
       },
     ];
 
-    const queryUrl = "/?s";
-    const searchUrl = url + queryUrl;
-
-    const $: CheerioAPI = await loadPageData(searchUrl)
-
-    const argumentsElements = getArgumentsElements($);
-    const schoolModelCheck = areAllElementsInVocabulary(
+    const argumentsElements = await getArgumentsElements(url);
+    const schoolModelCheck = await areAllElementsInVocabulary(
       argumentsElements,
       schoolModelVocabulary
     );
@@ -101,21 +96,48 @@ class LoadAudit extends lighthouse.Audit {
 
 module.exports = LoadAudit;
 
-function getArgumentsElements($: CheerioAPI): string[] {
-  const searchResultFilters = $(".custom-control-label");
+async function getArgumentsElements(url: string): Promise<string[]> {
+  let elements: string[] = []
+  const browser = await puppeteer.launch();
 
-  const argumentElements = [];
-  for (const element of searchResultFilters) {
-    argumentElements.push($(element).text().trim());
+  try {
+    const page = await browser.newPage();
+    await page.goto(url, { waitUntil: 'load' });
+
+    await page.waitForSelector('[data-structure="search-modal-button"]', {visible: true})
+    await page.$eval('[data-structure="search-modal-button"]',  (el: any) => el.value = 'test');
+
+    const button = await page.$('[data-structure="search-submit"]');
+    if (!Boolean(button)) {
+      return elements
+    }
+
+    await button?.evaluate((b: any) => b.click());
+    await page.waitForNavigation()
+
+    const $ = cheerio.load(await page.content());
+    if ($.length <= 0) {
+      await browser.close();
+      return elements
+    }
+
+    elements = await getPageElementDataAttribute($, '[data-structure="all-topics"]', 'li')
+
+    await browser.close();
+
+    return elements
   }
-
-  return argumentElements;
+  catch(ex) {
+    await browser.close()
+    console.log('Puppeteer exception: ', ex)
+    return []
+  }
 }
 
-function areAllElementsInVocabulary(
+async function areAllElementsInVocabulary(
   pageArguments: string[],
   vocabularyElements: string[]
-): vocabularyResult {
+): Promise<vocabularyResult> {
   let result = true;
 
   if (pageArguments.length <= 0) {

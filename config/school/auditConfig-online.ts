@@ -89,7 +89,7 @@ module.exports = {
   extends: "lighthouse:default",
   settings: {
     //onlyCategories: ["modelCompliance", "recommendations", "performance"]
-    onlyAudits: ['school-servizi-structure-match-model']
+    onlyAudits: ['school-controlled-vocabularies']
   },
 
   passes: [

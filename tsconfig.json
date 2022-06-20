@@ -9,7 +9,7 @@
     "skipLibCheck": true,
     "strict": true
   },
-  "lib": ["esnext", "ES2021.String", "ESNext.String"],
+  "lib": ["esnext", "ES2021.String", "ESNext.String", "dom"],
   "exclude": ["test"],
   "include": ["**/*.ts", "./node_modules/lighthouse/types/**/*.d.ts", "node_modules/@types/puppeteer/index.d.ts"]
 }
