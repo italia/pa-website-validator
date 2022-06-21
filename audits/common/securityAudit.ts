@@ -217,7 +217,7 @@ async function checkCipherSuite(
     standardName: await getCipherStandardName(url),
   };
 
-  if (!cipherInfo || cipherInfo.version || !cipherInfo.standardName) {
+  if (!cipherInfo || !cipherInfo.version || !cipherInfo.standardName) {
     return returnObj;
   }
 
