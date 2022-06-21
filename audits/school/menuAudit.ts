@@ -70,30 +70,41 @@ class LoadAudit extends lighthouse.Audit {
 
     const $: CheerioAPI = await loadPageData(url);
 
-    const menuElements = await getPageElementDataAttribute(
+    const foundMenuElements = await getPageElementDataAttribute(
       $,
       '[data-element="menu"]',
       "> li > a"
     );
+
+    const menuElements = []
+    for (const element of foundMenuElements) {
+      menuElements.push(element.toLowerCase())
+    }
+
     items[0].found_menu_voices = menuElements.join(", ");
+
+    const primaryMenuItemsToLower: string[] = []
+    for (const element of primaryMenuItems) {
+      primaryMenuItemsToLower.push(element.toLowerCase())
+    }
 
     const missingMandatoryElements = missingMandatoryItems(
       menuElements,
-      primaryMenuItems
+      primaryMenuItemsToLower
     );
     items[0].missing_menu_voices = missingMandatoryElements.join(", ");
 
-    const orderResult = await checkOrder(primaryMenuItems, menuElements);
+    const orderResult = await checkOrder(primaryMenuItemsToLower, menuElements);
     items[0].wrong_order_menu_voices =
       orderResult.elementsNotInSequence.join(", ");
 
     const containsMandatoryElementsResult = containsMandatoryElements(
       menuElements,
-      primaryMenuItems
+      primaryMenuItemsToLower
     );
     const mandatoryElementsCorrectOrder = correctOrderMandatoryElements(
       menuElements,
-      primaryMenuItems
+      primaryMenuItemsToLower
     );
 
     if (

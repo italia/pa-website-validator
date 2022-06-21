@@ -79,7 +79,11 @@ class LoadAudit extends Audit {
 
     let score = 0;
 
-    const secondaryMenuScuolaItems: string[] = secondaryMenuItems.Scuola;
+    const secondaryMenuScuolaItems: string[] = []
+    for (const element of secondaryMenuItems.Scuola) {
+      secondaryMenuScuolaItems.push(element.toLowerCase())
+    }
+
     const $: CheerioAPI = await loadPageData(url);
     const headerUlTest = await getPageElementDataAttribute(
       $,
@@ -90,11 +94,11 @@ class LoadAudit extends Audit {
     const elementsFound: string[] = [];
     const correctElementsFound: string[] = [];
     for (const element of headerUlTest) {
-      if (secondaryMenuScuolaItems.includes(element)) {
-        correctElementsFound.push(element);
+      if (secondaryMenuScuolaItems.includes(element.toLowerCase())) {
+        correctElementsFound.push(element.toLowerCase());
       }
 
-      elementsFound.push(element);
+      elementsFound.push(element.toLowerCase());
     }
 
     const presentVoicesPercentage: number = parseInt(
