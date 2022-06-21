@@ -88,8 +88,7 @@ const customReccomendationsAudits = [
 module.exports = {
   extends: "lighthouse:default",
   settings: {
-    //onlyCategories: ["modelCompliance", "recommendations", "performance"]
-    onlyAudits: ['school-controlled-vocabularies']
+    onlyCategories: ["modelCompliance", "recommendations", "performance"]
   },
 
   passes: [

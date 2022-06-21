@@ -7,12 +7,20 @@ import {CheerioAPI} from "cheerio";
 
 const loadPageData = async (url: string) : Promise<CheerioAPI> => {
   const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.goto(url);
-  const data = await page.content();
-  await browser.close();
+  let data = ""
 
-  return cheerio.load(data);
+  try {
+    const page = await browser.newPage();
+    await page.goto(url);
+    data = await page.content();
+    await browser.close();
+
+    return cheerio.load(data);
+  } catch (ex) {
+    await browser.close();
+
+    return cheerio.load(data);
+  }
 }
 
 const getPageElementDataAttribute = async ($: CheerioAPI, elementDataAttribute: string, tag: string = '') : Promise<string[]> => {
@@ -91,7 +99,7 @@ const getHREFValuesDataAttribute = async ($: CheerioAPI, elementDataAttribute: s
 const getRandomServiceUrl = async (url: string): Promise<string> => {
   let $ = await loadPageData(url)
 
-  let serviceUrls = await getHREFValuesDataAttribute($, '[data-structure="service-type"]')
+  let serviceUrls = await getHREFValuesDataAttribute($, '[data-element="service-type"]')
   if (serviceUrls.length <= 0) {
     return ""
   }
@@ -102,7 +110,7 @@ const getRandomServiceUrl = async (url: string): Promise<string> => {
   }
 
   $ = await loadPageData(serviceUrl)
-  let cardUrls = await getHREFValuesDataAttribute($, '[data-structure="service-link"]')
+  let cardUrls = await getHREFValuesDataAttribute($, '[data-element="service-link"]')
   if (cardUrls.length <= 0) {
     return ""
   }

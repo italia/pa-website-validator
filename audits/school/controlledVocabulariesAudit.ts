@@ -1,6 +1,5 @@
 "use strict";
 
-import { CheerioAPI } from "cheerio";
 import crawlerTypes from "../../types/crawler-types";
 import vocabularyResult = crawlerTypes.vocabularyResult;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -10,7 +9,6 @@ import { schoolModelVocabulary } from "../../storage/school/controlledVocabulary
 import { getPageElementDataAttribute } from "../../utils/utils";
 import puppeteer from "puppeteer"
 import cheerio from "cheerio"
-import {HTMLElement} from "node-html-parser";
 
 const Audit = lighthouse.Audit;
 
@@ -20,6 +18,8 @@ const yellowResult =
   "Tutti gli argomenti appartengono al vocabolario di EuroVoc ma non all'elenco di voci del modello scuole.";
 const redResult =
   "Più del 50% degli argomenti non appartengono alle voci del modello scuole o al vocabolario di EuroVoc.";
+
+const notExecuted = "Non è stato possibile condurre il test. Controlla le \"Modalità di verifica\" per scoprire di più."
 
 class LoadAudit extends lighthouse.Audit {
   static get meta() {
@@ -63,7 +63,14 @@ class LoadAudit extends lighthouse.Audit {
       },
     ];
 
-    const argumentsElements = await getArgumentsElements(url);
+    const argumentsElements: string[] =  await getArgumentsElements(url);
+    if (argumentsElements.length <= 0) {
+      return {
+        score: 0,
+        details: Audit.makeTableDetails([ { key: "result", itemType: "text", text: "Risultato" } ], [ { result: notExecuted + ' - argomenti non trovati' } ]),
+      }
+    }
+
     const schoolModelCheck = await areAllElementsInVocabulary(
       argumentsElements,
       schoolModelVocabulary
@@ -104,10 +111,10 @@ async function getArgumentsElements(url: string): Promise<string[]> {
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: 'load' });
 
-    await page.waitForSelector('[data-structure="search-modal-button"]', {visible: true})
-    await page.$eval('[data-structure="search-modal-button"]',  (el: any) => el.value = 'test');
+    await page.waitForSelector('[data-element="search-modal-button"]', {visible: true})
+    await page.$eval('[data-element="search-modal-button"]',  (el: any) => el.value = 'scuola');
 
-    const button = await page.$('[data-structure="search-submit"]');
+    const button = await page.$('[data-element="search-submit"]');
     if (!Boolean(button)) {
       return elements
     }
@@ -121,15 +128,14 @@ async function getArgumentsElements(url: string): Promise<string[]> {
       return elements
     }
 
-    elements = await getPageElementDataAttribute($, '[data-structure="all-topics"]', 'li')
+    elements = await getPageElementDataAttribute($, '[data-element="all-topics"]', 'li')
 
     await browser.close();
 
     return elements
-  }
-  catch(ex) {
+  } catch (ex) {
     await browser.close()
-    console.log('Puppeteer exception: ', ex)
+
     return []
   }
 }

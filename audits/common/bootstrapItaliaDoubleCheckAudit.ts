@@ -37,9 +37,9 @@ class LoadAudit extends Audit {
     }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     //@ts-ignore
-    const bootstrapItaliaVariableVersion = artifacts.bootstrapItaliaCheck.replaceAll('"', '');
+    const bootstrapItaliaVariableVersion = artifacts.bootstrapItaliaCheck?.replaceAll('"', '') ?? ""
     //@ts-ignore
-    const bootstrapItaliaSelectorVariableVersion = artifacts.bootstrapItaliaSelectorCheck.replaceAll('"', '');
+    const bootstrapItaliaSelectorVariableVersion = artifacts.bootstrapItaliaSelectorCheck?.replaceAll('"', '') ?? ""
 
     const headings = [
       {

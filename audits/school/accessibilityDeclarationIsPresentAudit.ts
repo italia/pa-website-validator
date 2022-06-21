@@ -60,8 +60,8 @@ class LoadAudit extends Audit {
       },
     ];
 
-    const $: CheerioAPI = await loadPageData('http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-home.html')
-    const accessibilityDeclarationElement = $('[data-structure="accessibility-link"]')
+    const $: CheerioAPI = await loadPageData(url)
+    const accessibilityDeclarationElement = $('[data-element="accessibility-link"]')
     const elementObj = $(accessibilityDeclarationElement).attr()
     items[0].link_name = accessibilityDeclarationElement.text() ?? ""
 

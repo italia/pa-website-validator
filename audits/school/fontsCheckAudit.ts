@@ -31,13 +31,6 @@ class LoadAudit extends Audit {
     const url = artifacts.origin;
     let score = 0;
 
-    const testNotFoundHeadings = [ { key: "result", itemType: "text", text: "Risultato" } ]
-    const testNotFoundItem = [ { result: "Non è stato possibile condurre il test. Controlla le \"Modalità di verifica\" per scoprire di più." } ]
-    const testNotFoundReturnObj = {
-      score: score,
-      details: Audit.makeTableDetails(testNotFoundHeadings, testNotFoundItem),
-    }
-
     const headings = [
       { key: "result", itemType: "text", text: "Risultato" },
       { key: "found_fonts", itemType: "text", text: "Font trovati" },
@@ -50,23 +43,33 @@ class LoadAudit extends Audit {
       missing_fonts: allowedFonts.join(', ')
     }]
 
-    const randomServiceToBeScanned: string = await getRandomServiceUrl('http://wp-scuole.local/design-scuole-pagine-statiche/build/scuole-home.html')
+    const randomServiceToBeScanned: string = await getRandomServiceUrl(url)
 
-    if (randomServiceToBeScanned === "") {
-      item[0].result = notExecuted + ': nessun servizio trovato'
+    if (!Boolean(randomServiceToBeScanned)) {
       return {
         score: 0,
-        details: Audit.makeTableDetails(headings, item),
+        details: Audit.makeTableDetails([ { key: "result", itemType: "text", text: "Risultato" } ], [ { result: notExecuted + ' - nessun servizio trovato su cui effettuare il test' } ])
       }
     }
 
     const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto(randomServiceToBeScanned);
-    const fonts: string = await page.evaluate(() => {
-      return window.getComputedStyle(document.body).fontFamily
-    });
-    await browser.close();
+
+    let fonts: string = ""
+    try {
+      const page = await browser.newPage();
+      await page.goto(randomServiceToBeScanned);
+      fonts = await page.evaluate(() => {
+        return window.getComputedStyle(document.body).fontFamily
+      });
+      await browser.close();
+    } catch (ex) {
+      await browser.close()
+
+      return {
+        score: 0,
+        details: Audit.makeTableDetails(headings, item)
+      }
+    }
 
     //@ts-ignore
     const splittedFonts: string[] = fonts.replaceAll('"','').split(',')

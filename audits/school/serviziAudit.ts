@@ -39,6 +39,7 @@ class LoadAudit extends Audit {
     artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
+
     const headings = [
       { key: "result", itemType: "text", text: "Risultato" },
       { key: "inspected_page", itemType: "text", text: "Scheda di servizio ispezionata"},
@@ -66,11 +67,10 @@ class LoadAudit extends Audit {
 
     const randomServiceToBeScanned: string = await getRandomServiceUrl(url)
 
-    if (randomServiceToBeScanned === "") {
-      item[0].result = notExecuted + ': nessun servizio trovato'
+    if (!Boolean(randomServiceToBeScanned)) {
       return {
         score: 0,
-        details: Audit.makeTableDetails(headings, item),
+        details: Audit.makeTableDetails([ { key: "result", itemType: "text", text: "Risultato" } ], [ { result: notExecuted + ' - nessun servizio trovato su cui effettuare il test' } ])
       }
     }
 
@@ -81,34 +81,35 @@ class LoadAudit extends Audit {
 
     const indexElements = await getServicesFromIndex($, mandatoryVoices);
     const orderResult = await checkOrder(mandatoryVoices, indexElements);
+
     let missingMandatoryItems = mandatoryVoices.filter((val) => !indexElements.includes(val));
 
-    const title = $('[data-structure="service-title"]').text() ?? ""
+    const title = $('[data-element="service-title"]').text() ?? ""
     if (!Boolean(title)) {
       missingMandatoryItems.push(mandatoryHeaderVoices[0])
     }
 
-    const description = $('[data-structure="service-description"]').text() ?? ""
+    const description = $('[data-element="service-description"]').text() ?? ""
     if (!Boolean(description)) {
       missingMandatoryItems.push(mandatoryHeaderVoices[1])
     }
 
-    const breadcrumbElements = await getPageElementDataAttribute($, '[data-structure="breadcrumb"]', 'li')
+    const breadcrumbElements = await getPageElementDataAttribute($, '[data-element="breadcrumb"]', 'li')
     if (!breadcrumbElements.includes(breadcrumbMandatoryElements[0]) && !breadcrumbElements.includes(breadcrumbMandatoryElements[1])) {
       missingMandatoryItems.push(mandatoryHeaderVoices[2])
     }
 
-    const argumentsTag = await getPageElementDataAttribute($, '[data-structure="topic-list"]')
+    const argumentsTag = await getPageElementDataAttribute($, '[data-element="topic-list"]')
     if (argumentsTag.length <= 0) {
       missingMandatoryItems.push(mandatoryHeaderVoices[3])
     }
 
-    const whatNeeds = $('[data-structure="used-for"]').text() ?? ""
+    const whatNeeds = $('[data-element="used-for"]').text() ?? ""
     if (!Boolean(whatNeeds)) {
       missingMandatoryItems.push(mandatoryBodyVoices[0])
     }
 
-    const responsibleStructure = await getPageElementDataAttribute($, '[data-structure="structures"]', 'a')
+    const responsibleStructure = await getPageElementDataAttribute($, '[data-element="structures"]', 'a')
     if (responsibleStructure.length <= 0) {
       missingMandatoryItems.push(mandatoryBodyVoices[1])
     }
@@ -118,7 +119,7 @@ class LoadAudit extends Audit {
       missingMandatoryItems = [...missingMandatoryItems, ...placeInfo]
     }
 
-    let metadata = $('[data-structure="metadata"]').text() ?? ""
+    let metadata = $('[data-element="metadata"]').text() ?? ""
     if (!metadata.includes(mandatoryMetadata[0]) || !metadata.includes(mandatoryMetadata[1])) {
       missingMandatoryItems.push(mandatoryBodyVoices[3])
     }
@@ -148,7 +149,7 @@ class LoadAudit extends Audit {
 module.exports = LoadAudit;
 
 async function getServicesFromIndex($: CheerioAPI, mandatoryElements: string[]): Promise<string[]> {
-  const indexList = await getPageElementDataAttribute($, '[data-structure="page-index"]', '> li > a')
+  const indexList = await getPageElementDataAttribute($, '[data-element="page-index"]', '> li > a')
 
   const returnValues = [];
   for (const indexElement of indexList) {
@@ -161,7 +162,7 @@ async function getServicesFromIndex($: CheerioAPI, mandatoryElements: string[]):
 }
 
 async function getPlaceInfo($: CheerioAPI, mandatoryElements: string[]) {
-  let elements = $('[data-structure="places"]');
+  let elements = $('[data-element="places"]');
 
   if (elements.length <= 0) {
     return mandatoryElements
@@ -173,7 +174,7 @@ async function getPlaceInfo($: CheerioAPI, mandatoryElements: string[]) {
     let innerElementLabels = $(element).find('span')
     let innerElementValues = $(element).find('p')
 
-    let gps = await getElementHrefValuesDataAttribute($, '[data-structure="places"]', 'a')
+    let gps = await getElementHrefValuesDataAttribute($, '[data-element="places"]', 'a')
     let gpsLabel = ""
     let gpsValue = ""
     for (let gpsElement of gps) {
