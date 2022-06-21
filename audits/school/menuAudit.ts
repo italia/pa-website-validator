@@ -76,16 +76,16 @@ class LoadAudit extends lighthouse.Audit {
       "> li > a"
     );
 
-    const menuElements = []
+    const menuElements = [];
     for (const element of foundMenuElements) {
-      menuElements.push(element.toLowerCase())
+      menuElements.push(element.toLowerCase());
     }
 
     items[0].found_menu_voices = menuElements.join(", ");
 
-    const primaryMenuItemsToLower: string[] = []
+    const primaryMenuItemsToLower: string[] = [];
     for (const element of primaryMenuItems) {
-      primaryMenuItemsToLower.push(element.toLowerCase())
+      primaryMenuItemsToLower.push(element.toLowerCase());
     }
 
     const missingMandatoryElements = missingMandatoryItems(

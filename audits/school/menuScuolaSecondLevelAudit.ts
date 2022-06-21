@@ -79,9 +79,9 @@ class LoadAudit extends Audit {
 
     let score = 0;
 
-    const secondaryMenuScuolaItems: string[] = []
+    const secondaryMenuScuolaItems: string[] = [];
     for (const element of secondaryMenuItems.Scuola) {
-      secondaryMenuScuolaItems.push(element.toLowerCase())
+      secondaryMenuScuolaItems.push(element.toLowerCase());
     }
 
     const $: CheerioAPI = await loadPageData(url);

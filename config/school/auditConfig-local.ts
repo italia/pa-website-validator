@@ -1,5 +1,4 @@
 import {
-  schoolGatherersFolder,
   schoolAuditsFolder,
   commonGatherersFolder,
   commonAuditsFolder,
@@ -79,8 +78,6 @@ module.exports = {
   passes: [
     {
       gatherers: [
-        schoolGatherersFolder + "/innerHeadHTMLGatherer.js",
-
         commonGatherersFolder + "/bootstrapItaliaCheckGatherer.js",
         commonGatherersFolder + "/bootstrapItaliaSelectorCheckGatherer.js",
         commonGatherersFolder + "/originGatherer.js",

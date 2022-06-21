@@ -2,8 +2,10 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import * as cheerio from "cheerio";
 import * as https from "https";
+import * as http from "http";
+import { CheerioAPI } from "cheerio";
+import { loadPageData } from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 const currentVersion = "1.1.0";
@@ -16,6 +18,9 @@ const yellowResult =
 const redResult =
   "Il sito utilizza una versione datata del tema CMS del modello scuole.";
 
+const notExecuted =
+  'Non è stato possibile condurre il test. Controlla le "Modalità di verifica" per scoprire di più.';
+
 class LoadAudit extends Audit {
   static get meta() {
     return {
@@ -27,16 +32,16 @@ class LoadAudit extends Audit {
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
         'CONDIZIONI DI SUCCESSO: la versione di tema CMS del modello scuole in uso è superiore alla 1.1; MODALITÀ DI VERIFICA: viene verificata la versione indicata nel file style.css, nel caso sia presente la chiave "Text Domain: design_scuole_italia"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)',
-      requiredArtifacts: ["innerHeadHTMLGatherer"],
+      requiredArtifacts: ["origin"],
     };
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { innerHeadHTMLGatherer: string }
+    artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    const headHtml = artifacts.innerHeadHTMLGatherer;
+    const url = artifacts.origin;
 
-    let score = 0;
+    let score = 0.5;
     const headings = [
       {
         key: "result",
@@ -57,21 +62,53 @@ class LoadAudit extends Audit {
 
     const items = [
       {
-        result: "",
+        result: yellowResult,
         theme_version: "",
         checked_element: "",
       },
     ];
 
-    const $ = cheerio.load(headHtml);
-    const linkTags = $("html").find("link");
+    const $: CheerioAPI = await loadPageData(url);
+    const linkTags = $("link");
+
     const versionToCheck = "Version: " + currentVersion;
 
     let styleCSSurl = "";
     for (const linkTag of linkTags) {
+      if (!linkTag.attribs || !("href" in linkTag.attribs)) {
+        continue;
+      }
+
       if (linkTag.attribs.href.includes("style.css")) {
         styleCSSurl = linkTag.attribs.href;
-        const CSS = await getCSS(styleCSSurl);
+
+        let CSS = "";
+        try {
+          CSS = await getCSShttps(styleCSSurl);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (ex: any) {
+          try {
+            CSS = await getCSShttp(styleCSSurl);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          } catch (ex: any) {
+            let errorMessage = "";
+            if (Object.values(ex)) {
+              errorMessage = Object.values(ex).toString();
+            }
+
+            return {
+              score: 0,
+              details: Audit.makeTableDetails(
+                [{ key: "result", itemType: "text", text: "Risultato" }],
+                [
+                  {
+                    result: notExecuted + errorMessage,
+                  },
+                ]
+              ),
+            };
+          }
+        }
 
         if (CSS.includes(versionToCheck) && CSS.includes(textDomain)) {
           score = 1;
@@ -80,26 +117,13 @@ class LoadAudit extends Audit {
           items[0].checked_element = styleCSSurl;
 
           break;
-        } else if (CSS.includes(versionToCheck) && !CSS.includes(textDomain)) {
-          score = 0.5;
-          items[0].result = yellowResult;
-          items[0].theme_version = versionToCheck;
-          items[0].checked_element = styleCSSurl;
-
-          break;
         } else if (!CSS.includes(versionToCheck) && CSS.includes(textDomain)) {
           score = 0;
           items[0].result = redResult;
-          items[0].theme_version = versionToCheck;
           items[0].checked_element = styleCSSurl;
 
           break;
         }
-      } else {
-        score = 0.5;
-        items[0].result = yellowResult;
-        items[0].theme_version = "";
-        items[0].checked_element = "";
       }
     }
 
@@ -112,9 +136,26 @@ class LoadAudit extends Audit {
 
 module.exports = LoadAudit;
 
-async function getCSS(hostname: string): Promise<string> {
+async function getCSShttps(hostname: string): Promise<string> {
   return new Promise(function (resolve) {
     https
+      .request(hostname, function (res) {
+        let data = "";
+        res.on("data", function (chunk) {
+          data += chunk;
+        });
+
+        res.on("end", function () {
+          resolve(data);
+        });
+      })
+      .end();
+  });
+}
+
+async function getCSShttp(hostname: string): Promise<string> {
+  return new Promise(function (resolve) {
+    http
       .request(hostname, function (res) {
         let data = "";
         res.on("data", function (chunk) {
