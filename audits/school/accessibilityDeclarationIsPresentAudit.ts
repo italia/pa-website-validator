@@ -4,7 +4,7 @@ import { CheerioAPI } from "cheerio";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import { loadPageData } from "../../utils/utils"
+import { loadPageData } from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -32,7 +32,7 @@ class LoadAudit extends Audit {
     }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
-    let score = 0
+    let score = 0;
 
     const headings = [
       {
@@ -52,7 +52,7 @@ class LoadAudit extends Audit {
       },
     ];
 
-    let items = [
+    const items = [
       {
         result: redResult,
         link_name: "",
@@ -60,15 +60,23 @@ class LoadAudit extends Audit {
       },
     ];
 
-    const $: CheerioAPI = await loadPageData(url)
-    const accessibilityDeclarationElement = $('[data-element="accessibility-link"]')
-    const elementObj = $(accessibilityDeclarationElement).attr()
-    items[0].link_name = accessibilityDeclarationElement.text() ?? ""
+    const $: CheerioAPI = await loadPageData(url);
+    const accessibilityDeclarationElement = $(
+      '[data-element="accessibility-link"]'
+    );
+    const elementObj = $(accessibilityDeclarationElement).attr();
+    items[0].link_name = accessibilityDeclarationElement.text() ?? "";
 
-    if (Boolean(elementObj) && ("href" in elementObj) && elementObj.href !== '#' && elementObj.href !== '' && elementObj.href.includes("form.agid.gov.it")) {
-      items[0].result = greenResult
-      items[0].link_destination = elementObj.href
-      score = 1
+    if (
+      Boolean(elementObj) &&
+      "href" in elementObj &&
+      elementObj.href !== "#" &&
+      elementObj.href !== "" &&
+      elementObj.href.includes("form.agid.gov.it")
+    ) {
+      items[0].result = greenResult;
+      items[0].link_destination = elementObj.href;
+      score = 1;
     }
 
     return {

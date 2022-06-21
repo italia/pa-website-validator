@@ -81,8 +81,13 @@ async function getLinksFromHTMLPage(page: Page): Promise<links[]> {
     (
       await page.$$("a,button")
     ).map(async (a) => {
-      //@ts-ignore
-      const className = ((await (await a.getProperty("className")).jsonValue()) as string).replaceAll(" ", ".").trim();
+      const className = (
+        (await (await a.getProperty("className")).jsonValue()) as string
+      )
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        .replaceAll(" ", ".")
+        .trim();
       const text: string = await (await a.getProperty("innerText")).jsonValue();
       return {
         text: text,

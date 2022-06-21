@@ -54,7 +54,8 @@ class LoadAudit extends Audit {
         text: "Elemento controllato",
       },
     ];
-    let items = [
+
+    const items = [
       {
         result: "",
         theme_version: "",

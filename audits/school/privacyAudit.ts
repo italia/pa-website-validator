@@ -49,7 +49,7 @@ class LoadAudit extends Audit {
       },
     ];
 
-    let items = [
+    const items = [
       {
         result: redResult,
         link_name: "",
@@ -57,15 +57,20 @@ class LoadAudit extends Audit {
       },
     ];
 
-    const $: CheerioAPI = await loadPageData(url)
-    const privacyPolicyElement = $('[data-element="privacy-policy-link"]')
-    const elementObj = $(privacyPolicyElement).attr()
-    items[0].link_name = privacyPolicyElement.text() ?? ""
+    const $: CheerioAPI = await loadPageData(url);
+    const privacyPolicyElement = $('[data-element="privacy-policy-link"]');
+    const elementObj = $(privacyPolicyElement).attr();
+    items[0].link_name = privacyPolicyElement.text() ?? "";
 
-    if (Boolean(elementObj) && ("href" in elementObj) && elementObj.href !== '#' && elementObj.href !== '') {
-      items[0].result = greenResult
-      items[0].link_destination = elementObj.href
-      score = 1
+    if (
+      Boolean(elementObj) &&
+      "href" in elementObj &&
+      elementObj.href !== "#" &&
+      elementObj.href !== ""
+    ) {
+      items[0].result = greenResult;
+      items[0].link_destination = elementObj.href;
+      score = 1;
     }
 
     return {

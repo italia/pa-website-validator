@@ -7,8 +7,8 @@ import vocabularyResult = crawlerTypes.vocabularyResult;
 import lighthouse from "lighthouse";
 import { schoolModelVocabulary } from "../../storage/school/controlledVocabulary";
 import { getPageElementDataAttribute } from "../../utils/utils";
-import puppeteer from "puppeteer"
-import cheerio from "cheerio"
+import puppeteer from "puppeteer";
+import cheerio from "cheerio";
 
 const Audit = lighthouse.Audit;
 
@@ -19,7 +19,8 @@ const yellowResult =
 const redResult =
   "Più del 50% degli argomenti non appartengono alle voci del modello scuole o al vocabolario di EuroVoc.";
 
-const notExecuted = "Non è stato possibile condurre il test. Controlla le \"Modalità di verifica\" per scoprire di più."
+const notExecuted =
+  'Non è stato possibile condurre il test. Controlla le "Modalità di verifica" per scoprire di più.';
 
 class LoadAudit extends lighthouse.Audit {
   static get meta() {
@@ -55,7 +56,7 @@ class LoadAudit extends lighthouse.Audit {
       },
     ];
 
-    let item = [
+    const item = [
       {
         result: redResult,
         element_in_school_model_percentage: "",
@@ -63,12 +64,15 @@ class LoadAudit extends lighthouse.Audit {
       },
     ];
 
-    const argumentsElements: string[] =  await getArgumentsElements(url);
+    const argumentsElements: string[] = await getArgumentsElements(url);
     if (argumentsElements.length <= 0) {
       return {
         score: 0,
-        details: Audit.makeTableDetails([ { key: "result", itemType: "text", text: "Risultato" } ], [ { result: notExecuted + ' - argomenti non trovati' } ]),
-      }
+        details: Audit.makeTableDetails(
+          [{ key: "result", itemType: "text", text: "Risultato" }],
+          [{ result: notExecuted + " - argomenti non trovati" }]
+        ),
+      };
     }
 
     const schoolModelCheck = await areAllElementsInVocabulary(
@@ -79,7 +83,10 @@ class LoadAudit extends lighthouse.Audit {
     let numberOfElementsNotInScuoleModelPercentage = 100;
 
     if (argumentsElements.length > 0) {
-      numberOfElementsNotInScuoleModelPercentage = (schoolModelCheck.elementNotIncluded.length / argumentsElements.length) * 100;
+      numberOfElementsNotInScuoleModelPercentage =
+        (schoolModelCheck.elementNotIncluded.length /
+          argumentsElements.length) *
+        100;
     }
 
     let score = 0;
@@ -91,8 +98,13 @@ class LoadAudit extends lighthouse.Audit {
       score = 0.5;
     }
 
-    item[0].element_in_school_model_percentage = (100 - numberOfElementsNotInScuoleModelPercentage).toFixed(0).toString();
-    item[0].element_not_in_school_model = schoolModelCheck.elementNotIncluded.join(", ");
+    item[0].element_in_school_model_percentage = (
+      100 - numberOfElementsNotInScuoleModelPercentage
+    )
+      .toFixed(0)
+      .toString();
+    item[0].element_not_in_school_model =
+      schoolModelCheck.elementNotIncluded.join(", ");
 
     return {
       score: score,
@@ -104,39 +116,56 @@ class LoadAudit extends lighthouse.Audit {
 module.exports = LoadAudit;
 
 async function getArgumentsElements(url: string): Promise<string[]> {
-  let elements: string[] = []
+  let elements: string[] = [];
   const browser = await puppeteer.launch();
 
   try {
     const page = await browser.newPage();
-    await page.goto(url, { waitUntil: 'load' });
+    await page.goto(url, { waitUntil: "load" });
 
-    await page.waitForSelector('[data-element="search-modal-button"]', {visible: true})
-    await page.$eval('[data-element="search-modal-button"]',  (el: any) => el.value = 'scuola');
+    await page.waitForSelector('[data-element="search-modal-button"]', {
+      visible: true,
+    });
+
+    await page.$eval(
+      '[data-element="search-modal-button"]',
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (el: any) => (el.value = "scuola")
+    );
 
     const button = await page.$('[data-element="search-submit"]');
-    if (!Boolean(button)) {
-      return elements
+    if (!button) {
+      return elements;
     }
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await button?.evaluate((b: any) => b.click());
-    await page.waitForNavigation()
+
+    await page.waitForNavigation();
 
     const $ = cheerio.load(await page.content());
     if ($.length <= 0) {
       await browser.close();
-      return elements
+      return elements;
     }
 
-    elements = await getPageElementDataAttribute($, '[data-element="all-topics"]', 'li')
+    elements = await getPageElementDataAttribute(
+      $,
+      '[data-element="all-topics"]',
+      "li"
+    );
 
     await browser.close();
 
-    return elements
+    return elements;
   } catch (ex) {
-    await browser.close()
+    await browser.close();
 
-    return []
+    return [];
   }
 }
 

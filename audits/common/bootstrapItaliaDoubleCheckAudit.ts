@@ -1,13 +1,10 @@
 "use strict";
 
-import { CheerioAPI } from "cheerio";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import * as cheerio from "cheerio";
 
 const Audit = lighthouse.Audit;
-
 
 const greenResult =
   "Il sito utilizza la libreria Bootstrap Italia in una versione più recente o uguale di 1.6.";
@@ -26,7 +23,10 @@ class LoadAudit extends Audit {
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
         "CONDIZIONI DI SUCCESSO: la versione di libreria Bootstrap Italia in uso è uguale o superiore alla 1.6; MODALITÀ DI VERIFICA: viene verificata la presenza della libreria Bootstrap Italia e la versione in uso individuando la variabile window.BOOTSTRAP_ITALIA_VERSION della libreria; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",
-      requiredArtifacts: ["bootstrapItaliaSelectorCheck", "bootstrapItaliaCheck"],
+      requiredArtifacts: [
+        "bootstrapItaliaSelectorCheck",
+        "bootstrapItaliaCheck",
+      ],
     };
   }
 
@@ -36,10 +36,14 @@ class LoadAudit extends Audit {
       bootstrapItaliaSelectorCheck: string;
     }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    //@ts-ignore
-    const bootstrapItaliaVariableVersion = artifacts.bootstrapItaliaCheck?.replaceAll('"', '') ?? ""
-    //@ts-ignore
-    const bootstrapItaliaSelectorVariableVersion = artifacts.bootstrapItaliaSelectorCheck?.replaceAll('"', '') ?? ""
+    const bootstrapItaliaVariableVersion =
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      artifacts.bootstrapItaliaCheck?.replaceAll('"', "") ?? "";
+    const bootstrapItaliaSelectorVariableVersion =
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      artifacts.bootstrapItaliaSelectorCheck?.replaceAll('"', "") ?? "";
 
     const headings = [
       {
@@ -68,22 +72,21 @@ class LoadAudit extends Audit {
     let score = 0;
 
     if (bootstrapItaliaVariableVersion !== null) {
-        items[0].library_version = bootstrapItaliaVariableVersion
+      items[0].library_version = bootstrapItaliaVariableVersion;
 
-        if (await checkVersion(bootstrapItaliaVariableVersion)) {
-          score = 1
-          items[0].result = greenResult
-          items[0].library_name = libraryName
-        }
-
+      if (await checkVersion(bootstrapItaliaVariableVersion)) {
+        score = 1;
+        items[0].result = greenResult;
+        items[0].library_name = libraryName;
+      }
     } else if (bootstrapItaliaSelectorVariableVersion !== null) {
-      items[0].library_version = bootstrapItaliaSelectorVariableVersion
+      items[0].library_version = bootstrapItaliaSelectorVariableVersion;
 
-        if (await checkVersion(bootstrapItaliaSelectorVariableVersion)) {
-          score = 1
-          items[0].result = greenResult
-          items[0].library_name = libraryName
-        }
+      if (await checkVersion(bootstrapItaliaSelectorVariableVersion)) {
+        score = 1;
+        items[0].result = greenResult;
+        items[0].library_name = libraryName;
+      }
     }
 
     return {
@@ -96,18 +99,18 @@ class LoadAudit extends Audit {
 module.exports = LoadAudit;
 
 const checkVersion = async (version: string) => {
-  let result = false
+  let result = false;
 
-  const versionValues = version.split('.')
+  const versionValues = version.split(".");
   if (versionValues.length === 3) {
-    const majorVersion = parseInt(versionValues[0])
-    const middleVersion = parseInt(versionValues[1])
-    const minorVersion = parseInt(versionValues[2])
+    const majorVersion = parseInt(versionValues[0]);
+    const middleVersion = parseInt(versionValues[1]);
+    const minorVersion = parseInt(versionValues[2]);
 
     if (majorVersion >= 1 && middleVersion >= 6 && minorVersion >= 3) {
-        result = true
+      result = true;
     }
   }
 
-  return result
-}
+  return result;
+};

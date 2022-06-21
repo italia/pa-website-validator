@@ -5,7 +5,11 @@ import { CheerioAPI } from "cheerio";
 // @ts-ignore
 import lighthouse from "lighthouse";
 
-import {checkOrder, getPageElementDataAttribute, loadPageData} from "../../utils/utils";
+import {
+  checkOrder,
+  getPageElementDataAttribute,
+  loadPageData,
+} from "../../utils/utils";
 import { secondaryMenuItems } from "../../storage/school/menuItems";
 
 const Audit = lighthouse.Audit;
@@ -63,7 +67,7 @@ class LoadAudit extends Audit {
       },
     ];
 
-    let items = [
+    const items = [
       {
         result: redResult,
         correct_voices_percentage: "",
@@ -76,23 +80,30 @@ class LoadAudit extends Audit {
     let score = 0;
 
     const secondaryMenuScuolaItems: string[] = secondaryMenuItems.Scuola;
-    const $: CheerioAPI = await loadPageData(url)
-    const headerUlTest = await getPageElementDataAttribute($, '[data-element="school-submenu"]', 'li')
+    const $: CheerioAPI = await loadPageData(url);
+    const headerUlTest = await getPageElementDataAttribute(
+      $,
+      '[data-element="school-submenu"]',
+      "li"
+    );
 
-    let numberOfMandatoryVoicesPresent = 0;
     const elementsFound: string[] = [];
-    let correctElementsFound: string[] = [];
+    const correctElementsFound: string[] = [];
     for (const element of headerUlTest) {
       if (secondaryMenuScuolaItems.includes(element)) {
-        numberOfMandatoryVoicesPresent++;
         correctElementsFound.push(element);
       }
 
       elementsFound.push(element);
     }
 
-    const presentVoicesPercentage: number = parseInt(((correctElementsFound.length / secondaryMenuScuolaItems.length) * 100).toFixed(0))
-    const missingVoicesPercentage: number = 100 - presentVoicesPercentage
+    const presentVoicesPercentage: number = parseInt(
+      (
+        (correctElementsFound.length / secondaryMenuScuolaItems.length) *
+        100
+      ).toFixed(0)
+    );
+    const missingVoicesPercentage: number = 100 - presentVoicesPercentage;
 
     let correctOrder = true;
     const correctOrderResult = await checkOrder(
@@ -114,9 +125,12 @@ class LoadAudit extends Audit {
     }
 
     items[0].correct_voices = correctElementsFound.join(", ");
-    items[0].correct_voices_percentage = presentVoicesPercentage.toString()
-    items[0].wrong_voices_order = correctOrderResult.elementsNotInSequence.join(", ");
-    items[0].missing_voices = secondaryMenuScuolaItems.filter((x) => !correctElementsFound.includes(x)).join(", ");
+    items[0].correct_voices_percentage = presentVoicesPercentage.toString();
+    items[0].wrong_voices_order =
+      correctOrderResult.elementsNotInSequence.join(", ");
+    items[0].missing_voices = secondaryMenuScuolaItems
+      .filter((x) => !correctElementsFound.includes(x))
+      .join(", ");
 
     return {
       score: score,

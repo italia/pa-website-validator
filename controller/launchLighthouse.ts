@@ -105,7 +105,7 @@ const run = async (
   } catch (ex) {
     await chrome.kill();
 
-    console.log('Launch lighthouse exception: ', ex)
+    console.log("Launch lighthouse exception: ", ex);
 
     return {
       status: false,

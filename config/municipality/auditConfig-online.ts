@@ -1,6 +1,5 @@
 import {
   municipalityGatherersFolder,
-  municipalityAuditsFolder,
   commonGatherersFolder,
   commonAuditsFolder,
 } from "../configFolderingConstants";
@@ -48,7 +47,7 @@ const customModelComplianceAudits = [
     id: "common-security",
     weight: 100,
     group: "security",
-  }
+  },
 ];
 const customReccomendationsAudits = [
   { id: "common-security-ip-location", weight: 100 },
@@ -73,18 +72,7 @@ module.exports = {
   ],
 
   audits: [
-    municipalityAuditsFolder + "/domainNameCheckAudit.js",
-
-    municipalityAuditsFolder + "/fontsCheckAudit.js",
-
-    municipalityAuditsFolder +
-      "/accessibilityDeclarationIsPresentAudit.js",
-    municipalityAuditsFolder + "/privacyAudit.js",
-
-    municipalityAuditsFolder + "/menuAudit.js",
-
     commonAuditsFolder + "/cookieDomainCheckAudit.js",
-
     commonAuditsFolder + "/securityAudit.js",
     commonAuditsFolder + "/ipLocationAudit.js",
     commonAuditsFolder + "/bootstrapItaliaDoubleCheckAudit.js",
@@ -116,7 +104,8 @@ module.exports = {
 
     performance: {
       title: "Raccomandazione progettuale: Velocità e tempi di risposta",
-      description: "Nel caso in cui il sito presenti livelli di prestazioni (media pesata di 6 metriche standard) inferiori a 50 secondo quanto calcolato e verificato tramite le librerie Lighthouse, il Comune deve pubblicare sul sito un “Piano di miglioramento del sito” che mostri, per ciascuna delle 6 metriche che impatta negativamente le prestazioni, le azioni future di miglioramento e le relative tempistiche di realizzazione attese. RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/)"
-    }
+      description:
+        "Nel caso in cui il sito presenti livelli di prestazioni (media pesata di 6 metriche standard) inferiori a 50 secondo quanto calcolato e verificato tramite le librerie Lighthouse, il Comune deve pubblicare sul sito un “Piano di miglioramento del sito” che mostri, per ciascuna delle 6 metriche che impatta negativamente le prestazioni, le azioni future di miglioramento e le relative tempistiche di realizzazione attese. RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/)",
+    },
   },
 };

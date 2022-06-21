@@ -2,12 +2,12 @@
 import crawlerTypes from "../types/crawler-types";
 import orderType = crawlerTypes.orderResult;
 import * as cheerio from "cheerio";
-import puppeteer from "puppeteer"
-import {CheerioAPI} from "cheerio";
+import puppeteer from "puppeteer";
+import { CheerioAPI } from "cheerio";
 
-const loadPageData = async (url: string) : Promise<CheerioAPI> => {
+const loadPageData = async (url: string): Promise<CheerioAPI> => {
   const browser = await puppeteer.launch();
-  let data = ""
+  let data = "";
 
   try {
     const page = await browser.newPage();
@@ -21,123 +21,145 @@ const loadPageData = async (url: string) : Promise<CheerioAPI> => {
 
     return cheerio.load(data);
   }
-}
+};
 
-const getPageElementDataAttribute = async ($: CheerioAPI, elementDataAttribute: string, tag: string = '') : Promise<string[]> => {
+const getPageElementDataAttribute = async (
+  $: CheerioAPI,
+  elementDataAttribute: string,
+  tag = ""
+): Promise<string[]> => {
   const returnValues: string[] = [];
 
   let elements = $(elementDataAttribute);
 
-  if (tag !== '') {
+  if (tag !== "") {
     if (Object.keys(elements).length === 0) {
-      return returnValues
+      return returnValues;
     }
 
     elements = $(elements).find(tag);
   }
 
   if (Object.keys(elements).length === 0) {
-    return returnValues
+    return returnValues;
   }
 
   for (const element of elements) {
-    const stringElement = $(element).text().trim() ?? null
-    if(stringElement) {
-      returnValues.push(stringElement)
+    const stringElement = $(element).text().trim() ?? null;
+    if (stringElement) {
+      returnValues.push(stringElement);
     }
   }
 
   return [...new Set(returnValues)];
-}
+};
 
-const getElementHrefValuesDataAttribute = async ($: CheerioAPI, elementDataAttribute: string, tag: string = '') : Promise<Array<{label: string, url: string}> | []> => {
-  let elements = $(elementDataAttribute)
+const getElementHrefValuesDataAttribute = async (
+  $: CheerioAPI,
+  elementDataAttribute: string,
+  tag = ""
+): Promise<Array<{ label: string; url: string }> | []> => {
+  const elements = $(elementDataAttribute);
 
   if (Object.keys(elements).length === 0) {
-    return []
+    return [];
   }
 
-  const innerElements = $(elements).find(tag)
+  const innerElements = $(elements).find(tag);
 
   if (Object.keys(innerElements).length === 0) {
-    return []
+    return [];
   }
 
-  let urls = []
+  const urls = [];
   for (const innerElement of innerElements) {
-    const label = $(innerElement).text().trim() ?? ''
-    const url = $(innerElement).attr().href ?? null
-    if (url && url !== '#' && url !== '') {
+    const label = $(innerElement).text().trim() ?? "";
+    const url = $(innerElement).attr().href ?? null;
+    if (url && url !== "#" && url !== "") {
       urls.push({
         label: label,
-        url: url
-      })
+        url: url,
+      });
     }
   }
 
-  return urls
-}
+  return urls;
+};
 
-const getHREFValuesDataAttribute = async ($: CheerioAPI, elementDataAttribute: string) : Promise<string[]> => {
-  let serviceUrls = []
+const getHREFValuesDataAttribute = async (
+  $: CheerioAPI,
+  elementDataAttribute: string
+): Promise<string[]> => {
+  const serviceUrls = [];
 
-  let elements = $(elementDataAttribute)
-  for (let element of elements) {
-    const elementObj = $(element).attr()
-    if (Boolean(elementObj) && ("href" in elementObj) && elementObj.href !== '#' && elementObj.href !== '') {
-      serviceUrls.push(elementObj.href)
+  const elements = $(elementDataAttribute);
+  for (const element of elements) {
+    const elementObj = $(element).attr();
+    if (
+      Boolean(elementObj) &&
+      "href" in elementObj &&
+      elementObj.href !== "#" &&
+      elementObj.href !== ""
+    ) {
+      serviceUrls.push(elementObj.href);
     }
   }
 
   if (serviceUrls.length <= 0) {
-    return []
+    return [];
   }
 
-  return serviceUrls
-}
+  return serviceUrls;
+};
 
 const getRandomServiceUrl = async (url: string): Promise<string> => {
-  let $ = await loadPageData(url)
+  let $ = await loadPageData(url);
 
-  let serviceUrls = await getHREFValuesDataAttribute($, '[data-element="service-type"]')
+  const serviceUrls = await getHREFValuesDataAttribute(
+    $,
+    '[data-element="service-type"]'
+  );
   if (serviceUrls.length <= 0) {
-    return ""
+    return "";
   }
 
-  let serviceUrl = serviceUrls[Math.floor(Math.random() * serviceUrls.length)]
+  let serviceUrl = serviceUrls[Math.floor(Math.random() * serviceUrls.length)];
   if (!serviceUrl.includes(url)) {
-    serviceUrl = await buildUrl(url, serviceUrl)
+    serviceUrl = await buildUrl(url, serviceUrl);
   }
 
-  $ = await loadPageData(serviceUrl)
-  let cardUrls = await getHREFValuesDataAttribute($, '[data-element="service-link"]')
+  $ = await loadPageData(serviceUrl);
+  const cardUrls = await getHREFValuesDataAttribute(
+    $,
+    '[data-element="service-link"]'
+  );
   if (cardUrls.length <= 0) {
-    return ""
+    return "";
   }
 
-  let serviceToInspect = cardUrls[Math.floor(Math.random() * cardUrls.length)]
+  let serviceToInspect = cardUrls[Math.floor(Math.random() * cardUrls.length)];
   if (!serviceToInspect.includes(url)) {
-    serviceToInspect = await buildUrl(url, serviceToInspect)
+    serviceToInspect = await buildUrl(url, serviceToInspect);
   }
 
-  return serviceToInspect
-}
+  return serviceToInspect;
+};
 
-const buildUrl = async (url: string, service: string) : Promise<string> => {
-  const urlParts = url.split('//')
+const buildUrl = async (url: string, service: string): Promise<string> => {
+  const urlParts = url.split("//");
 
   if (urlParts.length <= 0) {
-    return ""
+    return "";
   }
 
-  const hostname = urlParts[1].split('/')
+  const hostname = urlParts[1].split("/");
 
   if (hostname.length <= 0) {
-    return ""
+    return "";
   }
 
-  return  urlParts[0] + '//' + hostname[0] + service
-}
+  return urlParts[0] + "//" + hostname[0] + service;
+};
 
 const checkOrder = async (
   mandatoryElements: string[],
@@ -196,4 +218,11 @@ const checkOrder = async (
   };
 };
 
-export { checkOrder, loadPageData, getRandomServiceUrl, getPageElementDataAttribute, getHREFValuesDataAttribute, getElementHrefValuesDataAttribute }
+export {
+  checkOrder,
+  loadPageData,
+  getRandomServiceUrl,
+  getPageElementDataAttribute,
+  getHREFValuesDataAttribute,
+  getElementHrefValuesDataAttribute,
+};
