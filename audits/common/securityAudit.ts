@@ -82,6 +82,15 @@ class LoadAudit extends Audit {
     let score = 0;
 
     const protocol = await getProtocol(origin);
+    if (protocol !== "https") {
+      item[0].protocol = protocol;
+      item[0].result = redResult + redResultHttps;
+      return {
+        score: 0,
+        details: Audit.makeTableDetails(headings, item),
+      };
+    }
+
     const certificate = await checkCertificateValidation(origin);
     const tls = await checkTLSVersion(origin);
     const cipherSuite = await checkCipherSuite(origin);
@@ -92,19 +101,10 @@ class LoadAudit extends Audit {
     item[0].tls_version = tls.tls_version;
     item[0].cipher_suite = cipherSuite.version;
 
-    if (
-      protocol === "https" &&
-      certificate.valid &&
-      tls.valid &&
-      cipherSuite.valid
-    ) {
+    if (certificate.valid && tls.valid && cipherSuite.valid) {
       score = 1;
       item[0].result = greenResult;
     } else {
-      if (protocol !== "https") {
-        item[0].result += redResultHttps;
-      }
-
       if (!certificate.valid) {
         item[0].result += redResultCertificateValidation;
       }
