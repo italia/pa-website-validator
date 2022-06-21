@@ -86,10 +86,10 @@ class LoadAudit extends Audit {
       };
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-ignore
     const splittedFonts: string[] = fonts
       .toString()
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
       .replaceAll('"', "")
       .split(",");
 
