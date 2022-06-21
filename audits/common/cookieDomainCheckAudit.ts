@@ -84,6 +84,7 @@ async function getLinksFromHTMLPage(page: Page): Promise<links[]> {
       const className = (
         (await (await a.getProperty("className")).jsonValue()) as string
       )
+        .toString()
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
         .replaceAll(" ", ".")

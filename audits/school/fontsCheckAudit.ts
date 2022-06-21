@@ -88,7 +88,10 @@ class LoadAudit extends Audit {
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
-    const splittedFonts: string[] = fonts.replaceAll('"', "").split(",");
+    const splittedFonts: string[] = fonts
+      .toString()
+      .replaceAll('"', "")
+      .split(",");
 
     if (splittedFonts.length <= 0) {
       item[0].missing_fonts = allowedFonts.join(", ");

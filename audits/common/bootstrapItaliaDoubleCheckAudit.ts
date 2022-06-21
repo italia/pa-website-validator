@@ -39,11 +39,12 @@ class LoadAudit extends Audit {
     const bootstrapItaliaVariableVersion =
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
-      artifacts.bootstrapItaliaCheck?.replaceAll('"', "") ?? "";
+      artifacts.bootstrapItaliaCheck?.toString().replaceAll('"', "") ?? "";
     const bootstrapItaliaSelectorVariableVersion =
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
-      artifacts.bootstrapItaliaSelectorCheck?.replaceAll('"', "") ?? "";
+      artifacts.bootstrapItaliaSelectorCheck?.toString().replaceAll('"', "") ??
+      "";
 
     const headings = [
       {
