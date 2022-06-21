@@ -7,9 +7,9 @@ import lighthouse from "lighthouse";
 const Audit = lighthouse.Audit;
 
 const greenResult =
-  "Il sito utilizza la libreria Bootstrap Italia in una versione più recente o uguale di 1.6.";
+  "Il sito utilizza la libreria Bootstrap Italia in una versione più recente o uguale di 1.6.3";
 const redResult =
-  "Il sito non utilizza la libreria Bootstrap Italia o ne utilizza una versione precedente a 1.6";
+  "Il sito non utilizza la libreria Bootstrap Italia o ne utilizza una versione precedente a 1.6.3";
 const libraryName = "Bootstrap-italia";
 
 class LoadAudit extends Audit {
