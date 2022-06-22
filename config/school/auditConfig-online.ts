@@ -87,7 +87,7 @@ const customReccomendationsAudits = [
 module.exports = {
   extends: "lighthouse:default",
   settings: {
-    onlyCategories: ["modelCompliance", "recommendations", "performance"]
+    onlyCategories: ["modelCompliance", "recommendations", "performance"],
   },
 
   passes: [
