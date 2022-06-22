@@ -87,8 +87,7 @@ const customReccomendationsAudits = [
 module.exports = {
   extends: "lighthouse:default",
   settings: {
-    //onlyCategories: ["modelCompliance", "recommendations", "performance"],
-    onlyAudits: ["school-ux-ui-consistency-fonts-check"],
+    onlyCategories: ["modelCompliance", "recommendations", "performance"]
   },
 
   passes: [
