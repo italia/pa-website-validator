@@ -168,8 +168,8 @@ class LoadAudit extends Audit {
 
     const metadata = $('[data-element="metadata"]').text() ?? "";
     if (
-      !metadata.includes(mandatoryMetadata[0]) ||
-      !metadata.includes(mandatoryMetadata[1])
+      !metadata.toLowerCase().includes(mandatoryMetadata[0].toLowerCase()) ||
+      !metadata.toLowerCase().includes(mandatoryMetadata[1].toLowerCase())
     ) {
       missingMandatoryItems.push(mandatoryBodyVoices[3]);
     }
