@@ -127,14 +127,14 @@ module.exports = {
 
   categories: {
     modelCompliance: {
-      title: "Test di conformità al modello di sito scuole",
+      title: "Criteri di conformità",
       description:
         "Vengono mostrati i risultati degli audit, relativi ad alcuni dei criteri di conformità, in riferimento all'[Allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000dk82wQAA#allegati).",
       auditRefs: [...customModelComplianceAudits],
     },
 
     recommendations: {
-      title: "Raccomandazioni progettuali e test aggiuntivi",
+      title: "Raccomandazioni progettuali",
       description:
         "Vengono mostrati i risultati degli audit, relativi ad alcune delle raccomandazioni progettuali, in riferimento all'[Allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000dk82wQAA#allegati). A questi sono aggiunti ulteriori test per facilitare le attività di sviluppo e garantire un buon risultato.",
       auditRefs: [...customReccomendationsAudits],
@@ -152,7 +152,7 @@ module.exports = {
     },
 
     performance: {
-      title: "Raccomandazione progettuale: Velocità e tempi di risposta",
+      title: "Raccomandazioni progettuali: Velocità e tempi di risposta",
       description:
         "Nel caso in cui il sito presenti livelli di prestazioni (media pesata di 6 metriche standard) inferiori a 50 secondo quanto calcolato e verificato tramite le librerie Lighthouse, la scuola deve pubblicare sul sito un “Piano di miglioramento del sito” che mostri, per ciascuna delle 6 metriche che impatta negativamente le prestazioni, le azioni future di miglioramento e le relative tempistiche di realizzazione attese; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",
     },
