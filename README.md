@@ -12,16 +12,12 @@ PA Website validator è un tool che integra la libreria [Lightouse][lighthouse] 
 
 ## Test eseguiti
 
-| Test                            | Descrizione                                                                                                                                                  |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Performance                     | Test nativo di Lighthouse per la valutazione delle performances                                                                                              |
-| Accessibility                   | Test nativo di Lighthouse per evidenziare opportunità di miglioramento dell'accessibilità del sito web                                                       |
-| Best Practise                   | Test nativo di Lighthouse per la verifica dell'utilizzo di alcune best practise nel codice                                                                   |
-| SEO                             | Test nativo di Lighthouse per verificare che il sito web stia seguendo i consigli di base per l'ottimizzazione dei motori di ricerca                         |
-| Sicurezza                       | Serie di test custom per controllare i parametri di sicurezza: informazioni sull'HTTPS, sul TLS e localizzazione                                             |
-| Consistenza UX/UI               | Serie di test custom per controllare il rispetto della UX/UI: controlla i font, la versione di bootstrap e che venga utilizzato il tema corretto             |
-| Normativa                       | Serie di test custom per controllare la presenza della Privacy Policy, della Dichiarazione di Accessibilità e che vengano rispettate le normative sui cookie |
-| Architettura delle informazioni | Serie di test custom per controllare la consistenza dell'architettura delle informazioni (ad es: corretta formattazione dei menù)                            |
+| Test                                                      | Descrizione |
+| --------------------------------------------------------- | ----------- |
+| Criteri di conformità                                     | TBD         |
+| Raccomandazioni progettuali                               | TBD         |
+| Test aggiuntivi                                           | TBD         |
+| Raccomandazioni progettuali: Velocità e tempi di risposta | TBD         |
 
 ## Tecnologie
 
@@ -32,25 +28,16 @@ PA Website Validator utilizza le seguenti tecnologie
 - [Lighthouse] - Libreria principale estesa per l'esecuzione degli audit
 - [Typescript] - Linguaggio di programmazione fortemente tipizzato che si basa su JavaScript
 
-## Build
-
-Per l'installazione in locale partendo dalla repository effettuare prima la build del pacchetto:
-
-```sh
-cd pa-website-validator
-npm install
-npm run build
-```
-
-## Installazione
+## Requirements
 
 PA Website Validator necessita [Node.js](https://nodejs.org/it/) v16+ (LTS), [npm] e [Google Chrome](https://www.google.com/chrome/).
 
-Installazione locale:
+## Installazione
+
+Per l'installazione in locale partendo dalla repository effettuare il clone, poi:
 
 ```sh
-cd pa-website-validator/distribution
-npm install
+cd pa-website-validator
 npm install -g ./
 ```
 
