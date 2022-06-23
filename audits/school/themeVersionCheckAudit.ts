@@ -113,14 +113,14 @@ class LoadAudit extends Audit {
         if (CSS.includes(versionToCheck) && CSS.includes(textDomain)) {
           score = 1;
           items[0].result = greenResult;
-          items[0].theme_version = await getCurrentVersion(CSS)
+          items[0].theme_version = await getCurrentVersion(CSS);
           items[0].checked_element = styleCSSurl;
 
           break;
         } else if (!CSS.includes(versionToCheck) && CSS.includes(textDomain)) {
           score = 0;
           items[0].result = redResult;
-          items[0].theme_version = await getCurrentVersion(CSS)
+          items[0].theme_version = await getCurrentVersion(CSS);
           items[0].checked_element = styleCSSurl;
 
           break;
@@ -172,14 +172,14 @@ async function getCSShttp(hostname: string): Promise<string> {
 }
 
 async function getCurrentVersion(css: string): Promise<string> {
-  let version = ''
+  let version = "";
 
-  const splittedCss = css.split('\n')
-  for (let element of splittedCss) {
-    if (element.toLowerCase().match('(version)')) {
-      version = element
+  const splittedCss = css.split("\n");
+  for (const element of splittedCss) {
+    if (element.toLowerCase().match("(version)")) {
+      version = element;
     }
   }
 
-  return version
+  return version;
 }

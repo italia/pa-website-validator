@@ -72,7 +72,12 @@ const customReccomendationsAudits = [
 module.exports = {
   extends: "lighthouse:default",
   settings: {
-    onlyCategories: ["modelCompliance", "recommendations", "additionalTests", "performance"],
+    onlyCategories: [
+      "modelCompliance",
+      "recommendations",
+      "additionalTests",
+      "performance",
+    ],
   },
 
   passes: [
@@ -122,7 +127,8 @@ module.exports = {
 
     additionalTests: {
       title: "Test aggiuntivi",
-      description: "Vengono mostrati i risultati di test aggiuntivi di Lighthouse utili a facilitare le attività di sviluppo e garantire un buon risultato.",
+      description:
+        "Vengono mostrati i risultati di test aggiuntivi di Lighthouse utili a facilitare le attività di sviluppo e garantire un buon risultato.",
       auditRefs: [
         ...accessibilityAudits,
         ...bestPracticeAudits,
