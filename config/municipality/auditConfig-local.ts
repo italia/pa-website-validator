@@ -8,39 +8,13 @@ import {
   pwaAudits,
 } from "../commonAuditsParts";
 
-const customModelComplianceAudits = [
-  {
-    id: "municipality-ux-ui-consistency-fonts-check",
-    weight: 100,
-    group: "user-experience",
-  },
-  {
-    id: "municipality-ux-ui-consistency-bootstrap-italia-check",
-    weight: 100,
-    group: "user-experience",
-  },
-  {
-    id: "municipality-menu-structure-match-model",
-    weight: 100,
-    group: "user-experience",
-  },
-  {
-    id: "municipality-legislation-accessibility-declaration-is-present",
-    weight: 100,
-    group: "legislation",
-  },
-  {
-    id: "municipality-legislation-privacy-is-present",
-    weight: 100,
-    group: "legislation",
-  },
-];
+const customModelComplianceAudits: [] = [];
 const customReccomendationsAudits: [] = [];
 
 module.exports = {
   extends: "lighthouse:default",
   settings: {
-    onlyCategories: ["modelCompliance", "recommendations", "performance"],
+    onlyCategories: ["modelCompliance", "recommendations", "additionalTests", "performance"],
   },
 
   passes: [
@@ -69,8 +43,13 @@ module.exports = {
         "Raccomandazioni progettuali al modello di sito comunale e altri test",
       description:
         "Il validatore mostra i risultati degli audit per le raccomandazioni in riferimento all'allegato 2 dell'Avviso 1.4.1. A questi sono aggiunti ulteriori test per facilitare le attività di sviluppo e garantire un buon risultato.",
+      auditRefs: [...customReccomendationsAudits],
+    },
+
+    additionalTests: {
+      title: "Test aggiuntivi",
+      description: "Vengono mostrati i risultati di test aggiuntivi di Lighthouse utili a facilitare le attività di sviluppo e garantire un buon risultato.",
       auditRefs: [
-        ...customReccomendationsAudits,
         ...accessibilityAudits,
         ...bestPracticeAudits,
         ...seoAudits,
