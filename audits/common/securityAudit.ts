@@ -21,10 +21,10 @@ const redResultHttps = " -Il sito non utilizza il protocollo HTTPS- ";
 const redResultCertificateValidation = " -Il certificato è scaduto- ";
 const redResultTLSVersion = " -La versione del TLS richiesta è TLSv1.2 o TLSv1.3- ";
 const redResultCipherSuiteTLS12 =
-  " -La versione della suite di cifratura richiesta è: " +
+  " -La versione della suite di cifratura (per la versione TLS in uso) richiesta è una tra: " +
   allowedCiphers.tls12.join(", ") + "- ";
 const redResultCipherSuiteTLS13 =
-  " -La versione della suite di cifratura richiesta è: " +
+  " -La versione della suite di cifratura (per la versione TLS in uso) richiesta è una tra: " +
   allowedCiphers.tls13.join(", ") + "- ";
 
 class LoadAudit extends Audit {
