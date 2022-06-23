@@ -17,15 +17,15 @@ const Audit = lighthouse.Audit;
 let greenResult = "Il certificato del sito [url] è attivo e valido.";
 let redResult = "Il certificato del sito [url] non è attivo o valido: ";
 
-const redResultHttps = "Il sito non utilizza il protocollo HTTPS";
-const redResultCertificateValidation = "Il certificato è scaduto";
-const redResultTLSVersion = "La versione del TLS richiesta è TLSv1.2 o TLSv1.3";
+const redResultHttps = " -Il sito non utilizza il protocollo HTTPS- ";
+const redResultCertificateValidation = " -Il certificato è scaduto- ";
+const redResultTLSVersion = " -La versione del TLS richiesta è TLSv1.2 o TLSv1.3- ";
 const redResultCipherSuiteTLS12 =
-  "La versione della suite di cifratura richiesta è: " +
-  allowedCiphers.tls12.join(", ");
+  " -La versione della suite di cifratura richiesta è: " +
+  allowedCiphers.tls12.join(", ") + "- ";
 const redResultCipherSuiteTLS13 =
-  "La versione della suite di cifratura richiesta è: " +
-  allowedCiphers.tls13.join(", ");
+  " -La versione della suite di cifratura richiesta è: " +
+  allowedCiphers.tls13.join(", ") + "- ";
 
 class LoadAudit extends Audit {
   static get meta() {
