@@ -15,11 +15,11 @@ import { secondaryMenuItems } from "../../storage/school/menuItems";
 const Audit = lighthouse.Audit;
 
 const greenResult =
-  "Almeno il 30% delle voci del menù di secondo livello sono corrette e si trovano nella posizione giusta.";
+  "Almeno il 30% delle voci del menù di secondo livello sono corrette e si trovano nell'ordine giusto.";
 const yellowResult =
   "Almeno il 30% delle voci del menù di secondo livello sono corrette ma l'ordine è sbagliato.";
 const redResult =
-  "Non è presente nessuna voce corretta nel menù di secondo livello.";
+  "Sono presenti meno del 30% delle voci di menù di secondo livello nell'ordine corretto.";
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -31,7 +31,7 @@ class LoadAudit extends Audit {
         "VOCI DI MENÙ DI SECONDO LIVELLO - Il sito presenta almeno il 30% delle voci di menu di secondo livello in base a quanto descritto dal modello di sito per le scuole.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        "CONDIZIONI DI SUCCESSO: almeno il 30% delle voci del menù di secondo livello verificati corrispondono a quelli indicati nel documento di architettura dell'informazione del modello scuole e sono nell'ordine corretto; MODALITÀ DI VERIFICA: viene verificata la correttezza delle voci del menù di secondo livello presenti all'interno della pagina \"La scuola\" e il loro ordine; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",
+        "CONDIZIONI DI SUCCESSO: almeno il 30% delle voci del menù di secondo livello corrispondono a quelle indicate nel documento di architettura dell'informazione del modello scuole e sono nell'ordine corretto; MODALITÀ DI VERIFICA: viene verificata la correttezza e l'ordine delle voci del menù di secondo livello riferite alla voce di primo livello \"Scuola\"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",
       requiredArtifacts: ["origin"],
     };
   }
