@@ -74,19 +74,19 @@ class LoadAudit extends Audit {
 
     if (bootstrapItaliaVariableVersion !== null) {
       items[0].library_version = bootstrapItaliaVariableVersion;
+      items[0].library_name = libraryName;
 
       if (await checkVersion(bootstrapItaliaVariableVersion)) {
         score = 1;
         items[0].result = greenResult;
-        items[0].library_name = libraryName;
       }
     } else if (bootstrapItaliaSelectorVariableVersion !== null) {
       items[0].library_version = bootstrapItaliaSelectorVariableVersion;
+      items[0].library_name = libraryName;
 
       if (await checkVersion(bootstrapItaliaSelectorVariableVersion)) {
         score = 1;
         items[0].result = greenResult;
-        items[0].library_name = libraryName;
       }
     }
 
