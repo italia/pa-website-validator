@@ -17,18 +17,13 @@ const Audit = lighthouse.Audit;
 let greenResult = "Il certificato del sito [url] è attivo e valido.";
 let redResult = "Il certificato del sito [url] non è attivo o valido: ";
 
-const redResultHttps = " -Il sito non utilizza il protocollo HTTPS- ";
-const redResultCertificateValidation = " -Il certificato è scaduto- ";
-const redResultTLSVersion =
-  " -La versione del TLS richiesta è TLSv1.2 o TLSv1.3- ";
-const redResultCipherSuiteTLS12 =
-  " -La versione della suite di cifratura (per la versione TLS in uso) richiesta è una tra: " +
-  allowedCiphers.tls12.join(", ") +
-  "- ";
-const redResultCipherSuiteTLS13 =
-  " -La versione della suite di cifratura (per la versione TLS in uso) richiesta è una tra: " +
-  allowedCiphers.tls13.join(", ") +
-  "- ";
+const errorLogging = [
+  "Il sito non utilizza il protocollo HTTPS",
+  "Il certificato è scaduto",
+  "La versione del TLS richiesta è TLSv1.2 o TLSv1.3",
+  "La versione della suite di cifratura per TLSv1.2 richiesta è una tra: " + allowedCiphers.tls12.join(", "),
+  "La versione della suite di cifratura per TLSv1.3 richiesta è una tra: " + allowedCiphers.tls13.join(", ")
+]
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -87,7 +82,7 @@ class LoadAudit extends Audit {
     const protocol = await getProtocol(origin);
     if (protocol !== "https") {
       item[0].protocol = protocol;
-      item[0].result = redResult + redResultHttps;
+      item[0].result = redResult + errorLogging[0];
       return {
         score: 0,
         details: Audit.makeTableDetails(headings, item),
@@ -108,21 +103,24 @@ class LoadAudit extends Audit {
       score = 1;
       item[0].result = greenResult;
     } else {
+      let errors: string[] = []
       if (!certificate.valid) {
-        item[0].result += redResultCertificateValidation;
+        errors = [...errors, errorLogging[1]]
       }
 
       if (!tls.valid) {
-        item[0].result += redResultTLSVersion;
+        errors = [...errors, errorLogging[2]]
       }
 
       if (tls.tls_version === allowedTlsVersions[0] && !cipherSuite.valid) {
-        item[0].result += redResultCipherSuiteTLS12;
+        errors = [...errors, errorLogging[3]]
       }
 
       if (tls.tls_version === allowedTlsVersions[1] && !cipherSuite.valid) {
-        item[0].result += redResultCipherSuiteTLS13;
+        errors = [...errors, errorLogging[4]]
       }
+
+      item[0].result = redResult + errors.join(', ');
     }
 
     return {
