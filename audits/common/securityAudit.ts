@@ -18,12 +18,12 @@ let greenResult = "Il certificato del sito [url] è attivo e valido.";
 let redResult = "Il certificato del sito [url] non è attivo o valido: ";
 
 const errorLogging = [
-  "Il sito non utilizza il protocollo HTTPS",
-  "Il certificato è scaduto",
-  "La versione del TLS richiesta è TLSv1.2 o TLSv1.3",
-  "La versione della suite di cifratura per TLSv1.2 richiesta è una tra: " +
+  "il sito non utilizza il protocollo HTTPS",
+  "il certificato è scaduto",
+  "la versione del TLS richiesta deve essere superiore alla 1.2",
+  "la versione della suite di cifratura per TLSv1.2 richiesta è una tra: " +
     allowedCiphers.tls12.join(", "),
-  "La versione della suite di cifratura per TLSv1.3 richiesta è una tra: " +
+  "la versione della suite di cifratura per TLSv1.3 richiesta è una tra: " +
     allowedCiphers.tls13.join(", "),
 ];
 
@@ -57,14 +57,9 @@ class LoadAudit extends Audit {
         text: "Protocollo usato dal dominio",
       },
       {
-        key: "certificate_validation_from",
+        key: "certificate_validation",
         itemType: "text",
-        text: "Certificato valido da",
-      },
-      {
-        key: "certificate_validation_to",
-        itemType: "text",
-        text: "Certificato valido a",
+        text: "Validità certificato",
       },
       { key: "tls_version", itemType: "text", text: "Versione TLS" },
       { key: "cipher_suite", itemType: "text", text: "Suite di cifratura" },
@@ -73,8 +68,7 @@ class LoadAudit extends Audit {
       {
         result: redResult,
         protocol: "",
-        certificate_validation_from: "",
-        certificate_validation_to: "",
+        certificate_validation: "",
         tls_version: "",
         cipher_suite: "",
       },
@@ -96,9 +90,31 @@ class LoadAudit extends Audit {
     const cipherSuite = await checkCipherSuite(origin);
 
     item[0].protocol = protocol;
-    item[0].certificate_validation_from = certificate.valid_from;
-    item[0].certificate_validation_to = certificate.valid_to;
-    item[0].tls_version = tls.tls_version;
+
+    const validFrom = new Date(certificate.valid_from.toString());
+    const validTo = new Date(certificate.valid_to.toString());
+    item[0].certificate_validation =
+      "Valido dal: " +
+      validFrom.getDate() +
+      "/" +
+      validFrom.getMonth() +
+      "/" +
+      validFrom.getFullYear() +
+      " al: " +
+      validTo.getDate() +
+      "/" +
+      validTo.getMonth() +
+      "/" +
+      validTo.getFullYear();
+
+    if (tls.tls_version === "TLSv1.2") {
+      item[0].tls_version = "1.2";
+    } else if (tls.tls_version === "TLSv1.3") {
+      item[0].tls_version = "1.3";
+    } else {
+      item[0].tls_version = "";
+    }
+
     item[0].cipher_suite = cipherSuite.version;
 
     if (certificate.valid && tls.valid && cipherSuite.valid) {
