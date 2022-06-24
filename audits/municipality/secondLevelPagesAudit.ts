@@ -9,6 +9,7 @@ import {
   getHREFValuesDataAttribute, getPageElementDataAttribute,
   loadPageData,
 } from "../../utils/utils";
+import { secondLevelPageNames } from "../../storage/municipality/vocabulary";
 
 const Audit = lighthouse.Audit;
 
