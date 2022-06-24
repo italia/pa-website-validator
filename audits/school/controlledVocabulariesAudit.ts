@@ -18,9 +18,8 @@ const yellowResult =
   "Tutti gli argomenti appartengono al vocabolario di EuroVoc ma non all'elenco di voci del modello scuole.";
 const redResult =
   "Più del 50% degli argomenti non appartengono alle voci del modello scuole o al vocabolario di EuroVoc.";
-
 const notExecuted =
-  'Non è stato possibile condurre il test. Controlla le "Modalità di verifica" per scoprire di più.';
+  "Non è stato possibile trovare gli argomenti o la pagina che li contiene. Controlla le “Modalità di verifica” per scoprire di più.";
 
 class LoadAudit extends lighthouse.Audit {
   static get meta() {
@@ -70,7 +69,7 @@ class LoadAudit extends lighthouse.Audit {
         score: 0,
         details: Audit.makeTableDetails(
           [{ key: "result", itemType: "text", text: "Risultato" }],
-          [{ result: notExecuted + " - argomenti non trovati" }]
+          [{ result: notExecuted }]
         ),
       };
     }
