@@ -1,6 +1,7 @@
 import {
   commonGatherersFolder,
   commonAuditsFolder,
+  municipalityAuditsFolder,
 } from "../configFolderingConstants";
 
 import {
@@ -22,6 +23,11 @@ const customModelComplianceAudits = [
     weight: 100,
     group: "legislation",
   },
+  {
+    id: "municipality-menu-structure-match-model",
+    weight: 100,
+    group: "user-experience",
+  },
 ];
 
 const customReccomendationsAudits = [
@@ -31,12 +37,14 @@ const customReccomendationsAudits = [
 module.exports = {
   extends: "lighthouse:default",
   settings: {
-    onlyCategories: [
+    /*onlyCategories: [
       "modelCompliance",
       "recommendations",
       "additionalTests",
       "performance",
-    ],
+    ],*/
+
+    onlyAudits: ["municipality-menu-structure-match-model"],
   },
 
   passes: [
@@ -49,6 +57,8 @@ module.exports = {
   ],
 
   audits: [
+    municipalityAuditsFolder + "/menuAudit.js",
+
     commonAuditsFolder + "/cookieDomainCheckAudit.js",
     commonAuditsFolder + "/securityAudit.js",
     commonAuditsFolder + "/ipLocationAudit.js",
