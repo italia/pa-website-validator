@@ -12,7 +12,7 @@ const greenResult = "Il sito utilizza tutte le font del modello.";
 const yellowResult = "Il sito non utilizza il font Lora.";
 const redResult = "Il sito non utilizza tutte le font del modello.";
 const notExecuted =
-  'Non è stato possibile condurre il test. Controlla le "Modalità di verifica" per scoprire di più.';
+  "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.";
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -58,9 +58,7 @@ class LoadAudit extends Audit {
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result:
-                notExecuted +
-                " - nessun servizio trovato su cui effettuare il test",
+              result: notExecuted,
             },
           ]
         ),
