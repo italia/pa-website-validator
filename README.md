@@ -76,13 +76,13 @@ PA Website validator utilizza le seguenti dipendenze esterne principali
 Comando:
 
 ```bash
-pa-website-validator --type <type> --destination <folder> --report <report_name> --website <url> --scope <local|online|local-information-architecture|online-information-architecture[online]> --view <yes|no[no]>
+pa-website-validator --type <type> --destination <folder> --report <report_name> --website <url> --scope <local|online|local-information-architecture|online-information-architecture[online]> --view
 ```
 
 Esempio:
 
 ```bash
-pa-website-validator --type school --destination ~/pa-italia-crawler-reports --report myreport --website https://www.ismonnet.edu.it/ --scope online --view yes
+pa-website-validator --type school --destination ~/pa-italia-crawler-reports --report myreport --website https://www.ismonnet.edu.it/ --scope online --view
 ```
 
 Mappa opzioni comando
@@ -98,11 +98,14 @@ Mappa opzioni comando
 | - -view | Visualizzazione istantanea report | ❌ |
 
 > `--type` indica quale tipologia di sito web viene passato da ispezionare (comunale o scolastico).
-> `--scope` indica la tipologia di audit da eseguire:
 
-- `local` se il tool è lanciato su un sito web hostato in locale: esegue solo alcuni audit specifici.
+
+> `--scope` indica la tipologia di audit da eseguire:
+- `local` se il tool è lanciato su un sito web hostato in locale: esegue tutti gli audit che lavorano sulla struttura del sito ispezionato e mostra dei messaggi informativi per alcuni audit che non producono risultati se eseguiti in un ambiente locale.
 - `online` esegue tutti gli audit disponibili.
-  > `--view` se impostato su `Yes` alla fine dell'auditing lancia un'istanza di chrome che mostra automaticamente la reportistica generata.
+
+
+> `--view` se passato al comandoalla fine dell'auditing lancia un'istanza di chrome che mostra automaticamente la reportistica generata.
 
 [lighthouse]: https://www.npmjs.com/package/lighthouse
 [node.js]: http://nodejs.org
