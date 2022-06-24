@@ -1,4 +1,7 @@
-import { commonGatherersFolder } from "../configFolderingConstants";
+import {
+  commonGatherersFolder,
+  commonInformativeAuditsFolder
+} from "../configFolderingConstants";
 
 import {
   groups,
@@ -8,8 +11,25 @@ import {
   pwaAudits,
 } from "../commonAuditsParts";
 
-const customModelComplianceAudits: [] = [];
-const customReccomendationsAudits: [] = [];
+const customModelComplianceAudits = [
+  {
+    id: "common-informative-cookie-domain-check",
+    weight: 100,
+    group: "legislation",
+  },
+  {
+    id: "common-informative-security",
+    weight: 100,
+    group: "security",
+  },
+];
+const customReccomendationsAudits = [
+  {
+    id: "common-informative-ip-location",
+    weight: 100,
+    group: "security",
+  },
+];
 
 module.exports = {
   extends: "lighthouse:default",
@@ -31,7 +51,11 @@ module.exports = {
     },
   ],
 
-  audits: [],
+  audits: [
+    commonInformativeAuditsFolder + "/cookieDomainCheckAudit.js",
+    commonInformativeAuditsFolder + "/ipLocationAudit.js",
+    commonInformativeAuditsFolder + "/securityAudit.js",
+  ],
 
   groups: groups,
 

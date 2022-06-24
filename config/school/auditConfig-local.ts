@@ -2,6 +2,8 @@ import {
   schoolAuditsFolder,
   commonGatherersFolder,
   commonAuditsFolder,
+  schoolInformativeAuditsFolder,
+  commonInformativeAuditsFolder
 } from "../configFolderingConstants";
 
 import {
@@ -49,9 +51,14 @@ const customModelComplianceAudits = [
     group: "legislation",
   },
   {
-    id: "school-controlled-vocabularies",
+    id: "common-informative-cookie-domain-check",
     weight: 100,
-    group: "user-experience",
+    group: "legislation",
+  },
+  {
+    id: "common-informative-security",
+    weight: 100,
+    group: "security",
   },
 ];
 
@@ -66,6 +73,21 @@ const customReccomendationsAudits = [
     id: "school-informative-cloud-infrastructure",
     weight: 100,
     group: "legislation",
+  },
+  {
+    id: "common-informative-ip-location",
+    weight: 100,
+    group: "security",
+  },
+  {
+    id: "school-servizi-structure-match-model",
+    weight: 100,
+    group: "user-experience",
+  },
+  {
+    id: "school-controlled-vocabularies",
+    weight: 100,
+    group: "user-experience",
   },
 ];
 
@@ -86,6 +108,7 @@ module.exports = {
         commonGatherersFolder + "/bootstrapItaliaCheckGatherer.js",
         commonGatherersFolder + "/bootstrapItaliaSelectorCheckGatherer.js",
         commonGatherersFolder + "/originGatherer.js",
+        commonGatherersFolder + "/hostnameGatherer.js",
       ],
     },
   ],
@@ -99,11 +122,16 @@ module.exports = {
 
     schoolAuditsFolder + "/menuAudit.js",
     schoolAuditsFolder + "/menuScuolaSecondLevelAudit.js",
+    schoolAuditsFolder + "/serviziAudit.js",
     schoolAuditsFolder + "/controlledVocabulariesAudit.js",
 
-    schoolAuditsFolder + "/reuseAudit.js",
-    schoolAuditsFolder + "/licenseAndAttributionAudit.js",
-    schoolAuditsFolder + "/cloudInfrastructureAudit.js",
+    schoolInformativeAuditsFolder + "/reuseAudit.js",
+    schoolInformativeAuditsFolder + "/licenseAndAttributionAudit.js",
+    schoolInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
+
+    commonInformativeAuditsFolder + "/cookieDomainCheckAudit.js",
+    commonInformativeAuditsFolder + "/ipLocationAudit.js",
+    commonInformativeAuditsFolder + "/securityAudit.js",
 
     commonAuditsFolder + "/bootstrapItaliaDoubleCheckAudit.js",
   ],

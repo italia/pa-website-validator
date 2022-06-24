@@ -2,6 +2,7 @@ import {
   schoolAuditsFolder,
   commonGatherersFolder,
   commonAuditsFolder,
+  schoolInformativeAuditsFolder
 } from "../configFolderingConstants";
 
 import {
@@ -118,9 +119,9 @@ module.exports = {
     schoolAuditsFolder + "/serviziAudit.js",
     schoolAuditsFolder + "/controlledVocabulariesAudit.js",
 
-    schoolAuditsFolder + "/reuseAudit.js",
-    schoolAuditsFolder + "/licenseAndAttributionAudit.js",
-    schoolAuditsFolder + "/cloudInfrastructureAudit.js",
+    schoolInformativeAuditsFolder + "/reuseAudit.js",
+    schoolInformativeAuditsFolder + "/licenseAndAttributionAudit.js",
+    schoolInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
 
     commonAuditsFolder + "/cookieDomainCheckAudit.js",
     commonAuditsFolder + "/bootstrapItaliaDoubleCheckAudit.js",

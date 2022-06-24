@@ -17,6 +17,11 @@ const customModelComplianceAudits = [
     weight: 100,
     group: "security",
   },
+  {
+    id: "common-legislation-cookie-domain-check",
+    weight: 100,
+    group: "legislation",
+  },
 ];
 
 const customReccomendationsAudits = [
