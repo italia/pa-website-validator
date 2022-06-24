@@ -10,14 +10,23 @@ PA Website validator è un tool che integra la libreria [Lightouse][lighthouse] 
 - Possibilità di integrare il pacchetto come dipendenza NPM in progetti terzi.
 - Possibilità di lanciare l'auditing su un sito web online o in locale.
 
-## Test eseguiti
+## Scuole - Test eseguiti
 
 | Test                                                      | Descrizione |
 | --------------------------------------------------------- | ----------- |
-| Criteri di conformità                                     | TBD         |
-| Raccomandazioni progettuali                               | TBD         |
-| Test aggiuntivi                                           | TBD         |
-| Raccomandazioni progettuali: Velocità e tempi di risposta | TBD         |
+| Criteri di conformità                                     | Vengono mostrati i risultati degli audit, relativi ad alcuni dei criteri di conformità, in riferimento all'[Allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000dk82wQAA#allegati).         |
+| Raccomandazioni progettuali                               | Vengono mostrati i risultati degli audit, relativi ad alcune delle raccomandazioni progettuali, in riferimento all'[Allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000dk82wQAA#allegati).         |
+| Test aggiuntivi                                           | Vengono mostrati i risultati di test aggiuntivi di Lighthouse utili a facilitare le attività di sviluppo e garantire un buon risultato.         |
+| Raccomandazioni progettuali: Velocità e tempi di risposta | Nel caso in cui il sito presenti livelli di prestazioni (media pesata di 6 metriche standard) inferiori a 50 secondo quanto calcolato e verificato tramite le librerie Lighthouse, la scuola deve pubblicare sul sito un “Piano di miglioramento del sito” che mostri, per ciascuna delle 6 metriche che impatta negativamente le prestazioni, le azioni future di miglioramento e le relative tempistiche di realizzazione attese; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)         |
+
+## Comuni - Test eseguiti
+
+| Test                                                      | Descrizione |
+| --------------------------------------------------------- | ----------- |
+| Pacchetto Cittadino Informato: criteri di conformità                                    | Vengono mostrati i risultati degli audit, relativi ad alcuni dei criteri di conformità del Pacchetto Cittadino Informato, in riferimento all'[allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000dk829QAA#allegati).         |
+| Pacchetto Cittadino Attivo: criteri di conformità                               | Vengono mostrati i risultati degli audit, relativi ad alcuni dei criteri di conformità del Pacchetto Cittadino Attivo, in riferimento all'[allegato 2 dell'Avviso 1.4.1](https://www.nic.it/sites/default/files/docs/comuni_list.html).         |
+| Raccomandazioni progettuali e test aggiuntivi                                          | Vengono mostrati i risultati degli audit, relativi ad alcune delle raccomandazioni progettuali del Pacchetto Cittadino Informato, in riferimento all'[allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000dk829QAA#allegati). A questi sono aggiunti ulteriori test per facilitare le attività di sviluppo e garantire un buon risultato.         |
+| Pacchetto Cittadino Informato: C.SI.4.1 - Velocità e tempi di risposta | Nel caso in cui il sito presenti livelli di prestazioni (media pesata di 6 metriche standard) inferiori a 50 secondo quanto calcolato e verificato tramite le librerie Lighthouse, il Comune deve pubblicare sul sito un “Piano di miglioramento del sito” che mostri, per ciascuna delle 6 metriche che impatta negativamente le prestazioni, le azioni future di miglioramento e le relative tempistiche di realizzazione attese. RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/)         |
 
 ## Tecnologie
 
@@ -38,6 +47,7 @@ Per l'installazione in locale partendo dalla repository effettuare il clone, poi
 
 ```sh
 cd pa-website-validator
+npm install
 npm install -g ./
 ```
 
@@ -85,7 +95,7 @@ Mappa opzioni comando
 | - -report | Nome da assegnare al report | ✅ | |
 | - -website | Url sito web da analizzare | ✅ | |
 | - -scope | Scope di esecuzione | ❌ | "local" "online" | "online" |
-| - -view | Visualizzazione istantanea report | ❌ | "Yes", "No" | "No" |
+| - -view | Visualizzazione istantanea report | ❌ |
 
 > `--type` indica quale tipologia di sito web viene passato da ispezionare (comunale o scolastico).
 > `--scope` indica la tipologia di audit da eseguire:
