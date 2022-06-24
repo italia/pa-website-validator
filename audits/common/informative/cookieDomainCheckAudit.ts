@@ -16,7 +16,7 @@ class LoadAudit extends Audit {
         "COOKIE - Il sito deve presentare cookie tecnici in linea con la normativa vigente.",
       scoreDisplayMode: Audit.SCORING_MODES.INFORMATIVE,
       description:
-        "Questo audit produce un risultato attendibile solo quando viene effettuato su un sito pubblicato online.",
+        "Questo audit produce un risultato solo quando viene effettuato su un sito pubblicato online.",
       requiredArtifacts: [],
     };
   }
