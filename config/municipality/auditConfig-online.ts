@@ -43,8 +43,6 @@ module.exports = {
     {
       gatherers: [
         commonGatherersFolder + "/originGatherer.js",
-        commonGatherersFolder + "/bootstrapItaliaCheckGatherer.js",
-        commonGatherersFolder + "/bootstrapItaliaSelectorCheckGatherer.js",
         commonGatherersFolder + "/hostnameGatherer.js",
       ],
     },
@@ -54,7 +52,6 @@ module.exports = {
     commonAuditsFolder + "/cookieDomainCheckAudit.js",
     commonAuditsFolder + "/securityAudit.js",
     commonAuditsFolder + "/ipLocationAudit.js",
-    commonAuditsFolder + "/bootstrapItaliaDoubleCheckAudit.js",
   ],
 
   groups: groups,

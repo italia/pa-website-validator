@@ -124,7 +124,7 @@ module.exports = {
     schoolInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
 
     commonAuditsFolder + "/cookieDomainCheckAudit.js",
-    commonAuditsFolder + "/bootstrapItaliaDoubleCheckAudit.js",
+    schoolAuditsFolder + "/bootstrapItaliaDoubleCheckAudit.js",
     commonAuditsFolder + "/securityAudit.js",
     commonAuditsFolder + "/ipLocationAudit.js",
   ],

@@ -1,7 +1,4 @@
-import {
-  commonGatherersFolder,
-  commonInformativeAuditsFolder,
-} from "../configFolderingConstants";
+import { commonInformativeAuditsFolder } from "../configFolderingConstants";
 
 import {
   groups,
@@ -44,10 +41,7 @@ module.exports = {
 
   passes: [
     {
-      gatherers: [
-        commonGatherersFolder + "/bootstrapItaliaCheckGatherer.js",
-        commonGatherersFolder + "/bootstrapItaliaSelectorCheckGatherer.js",
-      ],
+      gatherers: [],
     },
   ],
 

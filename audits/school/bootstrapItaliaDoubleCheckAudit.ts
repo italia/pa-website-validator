@@ -103,12 +103,11 @@ const checkVersion = async (version: string) => {
   let result = false;
 
   const versionValues = version.split(".");
-  if (versionValues.length === 3) {
+  if (versionValues.length > 1) {
     const majorVersion = parseInt(versionValues[0]);
     const middleVersion = parseInt(versionValues[1]);
-    const minorVersion = parseInt(versionValues[2]);
 
-    if (majorVersion >= 1 && middleVersion >= 6 && minorVersion >= 3) {
+    if (majorVersion >= 1 && middleVersion >= 6) {
       result = true;
     }
   }

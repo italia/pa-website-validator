@@ -1,7 +1,6 @@
 import {
   schoolAuditsFolder,
   commonGatherersFolder,
-  commonAuditsFolder,
   schoolInformativeAuditsFolder,
   commonInformativeAuditsFolder,
 } from "../configFolderingConstants";
@@ -133,7 +132,7 @@ module.exports = {
     commonInformativeAuditsFolder + "/ipLocationAudit.js",
     commonInformativeAuditsFolder + "/securityAudit.js",
 
-    commonAuditsFolder + "/bootstrapItaliaDoubleCheckAudit.js",
+    schoolAuditsFolder + "/bootstrapItaliaDoubleCheckAudit.js",
   ],
 
   groups: groups,
