@@ -2,7 +2,7 @@ import {
   schoolAuditsFolder,
   commonGatherersFolder,
   commonAuditsFolder,
-  schoolInformativeAuditsFolder
+  schoolInformativeAuditsFolder,
 } from "../configFolderingConstants";
 
 import {

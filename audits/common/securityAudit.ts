@@ -21,9 +21,11 @@ const errorLogging = [
   "Il sito non utilizza il protocollo HTTPS",
   "Il certificato è scaduto",
   "La versione del TLS richiesta è TLSv1.2 o TLSv1.3",
-  "La versione della suite di cifratura per TLSv1.2 richiesta è una tra: " + allowedCiphers.tls12.join(", "),
-  "La versione della suite di cifratura per TLSv1.3 richiesta è una tra: " + allowedCiphers.tls13.join(", ")
-]
+  "La versione della suite di cifratura per TLSv1.2 richiesta è una tra: " +
+    allowedCiphers.tls12.join(", "),
+  "La versione della suite di cifratura per TLSv1.3 richiesta è una tra: " +
+    allowedCiphers.tls13.join(", "),
+];
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -103,24 +105,24 @@ class LoadAudit extends Audit {
       score = 1;
       item[0].result = greenResult;
     } else {
-      let errors: string[] = []
+      let errors: string[] = [];
       if (!certificate.valid) {
-        errors = [...errors, errorLogging[1]]
+        errors = [...errors, errorLogging[1]];
       }
 
       if (!tls.valid) {
-        errors = [...errors, errorLogging[2]]
+        errors = [...errors, errorLogging[2]];
       }
 
       if (tls.tls_version === allowedTlsVersions[0] && !cipherSuite.valid) {
-        errors = [...errors, errorLogging[3]]
+        errors = [...errors, errorLogging[3]];
       }
 
       if (tls.tls_version === allowedTlsVersions[1] && !cipherSuite.valid) {
-        errors = [...errors, errorLogging[4]]
+        errors = [...errors, errorLogging[4]];
       }
 
-      item[0].result = redResult + errors.join(', ');
+      item[0].result = redResult + errors.join(", ");
     }
 
     return {

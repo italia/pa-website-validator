@@ -177,7 +177,7 @@ async function getCurrentVersion(css: string): Promise<string> {
   const splittedCss = css.split("\n");
   for (const element of splittedCss) {
     if (element.toLowerCase().match("(version)")) {
-      const splittedElement = element.split(' ')
+      const splittedElement = element.split(" ");
       if (splittedElement.length < 2) {
         continue;
       }
