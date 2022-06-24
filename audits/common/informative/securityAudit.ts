@@ -16,7 +16,7 @@ class LoadAudit extends Audit {
         "CERTIFICATO HTTPS - Il sito scuola deve avere un certificato https valido e attivo.",
       scoreDisplayMode: Audit.SCORING_MODES.INFORMATIVE,
       description:
-        "AUDIT INFORMATIVO: L'audit effettivo produrrà un risultato quando verrà eseguito su un ambiente non locale",
+        "Questo audit produce un risultato attendibile solo quando viene effettuato su un sito pubblicato online.",
       requiredArtifacts: [],
     };
   }
