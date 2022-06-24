@@ -225,4 +225,5 @@ export {
   getPageElementDataAttribute,
   getHREFValuesDataAttribute,
   getElementHrefValuesDataAttribute,
+  buildUrl
 };

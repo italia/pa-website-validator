@@ -28,6 +28,11 @@ const customModelComplianceAudits = [
     weight: 100,
     group: "user-experience",
   },
+  {
+    id: "municipality-second-level-pages",
+    weight: 100,
+    group: "user-experience",
+  },
 ];
 
 const customReccomendationsAudits = [
@@ -44,7 +49,7 @@ module.exports = {
       "performance",
     ],*/
 
-    onlyAudits: ["municipality-menu-structure-match-model"],
+    onlyAudits: ["municipality-second-level-pages"],
   },
 
   passes: [
@@ -58,6 +63,7 @@ module.exports = {
 
   audits: [
     municipalityAuditsFolder + "/menuAudit.js",
+    municipalityAuditsFolder + "/secondLevelPagesAudit.js",
 
     commonAuditsFolder + "/cookieDomainCheckAudit.js",
     commonAuditsFolder + "/securityAudit.js",
