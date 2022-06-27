@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-import { exec } from "child_process";
 import { promises } from "fs";
-import { promisify } from "node:util";
 import Papa from "papaparse";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
+
+import { logLevels, run } from "../controller/launchLighthouse.js";
 
 const parser = yargs(hideBin(process.argv))
   .usage("Usage: $0 --type <type> --expected <file>")
@@ -35,12 +35,20 @@ try {
     const url = line.URL;
     console.log(url);
 
-    const configPath = `dist/config/${args.type}/auditConfig-online.js`;
-
-    const { stdout } = await promisify(exec)(
-      `npx lighthouse ${url} --locale it --config-path=${configPath} --chrome-flags=--headless --output=json`
+    const output = await run(
+      url,
+      args.type,
+      "online",
+      logLevels.display_none,
+      false,
+      "",
+      ""
     );
-    const report = JSON.parse(stdout);
+    const jsonReport = output.data.jsonReport;
+    if (!jsonReport) {
+      throw new Error("No JSON report");
+    }
+    const report = JSON.parse(output.data.jsonReport);
     for (const key in line) {
       if (key !== "URL") {
         const score = report.audits[key].score;

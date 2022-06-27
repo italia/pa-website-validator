@@ -1,12 +1,11 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
-    "module": "CommonJS",
+    "module": "ES2022",
     "moduleResolution": "node",
-    "outDir": "dist/lighthouse",
+    "outDir": "dist",
     "skipLibCheck": true,
     "strict": true,
     "target": "ES2022"
-  },
-  "include": ["audits", "gatherers", "node_modules/lighthouse/types/**/*.d.ts"]
+  }
 }

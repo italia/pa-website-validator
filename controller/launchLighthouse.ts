@@ -8,10 +8,10 @@ import * as fs from "fs";
 import * as chromeLauncher from "chrome-launcher";
 import open from "open";
 
-import * as schoolOnlineConfig from "../config/school/auditConfig-online";
-import * as schoolLocalConfig from "../config/school/auditConfig-local";
-import * as municipalityOnlineConfig from "../config/municipality/auditConfig-online";
-import * as municipalityLocalConfig from "../config/municipality/auditConfig-local";
+import schoolOnlineConfig from "../config/school/auditConfig-online.js";
+import schoolLocalConfig from "../config/school/auditConfig-local.js";
+import municipalityOnlineConfig from "../config/municipality/auditConfig-online.js";
+import municipalityLocalConfig from "../config/municipality/auditConfig-local.js";
 
 import { RunnerResult } from "lighthouse/types/externs";
 
