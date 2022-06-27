@@ -3,7 +3,14 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { CheerioAPI } from "cheerio";
-import { loadPageData } from "../../utils/utils";
+import {
+  loadPageData,
+  getHttpsRequestStatusCode,
+  isInternalUrl,
+  buildUrl,
+  isHttpsUrl,
+  hostnameExists,
+} from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -70,8 +77,43 @@ class LoadAudit extends Audit {
       elementObj.href !== "#" &&
       elementObj.href !== ""
     ) {
+      let inspectUrl = elementObj.href;
+      items[0].link_destination = inspectUrl;
+
+      if (
+        (await isInternalUrl(elementObj.href)) &&
+        !elementObj.href.includes(url)
+      ) {
+        inspectUrl = await buildUrl(url, elementObj.href);
+      }
+
+      if (!(await isHttpsUrl(inspectUrl))) {
+        items[0].result += " Protocollo HTTPS mancante nell'URL.";
+        return {
+          score: 0,
+          details: Audit.makeTableDetails(headings, items),
+        };
+      }
+
+      const hostExists = await hostnameExists(inspectUrl);
+      if (!hostExists.exists) {
+        items[0].result += " Hostname non trovato.";
+        return {
+          score: 0,
+          details: Audit.makeTableDetails(headings, items),
+        };
+      }
+
+      const statusCode = await getHttpsRequestStatusCode(inspectUrl);
+      if (statusCode !== 200) {
+        items[0].result += " Pagina non trovata.";
+        return {
+          score: 0,
+          details: Audit.makeTableDetails(headings, items),
+        };
+      }
+
       items[0].result = greenResult;
-      items[0].link_destination = elementObj.href;
       score = 1;
     }
 

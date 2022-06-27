@@ -4,6 +4,8 @@ import orderType = crawlerTypes.orderResult;
 import * as cheerio from "cheerio";
 import puppeteer from "puppeteer";
 import { CheerioAPI } from "cheerio";
+import https from "https";
+import dns from "dns";
 
 const loadPageData = async (url: string): Promise<CheerioAPI> => {
   const browser = await puppeteer.launch();
@@ -161,6 +163,14 @@ const buildUrl = async (url: string, service: string): Promise<string> => {
   return urlParts[0] + "//" + hostname[0] + service;
 };
 
+const isInternalUrl = async (url: string) => {
+  return !url.includes("www");
+};
+
+const isHttpsUrl = async (url: string) => {
+  return url.includes("https");
+};
+
 const checkOrder = async (
   mandatoryElements: string[],
   foundElements: string[]
@@ -218,6 +228,29 @@ const checkOrder = async (
   };
 };
 
+async function getHttpsRequestStatusCode(
+  hostname: string
+): Promise<number | undefined> {
+  return new Promise(function (resolve) {
+    https
+      .request(hostname, function (res) {
+        resolve(res.statusCode);
+      })
+      .end();
+  });
+}
+
+async function hostnameExists(
+  hostname: string
+): Promise<{ hostname: string; exists: boolean }> {
+  hostname = hostname.replace(/(^\w+:|^)\/\//, "");
+  hostname = hostname.replace("www.", "");
+
+  return new Promise((resolve) => {
+    dns.lookup(hostname, (error) => resolve({ hostname, exists: !error }));
+  });
+}
+
 export {
   checkOrder,
   loadPageData,
@@ -225,4 +258,9 @@ export {
   getPageElementDataAttribute,
   getHREFValuesDataAttribute,
   getElementHrefValuesDataAttribute,
+  getHttpsRequestStatusCode,
+  hostnameExists,
+  isInternalUrl,
+  isHttpsUrl,
+  buildUrl,
 };
