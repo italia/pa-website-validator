@@ -26,9 +26,9 @@ class LoadAudit extends lighthouse.Audit {
     return {
       id: "school-controlled-vocabularies",
       title:
-        "VOCABOLARI CONTROLLATI - Il sito scuola deve utilizzare argomenti forniti dal modello di sito scuola o appartenenti al vocabolario controllato europeo EuroVoc.",
+        "R.SC.1.1 - VOCABOLARI CONTROLLATI - Il sito scuola deve utilizzare argomenti forniti dal modello di sito scuola.",
       failureTitle:
-        "VOCABOLARI CONTROLLATI - Il sito scuola deve utilizzare argomenti forniti dal modello di sito scuola o appartenenti al vocabolario controllato europeo EuroVoc.",
+        "R.SC.1.1 - VOCABOLARI CONTROLLATI - Il sito scuola deve utilizzare argomenti forniti dal modello di sito scuola.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
         "CONDIZIONI DI SUCCESSO: almeno il 50% degli argomenti presenti appartiene alla lista indicata all'interno del documento di architettura dell'informazione del modello scuole alla voce \"Le parole della scuola\"; MODALITÀ DI VERIFICA: gli argomenti identificati all'interno della funzione di ricerca del sito vengono confrontati con l'elenco di voci presente nel documento di architettura dell'informazione; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Elenco degli argomenti del Modello scuole](https://docs.google.com/spreadsheets/d/1D4KbaA__xO9x_iBm08KvZASjrrFLYLKX/edit?usp=sharing&ouid=115576940975219606169&rtpof=true&sd=true)",

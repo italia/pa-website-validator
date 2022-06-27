@@ -30,9 +30,9 @@ class LoadAudit extends Audit {
     return {
       id: "school-servizi-structure-match-model",
       title:
-        "SCHEDE INFORMATIVE DI SERVIZIO - Tutte le schede informative dei servizi devono mostrare le voci segnalate come obbligatorie all'interno dell'architettura dell'informazione, nell'ordine segnalato dal modello.",
+        "R.SC.1.2 - SCHEDE INFORMATIVE DI SERVIZIO - Tutte le schede informative dei servizi devono mostrare le voci segnalate come obbligatorie all'interno dell'architettura dell'informazione, nell'ordine segnalato dal modello.",
       failureTitle:
-        "SCHEDE INFORMATIVE DI SERVIZIO - Tutte le schede informative dei servizi devono mostrare le voci segnalate come obbligatorie all'interno dell'architettura dell'informazione, nell'ordine segnalato dal modello.",
+        "R.SC.1.2 - SCHEDE INFORMATIVE DI SERVIZIO - Tutte le schede informative dei servizi devono mostrare le voci segnalate come obbligatorie all'interno dell'architettura dell'informazione, nell'ordine segnalato dal modello.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
         "CONDIZIONI DI SUCCESSO: nella scheda servizio sono presenti almeno 7 su 8 delle voci obbligatorie e almeno 7 su 8 delle voci obbligatorie sono nell'ordine corretto; MODALITÀ DI VERIFICA: viene verificato quali voci sono presenti all'interno di una scheda servizio casualmente selezionata e il loro ordine; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",
@@ -284,8 +284,7 @@ async function getPlaceInfo($: CheerioAPI, mandatoryElements: string[]) {
 
           while (
             !labelText.match("(ora)") &&
-            (labelValue.match("(alle)") ||
-              labelValue.match("^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$") ||
+            (labelValue.match("^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$") ||
               labelValue.match(
                 "^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$"
               ))

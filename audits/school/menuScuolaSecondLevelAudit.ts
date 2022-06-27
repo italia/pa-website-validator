@@ -26,9 +26,9 @@ class LoadAudit extends Audit {
     return {
       id: "school-menu-scuola-second-level-structure-match-model",
       title:
-        "VOCI DI MENÙ DI SECONDO LIVELLO - Il sito presenta almeno il 30% delle voci di menu di secondo livello in base a quanto descritto dal modello di sito per le scuole.",
+        "C.SC.1.5 - VOCI DI MENÙ DI SECONDO LIVELLO - Il sito presenta almeno il 30% delle voci di menu di secondo livello in base a quanto descritto dal modello di sito per le scuole.",
       failureTitle:
-        "VOCI DI MENÙ DI SECONDO LIVELLO - Il sito presenta almeno il 30% delle voci di menu di secondo livello in base a quanto descritto dal modello di sito per le scuole.",
+        "C.SC.1.5 - VOCI DI MENÙ DI SECONDO LIVELLO - Il sito presenta almeno il 30% delle voci di menu di secondo livello in base a quanto descritto dal modello di sito per le scuole.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
         "CONDIZIONI DI SUCCESSO: almeno il 30% delle voci del menù di secondo livello corrispondono a quelle indicate nel documento di architettura dell'informazione del modello scuole e sono nell'ordine corretto; MODALITÀ DI VERIFICA: viene verificata la correttezza e l'ordine delle voci del menù di secondo livello riferite alla voce di primo livello \"Scuola\"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",

@@ -26,9 +26,9 @@ class LoadAudit extends Audit {
     return {
       id: "school-ux-ui-consistency-theme-version-check",
       title:
-        "UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito scuola, deve utilizzarne la versione più recente disponibile alla data di inizio lavori.",
+        "C.SC.1.3 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito scuola, deve utilizzarne la versione più recente disponibile alla data di inizio lavori.",
       failureTitle:
-        "UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito scuola, deve utilizzarne la versione più recente disponibile alla data di inizio lavori.",
+        "C.SC.1.3 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito scuola, deve utilizzarne la versione più recente disponibile alla data di inizio lavori.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
         'CONDIZIONI DI SUCCESSO: la versione di tema CMS del modello scuole in uso è superiore alla 1.1; MODALITÀ DI VERIFICA: viene verificata la versione indicata nel file style.css, nel caso sia presente la chiave "Text Domain: design_scuole_italia"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)',

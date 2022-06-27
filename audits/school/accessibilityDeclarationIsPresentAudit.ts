@@ -16,9 +16,9 @@ class LoadAudit extends Audit {
     return {
       id: "school-legislation-accessibility-declaration-is-present",
       title:
-        "DICHIARAZIONE DI ACCESSIBILITÀ - Il sito scuola deve esporre la dichiarazione di accessibilità.",
+        "C.SC.2.2 - DICHIARAZIONE DI ACCESSIBILITÀ - Il sito scuola deve esporre la dichiarazione di accessibilità.",
       failureTitle:
-        "DICHIARAZIONE DI ACCESSIBILITÀ - Il sito scuola deve esporre la dichiarazione di accessibilità.",
+        "C.SC.2.2 - DICHIARAZIONE DI ACCESSIBILITÀ - Il sito scuola deve esporre la dichiarazione di accessibilità.",
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
         "CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta alla dichiarazione di accessibilità di AgID, in conformità al modello e alle linee guida rese disponibile da AgID in ottemperanza alla normativa vigente in materia di accessibilità, con livelli di accessibilità contemplati nelle specifiche tecniche WCAG 2.1; MODALITÀ DI VERIFICA: viene verificata la presenza e posizione del link nel footer e che riporti correttamente ad AgID; RIFERIMENTI TECNICI E NORMATIVI: AgID Dichiarazione di accessibilità, AgID Linee guida sull’accessibilità degli strumenti informatici, Direttiva UE n. 2102/2016, Legge 9 gennaio 2004 n. 4, Web Content Accessibility Guidelines WCAG 2.1.",
