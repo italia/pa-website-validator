@@ -14,16 +14,6 @@ import {
 
 const customModelComplianceAudits = [
   {
-    id: "common-security",
-    weight: 100,
-    group: "security",
-  },
-  {
-    id: "common-legislation-cookie-domain-check",
-    weight: 100,
-    group: "legislation",
-  },
-  {
     id: "municipality-menu-structure-match-model",
     weight: 100,
     group: "user-experience",
@@ -65,8 +55,6 @@ module.exports = {
     municipalityAuditsFolder + "/menuAudit.js",
     municipalityAuditsFolder + "/secondLevelPagesAudit.js",
 
-    commonAuditsFolder + "/cookieDomainCheckAudit.js",
-    commonAuditsFolder + "/securityAudit.js",
     commonAuditsFolder + "/ipLocationAudit.js",
   ],
 

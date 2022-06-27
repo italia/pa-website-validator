@@ -9,11 +9,11 @@ const Audit = lighthouse.Audit;
 class LoadAudit extends Audit {
   static get meta() {
     return {
-      id: "common-informative-cookie-domain-check",
+      id: "school-informative-cookie-domain-check",
       title:
-        "COOKIE - Il sito deve presentare cookie tecnici in linea con la normativa vigente.",
+        "C.SC.2.3 - COOKIE - Il sito scuola deve presentare cookie tecnici in linea con la normativa vigente.",
       failureTitle:
-        "COOKIE - Il sito deve presentare cookie tecnici in linea con la normativa vigente.",
+        "C.SC.2.3 - COOKIE - Il sito scuola deve presentare cookie tecnici in linea con la normativa vigente.",
       scoreDisplayMode: Audit.SCORING_MODES.INFORMATIVE,
       description:
         "Questo audit produce un risultato solo quando viene effettuato su un sito pubblicato online.",
