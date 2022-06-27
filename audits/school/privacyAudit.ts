@@ -58,7 +58,9 @@ class LoadAudit extends Audit {
     ];
 
     const $: CheerioAPI = await loadPageData(url);
-    const privacyPolicyElement = $('[data-element="privacy-policy-link"]');
+    const privacyPolicyElement = $("footer").find(
+      '[data-element="privacy-policy-link"]'
+    );
     const elementObj = $(privacyPolicyElement).attr();
     items[0].link_name = privacyPolicyElement.text() ?? "";
 

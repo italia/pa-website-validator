@@ -61,7 +61,7 @@ class LoadAudit extends Audit {
     ];
 
     const $: CheerioAPI = await loadPageData(url);
-    const accessibilityDeclarationElement = $(
+    const accessibilityDeclarationElement = $("footer").find(
       '[data-element="accessibility-link"]'
     );
     const elementObj = $(accessibilityDeclarationElement).attr();
