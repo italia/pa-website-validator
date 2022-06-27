@@ -17,9 +17,9 @@ class LoadAudit extends Audit {
     return {
       id: "school-ux-ui-consistency-bootstrap-italia-double-check",
       title:
-        "LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito deve utilizzare la libreria Bootstrap Italia.",
+        "C.SC.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito della scuola deve utilizzare la libreria Bootstrap Italia.",
       failureTitle:
-        "LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito deve utilizzare la libreria Bootstrap Italia.",
+        "C.SC.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito della scuola deve utilizzare la libreria Bootstrap Italia.",
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
         "CONDIZIONI DI SUCCESSO: la versione di libreria Bootstrap Italia in uso è uguale o superiore alla 1.6.3; MODALITÀ DI VERIFICA: viene verificata la presenza della libreria Bootstrap Italia e la versione in uso individuando la proprietà CSS --bootstrap-italia-version all’interno del selettore :root, o la variabile globale window.BOOTSTRAP_ITALIA_VERSION; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",

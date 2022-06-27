@@ -19,9 +19,9 @@ class LoadAudit extends Audit {
     return {
       id: "school-ux-ui-consistency-fonts-check",
       title:
-        "CONSISTENZA DELL'UTILIZZO DELLE FONT (librerie di caratteri) - Il sito scuola deve utilizzare le font indicate dalla documentazione del modello di sito scuola.",
+        "C.SC.1.1 - COERENZA DELL'UTILIZZO DEI FONT (librerie di caratteri) - Il sito scuola deve utilizzare i font indicati dalla documentazione del modello di sito scuola.",
       failureTitle:
-        "CONSISTENZA DELL'UTILIZZO DELLE FONT (librerie di caratteri) - Il sito scuola deve utilizzare le font indicate dalla documentazione del modello di sito scuola.",
+        "C.SC.1.1 - COERENZA DELL'UTILIZZO DEI FONT (librerie di caratteri) - Il sito scuola deve utilizzare i font indicati dalla documentazione del modello di sito scuola.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
         "CONDIZIONI DI SUCCESSO: il sito utilizza almeno le font Titillium Web e Lora; MODALITÀ DI VERIFICA: viene verificata la presenza delle font all'interno della Homepage del sito; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",
