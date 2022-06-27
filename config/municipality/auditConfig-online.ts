@@ -11,18 +11,7 @@ import {
   pwaAudits,
 } from "../commonAuditsParts";
 
-const customModelComplianceAudits = [
-  {
-    id: "common-security",
-    weight: 100,
-    group: "security",
-  },
-  {
-    id: "common-legislation-cookie-domain-check",
-    weight: 100,
-    group: "legislation",
-  },
-];
+const customModelComplianceAudits: [] = [];
 
 const customReccomendationsAudits = [
   { id: "common-security-ip-location", weight: 100 },
@@ -41,18 +30,11 @@ module.exports = {
 
   passes: [
     {
-      gatherers: [
-        commonGatherersFolder + "/originGatherer.js",
-        commonGatherersFolder + "/hostnameGatherer.js",
-      ],
+      gatherers: [commonGatherersFolder + "/hostnameGatherer.js"],
     },
   ],
 
-  audits: [
-    commonAuditsFolder + "/cookieDomainCheckAudit.js",
-    commonAuditsFolder + "/securityAudit.js",
-    commonAuditsFolder + "/ipLocationAudit.js",
-  ],
+  audits: [commonAuditsFolder + "/ipLocationAudit.js"],
 
   groups: groups,
 

@@ -50,12 +50,12 @@ const customModelComplianceAudits = [
     group: "legislation",
   },
   {
-    id: "common-informative-cookie-domain-check",
+    id: "school-informative-cookie-domain-check",
     weight: 100,
     group: "legislation",
   },
   {
-    id: "common-informative-security",
+    id: "school-informative-security",
     weight: 100,
     group: "security",
   },
@@ -127,12 +127,12 @@ module.exports = {
     schoolInformativeAuditsFolder + "/reuseAudit.js",
     schoolInformativeAuditsFolder + "/licenseAndAttributionAudit.js",
     schoolInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
-
-    commonInformativeAuditsFolder + "/cookieDomainCheckAudit.js",
-    commonInformativeAuditsFolder + "/ipLocationAudit.js",
-    commonInformativeAuditsFolder + "/securityAudit.js",
+    schoolInformativeAuditsFolder + "/cookieDomainCheckAudit.js",
+    schoolInformativeAuditsFolder + "/securityAudit.js",
 
     schoolAuditsFolder + "/bootstrapItaliaDoubleCheckAudit.js",
+
+    commonInformativeAuditsFolder + "/ipLocationAudit.js",
   ],
 
   groups: groups,

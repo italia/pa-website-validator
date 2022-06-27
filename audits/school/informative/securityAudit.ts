@@ -9,11 +9,11 @@ const Audit = lighthouse.Audit;
 class LoadAudit extends Audit {
   static get meta() {
     return {
-      id: "common-informative-security",
+      id: "school-informative-security",
       title:
-        "CERTIFICATO HTTPS - Il sito scuola deve avere un certificato https valido e attivo.",
+        "C.SC.3.1 - CERTIFICATO HTTPS - Il sito scuola deve avere un certificato https valido e attivo.",
       failureTitle:
-        "CERTIFICATO HTTPS - Il sito scuola deve avere un certificato https valido e attivo.",
+        "C.SC.3.1 - CERTIFICATO HTTPS - Il sito scuola deve avere un certificato https valido e attivo.",
       scoreDisplayMode: Audit.SCORING_MODES.INFORMATIVE,
       description:
         "Questo audit produce un risultato solo quando viene effettuato su un sito pubblicato online.",

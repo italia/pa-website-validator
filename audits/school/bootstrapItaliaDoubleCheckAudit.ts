@@ -72,7 +72,10 @@ class LoadAudit extends Audit {
     ];
     let score = 0;
 
-    if (bootstrapItaliaVariableVersion !== null) {
+    if (
+      bootstrapItaliaVariableVersion !== null &&
+      bootstrapItaliaVariableVersion
+    ) {
       items[0].library_version = bootstrapItaliaVariableVersion;
       items[0].library_name = libraryName;
 
@@ -80,7 +83,10 @@ class LoadAudit extends Audit {
         score = 1;
         items[0].result = greenResult;
       }
-    } else if (bootstrapItaliaSelectorVariableVersion !== null) {
+    } else if (
+      bootstrapItaliaSelectorVariableVersion !== null &&
+      bootstrapItaliaSelectorVariableVersion
+    ) {
       items[0].library_version = bootstrapItaliaSelectorVariableVersion;
       items[0].library_name = libraryName;
 
