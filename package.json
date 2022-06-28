@@ -3,16 +3,18 @@
   "version": "1.0.0",
   "description": "TBD",
   "private": true,
-  "main": "index.js",
+  "type": "module",
   "engines": {
     "node": ">=16.0.0"
   },
   "scripts": {
-    "build": "tsc",
+    "build:lighthouse": "tsc && echo '{\n  \"type\": \"commonjs\"\n}' > dist/lighthouse/package.json",
+    "build:main": "tsc -p tsconfig.main.json",
+    "build:test": "tsc -p tsconfig.test.json",
     "format:check": "prettier -c .",
     "lint:check": "eslint --ext .js,.ts --max-warnings 0 .",
-    "prepare": "npm run build",
-    "type:check": "tsc --noEmit && tsc -p tsconfig.test.json --noEmit"
+    "prepare": "npm run build:lighthouse && npm run build:main",
+    "type:check": "tsc --noEmit && tsc -p tsconfig.main.json --noEmit && tsc -p tsconfig.test.json --noEmit"
   },
   "bin": {
     "pa-website-validator": "dist/index.js"

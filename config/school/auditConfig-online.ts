@@ -3,7 +3,7 @@ import {
   commonGatherersFolder,
   commonAuditsFolder,
   schoolInformativeAuditsFolder,
-} from "../configFolderingConstants";
+} from "../configFolderingConstants.js";
 
 import {
   groups,
@@ -11,7 +11,7 @@ import {
   bestPracticeAudits,
   seoAudits,
   pwaAudits,
-} from "../commonAuditsParts";
+} from "../commonAuditsParts.js";
 
 const customModelComplianceAudits = [
   {
@@ -85,7 +85,7 @@ const customReccomendationsAudits = [
   },
 ];
 
-module.exports = {
+export default {
   extends: "lighthouse:default",
   settings: {
     onlyCategories: [

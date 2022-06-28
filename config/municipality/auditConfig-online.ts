@@ -2,7 +2,7 @@ import {
   commonGatherersFolder,
   commonAuditsFolder,
   municipalityAuditsFolder,
-} from "../configFolderingConstants";
+} from "../configFolderingConstants.js";
 
 import {
   groups,
@@ -10,7 +10,7 @@ import {
   bestPracticeAudits,
   seoAudits,
   pwaAudits,
-} from "../commonAuditsParts";
+} from "../commonAuditsParts.js";
 
 const customModelComplianceAudits = [
   {
@@ -29,7 +29,7 @@ const customReccomendationsAudits = [
   { id: "common-security-ip-location", weight: 100 },
 ];
 
-module.exports = {
+export default {
   extends: "lighthouse:default",
   settings: {
     /*onlyCategories: [

@@ -1,10 +1,4 @@
 {
-  "compilerOptions": {
-    "esModuleInterop": true,
-    "module": "ES2022",
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "ES2022"
-  },
+  "extends": "./tsconfig.esmodules",
   "include": ["test"]
 }
