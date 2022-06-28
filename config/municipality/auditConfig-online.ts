@@ -2,6 +2,7 @@ import {
   commonGatherersFolder,
   commonAuditsFolder,
   municipalityAuditsFolder,
+  municipalityInformativeAuditsFolder,
 } from "../configFolderingConstants.js";
 
 import {
@@ -28,6 +29,38 @@ const customModelComplianceAudits = [
     weight: 100,
     group: "user-experience",
   },
+
+  {
+    id: "municipality-informative-cloud-infrastructure",
+    weight: 100,
+    group: "legislation",
+  },
+  {
+    id: "municipality-informative-license-and-attribution",
+    weight: 100,
+    group: "legislation",
+  },
+  {
+    id: "municipality-informative-reuse",
+    weight: 100,
+    group: "legislation",
+  },
+  {
+    id: "municipality-informative-user-experience-evaluation",
+    weight: 100,
+    group: "function",
+  },
+
+  {
+    id: "municipality-legislation-cookie-domain-check",
+    weight: 100,
+    group: "legislation",
+  },
+  {
+    id: "municipality-security",
+    weight: 100,
+    group: "security",
+  },
 ];
 
 const customReccomendationsAudits = [
@@ -37,16 +70,16 @@ const customReccomendationsAudits = [
 export default {
   extends: "lighthouse:default",
   settings: {
-    /*onlyCategories: [
+    onlyCategories: [
       "modelCompliance",
       "recommendations",
       "additionalTests",
       "performance",
-    ],*/
-
-    onlyAudits: [
-      "municipality-ux-ui-consistency-bootstrap-italia-double-check",
     ],
+
+    /*onlyAudits: [
+      "municipality-ux-ui-consistency-bootstrap-italia-double-check",
+    ],*/
   },
 
   passes: [
@@ -64,6 +97,13 @@ export default {
     municipalityAuditsFolder + "/menuAudit.js",
     municipalityAuditsFolder + "/secondLevelPagesAudit.js",
     municipalityAuditsFolder + "/bootstrapItaliaDoubleCheckAudit.js",
+    municipalityAuditsFolder + "/cookieDomainCheckAudit.js",
+    municipalityAuditsFolder + "/securityAudit.js",
+
+    municipalityInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
+    municipalityInformativeAuditsFolder + "/licenseAndAttributionAudit.js",
+    municipalityInformativeAuditsFolder + "/reuseAudit.js",
+    municipalityInformativeAuditsFolder + "/userExperienceEvaluation.js",
 
     commonAuditsFolder + "/ipLocationAudit.js",
   ],

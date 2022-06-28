@@ -2,6 +2,7 @@ import {
   commonGatherersFolder,
   commonInformativeAuditsFolder,
   municipalityAuditsFolder,
+  municipalityInformativeAuditsFolder,
 } from "../configFolderingConstants.js";
 
 import {
@@ -27,6 +28,38 @@ const customModelComplianceAudits = [
     id: "municipality-ux-ui-consistency-bootstrap-italia-double-check",
     weight: 100,
     group: "user-experience",
+  },
+
+  {
+    id: "municipality-informative-cloud-infrastructure",
+    weight: 100,
+    group: "legislation",
+  },
+  {
+    id: "municipality-informative-license-and-attribution",
+    weight: 100,
+    group: "legislation",
+  },
+  {
+    id: "municipality-informative-reuse",
+    weight: 100,
+    group: "legislation",
+  },
+  {
+    id: "municipality-informative-user-experience-evaluation",
+    weight: 100,
+    group: "function",
+  },
+
+  {
+    id: "municipality-informative-security",
+    weight: 100,
+    group: "security",
+  },
+  {
+    id: "municipality-informative-cookie-domain-check",
+    weight: 100,
+    group: "legislation",
   },
 ];
 
@@ -62,7 +95,17 @@ export default {
 
   audits: [
     commonInformativeAuditsFolder + "/ipLocationAudit.js",
+
+    municipalityAuditsFolder + "/menuAudit.js",
+    municipalityAuditsFolder + "/secondLevelPagesAudit.js",
     municipalityAuditsFolder + "/bootstrapItaliaDoubleCheckAudit.js",
+
+    municipalityInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
+    municipalityInformativeAuditsFolder + "/licenseAndAttributionAudit.js",
+    municipalityInformativeAuditsFolder + "/reuseAudit.js",
+    municipalityInformativeAuditsFolder + "/userExperienceEvaluation.js",
+    municipalityInformativeAuditsFolder + "/cookieDomainCheckAudit.js",
+    municipalityInformativeAuditsFolder + "/securityAudit.js",
   ],
 
   groups: groups,
