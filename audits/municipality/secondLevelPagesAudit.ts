@@ -6,7 +6,8 @@ import { CheerioAPI } from "cheerio";
 import lighthouse from "lighthouse";
 import {
   buildUrl,
-  getHREFValuesDataAttribute, getPageElementDataAttribute,
+  getHREFValuesDataAttribute,
+  getPageElementDataAttribute,
   loadPageData,
 } from "../../utils/utils";
 import { secondLevelPageNames } from "../../storage/municipality/vocabulary";
@@ -14,9 +15,9 @@ import { secondLevelPageNames } from "../../storage/municipality/vocabulary";
 const Audit = lighthouse.Audit;
 
 const greenResult = "Almeno il 50% dei titoli delle pagine è corretto.";
-const redResult =
-  "Meno del 50% dei titoli delle pagine è corretto.";
-const notExecuted = "Non è stato possibile condurre il test. Controlla le \"Modalità di verifica\" per scoprire di più."
+const redResult = "Meno del 50% dei titoli delle pagine è corretto.";
+const notExecuted =
+  'Non è stato possibile condurre il test. Controlla le "Modalità di verifica" per scoprire di più.';
 
 class LoadAudit extends lighthouse.Audit {
   static get meta() {
@@ -28,7 +29,7 @@ class LoadAudit extends lighthouse.Audit {
         "C.SI.1.7 - TITOLI DELLE PAGINE DI SECONDO LIVELLO - Nel sito comunale, i titoli delle pagine di secondo livello devono rispettare il vocabolario descritto dalla documentazione del modello di sito comunale.",
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
-      "CONDIZIONI DI SUCCESSO: almeno il 50% dei titoli delle pagine di secondo livello verificati corrispondono a quelli indicati nel documento di architettura dell'informazione del modello Comuni; MODALITÀ DI VERIFICA: viene verificata la correttezza dei titoli delle pagine di II livello accessibili dalla pagina di I livello \"Servizi\"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/v2022.1/index.html)",
+        'CONDIZIONI DI SUCCESSO: almeno il 50% dei titoli delle pagine di secondo livello verificati corrispondono a quelli indicati nel documento di architettura dell\'informazione del modello Comuni; MODALITÀ DI VERIFICA: viene verificata la correttezza dei titoli delle pagine di II livello accessibili dalla pagina di I livello "Servizi"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/v2022.1/index.html)',
       requiredArtifacts: ["origin"],
     };
   }
@@ -36,58 +37,87 @@ class LoadAudit extends lighthouse.Audit {
   static async audit(
     artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    //const url = artifacts.origin;
-    const url = 'http://wp-scuole.local/design-comuni-pagine-statiche/new-templates/dist/template-homepage.html'
+    const url = artifacts.origin
 
     let score = 0;
     const headings = [
       { key: "result", itemType: "text", text: "Risultato" },
       {
-        key: "found_menu_voices",
+        key: "correct_title_percentage",
         itemType: "text",
-        text: "Voci del menù identificate",
+        text: "% dei titoli corretti identificati",
       },
       {
-        key: "missing_menu_voices",
+        key: "correct_title_found",
         itemType: "text",
-        text: "Voci del menù mancanti",
+        text: "Titoli corretti identificati",
       },
       {
-        key: "wrong_order_menu_voices",
+        key: "wrong_title_found",
         itemType: "text",
-        text: "Voci del menù in ordine errato",
+        text: "Titoli errati identificati",
       },
     ];
 
     const items = [
       {
         result: redResult,
-        found_menu_voices: "",
-        missing_menu_voices: "",
-        wrong_order_menu_voices: "",
+        correct_title_percentage: "",
+        correct_title_found: "",
+        wrong_title_found: "",
       },
     ];
 
     let $: CheerioAPI = await loadPageData(url);
 
-    const secondLevelPageHref = await getHREFValuesDataAttribute($, '[data-element="management"]')
+    const secondLevelPageHref = await getHREFValuesDataAttribute(
+      $,
+      '[data-element="management"]'
+    );
     if (secondLevelPageHref.length <= 0) {
-      items[0].result = notExecuted + ' - pagina amministrazione non trovata'
+      items[0].result = notExecuted + " - pagina amministrazione non trovata";
       return {
         score: score,
         details: Audit.makeTableDetails(headings, items),
       };
     }
 
-    let secondLevelPageUrl = secondLevelPageHref[0]
+    let secondLevelPageUrl = secondLevelPageHref[0];
     if (!secondLevelPageUrl.includes(url)) {
-      secondLevelPageUrl = await buildUrl(url, secondLevelPageHref[0])
+      secondLevelPageUrl = await buildUrl(url, secondLevelPageHref[0]);
     }
 
-    $ = await loadPageData(secondLevelPageUrl)
-    const pageNames = await getPageElementDataAttribute($, '[data-element="amministration-element"]')
+    $ = await loadPageData(secondLevelPageUrl);
+    const pageNames = await getPageElementDataAttribute(
+      $,
+      '[data-element="amministration-element"]'
+    );
 
-    console.log('PAGE NAMES', pageNames)
+    const pagesInVocabulary = [];
+    const pagesNotInVocabulary = [];
+    for (const pageName of pageNames) {
+      if (secondLevelPageNames.includes(pageName.toLowerCase())) {
+        pagesInVocabulary.push(pageName.toLowerCase());
+      } else {
+        pagesNotInVocabulary.push(pageName.toLowerCase());
+      }
+    }
+
+    let pagesFoundInVocabularyPercentage = 0;
+    if (pageNames.length > 0) {
+      pagesFoundInVocabularyPercentage = parseInt(
+        ((pagesInVocabulary.length / pageNames.length) * 100).toFixed(0)
+      );
+    }
+
+    if (pagesFoundInVocabularyPercentage > 50) {
+      items[0].result = greenResult;
+      score = 1;
+    }
+
+    items[0].correct_title_percentage = pagesFoundInVocabularyPercentage + "%";
+    items[0].correct_title_found = pagesInVocabulary.join(", ");
+    items[0].wrong_title_found = pagesNotInVocabulary.join(", ");
 
     return {
       score: score,
