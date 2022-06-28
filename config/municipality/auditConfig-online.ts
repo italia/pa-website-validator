@@ -71,6 +71,11 @@ const customModelComplianceAudits = [
     weight: 100,
     group: "legislation",
   },
+  {
+    id: "municipality-faq-is-present",
+    weight: 100,
+    group: "function",
+  },
 ];
 
 const customReccomendationsAudits = [
@@ -111,6 +116,7 @@ export default {
     municipalityAuditsFolder + "/securityAudit.js",
     municipalityAuditsFolder + "/accessibilityDeclarationIsPresentAudit.js",
     municipalityAuditsFolder + "/privacyAudit.js",
+    municipalityAuditsFolder + "/faqAudit.js",
 
     municipalityInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
     municipalityInformativeAuditsFolder + "/licenseAndAttributionAudit.js",

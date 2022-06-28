@@ -251,6 +251,48 @@ async function hostnameExists(
   });
 }
 
+const urlExists = async (
+  url: string,
+  href: string
+): Promise<{ result: boolean; reason: string; inspectedUrl: string }> => {
+  let inspectUrl = href;
+  if ((await isInternalUrl(href)) && !href.includes(url)) {
+    inspectUrl = await buildUrl(url, href);
+  }
+
+  if (!(await isHttpsUrl(inspectUrl))) {
+    return {
+      result: false,
+      reason: " Protocollo HTTPS mancante nell'URL.",
+      inspectedUrl: inspectUrl,
+    };
+  }
+
+  const hostExists = await hostnameExists(inspectUrl);
+  if (!hostExists.exists) {
+    return {
+      result: false,
+      reason: " Hostname non trovato.",
+      inspectedUrl: inspectUrl,
+    };
+  }
+
+  const statusCode = await getHttpsRequestStatusCode(inspectUrl);
+  if (statusCode !== 200) {
+    return {
+      result: false,
+      reason: " Pagina non trovata.",
+      inspectedUrl: inspectUrl,
+    };
+  }
+
+  return {
+    result: true,
+    reason: "",
+    inspectedUrl: inspectUrl,
+  };
+};
+
 export {
   checkOrder,
   loadPageData,
@@ -263,4 +305,5 @@ export {
   isInternalUrl,
   isHttpsUrl,
   buildUrl,
+  urlExists,
 };

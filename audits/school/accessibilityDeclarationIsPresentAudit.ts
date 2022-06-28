@@ -5,14 +5,7 @@ import { CheerioAPI } from "cheerio";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import {
-  loadPageData,
-  getHttpsRequestStatusCode,
-  hostnameExists,
-  isHttpsUrl,
-  isInternalUrl,
-  buildUrl,
-} from "../../utils/utils";
+import { loadPageData, urlExists } from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -82,36 +75,11 @@ class LoadAudit extends Audit {
       elementObj.href !== "" &&
       elementObj.href.includes("form.agid.gov.it")
     ) {
-      let inspectUrl = elementObj.href;
-      items[0].link_destination = inspectUrl;
+      const checkUrl = await urlExists(url, elementObj.href);
+      items[0].link_destination = checkUrl.inspectedUrl;
 
-      if (
-        (await isInternalUrl(elementObj.href)) &&
-        !elementObj.href.includes(url)
-      ) {
-        inspectUrl = await buildUrl(url, elementObj.href);
-      }
-
-      if (!(await isHttpsUrl(inspectUrl))) {
-        items[0].result += " Protocollo HTTPS mancante nell'URL.";
-        return {
-          score: 0,
-          details: Audit.makeTableDetails(headings, items),
-        };
-      }
-
-      const hostExists = await hostnameExists(inspectUrl);
-      if (!hostExists.exists) {
-        items[0].result += " Hostname non trovato.";
-        return {
-          score: 0,
-          details: Audit.makeTableDetails(headings, items),
-        };
-      }
-
-      const statusCode = await getHttpsRequestStatusCode(inspectUrl);
-      if (statusCode !== 200) {
-        items[0].result += " Pagina non trovata.";
+      if (!checkUrl.result) {
+        items[0].result += checkUrl.reason;
         return {
           score: 0,
           details: Audit.makeTableDetails(headings, items),

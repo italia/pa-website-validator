@@ -13,14 +13,14 @@ const redResult = "Il link è errato o non è nella posizione corretta.";
 class LoadAudit extends Audit {
   static get meta() {
     return {
-      id: "municipality-legislation-privacy-is-present",
+      id: "municipality-faq-is-present",
       title:
-        "C.SI.3.3 - INFORMATIVA PRIVACY - Il sito comunale deve presentare l'informativa sul trattamento dei dati personali, secondo quanto previsto dalla normativa vigente.",
+        "C.SI.2.3 - RICHIESTA DI ASSISTENZA / DOMANDE FREQUENTI - Il sito comunale deve contenere una sezione per le domande più frequenti (FAQ).",
       failureTitle:
-        "C.SI.3.3 - INFORMATIVA PRIVACY - Il sito comunale deve presentare l'informativa sul trattamento dei dati personali, secondo quanto previsto dalla normativa vigente.",
+        "C.SI.2.3 - RICHIESTA DI ASSISTENZA / DOMANDE FREQUENTI - Il sito comunale deve contenere una sezione per le domande più frequenti (FAQ).",
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
-        "CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta alla privacy policy; MODALITÀ DI VERIFICA: viene verificata la presenza e posizione del link nel footer e che riporti correttamente alla privacy policy; RIFERIMENTI TECNICI E NORMATIVI: GDPR Artt. 13 e 14, Reg. UE n. 679/2016.",
+        'CONDIZIONI DI SUCCESSO: nel footer del sito comunale è presente un link che rimanda alla sezione di FAQ; MODALITÀ DI VERIFICA: viene analizzato il footer del sito alla ricerca di un link che contenga nel nome i termini "FAQ" oppure "domande frequenti"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni, EGovernment benchmark method paper 2020-2023](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/v2022.1/index.html)',
       requiredArtifacts: ["origin"],
     };
   }
@@ -28,7 +28,7 @@ class LoadAudit extends Audit {
   static async audit(
     artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    const url = artifacts.origin;
+    const url = artifacts.origin
 
     let score = 0;
     const headings = [
@@ -58,9 +58,7 @@ class LoadAudit extends Audit {
     ];
 
     const $: CheerioAPI = await loadPageData(url);
-    const privacyPolicyElement = $("footer").find(
-      '[data-element="privacy-policy-link"]'
-    );
+    const privacyPolicyElement = $("footer").find('[data-element="faq"]');
     const elementObj = $(privacyPolicyElement).attr();
     items[0].link_name = privacyPolicyElement.text() ?? "";
 
