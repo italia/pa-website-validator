@@ -37,7 +37,7 @@ class LoadAudit extends lighthouse.Audit {
   static async audit(
     artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    const url = artifacts.origin
+    const url = artifacts.origin;
 
     let score = 0;
     const headings = [

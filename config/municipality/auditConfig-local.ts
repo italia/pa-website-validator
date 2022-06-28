@@ -1,4 +1,8 @@
-import { commonInformativeAuditsFolder } from "../configFolderingConstants.js";
+import {
+  commonGatherersFolder,
+  commonInformativeAuditsFolder,
+  municipalityAuditsFolder,
+} from "../configFolderingConstants.js";
 
 import {
   groups,
@@ -8,7 +12,23 @@ import {
   pwaAudits,
 } from "../commonAuditsParts.js";
 
-const customModelComplianceAudits: [] = [];
+const customModelComplianceAudits = [
+  {
+    id: "municipality-menu-structure-match-model",
+    weight: 100,
+    group: "user-experience",
+  },
+  {
+    id: "municipality-second-level-pages",
+    weight: 100,
+    group: "user-experience",
+  },
+  {
+    id: "municipality-ux-ui-consistency-bootstrap-italia-double-check",
+    weight: 100,
+    group: "user-experience",
+  },
+];
 
 const customReccomendationsAudits = [
   {
@@ -31,11 +51,19 @@ export default {
 
   passes: [
     {
-      gatherers: [],
+      gatherers: [
+        commonGatherersFolder + "/originGatherer.js",
+        commonGatherersFolder + "/hostnameGatherer.js",
+        commonGatherersFolder + "/bootstrapItaliaCheckGatherer.js",
+        commonGatherersFolder + "/bootstrapItaliaSelectorCheckGatherer.js",
+      ],
     },
   ],
 
-  audits: [commonInformativeAuditsFolder + "/ipLocationAudit.js"],
+  audits: [
+    commonInformativeAuditsFolder + "/ipLocationAudit.js",
+    municipalityAuditsFolder + "/bootstrapItaliaDoubleCheckAudit.js",
+  ],
 
   groups: groups,
 

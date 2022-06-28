@@ -23,6 +23,11 @@ const customModelComplianceAudits = [
     weight: 100,
     group: "user-experience",
   },
+  {
+    id: "municipality-ux-ui-consistency-bootstrap-italia-double-check",
+    weight: 100,
+    group: "user-experience",
+  },
 ];
 
 const customReccomendationsAudits = [
@@ -39,7 +44,9 @@ export default {
       "performance",
     ],*/
 
-    onlyAudits: ["municipality-second-level-pages"],
+    onlyAudits: [
+      "municipality-ux-ui-consistency-bootstrap-italia-double-check",
+    ],
   },
 
   passes: [
@@ -47,6 +54,8 @@ export default {
       gatherers: [
         commonGatherersFolder + "/originGatherer.js",
         commonGatherersFolder + "/hostnameGatherer.js",
+        commonGatherersFolder + "/bootstrapItaliaCheckGatherer.js",
+        commonGatherersFolder + "/bootstrapItaliaSelectorCheckGatherer.js",
       ],
     },
   ],
@@ -54,6 +63,7 @@ export default {
   audits: [
     municipalityAuditsFolder + "/menuAudit.js",
     municipalityAuditsFolder + "/secondLevelPagesAudit.js",
+    municipalityAuditsFolder + "/bootstrapItaliaDoubleCheckAudit.js",
 
     commonAuditsFolder + "/ipLocationAudit.js",
   ],
