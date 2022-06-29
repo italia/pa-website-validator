@@ -2,8 +2,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import { allowedFonts } from "../../storage/school/allowedFonts";
-import { getRandomSchoolServiceUrl } from "../../utils/utils";
+import { allowedFonts } from "../../storage/municipality/allowedFonts";
+import { getRandomMunicipalityServiceUrl } from "../../utils/utils";
 import puppeteer from "puppeteer";
 
 const Audit = lighthouse.Audit;
@@ -17,14 +17,14 @@ const notExecuted =
 class LoadAudit extends Audit {
   static get meta() {
     return {
-      id: "school-ux-ui-consistency-fonts-check",
+      id: "municipality-ux-ui-consistency-fonts-check",
       title:
-        "C.SC.1.1 - COERENZA DELL'UTILIZZO DEI FONT (librerie di caratteri) - Il sito scuola deve utilizzare i font indicati dalla documentazione del modello di sito scuola.",
+        "C.SI.1.1 - CONSISTENZA DELL'UTILIZZO DEI FONT (librerie di caratteri) - Il sito comunale deve utilizzare i font indicati dalla documentazione del modello di sito comunale.",
       failureTitle:
-        "C.SC.1.1 - COERENZA DELL'UTILIZZO DEI FONT (librerie di caratteri) - Il sito scuola deve utilizzare i font indicati dalla documentazione del modello di sito scuola.",
+        "C.SI.1.1 - CONSISTENZA DELL'UTILIZZO DEI FONT (librerie di caratteri) - Il sito comunale deve utilizzare i font indicati dalla documentazione del modello di sito comunale.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        "CONDIZIONI DI SUCCESSO: il sito utilizza almeno le font Titillium Web e Lora; MODALITÀ DI VERIFICA: viene verificata la presenza delle font all'interno della Homepage del sito; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",
+        "CONDIZIONI DI SUCCESSO: il sito utilizza almeno i font Titillium Web e Lora; MODALITÀ DI VERIFICA: viene verificata la presenza dei font all'interno di una scheda servizio casualmente selezionata; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/v2022.1/index.html).",
       requiredArtifacts: ["origin"],
     };
   }
@@ -49,9 +49,8 @@ class LoadAudit extends Audit {
       },
     ];
 
-    const randomServiceToBeScanned: string = await getRandomSchoolServiceUrl(
-      url
-    );
+    const randomServiceToBeScanned: string =
+      await getRandomMunicipalityServiceUrl(url);
 
     if (!randomServiceToBeScanned) {
       return {

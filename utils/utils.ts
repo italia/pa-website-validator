@@ -114,7 +114,7 @@ const getHREFValuesDataAttribute = async (
   return serviceUrls;
 };
 
-const getRandomServiceUrl = async (url: string): Promise<string> => {
+const getRandomSchoolServiceUrl = async (url: string): Promise<string> => {
   let $ = await loadPageData(url);
 
   const serviceUrls = await getHREFValuesDataAttribute(
@@ -293,10 +293,45 @@ const urlExists = async (
   };
 };
 
+const getRandomMunicipalityServiceUrl = async (url: string) => {
+  let $ = await loadPageData(url);
+
+  const servicesPageHref = await getHREFValuesDataAttribute(
+    $,
+    '[data-element="service"]'
+  );
+  if (servicesPageHref.length <= 0) {
+    return "";
+  }
+
+  let allServicesUrl = servicesPageHref[0];
+  if (!allServicesUrl.includes(url)) {
+    allServicesUrl = await buildUrl(url, allServicesUrl);
+  }
+
+  $ = await loadPageData(allServicesUrl);
+
+  const serviceUrls = await getHREFValuesDataAttribute(
+    $,
+    '[data-element="service-element"]'
+  );
+  if (serviceUrls.length <= 0) {
+    return "";
+  }
+
+  let randomUrl = serviceUrls[Math.floor(Math.random() * serviceUrls.length)];
+  if (!randomUrl.includes(url)) {
+    randomUrl = await buildUrl(url, randomUrl);
+  }
+
+  return randomUrl;
+};
+
 export {
   checkOrder,
   loadPageData,
-  getRandomServiceUrl,
+  getRandomSchoolServiceUrl,
+  getRandomMunicipalityServiceUrl,
   getPageElementDataAttribute,
   getHREFValuesDataAttribute,
   getElementHrefValuesDataAttribute,

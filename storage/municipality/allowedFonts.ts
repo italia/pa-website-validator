@@ -1,1 +1,1 @@
-export const allowedFonts = [];
+export const allowedFonts = ["Titillium Web", "Lora"];

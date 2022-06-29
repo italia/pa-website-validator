@@ -81,6 +81,11 @@ const customModelComplianceAudits = [
     weight: 100,
     group: "function",
   },
+  {
+    id: "municipality-ux-ui-consistency-fonts-check",
+    weight: 100,
+    group: "user-experience",
+  },
 ];
 
 const customReccomendationsAudits = [
@@ -123,6 +128,7 @@ export default {
     municipalityAuditsFolder + "/privacyAudit.js",
     municipalityAuditsFolder + "/faqAudit.js",
     municipalityAuditsFolder + "/inefficiencyReportAudit.js",
+    municipalityAuditsFolder + "/fontsCheckAudit.js",
 
     municipalityInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
     municipalityInformativeAuditsFolder + "/licenseAndAttributionAudit.js",

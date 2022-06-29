@@ -9,7 +9,7 @@ import {
   checkOrder,
   getElementHrefValuesDataAttribute,
   getPageElementDataAttribute,
-  getRandomServiceUrl,
+  getRandomSchoolServiceUrl,
   loadPageData,
 } from "../../utils/utils";
 import { contentTypeItems } from "../../storage/school/contentTypeItems";
@@ -88,7 +88,9 @@ class LoadAudit extends Audit {
     const mandatoryMetadata = contentTypeItems.Metadati;
     const breadcrumbMandatoryElements = contentTypeItems.Breadcrumb;
 
-    const randomServiceToBeScanned: string = await getRandomServiceUrl(url);
+    const randomServiceToBeScanned: string = await getRandomSchoolServiceUrl(
+      url
+    );
 
     if (!randomServiceToBeScanned) {
       return {
