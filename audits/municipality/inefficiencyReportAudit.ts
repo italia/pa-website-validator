@@ -13,14 +13,14 @@ const redResult = "Il link è errato o non è nella posizione corretta.";
 class LoadAudit extends Audit {
   static get meta() {
     return {
-      id: "municipality-faq-is-present",
+      id: "municipality-inefficiency-report",
       title:
-        "C.SI.2.3 - RICHIESTA DI ASSISTENZA / DOMANDE FREQUENTI - Il sito comunale deve contenere una sezione per le domande più frequenti (FAQ).",
+        "C.SI.2.4 - SEGNALAZIONE DISSERVIZIO - Il sito comunale deve fornire al cittadino la possibilità di segnalare un disservizio, tramite email o servizio dedicato.",
       failureTitle:
-        "C.SI.2.3 - RICHIESTA DI ASSISTENZA / DOMANDE FREQUENTI - Il sito comunale deve contenere una sezione per le domande più frequenti (FAQ).",
+        "C.SI.2.4 - SEGNALAZIONE DISSERVIZIO - Il sito comunale deve fornire al cittadino la possibilità di segnalare un disservizio, tramite email o servizio dedicato.",
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
-        'CONDIZIONI DI SUCCESSO: nel footer del sito comunale è presente un link che rimanda alla sezione di FAQ; MODALITÀ DI VERIFICA: viene analizzato il footer del sito alla ricerca di un link che contenga nel nome i termini "FAQ" oppure "domande frequenti"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni, EGovernment benchmark method paper 2020-2023](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/v2022.1/index.html)',
+        'CONDIZIONI DI SUCCESSO: nel footer del sito comunale è presente un link che rimanda alla funzionalità di segnalazione disservizio; MODALITÀ DI VERIFICA: viene analizzato il footer del sito alla ricerca di un link che contenga nel nome i termini "disservizio" oppure "segnala disservizio" oppure "segnalazione disservizio"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni, EGovernment benchmark method paper 2020-2023](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/v2022.1/index.html)',
       requiredArtifacts: ["origin"],
     };
   }
@@ -58,7 +58,9 @@ class LoadAudit extends Audit {
     ];
 
     const $: CheerioAPI = await loadPageData(url);
-    const privacyPolicyElement = $("footer").find('[data-element="faq"]');
+    const privacyPolicyElement = $("footer").find(
+      '[data-element="report-inefficiency"]'
+    );
     const elementObj = $(privacyPolicyElement).attr();
     items[0].link_name = privacyPolicyElement.text() ?? "";
 

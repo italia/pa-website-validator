@@ -76,6 +76,11 @@ const customModelComplianceAudits = [
     weight: 100,
     group: "function",
   },
+  {
+    id: "municipality-inefficiency-report",
+    weight: 100,
+    group: "function",
+  },
 ];
 
 const customReccomendationsAudits = [
@@ -118,6 +123,7 @@ export default {
     municipalityAuditsFolder + "/privacyAudit.js",
     municipalityAuditsFolder + "/bootstrapItaliaDoubleCheckAudit.js",
     municipalityAuditsFolder + "/faqAudit.js",
+    municipalityAuditsFolder + "/inefficiencyReportAudit.js",
 
     municipalityInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
     municipalityInformativeAuditsFolder + "/licenseAndAttributionAudit.js",
