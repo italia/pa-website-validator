@@ -86,6 +86,11 @@ const customModelComplianceAudits = [
     weight: 100,
     group: "user-experience",
   },
+  {
+    id: "municipality-booking-appointment-check",
+    weight: 100,
+    group: "function",
+  },
 ];
 
 const customReccomendationsAudits = [
@@ -130,6 +135,7 @@ export default {
     municipalityAuditsFolder + "/faqAudit.js",
     municipalityAuditsFolder + "/inefficiencyReportAudit.js",
     municipalityAuditsFolder + "/fontsCheckAudit.js",
+    municipalityAuditsFolder + "/bookingAppointmentAudit.js",
 
     municipalityInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
     municipalityInformativeAuditsFolder + "/licenseAndAttributionAudit.js",
