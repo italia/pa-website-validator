@@ -51,6 +51,7 @@ declare namespace crawlerTypes {
   interface vocabularyResult {
     allArgumentsInVocabulary: boolean;
     elementNotIncluded: string[];
+    elementIncluded: string[];
   }
 }
 

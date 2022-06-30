@@ -91,6 +91,11 @@ const customModelComplianceAudits = [
     weight: 100,
     group: "function",
   },
+  {
+    id: "municipality-controlled-vocabularies",
+    weight: 100,
+    group: "function",
+  },
 ];
 
 const customReccomendationsAudits = [
@@ -131,6 +136,7 @@ export default {
     municipalityAuditsFolder + "/inefficiencyReportAudit.js",
     municipalityAuditsFolder + "/fontsCheckAudit.js",
     municipalityAuditsFolder + "/bookingAppointmentAudit.js",
+    municipalityAuditsFolder + "/controlledVocabulariesAudit.js",
 
     municipalityInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
     municipalityInformativeAuditsFolder + "/licenseAndAttributionAudit.js",

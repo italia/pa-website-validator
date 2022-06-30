@@ -10,7 +10,7 @@ import {
   getPageElementDataAttribute,
   loadPageData,
 } from "../../utils/utils";
-import { secondLevelPageNames } from "../../storage/municipality/vocabulary";
+import { secondLevelPageNames } from "../../storage/municipality/controlledVocabulary";
 
 const Audit = lighthouse.Audit;
 

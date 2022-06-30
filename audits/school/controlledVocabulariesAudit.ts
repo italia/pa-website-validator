@@ -1,12 +1,13 @@
 "use strict";
 
-import crawlerTypes from "../../types/crawler-types";
-import vocabularyResult = crawlerTypes.vocabularyResult;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { schoolModelVocabulary } from "../../storage/school/controlledVocabulary";
-import { getPageElementDataAttribute } from "../../utils/utils";
+import {
+  getPageElementDataAttribute,
+  areAllElementsInVocabulary,
+} from "../../utils/utils";
 import puppeteer from "puppeteer";
 import cheerio from "cheerio";
 
@@ -166,28 +167,4 @@ async function getArgumentsElements(url: string): Promise<string[]> {
 
     return [];
   }
-}
-
-async function areAllElementsInVocabulary(
-  pageArguments: string[],
-  vocabularyElements: string[]
-): Promise<vocabularyResult> {
-  let result = true;
-
-  if (pageArguments.length <= 0) {
-    result = false;
-  }
-
-  const elementNotIncluded = [];
-  for (const pageArgument of pageArguments) {
-    if (!vocabularyElements.includes(pageArgument)) {
-      result = false;
-      elementNotIncluded.push(pageArgument);
-    }
-  }
-
-  return {
-    allArgumentsInVocabulary: result,
-    elementNotIncluded: elementNotIncluded,
-  };
 }

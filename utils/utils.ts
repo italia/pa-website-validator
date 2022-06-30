@@ -6,6 +6,7 @@ import puppeteer from "puppeteer";
 import { CheerioAPI } from "cheerio";
 import https from "https";
 import dns from "dns";
+import vocabularyResult = crawlerTypes.vocabularyResult;
 
 const loadPageData = async (url: string): Promise<CheerioAPI> => {
   const browser = await puppeteer.launch();
@@ -327,6 +328,34 @@ const getRandomMunicipalityServiceUrl = async (url: string) => {
   return randomUrl;
 };
 
+const areAllElementsInVocabulary = async (
+  pageArguments: string[],
+  vocabularyElements: string[]
+): Promise<vocabularyResult> => {
+  let result = true;
+
+  if (pageArguments.length <= 0) {
+    result = false;
+  }
+
+  const elementNotIncluded = [];
+  const elementIncluded = [];
+  for (const pageArgument of pageArguments) {
+    if (!vocabularyElements.includes(pageArgument)) {
+      result = false;
+      elementNotIncluded.push(pageArgument);
+    } else {
+      elementIncluded.push(pageArgument);
+    }
+  }
+
+  return {
+    allArgumentsInVocabulary: result,
+    elementNotIncluded: elementNotIncluded,
+    elementIncluded: elementIncluded,
+  };
+};
+
 export {
   checkOrder,
   loadPageData,
@@ -341,4 +370,5 @@ export {
   isHttpsUrl,
   buildUrl,
   urlExists,
+  areAllElementsInVocabulary,
 };
