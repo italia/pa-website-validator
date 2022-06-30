@@ -13,7 +13,7 @@ import {
   pwaAudits,
 } from "../commonAuditsParts.js";
 
-const customModelComplianceAudits = [
+const modelComplianceInformationAudits = [
   {
     id: "municipality-menu-structure-match-model",
     weight: 100,
@@ -29,22 +29,12 @@ const customModelComplianceAudits = [
     weight: 100,
     group: "user-experience",
   },
-
-  {
-    id: "municipality-informative-cloud-infrastructure",
-    weight: 100,
-    group: "legislation",
-  },
   {
     id: "municipality-informative-license-and-attribution",
     weight: 100,
     group: "legislation",
   },
-  {
-    id: "municipality-informative-reuse",
-    weight: 100,
-    group: "legislation",
-  },
+
   {
     id: "municipality-informative-user-experience-evaluation",
     weight: 100,
@@ -103,21 +93,39 @@ const customModelComplianceAudits = [
   },
 ];
 
-const customReccomendationsAudits = [
-  { id: "common-security-ip-location", weight: 100 },
+const modelComplianceActiveAudits = [
+  {
+    id: "municipality-personal-area-security",
+    weight: 100,
+    group: "security",
+  },
 ];
+
+const reccomandationsAndAdditionalTestsAudits = [
+  {
+    id: "municipality-informative-cloud-infrastructure",
+    weight: 100,
+    group: "legislation",
+  },
+  {
+    id: "municipality-informative-reuse",
+    weight: 100,
+    group: "legislation",
+  },
+];
+
+const additionalTestsAudit = [{ id: "common-security-ip-location", weight: 100 }]
 
 export default {
   extends: "lighthouse:default",
   settings: {
-    /*onlyCategories: [
-      "modelCompliance",
-      "recommendations",
-      "additionalTests",
+    onlyCategories: [
       "performance",
-    ],*/
-
-    onlyAudits: ["municipality-contacts-assistency"],
+      "modelComplianceInformation",
+      "modelComplianceActive",
+      "reccomandationsAndAdditionalTests",
+      "additionalTests",
+    ],
   },
 
   passes: [
@@ -145,6 +153,7 @@ export default {
     municipalityAuditsFolder + "/bookingAppointmentAudit.js",
     municipalityAuditsFolder + "/controlledVocabulariesAudit.js",
     municipalityAuditsFolder + "/contactsAssistencyAudit.js",
+    municipalityAuditsFolder + "/personalAreaSecurityAudit.js",
 
     municipalityInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
     municipalityInformativeAuditsFolder + "/licenseAndAttributionAudit.js",
@@ -157,37 +166,44 @@ export default {
   groups: groups,
 
   categories: {
-    modelCompliance: {
-      title: "Test di conformità al modello di sito comunale",
+    performance: {
+      title: "Pacchetto Cittadino Informato: C.SI.4.1 - Velocità e tempi di risposta",
       description:
-        "Il validatore mostra i risultati degli audit per i singoli parametri di conformità in riferimento all'allegato 2 dell'Avviso 1.4.1.",
-      auditRefs: [...customModelComplianceAudits],
+        "Nel caso in cui il sito presenti livelli di prestazioni (media pesata di 6 metriche standard) inferiori a 50 secondo quanto calcolato e verificato tramite le librerie Lighthouse, il Comune deve pubblicare sul sito un “Piano di miglioramento del sito” che mostri, per ciascuna delle 6 metriche che impatta negativamente le prestazioni, le azioni future di miglioramento e le relative tempistiche di realizzazione attese. RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/)"
     },
 
-    recommendations: {
-      title:
-        "Raccomandazioni progettuali al modello di sito comunale e altri test",
+    modelComplianceInformation: {
+      title: "Pacchetto Cittadino Informato: criteri di conformità",
       description:
-        "Il validatore mostra i risultati degli audit per le raccomandazioni in riferimento all'allegato 2 dell'Avviso 1.4.1. A questi sono aggiunti ulteriori test per facilitare le attività di sviluppo e garantire un buon risultato.",
-      auditRefs: [...customReccomendationsAudits],
+        "Il validatore mostra i risultati degli audit per le raccomandazioni in riferimento all'[allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000dk829QAA#allegati). A questi sono aggiunti ulteriori test per facilitare le attività di sviluppo e garantire un buon risultato.",
+      auditRefs: [...modelComplianceInformationAudits],
+    },
+
+    modelComplianceActive: {
+      title:
+        "Pacchetto Cittadino Attivo: criteri di conformità",
+      description:
+        "Vengono mostrati i risultati degli audit, relativi ad alcuni dei criteri di conformità del Pacchetto Cittadino Attivo, in riferimento all'[allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000dk829QAA#allegati).",
+      auditRefs: [...modelComplianceActiveAudits],
+    },
+
+    reccomandationsAndAdditionalTests: {
+      title: "Raccomandazioni progettuali e test aggiuntivi",
+      description:
+        "Vengono mostrati i risultati degli audit, relativi ad alcune delle raccomandazioni progettuali del Pacchetto Cittadino Informato, in riferimento all'[allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000dk829QAA#allegati). A questi sono aggiunti ulteriori test per facilitare le attività di sviluppo e garantire un buon risultato.",
+      auditRefs: [...reccomandationsAndAdditionalTestsAudits],
     },
 
     additionalTests: {
       title: "Test aggiuntivi",
-      description:
-        "Vengono mostrati i risultati di test aggiuntivi di Lighthouse utili a facilitare le attività di sviluppo e garantire un buon risultato.",
+      description: "Vengono mostrati i risultati di test aggiuntivi utili a facilitare le attività di sviluppo e garantire un buon risultato.",
       auditRefs: [
+        ...additionalTestsAudit,
         ...accessibilityAudits,
         ...bestPracticeAudits,
         ...seoAudits,
         ...pwaAudits,
-      ],
-    },
-
-    performance: {
-      title: "Raccomandazione progettuale: Velocità e tempi di risposta",
-      description:
-        "Nel caso in cui il sito presenti livelli di prestazioni (media pesata di 6 metriche standard) inferiori a 50 secondo quanto calcolato e verificato tramite le librerie Lighthouse, il Comune deve pubblicare sul sito un “Piano di miglioramento del sito” che mostri, per ciascuna delle 6 metriche che impatta negativamente le prestazioni, le azioni future di miglioramento e le relative tempistiche di realizzazione attese. RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/)",
-    },
+      ]
+    }
   },
 };
