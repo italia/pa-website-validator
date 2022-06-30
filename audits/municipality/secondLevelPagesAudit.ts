@@ -7,7 +7,6 @@ import lighthouse from "lighthouse";
 import {
   buildUrl,
   getHREFValuesDataAttribute,
-  getPageElementDataAttribute,
   loadPageData,
 } from "../../utils/utils";
 import { secondLevelPageNames } from "../../storage/municipality/controlledVocabulary";
@@ -72,10 +71,10 @@ class LoadAudit extends lighthouse.Audit {
 
     const secondLevelPageHref = await getHREFValuesDataAttribute(
       $,
-      '[data-element="management"]'
+      '[data-element="service"]'
     );
     if (secondLevelPageHref.length <= 0) {
-      items[0].result = notExecuted + " - pagina amministrazione non trovata";
+      items[0].result = notExecuted + " - pagina servizi non trovata";
       return {
         score: score,
         details: Audit.makeTableDetails(headings, items),
@@ -88,25 +87,46 @@ class LoadAudit extends lighthouse.Audit {
     }
 
     $ = await loadPageData(secondLevelPageUrl);
-    const pageNames = await getPageElementDataAttribute(
+    const servicesSecondLevelPages = await getHREFValuesDataAttribute(
       $,
-      '[data-element="amministration-element"]'
+      '[data-element="service-page"]'
     );
+
+    if (servicesSecondLevelPages.length <= 0) {
+      items[0].result = notExecuted + " - pagina servizio di secondo livello non trovata";
+      return {
+        score: score,
+        details: Audit.makeTableDetails(headings, items),
+      };
+    }
+
+    let pageTitles = []
+    for (let page of servicesSecondLevelPages) {
+      if (!page.includes(url)) {
+        page = await buildUrl(url, page);
+      }
+
+      $ = await loadPageData(page)
+      const title = $('[data-element="page-name"]').text() ?? "";
+      if (title) {
+        pageTitles.push(title)
+      }
+    }
 
     const pagesInVocabulary = [];
     const pagesNotInVocabulary = [];
-    for (const pageName of pageNames) {
-      if (secondLevelPageNames.includes(pageName.toLowerCase())) {
-        pagesInVocabulary.push(pageName.toLowerCase());
+    for (const pageTitle of pageTitles) {
+      if (secondLevelPageNames.includes(pageTitle.toLowerCase())) {
+        pagesInVocabulary.push(pageTitle.toLowerCase());
       } else {
-        pagesNotInVocabulary.push(pageName.toLowerCase());
+        pagesNotInVocabulary.push(pageTitle.toLowerCase());
       }
     }
 
     let pagesFoundInVocabularyPercentage = 0;
-    if (pageNames.length > 0) {
+    if (pageTitles.length > 0) {
       pagesFoundInVocabularyPercentage = parseInt(
-        ((pagesInVocabulary.length / pageNames.length) * 100).toFixed(0)
+        ((pagesInVocabulary.length / pageTitles.length) * 100).toFixed(0)
       );
     }
 
