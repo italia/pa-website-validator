@@ -96,6 +96,11 @@ const customModelComplianceAudits = [
     weight: 100,
     group: "function",
   },
+  {
+    id: "municipality-contacts-assistency",
+    weight: 100,
+    group: "function",
+  },
 ];
 
 const customReccomendationsAudits = [
@@ -142,6 +147,7 @@ export default {
     municipalityAuditsFolder + "/fontsCheckAudit.js",
     municipalityAuditsFolder + "/bookingAppointmentAudit.js",
     municipalityAuditsFolder + "/controlledVocabulariesAudit.js",
+    municipalityAuditsFolder + "/contactsAssistencyAudit.js",
 
     municipalityInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
     municipalityInformativeAuditsFolder + "/licenseAndAttributionAudit.js",

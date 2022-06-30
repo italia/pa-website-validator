@@ -96,6 +96,11 @@ const customModelComplianceAudits = [
     weight: 100,
     group: "function",
   },
+  {
+    id: "municipality-contacts-assistency",
+    weight: 100,
+    group: "function",
+  },
 ];
 
 const customReccomendationsAudits = [
@@ -105,12 +110,14 @@ const customReccomendationsAudits = [
 export default {
   extends: "lighthouse:default",
   settings: {
-    onlyCategories: [
+    /*onlyCategories: [
       "modelCompliance",
       "recommendations",
       "additionalTests",
       "performance",
-    ],
+    ],*/
+
+    onlyAudits: ["municipality-contacts-assistency"],
   },
 
   passes: [
@@ -137,6 +144,7 @@ export default {
     municipalityAuditsFolder + "/fontsCheckAudit.js",
     municipalityAuditsFolder + "/bookingAppointmentAudit.js",
     municipalityAuditsFolder + "/controlledVocabulariesAudit.js",
+    municipalityAuditsFolder + "/contactsAssistencyAudit.js",
 
     municipalityInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
     municipalityInformativeAuditsFolder + "/licenseAndAttributionAudit.js",
