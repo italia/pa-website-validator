@@ -60,7 +60,15 @@ class LoadAudit extends Audit {
     const $: CheerioAPI = await loadPageData(url);
     const privacyPolicyElement = $("footer").find('[data-element="faq"]');
     const elementObj = $(privacyPolicyElement).attr();
-    items[0].link_name = privacyPolicyElement.text() ?? "";
+
+    const label = privacyPolicyElement.text().toLowerCase() ?? "";
+    items[0].link_name = label
+    if (!label.includes('disservizio') && !label.includes('segnala')) {
+      return {
+        score: 0,
+        details: Audit.makeTableDetails(headings, items),
+      };
+    }
 
     if (
       Boolean(elementObj) &&

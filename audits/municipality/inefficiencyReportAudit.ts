@@ -62,7 +62,15 @@ class LoadAudit extends Audit {
       '[data-element="report-inefficiency"]'
     );
     const elementObj = $(privacyPolicyElement).attr();
-    items[0].link_name = privacyPolicyElement.text() ?? "";
+
+    const label = privacyPolicyElement.text().toLowerCase() ?? "";
+    items[0].link_name = label
+    if (!label.includes('faq') && !label.includes('domande frequenti')) {
+      return {
+        score: 0,
+        details: Audit.makeTableDetails(headings, items),
+      };
+    }
 
     if (
       Boolean(elementObj) &&
