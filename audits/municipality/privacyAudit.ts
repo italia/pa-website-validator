@@ -7,8 +7,9 @@ import { loadPageData, urlExists } from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
-const greenResult = "Il link è corretto e nella posizione corretta.";
-const redResult = "Il link è errato o non è nella posizione corretta.";
+const greenResult = "Il link è corretto: è nel footer, la pagina esiste e la pagina è HTTPS";
+const yellowResult = "Il link è nel footer e la pagina esiste";
+const redResult = "Il link è errato o non è nella posizione non corretta.";
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -18,7 +19,7 @@ class LoadAudit extends Audit {
         "C.SI.3.3 - INFORMATIVA PRIVACY - Il sito comunale deve presentare l'informativa sul trattamento dei dati personali, secondo quanto previsto dalla normativa vigente.",
       failureTitle:
         "C.SI.3.3 - INFORMATIVA PRIVACY - Il sito comunale deve presentare l'informativa sul trattamento dei dati personali, secondo quanto previsto dalla normativa vigente.",
-      scoreDisplayMode: Audit.SCORING_MODES.BINARY,
+      scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
         "CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta alla privacy policy; MODALITÀ DI VERIFICA: viene verificata la presenza e posizione del link nel footer e che riporti correttamente alla privacy policy; RIFERIMENTI TECNICI E NORMATIVI: GDPR Artt. 13 e 14, Reg. UE n. 679/2016.",
       requiredArtifacts: ["origin"],
@@ -70,19 +71,16 @@ class LoadAudit extends Audit {
       elementObj.href !== "#" &&
       elementObj.href !== ""
     ) {
-      const checkUrl = await urlExists(url, elementObj.href);
-      items[0].link_destination = checkUrl.inspectedUrl;
+      const checkUrl = await urlExists(url, elementObj.href, false);
+      const checkUrlHttps = await urlExists(url, elementObj.href, true);
 
-      if (!checkUrl.result) {
-        items[0].result += checkUrl.reason;
-        return {
-          score: 0,
-          details: Audit.makeTableDetails(headings, items),
-        };
+      if (checkUrlHttps.result) {
+        items[0].result = greenResult
+        score = 1
+      } else if (checkUrl.result) {
+        items[0].result = yellowResult
+        score = 0.5
       }
-
-      items[0].result = greenResult;
-      score = 1;
     }
 
     return {

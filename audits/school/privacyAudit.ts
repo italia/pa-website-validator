@@ -7,8 +7,9 @@ import { loadPageData, urlExists } from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
-const greenResult = "Il link è corretto e nella posizione corretta.";
-const redResult = "Il link è errato o non è nella posizione corretta.";
+const greenResult = "Il link è corretto: è nel footer, la pagina esiste e la pagina è HTTPS";
+const yellowResult = "Il link è nel footer e la pagina esiste";
+const redResult = "Il link è errato o non è nella posizione non corretta.";
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -70,19 +71,16 @@ class LoadAudit extends Audit {
       elementObj.href !== "#" &&
       elementObj.href !== ""
     ) {
-      const checkUrl = await urlExists(url, elementObj.href);
-      items[0].link_destination = checkUrl.inspectedUrl;
+      const checkUrl = await urlExists(url, elementObj.href, false);
+      const checkUrlHttps = await urlExists(url, elementObj.href, true);
 
-      if (!checkUrl.result) {
-        items[0].result += checkUrl.reason;
-        return {
-          score: 0,
-          details: Audit.makeTableDetails(headings, items),
-        };
+      if (checkUrlHttps.result) {
+        items[0].result = greenResult
+        score = 1
+      } else if (checkUrl.result) {
+        items[0].result = yellowResult
+        score = 0.5
       }
-
-      items[0].result = greenResult;
-      score = 1;
     }
 
     return {

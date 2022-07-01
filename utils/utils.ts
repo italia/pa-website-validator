@@ -254,19 +254,22 @@ async function hostnameExists(
 
 const urlExists = async (
   url: string,
-  href: string
+  href: string,
+  checkHttps: boolean = false
 ): Promise<{ result: boolean; reason: string; inspectedUrl: string }> => {
   let inspectUrl = href;
   if ((await isInternalUrl(href)) && !href.includes(url)) {
     inspectUrl = await buildUrl(url, href);
   }
 
-  if (!(await isHttpsUrl(inspectUrl))) {
-    return {
-      result: false,
-      reason: " Protocollo HTTPS mancante nell'URL.",
-      inspectedUrl: inspectUrl,
-    };
+  if (checkHttps) {
+    if (!(await isHttpsUrl(inspectUrl))) {
+      return {
+        result: false,
+        reason: " Protocollo HTTPS mancante nell'URL.",
+        inspectedUrl: inspectUrl,
+      };
+    }
   }
 
   const hostExists = await hostnameExists(inspectUrl);
