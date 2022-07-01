@@ -114,6 +114,11 @@ const customReccomendationsAudits = [
     weight: 100,
     group: "security",
   },
+  {
+    id: "municipality-informative-subdomain",
+    weight: 100,
+    group: "security",
+  },
 ];
 
 export default {
@@ -161,6 +166,7 @@ export default {
     municipalityInformativeAuditsFolder + "/cookieDomainCheckAudit.js",
     municipalityInformativeAuditsFolder + "/securityAudit.js",
     municipalityInformativeAuditsFolder + "/domainAudit.js",
+    municipalityInformativeAuditsFolder + "/subDomainAudit.js",
   ],
 
   groups: groups,

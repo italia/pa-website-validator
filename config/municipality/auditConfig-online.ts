@@ -109,6 +109,11 @@ const modelComplianceActiveAudits = [
     weight: 100,
     group: "security",
   },
+  {
+    id: "municipality-subdomain",
+    weight: 100,
+    group: "security",
+  },
 ];
 
 const reccomandationsAndAdditionalTestsAudits = [
@@ -137,7 +142,7 @@ export default {
       "additionalTests",
     ],*/
 
-    onlyAudits: ['municipality-domain']
+    onlyAudits: ['municipality-domain', 'municipality-subdomain']
   },
 
   passes: [
@@ -168,6 +173,7 @@ export default {
     municipalityAuditsFolder + "/personalAreaSecurityAudit.js",
     municipalityAuditsFolder + "/feedbackElementAudit.js",
     municipalityAuditsFolder + "/domainAudit.js",
+    municipalityAuditsFolder + "/subDomainAudit.js",
 
     municipalityInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
     municipalityInformativeAuditsFolder + "/licenseAndAttributionAudit.js",
