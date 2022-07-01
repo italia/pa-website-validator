@@ -26,7 +26,7 @@ class LoadAudit extends lighthouse.Audit {
         "C.SI.2.5 - VALUTAZIONE DELL'ESPERIENZA D'USO, CHIAREZZA DELLE PAGINE INFORMATIVE - Il sito comunale deve consentire al cittadino di fornire una valutazione della chiarezza di ogni pagina di primo e secondo livello.",
       failureTitle:
         "C.SI.2.5 - VALUTAZIONE DELL'ESPERIENZA D'USO, CHIAREZZA DELLE PAGINE INFORMATIVE - Il sito comunale deve consentire al cittadino di fornire una valutazione della chiarezza di ogni pagina di primo e secondo livello.",
-      scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
+      scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
         "CONDIZIONI DI SUCCESSO: la funzionalità per valutare la chiarezza informativa è presente su tutte le pagine di primo e secondo livello; MODALITÀ DI VERIFICA: viene verificata la presenza del componente, tramite il suo attributo, su una pagina di primo o secondo livello selezionata casualmente; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni, EGovernment benchmark method paper 2020-2023](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/v2022.1/index.html)",
       requiredArtifacts: ["origin"],
@@ -36,19 +36,24 @@ class LoadAudit extends lighthouse.Audit {
   static async audit(
     artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    const url = artifacts.origin;
+    const url = 'http://wp-scuole.local/design-comuni-pagine-statiche/new-templates/dist/template-homepage.html'//artifacts.origin;
 
     let score = 0;
+
     const headings = [
       { key: "result", itemType: "text", text: "Risultato" },
       { key: "inspected_first_level_page", itemType: "text", text: "Pagina di primo livello ispezionata" },
+      { key: "first_level_feedback", itemType: "text", text: "Componente feedback presente" },
       { key: "inspected_second_level_page", itemType: "text", text: "Pagina di primo livello ispezionata" },
+      { key: "second_level_feedback", itemType: "text", text: "Componente feedback presente" },
     ];
 
     const items = [{
       result: redResult,
       inspected_first_level_page: "",
-      inspected_second_level_page: ""
+      first_level_feedback: "No",
+      inspected_second_level_page: "",
+      second_level_feedback: "No"
     }];
 
     let $ = await loadPageData(url)
@@ -58,7 +63,7 @@ class LoadAudit extends lighthouse.Audit {
     const newsPage = await getHREFValuesDataAttribute($, '[data-element="news"]')
     const lifePage = await getHREFValuesDataAttribute($, '[data-element="live"]')
 
-    const firstLevelPages = [...administrationPage, ...servicesPage, ...newsPage, ...lifePage]
+    const firstLevelPages = [...administrationPage, ...servicesPage, ...lifePage, ...newsPage]
 
     if (firstLevelPages.length <= 0) {
       items[0].result = notExecuted + ' nessuna pagina di primo livello trovata'
@@ -75,10 +80,10 @@ class LoadAudit extends lighthouse.Audit {
 
     $ = await loadPageData(randomFirstLevelPage)
     let feedbackElement = $('[data-element="feedback"]')
-    console.log('FEEDBACK ELEMENT', feedbackElement)
-    console.log('FEEDBACK ELEMENT TEXT', feedbackElement.text())
-
-    //TODO: booleano per verificare presenza componente su pagina di primo livello
+    let firstLevelFeedbackElement = true
+    if (!Boolean(feedbackElement) || feedbackElement.length === 0 || feedbackElement.text() === "") {
+      firstLevelFeedbackElement = false
+    }
 
     if (servicesPage.length <= 0) {
       items[0].result = notExecuted + ' pagina servizi non trovata'
@@ -109,14 +114,25 @@ class LoadAudit extends lighthouse.Audit {
 
     let randomSecondLevelServicePage = servicesSecondLevelPages[Math.floor(Math.random() * servicesSecondLevelPages.length)]
     if (!randomSecondLevelServicePage.includes(url)) {
-      randomSecondLevelServicePage = await buildUrl(url, servicesPage[0]);
+      randomSecondLevelServicePage = await buildUrl(url, randomSecondLevelServicePage);
     }
 
     $ = await loadPageData(randomSecondLevelServicePage)
     feedbackElement = $('[data-element="feedback"]')
+    let secondLevelFeedbackElement = true
+    if (!Boolean(feedbackElement) || feedbackElement.length === 0 || feedbackElement.text() === "") {
+      secondLevelFeedbackElement = false
+    }
 
-    //TODO: booleano per verificare presenza componente su pagina di secondo livello
+    if (firstLevelFeedbackElement && secondLevelFeedbackElement) {
+      items[0].result = greenResult
+      score = 1
+    }
 
+    items[0].inspected_first_level_page = randomFirstLevelPage
+    items[0].first_level_feedback = firstLevelFeedbackElement ? 'Sì' : 'No'
+    items[0].inspected_second_level_page = randomSecondLevelServicePage
+    items[0].second_level_feedback = secondLevelFeedbackElement ? 'Sì' : 'No'
 
     return {
       score: score,

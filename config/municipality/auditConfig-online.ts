@@ -91,6 +91,11 @@ const modelComplianceInformationAudits = [
     weight: 100,
     group: "function",
   },
+  {
+    id: "municipality-feedback-element",
+    weight: 100,
+    group: "function",
+  },
 ];
 
 const modelComplianceActiveAudits = [
@@ -119,13 +124,15 @@ const additionalTestsAudit = [{ id: "common-security-ip-location", weight: 100 }
 export default {
   extends: "lighthouse:default",
   settings: {
-    onlyCategories: [
+    /*onlyCategories: [
       "performance",
       "modelComplianceInformation",
       "modelComplianceActive",
       "reccomandationsAndAdditionalTests",
       "additionalTests",
-    ],
+    ],*/
+
+    onlyAudits: ['municipality-feedback-element']
   },
 
   passes: [
@@ -154,6 +161,7 @@ export default {
     municipalityAuditsFolder + "/controlledVocabulariesAudit.js",
     municipalityAuditsFolder + "/contactsAssistencyAudit.js",
     municipalityAuditsFolder + "/personalAreaSecurityAudit.js",
+    municipalityAuditsFolder + "/feedbackElementAudit.js",
 
     municipalityInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
     municipalityInformativeAuditsFolder + "/licenseAndAttributionAudit.js",
