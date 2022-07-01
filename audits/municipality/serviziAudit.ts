@@ -4,13 +4,15 @@ import { CheerioAPI } from "cheerio";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
+const Audit = lighthouse.Audit;
 
 import {
+  checkOrder,
   getPageElementDataAttribute,
-  getRandomMunicipalityServiceUrl,
+  getRandomMunicipalityServiceUrl, loadPageData,
 } from "../../utils/utils";
 
-const Audit = lighthouse.Audit;
+import { contentTypeItems } from "../../storage/municipality/contentTypeItems";
 
 const greenResult =
   "Tutte le voci obbligatorie sono presenti e nell'ordine corretto.";
@@ -71,8 +73,14 @@ class LoadAudit extends Audit {
 
     let score = 1;
 
+    const mandatoryIndexVoices = contentTypeItems.Indice;
+    const mandatoryHeaderVoices = contentTypeItems.Header;
+    const mandatoryBodyVoices = contentTypeItems.Body;
+    const totalMandatoryVoices = mandatoryIndexVoices.length + mandatoryHeaderVoices.length + mandatoryBodyVoices.length
+
     const randomServiceToBeScanned: string =
       await getRandomMunicipalityServiceUrl(url);
+
     if (!randomServiceToBeScanned) {
       return {
         score: 0,
@@ -80,12 +88,77 @@ class LoadAudit extends Audit {
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: notExecuted + " - Pagina servizio non trovata.",
+              result: notExecuted + "  - nessun servizio trovato su cui effettuare il test.",
             },
           ]
         ),
       };
     }
+
+    item[0].inspected_page = randomServiceToBeScanned;
+
+    const $: CheerioAPI = await loadPageData(randomServiceToBeScanned);
+
+    const indexElements = await getServicesFromIndex($, mandatoryIndexVoices);
+    const orderResult = await checkOrder(mandatoryIndexVoices, indexElements);
+    let missingMandatoryItems = mandatoryIndexVoices.filter(
+      (val) => !indexElements.includes(val)
+    );
+
+    const title = $('[data-element="service-title"]').text() ?? "";
+    if (!title) {
+      missingMandatoryItems.push(mandatoryHeaderVoices[0]);
+    }
+
+    const description = $('[data-element="service-description"]').text() ?? "";
+    if (!description) {
+      missingMandatoryItems.push(mandatoryHeaderVoices[1]);
+    }
+
+    const status = $('[data-element="service-status"]').text().trim().toLowerCase() ?? "";
+    if (!status || !status.includes('attivo')) {
+      missingMandatoryItems.push(mandatoryHeaderVoices[2]);
+    }
+
+    const argumentsTag = await getPageElementDataAttribute(
+      $,
+      '[data-element="service-topic"]'
+    );
+    if (argumentsTag.length <= 0) {
+      missingMandatoryItems.push(mandatoryHeaderVoices[3]);
+    }
+
+    const area = $('[data-element="service-area"]').text() ?? "";
+    if (!area) {
+      missingMandatoryItems.push(mandatoryBodyVoices[0]);
+    }
+
+    const foundMandatoryVoicesPercentage =
+      ((totalMandatoryVoices - missingMandatoryItems.length) /
+        totalMandatoryVoices) *
+      100;
+    const foundMandatoryVoicesNotCorrectOrderPercentage =
+      (orderResult.numberOfElementsNotInSequence / totalMandatoryVoices) * 100;
+
+    if (
+      foundMandatoryVoicesPercentage < 90 ||
+      foundMandatoryVoicesNotCorrectOrderPercentage > 10
+    ) {
+      score = 0;
+      item[0].result = redResult;
+    } else if (
+      (foundMandatoryVoicesPercentage > 90 &&
+        foundMandatoryVoicesPercentage < 100) ||
+      (foundMandatoryVoicesNotCorrectOrderPercentage > 0 &&
+        foundMandatoryVoicesNotCorrectOrderPercentage < 10)
+    ) {
+      score = 0.5;
+      item[0].result = yellowResult;
+    }
+
+    item[0].missing_mandatory_elements_found = missingMandatoryItems.join(", ");
+    item[0].mandatory_elements_not_right_order =
+      orderResult.elementsNotInSequence.join(", ");
 
     return {
       score: score,
@@ -102,7 +175,7 @@ async function getServicesFromIndex(
 ): Promise<string[]> {
   const indexList = await getPageElementDataAttribute(
     $,
-    '[data-element="index-link-list"]',
+    '[data-element=index-link-list]',
     "> li > a"
   );
 

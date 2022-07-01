@@ -106,6 +106,11 @@ const customModelComplianceAudits = [
     weight: 100,
     group: "function",
   },
+  {
+    id: "municipality-servizi-structure-match-model",
+    weight: 100,
+    group: "user-experience",
+  },
 ];
 
 const customReccomendationsAudits = [
@@ -158,6 +163,7 @@ export default {
     municipalityAuditsFolder + "/bookingAppointmentAudit.js",
     municipalityAuditsFolder + "/controlledVocabulariesAudit.js",
     municipalityAuditsFolder + "/contactsAssistencyAudit.js",
+    municipalityAuditsFolder + "/serviziAudit.js",
 
     municipalityInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
     municipalityInformativeAuditsFolder + "/licenseAndAttributionAudit.js",

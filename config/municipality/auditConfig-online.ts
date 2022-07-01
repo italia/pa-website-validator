@@ -101,6 +101,11 @@ const modelComplianceInformationAudits = [
     weight: 100,
     group: "security",
   },
+  {
+    id: "municipality-servizi-structure-match-model",
+    weight: 100,
+    group: "user-experience",
+  },
 ];
 
 const modelComplianceActiveAudits = [
@@ -142,7 +147,7 @@ export default {
       "additionalTests",
     ],*/
 
-    onlyAudits: ['municipality-domain', 'municipality-subdomain']
+    onlyAudits: ['municipality-servizi-structure-match-model']
   },
 
   passes: [
@@ -174,6 +179,7 @@ export default {
     municipalityAuditsFolder + "/feedbackElementAudit.js",
     municipalityAuditsFolder + "/domainAudit.js",
     municipalityAuditsFolder + "/subDomainAudit.js",
+    municipalityAuditsFolder + "/serviziAudit.js",
 
     municipalityInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
     municipalityInformativeAuditsFolder + "/licenseAndAttributionAudit.js",
