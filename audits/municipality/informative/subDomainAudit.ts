@@ -14,14 +14,14 @@ class LoadAudit extends Audit {
         "C.SE.5.2 - SOTTODOMINIO ISTITUZIONALE - L'area servizi per il cittadino del sito comunale deve utilizzare un sottodominio istituzionale congruente al dominio istituzionale del sito, presente all’interno dell’Anagrafe dei domini.",
       scoreDisplayMode: Audit.SCORING_MODES.INFORMATIVE,
       description:
-       "Questo audit produce un risultato solo quando viene effettuato su un sito pubblicato online.",
+        "Questo audit produce un risultato solo quando viene effettuato su un sito pubblicato online.",
       requiredArtifacts: [],
     };
   }
 
   static async audit(): Promise<{ score: number }> {
     return {
-      score: 1
+      score: 1,
     };
   }
 }

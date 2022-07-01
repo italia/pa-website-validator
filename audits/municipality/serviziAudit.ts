@@ -9,7 +9,8 @@ const Audit = lighthouse.Audit;
 import {
   checkOrder,
   getPageElementDataAttribute,
-  getRandomMunicipalityServiceUrl, loadPageData,
+  getRandomMunicipalityServiceUrl,
+  loadPageData,
 } from "../../utils/utils";
 
 import { contentTypeItems } from "../../storage/municipality/contentTypeItems";
@@ -76,7 +77,10 @@ class LoadAudit extends Audit {
     const mandatoryIndexVoices = contentTypeItems.Indice;
     const mandatoryHeaderVoices = contentTypeItems.Header;
     const mandatoryBodyVoices = contentTypeItems.Body;
-    const totalMandatoryVoices = mandatoryIndexVoices.length + mandatoryHeaderVoices.length + mandatoryBodyVoices.length
+    const totalMandatoryVoices =
+      mandatoryIndexVoices.length +
+      mandatoryHeaderVoices.length +
+      mandatoryBodyVoices.length;
 
     const randomServiceToBeScanned: string =
       await getRandomMunicipalityServiceUrl(url);
@@ -88,7 +92,9 @@ class LoadAudit extends Audit {
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: notExecuted + "  - nessun servizio trovato su cui effettuare il test.",
+              result:
+                notExecuted +
+                "  - nessun servizio trovato su cui effettuare il test.",
             },
           ]
         ),
@@ -101,7 +107,7 @@ class LoadAudit extends Audit {
 
     const indexElements = await getServicesFromIndex($, mandatoryIndexVoices);
     const orderResult = await checkOrder(mandatoryIndexVoices, indexElements);
-    let missingMandatoryItems = mandatoryIndexVoices.filter(
+    const missingMandatoryItems = mandatoryIndexVoices.filter(
       (val) => !indexElements.includes(val)
     );
 
@@ -115,8 +121,9 @@ class LoadAudit extends Audit {
       missingMandatoryItems.push(mandatoryHeaderVoices[1]);
     }
 
-    const status = $('[data-element="service-status"]').text().trim().toLowerCase() ?? "";
-    if (!status || !status.includes('attivo')) {
+    const status =
+      $('[data-element="service-status"]').text().trim().toLowerCase() ?? "";
+    if (!status || !status.includes("attivo")) {
       missingMandatoryItems.push(mandatoryHeaderVoices[2]);
     }
 
@@ -175,7 +182,7 @@ async function getServicesFromIndex(
 ): Promise<string[]> {
   const indexList = await getPageElementDataAttribute(
     $,
-    '[data-element=index-link-list]',
+    "[data-element=index-link-list]",
     "> li > a"
   );
 

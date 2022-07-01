@@ -62,8 +62,8 @@ class LoadAudit extends Audit {
     const elementObj = $(privacyPolicyElement).attr();
 
     const label = privacyPolicyElement.text().toLowerCase() ?? "";
-    items[0].link_name = label
-    if (!label.includes('disservizio') && !label.includes('segnala')) {
+    items[0].link_name = label;
+    if (!label.includes("disservizio") && !label.includes("segnala")) {
       return {
         score: 0,
         details: Audit.makeTableDetails(headings, items),

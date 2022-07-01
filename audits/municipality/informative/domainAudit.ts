@@ -19,7 +19,7 @@ class LoadAudit extends Audit {
     };
   }
 
-  static async audit(): Promise<{ score: number }>  {
+  static async audit(): Promise<{ score: number }> {
     return {
       score: 1,
     };

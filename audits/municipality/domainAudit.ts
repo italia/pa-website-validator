@@ -4,12 +4,11 @@
 import lighthouse from "lighthouse";
 const Audit = lighthouse.Audit;
 
-import {
-  domains
-} from "../../storage/municipality/allowedDomains";
+import { domains } from "../../storage/municipality/allowedDomains";
 
 const greenResult = "Il dominio utilizzato è corretto.";
-const redResult = "Il dominio utilizzato non è presente nell'elenco dei domini riservati.";
+const redResult =
+  "Il dominio utilizzato non è presente nell'elenco dei domini riservati.";
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -21,7 +20,7 @@ class LoadAudit extends Audit {
         "C.SI.5.2 - DOMINIO ISTITUZIONALE - Il sito comunale deve utilizzare un dominio istituzionale presente all’interno dell’Anagrafe dei domini.",
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
-       "CONDIZIONI DI SUCCESSO: il dominio istituzione del sito è valido; MODALITÀ DI VERIFICA: viene verificato che il dominio utilizzato dal sito sia presente nell'Elenco Nomi a Dominio Riservati per i Comuni Italiani; RIFERIMENTI TECNICI E NORMATIVI: [Elenco Nomi a Dominio Riservati Per i Comuni Italiani](https://www.nic.it/sites/default/files/docs/comuni_list.html)",
+        "CONDIZIONI DI SUCCESSO: il dominio istituzione del sito è valido; MODALITÀ DI VERIFICA: viene verificato che il dominio utilizzato dal sito sia presente nell'Elenco Nomi a Dominio Riservati per i Comuni Italiani; RIFERIMENTI TECNICI E NORMATIVI: [Elenco Nomi a Dominio Riservati Per i Comuni Italiani](https://www.nic.it/sites/default/files/docs/comuni_list.html)",
       requiredArtifacts: ["origin"],
     };
   }
@@ -47,7 +46,7 @@ class LoadAudit extends Audit {
     ];
 
     const hostnameParts = new URL(url).hostname.split(".");
-    const domain = hostnameParts.slice(hostnameParts.length > 3 ? -2 : -1)
+    const domain = hostnameParts.slice(hostnameParts.length > 3 ? -2 : -1);
     const domainResult = domain.join(".").split(".")[0];
 
     const items = [
@@ -57,18 +56,18 @@ class LoadAudit extends Audit {
       },
     ];
 
-    let correctDomain = false
+    let correctDomain = false;
     for (const domain of domains) {
-      const splitDomain = domain.split('.')
+      const splitDomain = domain.split(".");
       if (domainResult === splitDomain[1]) {
-        correctDomain = true
-        break
+        correctDomain = true;
+        break;
       }
     }
 
     if (correctDomain) {
-      score = 1
-      items[0].result = greenResult
+      score = 1;
+      items[0].result = greenResult;
     }
 
     return {

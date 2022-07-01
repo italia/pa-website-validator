@@ -5,7 +5,6 @@
 import lighthouse from "lighthouse";
 const Audit = lighthouse.Audit;
 
-
 class LoadAudit extends Audit {
   static get meta() {
     return {
@@ -21,11 +20,11 @@ class LoadAudit extends Audit {
     };
   }
 
-  static async audit(): Promise<{ score: number; }> {
+  static async audit(): Promise<{ score: number }> {
     return {
-      score: 1
-    }
-  };
+      score: 1,
+    };
+  }
 }
 
 module.exports = LoadAudit;

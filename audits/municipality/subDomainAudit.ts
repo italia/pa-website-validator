@@ -4,12 +4,11 @@
 import lighthouse from "lighthouse";
 const Audit = lighthouse.Audit;
 
-import {
-  domains
-} from "../../storage/municipality/allowedDomains";
+import { domains } from "../../storage/municipality/allowedDomains";
 
 const greenResult = "Il sottodominio utilizzato è corretto.";
-const redResult = "Il sottodominio utilizzato non è congruente al dominio del sito o non fa riferimento a un dominio riservato.";
+const redResult =
+  "Il sottodominio utilizzato non è congruente al dominio del sito o non fa riferimento a un dominio riservato.";
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -46,7 +45,7 @@ class LoadAudit extends Audit {
       },
     ];
 
-    const urlParts = url.split(".")
+    const urlParts = url.split(".");
 
     const items = [
       {
@@ -55,18 +54,18 @@ class LoadAudit extends Audit {
       },
     ];
 
-    let correctDomain = false
+    let correctDomain = false;
     for (const domain of domains) {
-      const splitDomain = domain.split('.')
+      const splitDomain = domain.split(".");
       if (urlParts[1] === splitDomain[0]) {
-        correctDomain = true
-        break
+        correctDomain = true;
+        break;
       }
     }
 
     if (correctDomain) {
-      score = 1
-      items[0].result = greenResult
+      score = 1;
+      items[0].result = greenResult;
     }
 
     return {

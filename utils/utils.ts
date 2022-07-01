@@ -255,7 +255,7 @@ async function hostnameExists(
 const urlExists = async (
   url: string,
   href: string,
-  checkHttps: boolean = false
+  checkHttps = false
 ): Promise<{ result: boolean; reason: string; inspectedUrl: string }> => {
   let inspectUrl = href;
   if ((await isInternalUrl(href)) && !href.includes(url)) {

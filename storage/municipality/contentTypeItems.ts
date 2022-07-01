@@ -4,15 +4,8 @@ export const contentTypeItems = {
     "Come fare",
     "Cosa serve",
     "Cosa si ottiene",
-    "Tempi e scadenze"
+    "Tempi e scadenze",
   ],
-  Header: [
-    "Titolo",
-    "Descrizione",
-    "Stato",
-    "Tassonomie argomenti",
-  ],
-  Body: [
-    "Area"
-  ]
+  Header: ["Titolo", "Descrizione", "Stato", "Tassonomie argomenti"],
+  Body: ["Area"],
 };

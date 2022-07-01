@@ -93,23 +93,24 @@ class LoadAudit extends lighthouse.Audit {
     );
 
     if (servicesSecondLevelPages.length <= 0) {
-      items[0].result = notExecuted + " - pagina servizio di secondo livello non trovata";
+      items[0].result =
+        notExecuted + " - pagina servizio di secondo livello non trovata";
       return {
         score: score,
         details: Audit.makeTableDetails(headings, items),
       };
     }
 
-    let pageTitles = []
+    const pageTitles = [];
     for (let page of servicesSecondLevelPages) {
       if (!page.includes(url)) {
         page = await buildUrl(url, page);
       }
 
-      $ = await loadPageData(page)
+      $ = await loadPageData(page);
       const title = $('[data-element="page-name"]').text() ?? "";
       if (title) {
-        pageTitles.push(title)
+        pageTitles.push(title);
       }
     }
 
