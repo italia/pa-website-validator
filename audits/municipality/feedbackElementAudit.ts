@@ -36,7 +36,7 @@ class LoadAudit extends lighthouse.Audit {
   static async audit(
     artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    const url = 'http://wp-scuole.local/design-comuni-pagine-statiche/new-templates/dist/template-homepage.html'//artifacts.origin;
+    const url = artifacts.origin;
 
     let score = 0;
 

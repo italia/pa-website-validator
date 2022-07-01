@@ -101,6 +101,11 @@ const customModelComplianceAudits = [
     weight: 100,
     group: "function",
   },
+  {
+    id: "municipality-informative-domain",
+    weight: 100,
+    group: "function",
+  },
 ];
 
 const customReccomendationsAudits = [
@@ -155,6 +160,7 @@ export default {
     municipalityInformativeAuditsFolder + "/userExperienceEvaluation.js",
     municipalityInformativeAuditsFolder + "/cookieDomainCheckAudit.js",
     municipalityInformativeAuditsFolder + "/securityAudit.js",
+    municipalityInformativeAuditsFolder + "/domainAudit.js",
   ],
 
   groups: groups,
