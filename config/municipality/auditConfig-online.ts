@@ -106,6 +106,11 @@ const modelComplianceInformationAudits = [
     weight: 100,
     group: "user-experience",
   },
+  {
+    id: "municipality-ux-ui-consistency-theme-version-check",
+    weight: 100,
+    group: "user-experience",
+  },
 ];
 
 const modelComplianceActiveAudits = [
@@ -139,15 +144,13 @@ const additionalTestsAudit = [{ id: "common-security-ip-location", weight: 100 }
 export default {
   extends: "lighthouse:default",
   settings: {
-    /*onlyCategories: [
+    onlyCategories: [
       "performance",
       "modelComplianceInformation",
       "modelComplianceActive",
       "reccomandationsAndAdditionalTests",
       "additionalTests",
-    ],*/
-
-    onlyAudits: ['municipality-servizi-structure-match-model']
+    ],
   },
 
   passes: [
@@ -180,6 +183,7 @@ export default {
     municipalityAuditsFolder + "/domainAudit.js",
     municipalityAuditsFolder + "/subDomainAudit.js",
     municipalityAuditsFolder + "/serviziAudit.js",
+    municipalityAuditsFolder + "/themeVersionCheckAudit.js",
 
     municipalityInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
     municipalityInformativeAuditsFolder + "/licenseAndAttributionAudit.js",

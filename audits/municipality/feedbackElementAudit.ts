@@ -51,9 +51,9 @@ class LoadAudit extends lighthouse.Audit {
     const items = [{
       result: redResult,
       inspected_first_level_page: "",
-      first_level_feedback: "No",
+      first_level_feedback: "",
       inspected_second_level_page: "",
-      second_level_feedback: "No"
+      second_level_feedback: ""
     }];
 
     let $ = await loadPageData(url)
