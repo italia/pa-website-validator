@@ -108,7 +108,8 @@ class LoadAudit extends lighthouse.Audit {
       }
 
       $ = await loadPageData(page);
-      const title = $('[data-element="page-name"]').text() ?? "";
+      const title = $('[data-element="page-name"]').text().trim() ?? "";
+
       if (title) {
         pageTitles.push(title);
       }

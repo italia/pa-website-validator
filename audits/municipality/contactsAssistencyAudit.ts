@@ -90,7 +90,7 @@ class LoadAudit extends Audit {
     const $: CheerioAPI = await loadPageData(randomServiceToBeScanned);
     const contactsElement = $('[data-element="contacts"]');
     const elementObj = $(contactsElement).attr();
-    item[0].link_name = contactsElement.text() ?? "";
+    item[0].link_name = contactsElement.text().trim() ?? "";
 
     if (
       Boolean(elementObj) &&

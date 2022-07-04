@@ -119,12 +119,12 @@ class LoadAudit extends Audit {
       (val) => !indexElements.includes(val)
     );
 
-    const title = $('[data-element="service-title"]').text() ?? "";
+    const title = $('[data-element="service-title"]').text().trim() ?? "";
     if (!title) {
       missingMandatoryItems.push(mandatoryHeaderVoices[0]);
     }
 
-    const description = $('[data-element="service-description"]').text() ?? "";
+    const description = $('[data-element="service-description"]').text().trim() ?? "";
     if (!description) {
       missingMandatoryItems.push(mandatoryHeaderVoices[1]);
     }
@@ -149,7 +149,7 @@ class LoadAudit extends Audit {
       missingMandatoryItems.push(mandatoryHeaderVoices[3]);
     }
 
-    const whatNeeds = $('[data-element="used-for"]').text() ?? "";
+    const whatNeeds = $('[data-element="used-for"]').text().trim() ?? "";
     if (!whatNeeds) {
       missingMandatoryItems.push(mandatoryBodyVoices[0]);
     }
@@ -168,7 +168,7 @@ class LoadAudit extends Audit {
       missingMandatoryItems = [...missingMandatoryItems, ...placeInfo];
     }
 
-    const metadata = $('[data-element="metadata"]').text() ?? "";
+    const metadata = $('[data-element="metadata"]').text().trim() ?? "";
     if (
       !metadata.toLowerCase().includes(mandatoryMetadata[0].toLowerCase()) ||
       !metadata.toLowerCase().includes(mandatoryMetadata[1].toLowerCase())

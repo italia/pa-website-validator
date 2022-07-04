@@ -111,12 +111,12 @@ class LoadAudit extends Audit {
       (val) => !indexElements.includes(val)
     );
 
-    const title = $('[data-element="service-title"]').text() ?? "";
+    const title = $('[data-element="service-title"]').text().trim() ?? "";
     if (!title) {
       missingMandatoryItems.push(mandatoryHeaderVoices[0]);
     }
 
-    const description = $('[data-element="service-description"]').text() ?? "";
+    const description = $('[data-element="service-description"]').text().trim() ?? "";
     if (!description) {
       missingMandatoryItems.push(mandatoryHeaderVoices[1]);
     }
@@ -135,7 +135,7 @@ class LoadAudit extends Audit {
       missingMandatoryItems.push(mandatoryHeaderVoices[3]);
     }
 
-    const area = $('[data-element="service-area"]').text() ?? "";
+    const area = $('[data-element="service-area"]').text().trim() ?? "";
     if (!area) {
       missingMandatoryItems.push(mandatoryBodyVoices[0]);
     }

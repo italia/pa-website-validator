@@ -64,7 +64,7 @@ class LoadAudit extends Audit {
       '[data-element="privacy-policy-link"]'
     );
     const elementObj = $(privacyPolicyElement).attr();
-    items[0].link_name = privacyPolicyElement.text() ?? "";
+    items[0].link_name = privacyPolicyElement.text().trim() ?? "";
 
     if (
       Boolean(elementObj) &&

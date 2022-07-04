@@ -119,7 +119,7 @@ class LoadAudit extends lighthouse.Audit {
     if (
       !feedbackElement ||
       feedbackElement.length === 0 ||
-      feedbackElement.text() === ""
+      feedbackElement.text().trim() === ""
     ) {
       firstLevelFeedbackElement = false;
     }
@@ -169,7 +169,7 @@ class LoadAudit extends lighthouse.Audit {
     if (
       !feedbackElement ||
       feedbackElement.length === 0 ||
-      feedbackElement.text() === ""
+      feedbackElement.text().trim() === ""
     ) {
       secondLevelFeedbackElement = false;
     }

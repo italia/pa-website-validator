@@ -69,7 +69,7 @@ class LoadAudit extends Audit {
     const $ = await loadPageData(randomServiceToBeScanned);
     const bookingAppointmentElement = $('[data-element="appointment-booking"]');
     const elementObj = $(bookingAppointmentElement).attr();
-    const elementName = bookingAppointmentElement.text().trim() ?? "";
+    const elementName = bookingAppointmentElement.text().trim().trim() ?? "";
 
     if (
       Boolean(elementObj) &&

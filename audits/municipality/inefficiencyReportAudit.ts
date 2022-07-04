@@ -63,7 +63,7 @@ class LoadAudit extends Audit {
     );
     const elementObj = $(privacyPolicyElement).attr();
 
-    const label = privacyPolicyElement.text().toLowerCase() ?? "";
+    const label = privacyPolicyElement.text().trim().toLowerCase() ?? "";
     items[0].link_name = label;
     if (!label.includes("faq") && !label.includes("domande frequenti")) {
       return {

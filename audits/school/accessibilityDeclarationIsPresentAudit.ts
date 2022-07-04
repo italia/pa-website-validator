@@ -66,7 +66,7 @@ class LoadAudit extends Audit {
       '[data-element="accessibility-link"]'
     );
     const elementObj = $(accessibilityDeclarationElement).attr();
-    items[0].link_name = accessibilityDeclarationElement.text() ?? "";
+    items[0].link_name = accessibilityDeclarationElement.text().trim() ?? "";
 
     if (
       Boolean(elementObj) &&
