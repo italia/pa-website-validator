@@ -63,7 +63,7 @@ class LoadAudit extends Audit {
 
     const label = privacyPolicyElement.text().trim().toLowerCase() ?? "";
     items[0].link_name = label;
-    if (!label.includes("disservizio") && !label.includes("segnala")) {
+    if (!label.includes("faq") && !label.includes("domande frequenti")) {
       return {
         score: 0,
         details: Audit.makeTableDetails(headings, items),

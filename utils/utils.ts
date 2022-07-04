@@ -262,39 +262,49 @@ const urlExists = async (
     inspectUrl = await buildUrl(url, href);
   }
 
-  if (checkHttps) {
-    if (!(await isHttpsUrl(inspectUrl))) {
+  try {
+    if (checkHttps) {
+      if (!(await isHttpsUrl(inspectUrl))) {
+        return {
+          result: false,
+          reason: " Protocollo HTTPS mancante nell'URL.",
+          inspectedUrl: inspectUrl,
+        };
+      }
+    }
+
+    const hostExists = await hostnameExists(inspectUrl);
+    if (!hostExists.exists) {
       return {
         result: false,
-        reason: " Protocollo HTTPS mancante nell'URL.",
+        reason: " Hostname non trovato.",
         inspectedUrl: inspectUrl,
       };
     }
-  }
 
-  const hostExists = await hostnameExists(inspectUrl);
-  if (!hostExists.exists) {
+    const statusCode = await getHttpsRequestStatusCode(inspectUrl);
+    if (statusCode !== 200) {
+      return {
+        result: false,
+        reason: " Pagina non trovata.",
+        inspectedUrl: inspectUrl,
+      };
+    }
+
+    return {
+      result: true,
+      reason: "",
+      inspectedUrl: inspectUrl,
+    };
+  } catch (ex) {
+    console.log(ex)
+
     return {
       result: false,
-      reason: " Hostname non trovato.",
+      reason: "Internal exception",
       inspectedUrl: inspectUrl,
     };
   }
-
-  const statusCode = await getHttpsRequestStatusCode(inspectUrl);
-  if (statusCode !== 200) {
-    return {
-      result: false,
-      reason: " Pagina non trovata.",
-      inspectedUrl: inspectUrl,
-    };
-  }
-
-  return {
-    result: true,
-    reason: "",
-    inspectedUrl: inspectUrl,
-  };
 };
 
 const getRandomMunicipalityServiceUrl = async (url: string) => {

@@ -75,6 +75,8 @@ class LoadAudit extends Audit {
       const checkUrl = await urlExists(url, elementObj.href, false);
       const checkUrlHttps = await urlExists(url, elementObj.href, true);
 
+      items[0].link_destination = checkUrlHttps.inspectedUrl
+
       if (checkUrlHttps.result) {
         items[0].result = greenResult;
         score = 1;
