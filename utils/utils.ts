@@ -297,7 +297,7 @@ const urlExists = async (
       inspectedUrl: inspectUrl,
     };
   } catch (ex) {
-    console.log(ex)
+    console.log(ex);
 
     return {
       result: false,

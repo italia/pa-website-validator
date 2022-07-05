@@ -138,8 +138,7 @@ class LoadAudit extends lighthouse.Audit {
 
     item[0].element_in_municipality_model_percentage =
       elementInMunicipalityModelPercentage + "%";
-    item[0].element_in_eurovoc_percentage =
-      elementInEurovocPercentage + "%";
+    item[0].element_in_eurovoc_percentage = elementInEurovocPercentage + "%";
     item[0].element_not_in_municipality_vocabulary =
       elementInfoMunicipalityVocabulary.elementNotIncluded.join(", ");
     item[0].element_not_in_eurovoc_vocabulary =

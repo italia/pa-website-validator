@@ -124,7 +124,8 @@ class LoadAudit extends Audit {
       missingMandatoryItems.push(mandatoryHeaderVoices[0]);
     }
 
-    const description = $('[data-element="service-description"]').text().trim() ?? "";
+    const description =
+      $('[data-element="service-description"]').text().trim() ?? "";
     if (!description) {
       missingMandatoryItems.push(mandatoryHeaderVoices[1]);
     }

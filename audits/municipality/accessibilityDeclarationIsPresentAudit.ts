@@ -5,7 +5,7 @@ import { CheerioAPI } from "cheerio";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import {loadPageData, urlExists} from "../../utils/utils";
+import { loadPageData, urlExists } from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -68,11 +68,8 @@ class LoadAudit extends Audit {
     const elementObj = $(accessibilityDeclarationElement).attr();
     items[0].link_name = accessibilityDeclarationElement.text().trim() ?? "";
 
-    if (
-      Boolean(elementObj) &&
-      "href" in elementObj
-    ) {
-      items[0].link_destination = elementObj.href
+    if (Boolean(elementObj) && "href" in elementObj) {
+      items[0].link_destination = elementObj.href;
 
       if (!elementObj.href.includes("https://form.agid.gov.it")) {
         items[0].result += " L'url deve iniziare con: https://form.agid.gov.it";

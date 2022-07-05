@@ -41,7 +41,43 @@ PA Website Validator utilizza le seguenti tecnologie
 
 PA Website Validator necessita [Node.js](https://nodejs.org/it/) v16+ (LTS), [npm] e [Google Chrome](https://www.google.com/chrome/).
 
-## Installazione
+## Plugins
+
+PA Website validator utilizza le seguenti dipendenze esterne principali
+
+| Plugin              | Repository                        |
+| ------------------- | --------------------------------- |
+| Lighthouse          | [GitHub][lighthouse-url]          |
+| Yargs               | [GitHub][yargs-url]               |
+| Puppeteer           | [GitHub][puppeteer-url]           |
+| Cheerio             | [GitHub][cheerio-url]             |
+| JSDOM               | [GitHub][jsdom-url]               |
+| Geo Ip              | [GitHub][geoip-url]               |
+| Get SSL Certificate | [GitHub][get-ssl-certificate-url] |
+
+## Installazione tramite build
+
+Per l'installazione tramite build, partire dalla repository ed effettuare il clone, poi:
+
+```sh
+cd pa-website-validator
+npm install
+npm run prepare
+```
+
+Viene generata la folder "dist", utilizzo:
+
+```sh
+node dist --type <type> --destination <folder> --report <report_name> --website <url> --scope <local|online [online]> --view
+```
+
+Esempio:
+
+```bash
+node dist --type school --destination ~/pa-italia-crawler-reports --report myreport --website https://www.ismonnet.edu.it/ --scope online --view
+```
+
+## Installazione globale
 
 Per l'installazione in locale partendo dalla repository effettuare il clone, poi:
 
@@ -57,26 +93,12 @@ NB: Potrebbe essere necessario riavviare la shell/terminale per la propagazione 
 npm cache clean
 ```
 
-## Plugins
-
-PA Website validator utilizza le seguenti dipendenze esterne principali
-
-| Plugin              | Repository                        |
-| ------------------- | --------------------------------- |
-| Lighthouse          | [GitHub][lighthouse-url]          |
-| Yargs               | [GitHub][yargs-url]               |
-| Puppeteer           | [GitHub][puppeteer-url]           |
-| Cheerio             | [GitHub][cheerio-url]             |
-| JSDOM               | [GitHub][jsdom-url]               |
-| Geo Ip              | [GitHub][geoip-url]               |
-| Get SSL Certificate | [GitHub][get-ssl-certificate-url] |
-
 ## Utilizzo
 
 Comando:
 
 ```bash
-pa-website-validator --type <type> --destination <folder> --report <report_name> --website <url> --scope <local|online|local-information-architecture|online-information-architecture[online]> --view
+pa-website-validator --type <type> --destination <folder> --report <report_name> --website <url> --scope <local|online [online]> --view
 ```
 
 Esempio:
