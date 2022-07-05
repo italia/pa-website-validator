@@ -183,7 +183,7 @@ async function getServicesFromIndex(
 ): Promise<string[]> {
   const indexList = await getPageElementDataAttribute(
     $,
-    '[data-element="index-link-list"]',
+    '[data-element="page-index"]',
     "> li > a"
   );
 

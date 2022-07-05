@@ -80,7 +80,7 @@ class LoadAudit extends lighthouse.Audit {
     );
     const servicesPage = await getHREFValuesDataAttribute(
       $,
-      '[data-element="service"]'
+      '[data-element="all-services"]'
     );
     const newsPage = await getHREFValuesDataAttribute(
       $,
@@ -140,7 +140,7 @@ class LoadAudit extends lighthouse.Audit {
     $ = await loadPageData(secondLevelPageUrl);
     const servicesSecondLevelPages = await getHREFValuesDataAttribute(
       $,
-      '[data-element="service-page"]'
+      '[data-element="service-category-link"]'
     );
 
     if (servicesSecondLevelPages.length <= 0) {

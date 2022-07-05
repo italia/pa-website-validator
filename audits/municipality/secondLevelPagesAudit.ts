@@ -71,7 +71,7 @@ class LoadAudit extends lighthouse.Audit {
 
     const secondLevelPageHref = await getHREFValuesDataAttribute(
       $,
-      '[data-element="service"]'
+      '[data-element="all-services"]'
     );
     if (secondLevelPageHref.length <= 0) {
       items[0].result = notExecuted + " - pagina servizi non trovata";
@@ -89,7 +89,7 @@ class LoadAudit extends lighthouse.Audit {
     $ = await loadPageData(secondLevelPageUrl);
     const servicesSecondLevelPages = await getHREFValuesDataAttribute(
       $,
-      '[data-element="service-page"]'
+      '[data-element="service-category-link"]'
     );
 
     if (servicesSecondLevelPages.length <= 0) {

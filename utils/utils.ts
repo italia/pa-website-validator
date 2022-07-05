@@ -327,7 +327,7 @@ const getRandomMunicipalityServiceUrl = async (url: string) => {
 
   const serviceUrls = await getHREFValuesDataAttribute(
     $,
-    '[data-element="service-element"]'
+    '[data-element="service-link"]'
   );
   if (serviceUrls.length <= 0) {
     return "";
@@ -351,14 +351,18 @@ const areAllElementsInVocabulary = async (
     result = false;
   }
 
+  const lowerCasedVocabulary = vocabularyElements.map((vocabularyElements) =>
+    vocabularyElements.toLowerCase()
+  );
+
   const elementNotIncluded = [];
   const elementIncluded = [];
   for (const pageArgument of pageArguments) {
-    if (!vocabularyElements.includes(pageArgument)) {
+    if (!lowerCasedVocabulary.includes(pageArgument.toLowerCase())) {
       result = false;
-      elementNotIncluded.push(pageArgument);
+      elementNotIncluded.push(pageArgument.toLowerCase());
     } else {
-      elementIncluded.push(pageArgument);
+      elementIncluded.push(pageArgument.toLowerCase());
     }
   }
 
