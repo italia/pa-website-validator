@@ -70,10 +70,17 @@ class LoadAudit extends Audit {
 
     if (
       Boolean(elementObj) &&
-      "href" in elementObj &&
-      elementObj.href.includes("https://form.agid.gov.it")
+      "href" in elementObj
     ) {
-      items[0].link_destination = elementObj.href;
+      items[0].link_destination = elementObj.href
+
+      if (!elementObj.href.includes("https://form.agid.gov.it")) {
+        items[0].result += " L'url deve iniziare con: https://form.agid.gov.it";
+        return {
+          score: 0,
+          details: Audit.makeTableDetails(headings, items),
+        };
+      }
 
       const checkUrl = await urlExists(url, elementObj.href);
       if (!checkUrl.result) {
