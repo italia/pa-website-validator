@@ -71,7 +71,6 @@ const customReccomendationsAudits = [
     weight: 100,
     group: "user-experience",
   },
-  { id: "common-security-ip-location", weight: 100, group: "security" },
   { id: "school-informative-reuse", weight: 100, group: "legislation" },
   {
     id: "school-informative-license-and-attribution",
@@ -83,6 +82,10 @@ const customReccomendationsAudits = [
     weight: 100,
     group: "legislation",
   },
+];
+
+const customAdditionalAudits = [
+  { id: "common-security-ip-location", weight: 100, group: "security" },
 ];
 
 export default {
@@ -152,6 +155,7 @@ export default {
       description:
         "Vengono mostrati i risultati di test aggiuntivi di Lighthouse utili a facilitare le attività di sviluppo e garantire un buon risultato.",
       auditRefs: [
+        ...customAdditionalAudits,
         ...accessibilityAudits,
         ...bestPracticeAudits,
         ...seoAudits,

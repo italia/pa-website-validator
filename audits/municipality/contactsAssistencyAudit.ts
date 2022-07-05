@@ -26,7 +26,7 @@ class LoadAudit extends Audit {
         "C.SI.2.2 - RICHIESTA DI ASSISTENZA / CONTATTI - All'interno del sito comunale, nel contenuto della scheda servizio, devono essere comunicati i contatti dell'ufficio preposto all'erogazione del servizio.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        'CONDIZIONI DI SUCCESSO: in ogni scheda servizio è presente la voce "Contatti" (NB: questo audit è correlato a C.SI.1.3); MODALITÀ DI VERIFICA: viene verificata la presenza della voce "Contatti" in una scheda servizio casualmente selezionata; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni, EGovernment benchmark method paper 2020-2023](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/v2022.1/index.html)',
+        'CONDIZIONI DI SUCCESSO: in ogni scheda servizio è presente la voce "Richiedi assistenza" (NB: questo audit è correlato a C.SI.1.3); MODALITÀ DI VERIFICA: viene verificata la presenza della voce "Contatti" in una scheda servizio casualmente selezionata; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni, EGovernment benchmark method paper 2020-2023](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/v2022.1/index.html)',
       requiredArtifacts: ["origin"],
     };
   }

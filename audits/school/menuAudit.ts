@@ -30,7 +30,7 @@ class LoadAudit extends lighthouse.Audit {
         "C.SC.1.4 - VOCI DI MENÙ DI PRIMO LIVELLO - Il sito scuola deve presentare tutte le voci di menù di primo livello, nell'esatto ordine descritto dalla documentazione del modello di sito scuola.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        "CONDIZIONI DI SUCCESSO: le voci di menù del sito sono esattamente quelle indicate nel documento di architettura dell'informazione e sono nell'ordine indicato, ovvero La scuola, Servizi, Novità, Didattica; MODALITÀ DI VERIFICA: vengono identificate le voci presenti nel menù del sito e il loro ordine, confrontandole con quanto indicato nel documento di architettura dell'informazione, applicando una tolleranza di 2 voci aggiuntive; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",
+        "CONDIZIONI DI SUCCESSO: le voci di menù del sito sono esattamente quelle indicate nel documento di architettura dell'informazione e sono nell'ordine indicato, ovvero Scuola, Servizi, Novità, Didattica; MODALITÀ DI VERIFICA: ricercando uno specifico attributo \"data-element\" come spiegato nella documentazione tecnica, vengono identificate le voci presenti nel menù del sito e il loro ordine, confrontandole con quanto indicato nel documento di architettura dell'informazione, applicando una tolleranza di 3 voci aggiuntive; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html), Documentazione tecnica.",
       requiredArtifacts: ["origin"],
     };
   }
