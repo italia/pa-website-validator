@@ -5,7 +5,7 @@ import { CheerioAPI } from "cheerio";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import { loadPageData } from "../../utils/utils";
+import {loadPageData, urlExists} from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -70,11 +70,27 @@ class LoadAudit extends Audit {
 
     if (
       Boolean(elementObj) &&
-      "href" in elementObj &&
-      elementObj.href.includes("form.agid.gov.it") &&
-      elementObj.href.includes("https")
+      "href" in elementObj
     ) {
-      items[0].link_destination = elementObj.href;
+      items[0].link_destination = elementObj.href
+
+      if (!elementObj.href.includes("https://form.agid.gov.it")) {
+        items[0].result += " L'url deve iniziare con: https://form.agid.gov.it";
+        return {
+          score: 0,
+          details: Audit.makeTableDetails(headings, items),
+        };
+      }
+
+      const checkUrl = await urlExists(url, elementObj.href);
+      if (!checkUrl.result) {
+        items[0].result += checkUrl.reason;
+        return {
+          score: 0,
+          details: Audit.makeTableDetails(headings, items),
+        };
+      }
+
       items[0].result = greenResult;
       score = 1;
     }
