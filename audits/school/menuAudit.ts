@@ -13,11 +13,12 @@ import {
 
 const Audit = lighthouse.Audit;
 
-const greenResult = "Le voci del menù del sito e il loro ordine è corretto.";
+const greenResult =
+  "Le voci del menù del sito sono presenti e il loro ordine è corretto.";
 const yellowResult =
-  "Sono presenti fino a 2 voci aggiuntive nel menù del sito.";
+  "Sono presenti fino a 3 voci aggiuntive nel menù del sito.";
 const redResult =
-  "Almeno una delle voci obbligatorie è assente o inesatta e/o le voci sono in ordine errato e/o sono presenti 7 o più voci nel menù del sito.";
+  "Almeno una delle voci obbligatorie è assente o inesatta e/o le voci sono in ordine errato e/o sono presenti 8 o più voci nel menù del sito.";
 
 class LoadAudit extends lighthouse.Audit {
   static get meta() {
@@ -116,7 +117,7 @@ class LoadAudit extends lighthouse.Audit {
       items[0].result = greenResult;
     } else if (
       menuElements.length > 4 &&
-      menuElements.length < 7 &&
+      menuElements.length < 8 &&
       containsMandatoryElementsResult &&
       mandatoryElementsCorrectOrder
     ) {
