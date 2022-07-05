@@ -72,7 +72,7 @@ const modelComplianceInformationAudits = [
   {
     id: "municipality-controlled-vocabularies",
     weight: 100,
-    group: "function",
+    group: "user-experience",
   },
   {
     id: "municipality-contacts-assistency",

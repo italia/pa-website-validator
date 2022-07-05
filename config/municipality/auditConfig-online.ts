@@ -34,7 +34,6 @@ const modelComplianceInformationAudits = [
     weight: 100,
     group: "legislation",
   },
-
   {
     id: "municipality-informative-user-experience-evaluation",
     weight: 100,
@@ -44,7 +43,7 @@ const modelComplianceInformationAudits = [
   {
     id: "municipality-legislation-cookie-domain-check",
     weight: 100,
-    group: "legislation",
+    group: "security",
   },
   {
     id: "municipality-security",
@@ -84,7 +83,7 @@ const modelComplianceInformationAudits = [
   {
     id: "municipality-controlled-vocabularies",
     weight: 100,
-    group: "function",
+    group: "user-experience",
   },
   {
     id: "municipality-contacts-assistency",
