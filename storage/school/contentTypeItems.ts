@@ -4,6 +4,8 @@ export const contentTypeItems = {
     "Come si accede al servizio",
     "Cosa serve",
     "Tempi e scadenze",
+    "Contatti",
+    "Ulteriori informazioni",
   ],
   Header: [
     "Titolo",
@@ -17,7 +19,7 @@ export const contentTypeItems = {
     "Sede canale fisico",
     "Metadati",
   ],
-  Luogo: ["indirizzo", "cap", "orari", "gps"],
+  Luogo: ["indirizzo", "cap", "orari", "gps", "email", "pec", "telefono"],
 
   Metadati: ["Pubblicato", "Revisione"],
   Breadcrumb: ["Famiglie e studenti", "Personale scolastico"],
