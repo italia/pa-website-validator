@@ -7,6 +7,7 @@ import lighthouse from "lighthouse";
 import {
   buildUrl,
   getHREFValuesDataAttribute,
+  getPageElementDataAttribute,
   loadPageData,
 } from "../../utils/utils";
 import { secondLevelPageNames } from "../../storage/municipality/controlledVocabulary";
@@ -87,37 +88,14 @@ class LoadAudit extends lighthouse.Audit {
     }
 
     $ = await loadPageData(secondLevelPageUrl);
-    const servicesSecondLevelPages = await getHREFValuesDataAttribute(
+    const servicesSecondLevelPagesNames = await getPageElementDataAttribute(
       $,
       '[data-element="service-category-link"]'
     );
 
-    if (servicesSecondLevelPages.length <= 0) {
-      items[0].result =
-        notExecuted + " - pagina servizio di secondo livello non trovata";
-      return {
-        score: score,
-        details: Audit.makeTableDetails(headings, items),
-      };
-    }
-
-    const pageTitles = [];
-    for (let page of servicesSecondLevelPages) {
-      if (!page.includes(url)) {
-        page = await buildUrl(url, page);
-      }
-
-      $ = await loadPageData(page);
-      const title = $('[data-element="page-name"]').text().trim() ?? "";
-
-      if (title) {
-        pageTitles.push(title);
-      }
-    }
-
     const pagesInVocabulary = [];
     const pagesNotInVocabulary = [];
-    for (const pageTitle of pageTitles) {
+    for (const pageTitle of servicesSecondLevelPagesNames) {
       if (secondLevelPageNames.includes(pageTitle.toLowerCase())) {
         pagesInVocabulary.push(pageTitle.toLowerCase());
       } else {
@@ -126,9 +104,12 @@ class LoadAudit extends lighthouse.Audit {
     }
 
     let pagesFoundInVocabularyPercentage = 0;
-    if (pageTitles.length > 0) {
+    if (servicesSecondLevelPagesNames.length > 0) {
       pagesFoundInVocabularyPercentage = parseInt(
-        ((pagesInVocabulary.length / pageTitles.length) * 100).toFixed(0)
+        (
+          (pagesInVocabulary.length / servicesSecondLevelPagesNames.length) *
+          100
+        ).toFixed(0)
       );
     }
 
