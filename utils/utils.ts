@@ -312,7 +312,7 @@ const getRandomMunicipalityServiceUrl = async (url: string) => {
 
   const servicesPageHref = await getHREFValuesDataAttribute(
     $,
-    '[data-element="service"]'
+    '[data-element="all-services"]'
   );
   if (servicesPageHref.length <= 0) {
     return "";

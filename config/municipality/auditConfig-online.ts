@@ -136,6 +136,11 @@ const reccomandationsAndAdditionalTestsAudits = [
     weight: 100,
     group: "legislation",
   },
+  {
+    id: "municipality-metatag",
+    weight: 100,
+    group: "user-experience",
+  },
 ];
 
 const additionalTestsAudit = [
@@ -185,6 +190,7 @@ export default {
     municipalityAuditsFolder + "/subDomainAudit.js",
     municipalityAuditsFolder + "/serviziAudit.js",
     municipalityAuditsFolder + "/themeVersionCheckAudit.js",
+    municipalityAuditsFolder + "/metatagAudit.js",
 
     municipalityInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
     municipalityInformativeAuditsFolder + "/licenseAndAttributionAudit.js",
