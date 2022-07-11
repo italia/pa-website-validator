@@ -51,6 +51,11 @@ class LoadAudit extends Audit {
         itemType: "text",
         text: "Destinazione link",
       },
+      {
+        key: "existing_page",
+        itemType: "text",
+        text: "Pagina esistente",
+      },
     ];
 
     const items = [
@@ -58,6 +63,7 @@ class LoadAudit extends Audit {
         result: redResult,
         link_name: "",
         link_destination: "",
+        existing_page: "No",
       },
     ];
 
@@ -88,6 +94,7 @@ class LoadAudit extends Audit {
         };
       }
 
+      items[0].existing_page = "Sì";
       items[0].result = greenResult;
       score = 1;
     }

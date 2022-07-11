@@ -49,6 +49,16 @@ class LoadAudit extends Audit {
         itemType: "text",
         text: "Destinazione link",
       },
+      {
+        key: "existing_page",
+        itemType: "text",
+        text: "Pagina esistente",
+      },
+      {
+        key: "secure_page",
+        itemType: "text",
+        text: "Pagina sicura",
+      },
     ];
 
     const items = [
@@ -56,6 +66,8 @@ class LoadAudit extends Audit {
         result: redResult,
         link_name: "",
         link_destination: "",
+        existing_page: "No",
+        secure_page: "No",
       },
     ];
 
@@ -77,9 +89,12 @@ class LoadAudit extends Audit {
 
       if (checkUrlHttps.result) {
         items[0].result = greenResult;
+        items[0].existing_page = "Sì";
+        items[0].secure_page = "Sì";
         score = 1;
       } else if (checkUrl.result) {
         items[0].result = yellowResult;
+        items[0].existing_page = "Sì";
         score = 0.5;
       }
     }
