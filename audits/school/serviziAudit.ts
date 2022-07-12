@@ -101,7 +101,7 @@ class LoadAudit extends Audit {
             {
               result:
                 notExecuted +
-                " - nessun servizio trovato su cui effettuare il test",
+                " Nessuna pagina servizio trovata su cui effettuare il test.",
             },
           ]
         ),
