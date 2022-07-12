@@ -11,9 +11,9 @@ class LoadAudit extends Audit {
     return {
       id: "school-informative-cookie-domain-check",
       title:
-        "C.SC.2.3 - COOKIE - Il sito scuola deve presentare cookie tecnici in linea con la normativa vigente.",
+        "C.SC.2.3 - COOKIE - Il sito della scuola deve presentare cookie tecnici in linea con la normativa vigente.",
       failureTitle:
-        "C.SC.2.3 - COOKIE - Il sito scuola deve presentare cookie tecnici in linea con la normativa vigente.",
+        "C.SC.2.3 - COOKIE - Il sito della scuola deve presentare cookie tecnici in linea con la normativa vigente.",
       scoreDisplayMode: Audit.SCORING_MODES.INFORMATIVE,
       description:
         "Questo audit produce un risultato solo quando viene effettuato su un sito pubblicato online.",
