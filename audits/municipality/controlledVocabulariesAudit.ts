@@ -18,7 +18,7 @@ import {
 const Audit = lighthouse.Audit;
 
 const greenResult =
-  "Tutti gli argomenti appartengono all’elenco di voci del modello o al vocabolario EuroVoc.";
+  "Tutti gli argomenti appartengono all’elenco di voci del modello.";
 const yellowResult =
   "Almeno il 50% degli argomenti appartengono all'elenco di voci del modello o al vocabolario EuroVoc.";
 const redResult =
@@ -116,24 +116,37 @@ class LoadAudit extends lighthouse.Audit {
       eurovocVocabulary
     );
 
-    const elementInMunicipalityModelPercentage = (
-      (elementInfoMunicipalityVocabulary.elementIncluded.length /
-        argumentList.length) *
-      100
-    ).toFixed(0);
+    const elementInMunicipalityModelPercentage = parseInt(
+      (
+        (elementInfoMunicipalityVocabulary.elementIncluded.length /
+          argumentList.length) *
+        100
+      ).toFixed(0)
+    );
 
-    const elementInEurovocPercentage = (
-      (elementInfoEurovocVocabulary.elementIncluded.length /
-        argumentList.length) *
-      100
-    ).toFixed(0);
+    const elementInEurovocPercentage = parseInt(
+      (
+        (elementInfoEurovocVocabulary.elementIncluded.length /
+          argumentList.length) *
+        100
+      ).toFixed(0)
+    );
 
     if (elementInfoMunicipalityVocabulary.allArgumentsInVocabulary) {
       score = 1;
       item[0].result = greenResult;
-    } else if (elementInfoEurovocVocabulary.allArgumentsInVocabulary) {
+    } else if (
+      elementInMunicipalityModelPercentage > 50 ||
+      elementInEurovocPercentage > 50
+    ) {
       item[0].result = yellowResult;
       score = 0.5;
+    } else if (
+      elementInMunicipalityModelPercentage < 50 ||
+      elementInEurovocPercentage < 50
+    ) {
+      item[0].result = redResult;
+      score = 0;
     }
 
     item[0].element_in_municipality_model_percentage =
