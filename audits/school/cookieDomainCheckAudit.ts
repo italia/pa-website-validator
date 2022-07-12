@@ -11,9 +11,9 @@ class LoadAudit extends Audit {
     return {
       id: "school-legislation-cookie-domain-check",
       title:
-        "C.SC.2.3 - COOKIE - Il sito scuola deve presentare cookie tecnici in linea con la normativa vigente.",
+        "C.SC.2.3 - COOKIE - Il sito della scuola deve presentare cookie tecnici in linea con la normativa vigente.",
       failureTitle:
-        "C.SC.2.3 - COOKIE - Il sito scuola deve presentare cookie tecnici in linea con la normativa vigente.",
+        "C.SC.2.3 - COOKIE - Il sito della scuola deve presentare cookie tecnici in linea con la normativa vigente.",
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
         "CONDIZIONI DI SUCCESSO: il sito presenta solo cookie idonei come definito dalla normativa; MODALITÀ DI VERIFICA: viene verificato che il dominio dei cookie identificati sia corrispondente al dominio del sito web; RIFERIMENTI TECNICI E NORMATIVI: [Linee guida cookie e altri strumenti di tracciamento - 10 giugno 2021](https://www.garanteprivacy.it/home/docweb/-/docweb-display/docweb/9677876)",

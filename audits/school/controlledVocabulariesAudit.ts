@@ -14,11 +14,11 @@ import cheerio from "cheerio";
 const Audit = lighthouse.Audit;
 
 const greenResult =
-  "Tutti gli argomenti appartengono all’elenco di voci del modello scuole.";
+  "Tutti gli argomenti appartengono all’elenco di voci del modello.";
 const yellowResult =
-  "Tutti gli argomenti appartengono al vocabolario di EuroVoc ma non all'elenco di voci del modello scuole.";
+  "Almeno il 50% degli argomenti appartengono all'elenco di voci del modello.";
 const redResult =
-  "Più del 50% degli argomenti non appartengono alle voci del modello scuole o al vocabolario di EuroVoc.";
+  "Meno del 50% degli argomenti appartengono alle voci del modello.";
 const notExecuted =
   "Non è stato possibile trovare gli argomenti o la pagina che li contiene. Controlla le “Modalità di verifica” per scoprire di più.";
 
@@ -27,12 +27,12 @@ class LoadAudit extends lighthouse.Audit {
     return {
       id: "school-controlled-vocabularies",
       title:
-        "R.SC.1.1 - VOCABOLARI CONTROLLATI - Il sito scuola deve utilizzare argomenti forniti dal modello di sito scuola.",
+        "R.SC.1.1 - VOCABOLARI CONTROLLATI - Il sito della scuola deve utilizzare argomenti forniti dal modello di sito scuola.",
       failureTitle:
-        "R.SC.1.1 - VOCABOLARI CONTROLLATI - Il sito scuola deve utilizzare argomenti forniti dal modello di sito scuola.",
+        "R.SC.1.1 - VOCABOLARI CONTROLLATI - Il sito della scuola deve utilizzare argomenti forniti dal modello di sito scuola.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        "CONDIZIONI DI SUCCESSO: almeno il 50% degli argomenti presenti appartiene alla lista indicata all'interno del documento di architettura dell'informazione del modello scuole alla voce \"Le parole della scuola\"; MODALITÀ DI VERIFICA: gli argomenti identificati all'interno della funzione di ricerca del sito vengono confrontati con l'elenco di voci presente nel documento di architettura dell'informazione; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Elenco degli argomenti del Modello scuole](https://docs.google.com/spreadsheets/d/1D4KbaA__xO9x_iBm08KvZASjrrFLYLKX/edit?usp=sharing&ouid=115576940975219606169&rtpof=true&sd=true)",
+        "CONDIZIONI DI SUCCESSO: gli argomenti utilizzati appartengono alla lista indicata all'interno del documento di architettura dell'informazione del modello scuole alla voce \"Le parole della scuola\"; MODALITÀ DI VERIFICA: gli argomenti identificati all'interno della funzione di ricerca del sito vengono confrontati con l'elenco di voci presente nel documento di architettura dell'informazione, ricercandoli usando specifici attributi \"data-element\" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Elenco degli argomenti del Modello scuole](https://docs.google.com/spreadsheets/d/1MoayTY05SE4ixtgBsfsdngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=2135815526), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
       requiredArtifacts: ["origin"],
     };
   }
@@ -98,11 +98,9 @@ class LoadAudit extends lighthouse.Audit {
       score = 0.5;
     }
 
-    item[0].element_in_school_model_percentage = (
-      100 - numberOfElementsNotInScuoleModelPercentage
-    )
-      .toFixed(0)
-      .toString();
+    item[0].element_in_school_model_percentage =
+      (100 - numberOfElementsNotInScuoleModelPercentage).toFixed(0).toString() +
+      "%";
     item[0].element_not_in_school_model =
       schoolModelCheck.elementNotIncluded.join(", ");
 

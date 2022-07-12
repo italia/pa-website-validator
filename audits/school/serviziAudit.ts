@@ -19,11 +19,11 @@ const Audit = lighthouse.Audit;
 const greenResult =
   "Tutte le voci obbligatorie sono presenti e nell'ordine corretto.";
 const yellowResult =
-  "Non sono presenti tutte le voci obbligatorie o non tutte le voci obbligatorie sono nell'ordine corretto.";
+  "Fino a 2 voci obbligatorie non sono presenti o 1 voce non è nell'ordine corretto.";
 const redResult =
-  "Non sono presenti tutte le voci obbligatorie e non tutte le voci obbligatorie sono nell'ordine corretto.";
+  "Più di 2 voci obbligatorie non sono presenti o più di 1 voce non è nell'ordine corretto.";
 const notExecuted =
-  'Non è stato possibile condurre il test. Controlla le "Modalità di verifica" per scoprire di più.';
+  "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.";
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -35,7 +35,7 @@ class LoadAudit extends Audit {
         "R.SC.1.2 - SCHEDE INFORMATIVE DI SERVIZIO - Tutte le schede informative dei servizi devono mostrare le voci segnalate come obbligatorie all'interno dell'architettura dell'informazione, nell'ordine segnalato dal modello.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        "CONDIZIONI DI SUCCESSO: nella scheda servizio sono presenti almeno 7 su 8 delle voci obbligatorie e almeno 7 su 8 delle voci obbligatorie sono nell'ordine corretto; MODALITÀ DI VERIFICA: viene verificato quali voci sono presenti all'interno di una scheda servizio casualmente selezionata e il loro ordine; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",
+        "CONDIZIONI DI SUCCESSO: nelle schede informative di servizio le voci indicate come obbligatorie sono presenti e sono nell'ordine corretto; MODALITÀ DI VERIFICA: viene verificato se le voci indicate come obbligatorie all'interno del documento di architettura dell'informazione sono presenti. Inoltre viene verificato se le voci obbligatorie presenti nell'indice della pagina sono nell'ordine corretto. La verifica viene effettuata su una scheda servizio casualmente selezionata, ricercando le voci indicate nella documentazione tecnica tramite specifici attributi \"data-element\"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Content type: scheda servizio](https://docs.google.com/spreadsheets/d/1MoayTY05SE4ixtgBsfsdngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=0), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
       requiredArtifacts: ["origin"],
     };
   }
@@ -101,7 +101,7 @@ class LoadAudit extends Audit {
             {
               result:
                 notExecuted +
-                " - nessun servizio trovato su cui effettuare il test",
+                " Nessuna pagina servizio trovata su cui effettuare il test.",
             },
           ]
         ),
