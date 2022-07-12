@@ -77,6 +77,7 @@ class LoadAudit extends Audit {
     );
     const elementObj = $(privacyPolicyElement).attr();
     items[0].link_name = privacyPolicyElement.text().trim() ?? "";
+    items[0].link_destination = elementObj?.href ?? "";
 
     if (
       Boolean(elementObj) &&
