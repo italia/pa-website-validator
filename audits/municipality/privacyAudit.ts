@@ -80,7 +80,7 @@ class LoadAudit extends Audit {
     items[0].link_destination = elementObj?.href ?? "";
 
     if (
-      Boolean(elementObj) &&
+      elementObj &&
       "href" in elementObj &&
       elementObj.href !== "#" &&
       elementObj.href !== ""

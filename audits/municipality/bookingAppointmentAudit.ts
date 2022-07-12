@@ -72,7 +72,7 @@ class LoadAudit extends Audit {
     const elementName = bookingAppointmentElement.text().trim().trim() ?? "";
 
     if (
-      Boolean(elementObj) &&
+      elementObj &&
       "href" in elementObj &&
       elementObj.href !== "#" &&
       elementObj.href !== "" &&

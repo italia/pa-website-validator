@@ -63,7 +63,7 @@ class LoadAudit extends Audit {
       };
 
       if (
-        Boolean(elementObj) &&
+        elementObj &&
         "href" in elementObj &&
         elementObj.href &&
         elementObj.href !== "#" &&

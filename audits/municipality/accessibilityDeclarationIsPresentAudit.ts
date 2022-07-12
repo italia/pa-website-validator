@@ -74,7 +74,7 @@ class LoadAudit extends Audit {
     const elementObj = $(accessibilityDeclarationElement).attr();
     items[0].link_name = accessibilityDeclarationElement.text().trim() ?? "";
 
-    if (Boolean(elementObj) && "href" in elementObj) {
+    if (elementObj && "href" in elementObj) {
       items[0].link_destination = elementObj.href;
 
       if (!elementObj.href.includes("https://form.agid.gov.it")) {

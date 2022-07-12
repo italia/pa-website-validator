@@ -93,7 +93,7 @@ class LoadAudit extends Audit {
     item[0].link_name = contactsElement.text().trim() ?? "";
 
     if (
-      Boolean(elementObj) &&
+      elementObj &&
       "href" in elementObj &&
       elementObj.href !== "#" &&
       elementObj.href !== ""

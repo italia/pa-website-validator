@@ -77,7 +77,7 @@ const getElementHrefValuesDataAttribute = async (
   const urls = [];
   for (const innerElement of innerElements) {
     const label = $(innerElement).text().trim() ?? "";
-    const url = $(innerElement).attr().href ?? null;
+    const url = $(innerElement).attr()?.href;
     if (url && url !== "#" && url !== "") {
       urls.push({
         label: label,
@@ -99,7 +99,7 @@ const getHREFValuesDataAttribute = async (
   for (const element of elements) {
     const elementObj = $(element).attr();
     if (
-      Boolean(elementObj) &&
+      elementObj &&
       "href" in elementObj &&
       elementObj.href !== "#" &&
       elementObj.href !== ""
