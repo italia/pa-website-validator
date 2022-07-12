@@ -1,5 +1,8 @@
 {
   "extends": "./tsconfig.esmodules",
-  "exclude": ["audits", "gatherers", "test"],
+  "compilerOptions": {
+    "declaration": true
+  },
+  "exclude": ["audits", "gatherers", "__tests__"],
   "include": ["**/*.ts", "node_modules/lighthouse/types/**/*.d.ts"]
 }

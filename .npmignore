@@ -1,6 +1,7 @@
-.eslint.yml
+__tests__
+.eslintrc.yml
 .eslintignore
 .github
 .prettierignore
 *.ts
-tsconfig.json
+tsconfig*.json
