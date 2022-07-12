@@ -144,21 +144,21 @@ export default {
     modelCompliance: {
       title: "Criteri di conformità",
       description:
-        "Il validatore mostra i risultati degli audit per i singoli parametri di conformità in riferimento all'Allegato 2 dell' [Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000dk82wQAA#allegati).",
+        "Vengono mostrati i risultati degli audit relativi ai criteri di conformità illustrati nell'[Allegato 2 dell'Avviso 1.4.1.](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000ocbtrQAA#allegati).",
       auditRefs: [...customModelComplianceAudits],
     },
 
     recommendations: {
       title: "Raccomandazioni progettuali",
       description:
-        "Il validatore mostra i risultati degli audit per le raccomandazioni in riferimento all'Allegato 2 dell' [Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000dk82wQAA#allegati).",
+        "Vengono mostrati i risultati degli audit relativi ad alcune delle raccomandazioni progettuali illustrate nell'[Allegato 2 dell'Avviso 1.4.1.](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000ocbtrQAA#allegati).",
       auditRefs: [...customReccomendationsAudits],
     },
 
     additionalTests: {
       title: "Test aggiuntivi",
       description:
-        "Vengono mostrati i risultati di test aggiuntivi di Lighthouse utili a facilitare le attività di sviluppo e garantire un buon risultato.",
+        "Vengono mostrati i risultati di test aggiuntivi utili a facilitare le attività di sviluppo e garantire un buon risultato.",
       auditRefs: [
         ...customAdditionalAudits,
         ...accessibilityAudits,
@@ -169,9 +169,9 @@ export default {
     },
 
     performance: {
-      title: "Raccomandazioni progettuali: Velocità e tempi di risposta",
+      title: "Raccomandazione progettuale \"R.SC.3.1 - Velocità e tempi di risposta\"",
       description:
-        "Nel caso in cui il sito presenti livelli di prestazioni (media pesata di 6 metriche standard) inferiori a 50 secondo quanto calcolato e verificato tramite le librerie Lighthouse, la scuola deve pubblicare sul sito un “Piano di miglioramento del sito” che mostri, per ciascuna delle 6 metriche che impatta negativamente le prestazioni, le azioni future di miglioramento e le relative tempistiche di realizzazione attese. RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Scuole.](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/v2022.1/index.html)",
+        "CONDIZIONI DI SUCCESSO: il sito presenta livelli di prestazioni (media pesata di 6 metriche standard) pari o superiori a 50; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs)"
     },
   },
 };
