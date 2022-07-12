@@ -11,9 +11,9 @@ class LoadAudit extends Audit {
     return {
       id: "school-informative-security",
       title:
-        "C.SC.3.1 - CERTIFICATO HTTPS - Il sito scuola deve avere un certificato https valido e attivo.",
+        "C.SC.3.1 - CERTIFICATO HTTPS - Il sito della scuola deve avere un certificato https valido e attivo.",
       failureTitle:
-        "C.SC.3.1 - CERTIFICATO HTTPS - Il sito scuola deve avere un certificato https valido e attivo.",
+        "C.SC.3.1 - CERTIFICATO HTTPS - Il sito della scuola deve avere un certificato https valido e attivo.",
       scoreDisplayMode: Audit.SCORING_MODES.INFORMATIVE,
       description:
         "Questo audit produce un risultato solo quando viene effettuato su un sito pubblicato online.",
