@@ -8,21 +8,21 @@ import { loadPageData, urlExists } from "../../utils/utils";
 const Audit = lighthouse.Audit;
 
 const greenResult =
-  "Il link è corretto: è nel footer, la pagina esiste e la pagina è HTTPS";
-const yellowResult = "Il link è nel footer e la pagina esiste";
-const redResult = "Il link è errato o non è nella posizione non corretta.";
+  "Il link è nel footer e invia a una pagina esistente e sicura.";
+const yellowResult = "Il link è nel footer e invia a una pagina esistente ma non sicura.";
+const redResult = "Il link non è nel footer o non invia a una pagina esistente.";
 
 class LoadAudit extends Audit {
   static get meta() {
     return {
       id: "school-legislation-privacy-is-present",
       title:
-        "C.SC.2.1 - INFORMATIVA PRIVACY - Il sito scuola deve presentare l'informativa sul trattamento dei dati personali, secondo quanto previsto dalla normativa vigente.",
+        "C.SC.2.1 - INFORMATIVA PRIVACY - Il sito della scuola deve presentare l'informativa sul trattamento dei dati personali, secondo quanto previsto dalla normativa vigente.",
       failureTitle:
-        "C.SC.2.1 - INFORMATIVA PRIVACY - Il sito scuola deve presentare l'informativa sul trattamento dei dati personali, secondo quanto previsto dalla normativa vigente.",
+        "C.SC.2.1 - INFORMATIVA PRIVACY - Il sito della scuola deve presentare l'informativa sul trattamento dei dati personali, secondo quanto previsto dalla normativa vigente.",
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
-        "CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta alla privacy policy; MODALITÀ DI VERIFICA: viene verificata la presenza e posizione del link nel footer e che riporti correttamente alla privacy policy; RIFERIMENTI TECNICI E NORMATIVI: GDPR Artt. 13 e 14, Reg. UE n. 679/2016.",
+        "CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta alla privacy policy; MODALITÀ DI VERIFICA: viene verificata la presenza del link nel footer, che riporti a una pagina esistente e con certificato HTTPS valido e attivo, ricercando uno specifico attributo \"data-element\" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: GDPR Artt. 13 e 14, Reg. UE n. 679/2016, [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
       requiredArtifacts: ["origin"],
     };
   }
