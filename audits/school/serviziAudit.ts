@@ -23,7 +23,7 @@ const yellowResult =
 const redResult =
   "Più di 2 voci obbligatorie non sono presenti o più di 1 voce non è nell'ordine corretto.";
 const notExecuted =
-  'Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.';
+  "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.";
 
 class LoadAudit extends Audit {
   static get meta() {

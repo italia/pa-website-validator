@@ -98,11 +98,9 @@ class LoadAudit extends lighthouse.Audit {
       score = 0.5;
     }
 
-    item[0].element_in_school_model_percentage = (
-      100 - numberOfElementsNotInScuoleModelPercentage
-    )
-      .toFixed(0)
-      .toString() + '%';
+    item[0].element_in_school_model_percentage =
+      (100 - numberOfElementsNotInScuoleModelPercentage).toFixed(0).toString() +
+      "%";
     item[0].element_not_in_school_model =
       schoolModelCheck.elementNotIncluded.join(", ");
 

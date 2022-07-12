@@ -13,8 +13,7 @@ import {
 
 const Audit = lighthouse.Audit;
 
-const greenResult =
-  "Le voci del menù sono corrette e nell'ordine giusto.";
+const greenResult = "Le voci del menù sono corrette e nell'ordine giusto.";
 const yellowResult =
   "L'ordine delle voci del menu è corretto ma sono presenti fino a 3 voci aggiuntive.";
 const redResult =

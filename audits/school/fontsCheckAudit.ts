@@ -9,7 +9,8 @@ import puppeteer from "puppeteer";
 const Audit = lighthouse.Audit;
 
 const greenResult = "Il sito utilizza tutti i font necessari.";
-const yellowResult = "Il sito utilizza il font Titillium Web ma non il font Lora.";
+const yellowResult =
+  "Il sito utilizza il font Titillium Web ma non il font Lora.";
 const redResult = "Il sito non utilizza i font del modello.";
 const notExecuted =
   "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.";
@@ -24,7 +25,7 @@ class LoadAudit extends Audit {
         "C.SC.1.1 - COERENZA DELL'UTILIZZO DEI FONT (librerie di caratteri) - Il sito della scuola deve utilizzare i font indicati dalla documentazione del modello di sito della scuola.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        "CONDIZIONI DI SUCCESSO: il sito utilizza almeno i font Titillium Web e Lora; MODALITÀ DI VERIFICA: ricercando uno specifico attributo \"data-element\" come spiegato nella documentazione tecnica, viene verificata la presenza dei font all'interno di una scheda servizio casualmente selezionata; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
+        'CONDIZIONI DI SUCCESSO: il sito utilizza almeno i font Titillium Web e Lora; MODALITÀ DI VERIFICA: ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica, viene verificata la presenza dei font all\'interno di una scheda servizio casualmente selezionata; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
       requiredArtifacts: ["origin"],
     };
   }
@@ -60,7 +61,9 @@ class LoadAudit extends Audit {
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: notExecuted + " Nessuna pagina servizio trovata su cui effettuare il test.",
+              result:
+                notExecuted +
+                " Nessuna pagina servizio trovata su cui effettuare il test.",
             },
           ]
         ),

@@ -18,8 +18,7 @@ const greenResult =
   "Almeno il 30% delle voci sono corrette e si trovano nell'ordine giusto.";
 const yellowResult =
   "Almeno il 30% delle voci sono corrette ma l'ordine è sbagliato.";
-const redResult =
-  "Più del 30% delle voci sono errate.";
+const redResult = "Più del 30% delle voci sono errate.";
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -31,7 +30,7 @@ class LoadAudit extends Audit {
         "C.SC.1.5 - VOCI DI MENÙ DI SECONDO LIVELLO - Il sito presenta almeno il 30% delle voci di menu di secondo livello in base a quanto descritto dal modello di sito per le scuole.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        "CONDIZIONI DI SUCCESSO: le voci del menù di secondo livello corrispondono a quelle indicate nel documento di architettura dell'informazione del modello scuole e sono nell'ordine corretto; MODALITÀ DI VERIFICA: ricercando uno specifico attributo \"data-element\" come spiegato nella documentazione tecnica, viene verificata la correttezza e l'ordine delle voci del menù di secondo livello riferite alla voce di primo livello \"Scuola\"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
+        'CONDIZIONI DI SUCCESSO: le voci del menù di secondo livello corrispondono a quelle indicate nel documento di architettura dell\'informazione del modello scuole e sono nell\'ordine corretto; MODALITÀ DI VERIFICA: ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica, viene verificata la correttezza e l\'ordine delle voci del menù di secondo livello riferite alla voce di primo livello "Scuola"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
       requiredArtifacts: ["origin"],
     };
   }
@@ -129,7 +128,8 @@ class LoadAudit extends Audit {
     }
 
     items[0].correct_voices = correctElementsFound.join(", ");
-    items[0].correct_voices_percentage = presentVoicesPercentage.toString() + '%';
+    items[0].correct_voices_percentage =
+      presentVoicesPercentage.toString() + "%";
     items[0].wrong_voices_order =
       correctOrderResult.elementsNotInSequence.join(", ");
     items[0].missing_voices = secondaryMenuScuolaItems
