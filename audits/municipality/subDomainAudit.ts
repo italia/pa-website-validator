@@ -20,7 +20,7 @@ class LoadAudit extends Audit {
         "C.SE.5.2 - SOTTODOMINIO ISTITUZIONALE - L'area servizi per il cittadino del sito comunale deve utilizzare un sottodominio istituzionale congruente al dominio istituzionale del sito, presente all’interno dell’Anagrafe dei domini.",
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
-        "CONDIZIONI DI SUCCESSO: il sottodominio istituzione del sito è valido; MODALITÀ DI VERIFICA: viene verificato che il sottodominio utilizzato nella pagina di accesso all'area privata sia congruente al dominio utilizzato dal sito e che questo sia presente nell'Elenco Nomi a Dominio Riservati per i Comuni Italiani; RIFERIMENTI TECNICI E NORMATIVI: [Elenco Nomi a Dominio Riservati Per i Comuni Italiani](https://www.nic.it/sites/default/files/docs/comuni_list.html)",
+        "CONDIZIONI DI SUCCESSO: il sottodominio istituzione del sito è valido; MODALITÀ DI VERIFICA: viene verificato che il sottodominio utilizzato nella pagina di accesso all'area privata sia congruente al dominio utilizzato dal sito e che questo sia presente nell'Elenco Nomi a Dominio Riservati per i Comuni Italiani; RIFERIMENTI TECNICI E NORMATIVI: [Elenco Nomi a Dominio Riservati Per i Comuni Italiani](https://www.nic.it/sites/default/files/docs/comuni_list.html).",
       requiredArtifacts: ["origin"],
     };
   }

@@ -11,12 +11,12 @@ class LoadAudit extends Audit {
     return {
       id: "municipality-informative-user-experience-evaluation",
       title:
-        "C.SI.2.6 - VALUTAZIONE DELL’ESPERIENZA D’USO, CHIAREZZA INFORMATIVA DELLA SCHEDA DI SERVIZIO - Nel caso in cui il servizio non sia erogato in digitale, il sito deve permettere la valutazione dell’utilità della scheda di servizio, come per il criterio “valutazione dell’esperienza d’uso, chiarezza delle pagine informative”.",
+        "C.SI.2.6 - VALUTAZIONE DELL’ESPERIENZA D’USO, CHIAREZZA INFORMATIVA DELLA SCHEDA DI SERVIZIO - Nel caso in cui il servizio non sia erogato in digitale, il sito deve permettere la valutazione dell’utilità della scheda di servizio, come per il criterio C.SI.2.5.",
       failureTitle:
-        "C.SI.2.6 - VALUTAZIONE DELL’ESPERIENZA D’USO, CHIAREZZA INFORMATIVA DELLA SCHEDA DI SERVIZIO - Nel caso in cui il servizio non sia erogato in digitale, il sito deve permettere la valutazione dell’utilità della scheda di servizio, come per il criterio “valutazione dell’esperienza d’uso, chiarezza delle pagine informative”.",
+        "C.SI.2.6 - VALUTAZIONE DELL’ESPERIENZA D’USO, CHIAREZZA INFORMATIVA DELLA SCHEDA DI SERVIZIO - Nel caso in cui il servizio non sia erogato in digitale, il sito deve permettere la valutazione dell’utilità della scheda di servizio, come per il criterio C.SI.2.5.",
       scoreDisplayMode: Audit.SCORING_MODES.INFORMATIVE,
       description:
-        "RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni, eGovernment Benchmark method paper 2020-2023](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/v2022.1/index.html).",
+        "RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment Benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1).",
       requiredArtifacts: [],
     };
   }

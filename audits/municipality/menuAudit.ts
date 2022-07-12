@@ -13,11 +13,11 @@ import {
 
 const Audit = lighthouse.Audit;
 
-const greenResult = "Le voci del menù del sito e il loro ordine è corretto.";
+const greenResult = "Le voci del menù sono corrette e nell'ordine giusto.";
 const yellowResult =
-  "Sono presenti fino a 2 voci aggiuntive nel menù del sito.";
+  "L'ordine delle voci del menu è corretto ma sono presenti fino a 3 voci aggiuntive.";
 const redResult =
-  "Almeno una delle voci obbligatorie è assente o inesatta e/o le voci sono in ordine errato e/o sono presenti 7 o più voci nel menù del sito.";
+  "Almeno una delle voci obbligatorie è assente o inesatta e/o le voci obbligatorie sono in ordine errato e/o sono presenti 8 o più voci nel menù del sito.";
 
 class LoadAudit extends lighthouse.Audit {
   static get meta() {
@@ -29,7 +29,7 @@ class LoadAudit extends lighthouse.Audit {
         "C.SI.1.6 - VOCI DI MENÙ DI PRIMO LIVELLO - Il sito comunale deve presentare tutte le voci di menù di primo livello, nell'esatto ordine descritto dalla documentazione del modello di sito comunale.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        "CONDIZIONI DI SUCCESSO: le voci di menù del sito sono esattamente quelle indicate nel documento di architettura dell'informazione e sono nell'ordine indicato, ovvero Amministrazione, Novità, Servizi, Vivere il Comune; MODALITÀ DI VERIFICA: vengono identificate le voci presenti nel menù del sito e il loro ordine, confrontandole con quanto indicato nel documento di architettura dell'informazione, applicando una tolleranza di 2 voci aggiuntive; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/v2022.1/index.html)",
+        "CONDIZIONI DI SUCCESSO: le voci del menù di primo livello del sito sono esattamente quelle indicate nel documento di architettura dell'informazione e sono nell'ordine indicato (ovvero Amministrazione, Novità, Servizi, Vivere il Comune); MODALITÀ DI VERIFICA: ricercando uno specifico attributo \"data-element\" come spiegato nella documentazione tecnica, vengono identificate le voci presenti nel menù del sito, il loro ordine e confrontate con quanto indicato nel documento di architettura dell'informazione, applicando una tolleranza di massimo 3 voci aggiuntive; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
       requiredArtifacts: ["origin"],
     };
   }
@@ -112,7 +112,7 @@ class LoadAudit extends lighthouse.Audit {
       items[0].result = greenResult;
     } else if (
       menuElements.length > 4 &&
-      menuElements.length < 7 &&
+      menuElements.length < 8 &&
       containsMandatoryElementsResult &&
       orderResult.numberOfElementsNotInSequence === 0
     ) {

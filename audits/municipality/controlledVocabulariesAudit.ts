@@ -18,11 +18,11 @@ import {
 const Audit = lighthouse.Audit;
 
 const greenResult =
-  "Tutti gli argomenti appartengono all’elenco di voci del modello Comuni.";
+  "Tutti gli argomenti appartengono all’elenco di voci del modello o al vocabolario EuroVoc.";
 const yellowResult =
-  "Tutti gli argomenti appartengono al vocabolario di EuroVoc ma non all'elenco di voci del modello Comuni.";
+  "Almeno il 50% degli argomenti appartengono all'elenco di voci del modello o al vocabolario EuroVoc.";
 const redResult =
-  "Più del 50% degli argomenti non appartengono alle voci del modello scuole o al vocabolario di EuroVoc.";
+  "Meno del 50% degli argomenti appartengono alle voci del modello Comuni o al vocabolario EuroVoc.";
 const notExecuted =
   "Non è stato possibile trovare gli argomenti o la pagina che li contiene. Controlla le “Modalità di verifica” per scoprire di più.";
 
@@ -36,7 +36,7 @@ class LoadAudit extends lighthouse.Audit {
         "C.SI.1.5 - VOCABOLARI CONTROLLATI - Il sito comunale deve utilizzare argomenti forniti dal modello di sito comunale o appartenenti al vocabolario controllato europeo EuroVoc.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        "CONDIZIONI DI SUCCESSO: almeno il 50% degli argomenti presenti appartiene alla lista indicata all'interno del documento di architettura dell'informazione del modello Comuni alla voce \"Tassonomia ARGOMENTI\" o, almeno, appartiene al vocabolario controllato EuroVoc; MODALITÀ DI VERIFICA: gli argomenti identificati all'interno della funzione di ricerca del sito vengono confrontati con l'elenco di voci presente nel documento di architettura dell'informazione e con l'elenco di voci presente nel vocabolario controllato EuroVoc; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni, Elenco degli argomenti del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/v2022.1/index.html), [Vocabolario EuroVoc](https://eur-lex.europa.eu/browse/eurovoc.html?locale=it)",
+        "CONDIZIONI DI SUCCESSO: gli argomenti utilizzati appartengono alla lista indicata all'interno del documento di architettura dell'informazione del modello Comuni alla voce \"Tassonomia ARGOMENTI\" o al vocabolario controllato EuroVoc; MODALITÀ DI VERIFICA: gli argomenti identificati all'interno della funzione di ricerca del sito vengono confrontati con l'elenco di voci presente nel documento di architettura dell'informazione e con il vocabolario controllato EuroVoc, ricercandoli usando specifici attributi \"data-element\" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/), [Elenco degli argomenti del Modello Comuni](https://docs.google.com/spreadsheets/d/1D4KbaA__xO9x_iBm08KvZASjrrFLYLKX/edit#gid=335720294), [Vocabolario EuroVoc](https://eur-lex.europa.eu/browse/eurovoc.html?locale=it).",
       requiredArtifacts: ["origin"],
     };
   }

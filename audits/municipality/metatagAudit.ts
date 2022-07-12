@@ -31,7 +31,7 @@ class LoadAudit extends Audit {
         "R.SI.1.1 - METATAG - Nel sito comunale, le voci della scheda servizio devono presentare i metatag descritti dal modello, in base agli standard internazionali.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        "CONDIZIONI DI SUCCESSO: Le voci della scheda servizio presentano i corretti metatag associati; MODALITÀ DI VERIFICA: vengono verificati i metatag delle voci della scheda servizio con quelli richiesti dal modello; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni, Schema](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/v2022.1/modello-sito-comunale/scheda-servizio.html#dati-strutturati-e-interoperabilita)",
+        'CONDIZIONI DI SUCCESSO: le voci delle schede servizio presentano tutti i metatag richiesti dal modello; MODALITÀ DI VERIFICA: viene verificata la presenza e correttezza dei metatag indicati nella sezione "Dati strutturati e interoperabilità" della documentazione in una scheda servizio selezionata casualmente; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Schema](http://www.schema.org/).',
       requiredArtifacts: ["origin"],
     };
   }

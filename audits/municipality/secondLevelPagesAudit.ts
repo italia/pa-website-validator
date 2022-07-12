@@ -14,8 +14,9 @@ import { secondLevelPageNames } from "../../storage/municipality/controlledVocab
 
 const Audit = lighthouse.Audit;
 
-const greenResult = "Almeno il 50% dei titoli delle pagine è corretto.";
-const redResult = "Meno del 50% dei titoli delle pagine è corretto.";
+const greenResult = "Tutti i titoli sono corretti.";
+const yellowResult = "Almeno il 50% dei titoli è corretto.";
+const redResult = "Meno del 50% dei titoli è corretto.";
 const notExecuted =
   'Non è stato possibile condurre il test. Controlla le "Modalità di verifica" per scoprire di più.';
 
@@ -27,9 +28,9 @@ class LoadAudit extends lighthouse.Audit {
         "C.SI.1.7 - TITOLI DELLE PAGINE DI SECONDO LIVELLO - Nel sito comunale, i titoli delle pagine di secondo livello devono rispettare il vocabolario descritto dalla documentazione del modello di sito comunale.",
       failureTitle:
         "C.SI.1.7 - TITOLI DELLE PAGINE DI SECONDO LIVELLO - Nel sito comunale, i titoli delle pagine di secondo livello devono rispettare il vocabolario descritto dalla documentazione del modello di sito comunale.",
-      scoreDisplayMode: Audit.SCORING_MODES.BINARY,
+      scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        'CONDIZIONI DI SUCCESSO: almeno il 50% dei titoli delle pagine di secondo livello verificati corrispondono a quelli indicati nel documento di architettura dell\'informazione del modello Comuni; MODALITÀ DI VERIFICA: viene verificata la correttezza dei titoli delle pagine di II livello accessibili dalla pagina di I livello "Servizi"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/v2022.1/index.html)',
+        'CONDIZIONI DI SUCCESSO: i titoli delle pagine di secondo livello corrispondono a quelli indicati nel documento di architettura dell\'informazione del modello Comuni; MODALITÀ DI VERIFICA: vengono confrontati i titoli delle categorie di servizi presentati nella pagina di primo livello "Servizi" con i titoli richiesti dal modello, ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
       requiredArtifacts: ["origin"],
     };
   }
@@ -113,9 +114,15 @@ class LoadAudit extends lighthouse.Audit {
       );
     }
 
-    if (pagesFoundInVocabularyPercentage > 50) {
+    if (pagesFoundInVocabularyPercentage === 100) {
       items[0].result = greenResult;
       score = 1;
+    } else if (
+      pagesFoundInVocabularyPercentage > 50 &&
+      pagesFoundInVocabularyPercentage < 100
+    ) {
+      items[0].result = yellowResult;
+      score = 0.5;
     }
 
     items[0].correct_title_percentage = pagesFoundInVocabularyPercentage + "%";
