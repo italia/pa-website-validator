@@ -102,7 +102,7 @@ class LoadAudit extends lighthouse.Audit {
       100 - numberOfElementsNotInScuoleModelPercentage
     )
       .toFixed(0)
-      .toString();
+      .toString() + '%';
     item[0].element_not_in_school_model =
       schoolModelCheck.elementNotIncluded.join(", ");
 

@@ -129,7 +129,7 @@ class LoadAudit extends Audit {
     }
 
     items[0].correct_voices = correctElementsFound.join(", ");
-    items[0].correct_voices_percentage = presentVoicesPercentage.toString();
+    items[0].correct_voices_percentage = presentVoicesPercentage.toString() + '%';
     items[0].wrong_voices_order =
       correctOrderResult.elementsNotInSequence.join(", ");
     items[0].missing_voices = secondaryMenuScuolaItems
