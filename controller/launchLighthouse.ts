@@ -5,8 +5,8 @@
 import lighthouse from "lighthouse";
 
 import * as fs from "fs";
-import * as chromeLauncher from "chrome-launcher";
 import open from "open";
+import puppeteer from "puppeteer";
 
 import schoolOnlineConfig from "../config/school/auditConfig-online.js";
 import schoolLocalConfig from "../config/school/auditConfig-local.js";
@@ -33,7 +33,7 @@ const run = async (
   view = false
 ) => {
   //L'oggetto chrome non è incluso nel try-catch in modo tale che la sua istanza venga killata anche in caso di eccezione lanciata da altri processi
-  const chrome = await chromeLauncher.launch({ chromeFlags: ["--headless"] });
+  const browser = await puppeteer.launch();
 
   try {
     let loadConfig;
@@ -52,7 +52,7 @@ const run = async (
     const options = {
       logLevel: logLevel,
       output: ["html", "json"],
-      port: chrome.port,
+      port: new URL(browser.wsEndpoint()).port,
       locale: "it",
     };
     const runnerResult: RunnerResult = await lighthouse(
@@ -68,7 +68,7 @@ const run = async (
     const reportHtml: string = runnerResult.report[0];
     const reportJSON: string = runnerResult.report[1];
 
-    await chrome.kill();
+    await browser.close();
 
     if (!saveFile) {
       return {
@@ -103,7 +103,7 @@ const run = async (
       },
     };
   } catch (ex) {
-    await chrome.kill();
+    await browser.close();
 
     console.log("Launch lighthouse exception: ", ex);
 
