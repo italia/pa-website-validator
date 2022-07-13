@@ -8,7 +8,7 @@ import lighthouse from "lighthouse";
 
 class bootstrapItaliaSelectorCheck extends lighthouse.Gatherer {
   afterPass(options: PassContext) {
-    const expression = `$(':root').css('--bootstrap-italia-version') || null`;
+    const expression = `getComputedStyle(document.body).getPropertyValue('--bootstrap-italia-version') || null`;
 
     const driver = options.driver;
 

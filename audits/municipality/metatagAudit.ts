@@ -181,12 +181,12 @@ const metatadaJSONStructure = {
             address: {
               type: "object",
               properties: {
-                streetAdress: { type: "string", minLength: 1 },
+                streetAddress: { type: "string", minLength: 1 },
                 postalCode: { type: "string", minLength: 1 },
                 addressLocality: { type: "string", minLength: 1 },
               },
 
-              required: ["streetAdress", "postalCode", "addressLocality"],
+              required: ["streetAddress", "postalCode", "addressLocality"],
             },
           },
 

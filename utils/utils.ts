@@ -5,6 +5,7 @@ import * as cheerio from "cheerio";
 import puppeteer from "puppeteer";
 import { CheerioAPI } from "cheerio";
 import https from "https";
+import http from "http";
 import dns from "dns";
 import vocabularyResult = crawlerTypes.vocabularyResult;
 
@@ -165,7 +166,9 @@ const buildUrl = async (url: string, service: string): Promise<string> => {
 };
 
 const isInternalUrl = async (url: string) => {
-  return !url.includes("www");
+  return (
+    !url.includes("www") && !url.includes("http") && !url.includes("https")
+  );
 };
 
 const isHttpsUrl = async (url: string) => {
@@ -241,11 +244,34 @@ async function getHttpsRequestStatusCode(
   });
 }
 
-async function hostnameExists(
+async function getHttpRequestStatusCode(
   hostname: string
+): Promise<number | undefined> {
+  return new Promise(function (resolve) {
+    http
+      .request(hostname, function (res) {
+        resolve(res.statusCode);
+      })
+      .end();
+  });
+}
+
+async function hostnameExists(
+  url: string
 ): Promise<{ hostname: string; exists: boolean }> {
+  const newURL = new URL(url);
+
+  if (!("hostname" in newURL)) {
+    return {
+      hostname: "",
+      exists: false,
+    };
+  }
+
+  let hostname = newURL.hostname;
   hostname = hostname.replace(/(^\w+:|^)\/\//, "");
   hostname = hostname.replace("www.", "");
+  hostname = hostname.replace("/", "");
 
   return new Promise((resolve) => {
     dns.lookup(hostname, (error) => resolve({ hostname, exists: !error }));
@@ -282,7 +308,21 @@ const urlExists = async (
       };
     }
 
-    const statusCode = await getHttpsRequestStatusCode(inspectUrl);
+    let statusCode = undefined;
+    try {
+      statusCode = await getHttpsRequestStatusCode(inspectUrl);
+    } catch (e) {
+      try {
+        statusCode = await getHttpRequestStatusCode(inspectUrl);
+      } catch (e) {
+        return {
+          result: false,
+          reason: " Internal exception.",
+          inspectedUrl: inspectUrl,
+        };
+      }
+    }
+
     if (statusCode !== 200) {
       return {
         result: false,
