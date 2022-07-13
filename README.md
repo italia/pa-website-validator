@@ -61,8 +61,7 @@ Per l'installazione tramite build, partire dalla repository ed effettuare il clo
 
 ```sh
 cd pa-website-validator
-npm install
-npm run prepare
+PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=1 npm install
 ```
 
 Viene generata la folder "dist", utilizzo:

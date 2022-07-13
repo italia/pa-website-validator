@@ -13,7 +13,7 @@
     "format:check": "prettier -c .",
     "lint:check": "eslint --ext .js,.ts --max-warnings 0 .",
     "prepare": "npm run build:lighthouse && npm run build:main",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test": "NODE_OPTIONS=--experimental-vm-modules PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=1 jest",
     "type:check": "tsc --noEmit && tsc -p tsconfig.main.json --noEmit && tsc -p tsconfig.test.json --noEmit"
   },
   "bin": {
@@ -35,7 +35,7 @@
     "lighthouse": "^9.5.0",
     "node-html-parser": "^5.3.3",
     "open": "^8.4.0",
-    "puppeteer": "^13.7.0",
+    "puppeteer": "^15.3.2",
     "selenium-webdriver": "^4.1.1",
     "striptags": "^3.2.0",
     "yargs": "^17.0.10"
@@ -65,7 +65,7 @@
     "modulePaths": [
       "<rootDir>"
     ],
-    "testTimeout": 60000,
+    "testTimeout": 300000,
     "transform": {
       "^.+\\.(t|j)sx?$": [
         "@swc/jest"
