@@ -13,12 +13,7 @@ export const contentTypeItems = {
     "Tipologia servizio",
     "Tassonomie argomenti",
   ],
-  Body: [
-    "A cosa serve",
-    "Struttura responsabile del servizio",
-    "Sede canale fisico",
-    "Metadati",
-  ],
+  Body: ["A cosa serve", "Struttura responsabile del servizio", "Metadati"],
   Luogo: ["indirizzo", "cap", "orari", "gps", "email", "pec", "telefono"],
 
   Metadati: ["Pubblicato", "Revisione"],

@@ -174,27 +174,20 @@ class LoadAudit extends Audit {
       !metadata.toLowerCase().includes(mandatoryMetadata[0].toLowerCase()) ||
       !metadata.toLowerCase().includes(mandatoryMetadata[1].toLowerCase())
     ) {
-      missingMandatoryItems.push(mandatoryBodyVoices[3]);
+      missingMandatoryItems.push(mandatoryBodyVoices[2]);
     }
 
-    const foundMandatoryVoicesPercentage =
-      ((totalMandatoryVoices - missingMandatoryItems.length) /
-        totalMandatoryVoices) *
-      100;
-    const foundMandatoryVoicesNotCorrectOrderPercentage =
-      (orderResult.numberOfElementsNotInSequence / totalMandatoryVoices) * 100;
+    const missingVoicesAmount =
+      totalMandatoryVoices - missingMandatoryItems.length;
+    const voicesNotInCorrectOrderAmount =
+      orderResult.numberOfElementsNotInSequence;
 
-    if (
-      foundMandatoryVoicesPercentage < 90 ||
-      foundMandatoryVoicesNotCorrectOrderPercentage > 10
-    ) {
+    if (missingVoicesAmount > 2 || voicesNotInCorrectOrderAmount > 1) {
       score = 0;
       item[0].result = redResult;
     } else if (
-      (foundMandatoryVoicesPercentage > 90 &&
-        foundMandatoryVoicesPercentage < 100) ||
-      (foundMandatoryVoicesNotCorrectOrderPercentage > 0 &&
-        foundMandatoryVoicesNotCorrectOrderPercentage < 10)
+      (missingVoicesAmount > 0 && missingVoicesAmount <= 2) ||
+      voicesNotInCorrectOrderAmount === 1
     ) {
       score = 0.5;
       item[0].result = yellowResult;

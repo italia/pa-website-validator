@@ -19,9 +19,9 @@ import { secondLevelPageNames } from "../../storage/municipality/controlledVocab
 const greenResult =
   "Tutte le voci obbligatorie sono presenti e nell'ordine corretto.";
 const yellowResult =
-  "Non sono presenti tutte le voci obbligatorie o non tutte le voci obbligatorie sono nell'ordine corretto.";
+  "Fino a 2 voci obbligatorie non sono presenti o 1 voce non è nell'ordine corretto.";
 const redResult =
-  "Non sono presenti tutte le voci obbligatorie e non tutte le voci obbligatorie sono nell'ordine corretto.";
+  "Più di 2 voci obbligatorie non sono presenti o più di 1 voce non è nell'ordine corretto.";
 const notExecuted =
   'Non è stato possibile condurre il test. Controlla le "Modalità di verifica" per scoprire di più.';
 
@@ -35,7 +35,7 @@ class LoadAudit extends Audit {
         "C.SI.1.3 - SCHEDE INFORMATIVE DI SERVIZIO PER IL CITTADINO - Tutte le schede informative dei servizi per il cittadino devono mostrare le voci segnalate come obbligatorie all'interno dell'architettura dell'informazione, nell'ordine segnalato dal modello.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        "CONDIZIONI DI SUCCESSO: nella scheda servizio sono presenti almeno 8 su 9 delle voci obbligatorie e almeno 8 su 9 delle voci obbligatorie sono nell'ordine corretto; MODALITÀ DI VERIFICA: viene verificato quali voci sono presenti all'interno di una scheda servizio casualmente selezionata e il loro ordine; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/v2022.1/index.html).",
+        "CONDIZIONI DI SUCCESSO: nelle schede informative di servizio le voci indicate come obbligatorie sono presenti e sono nell'ordine corretto; MODALITÀ DI VERIFICA: viene verificato se le voci indicate come obbligatorie all'interno del documento di architettura dell'informazione sono presenti. Inoltre viene verificato se le voci obbligatorie presenti nell'indice della pagina sono nell'ordine corretto. La verifica viene effettuata su una scheda servizio casualmente selezionata, ricercando le voci indicate nella documentazione tecnica tramite specifici attributi \"data-element\"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Content type: scheda servizio](https://docs.google.com/spreadsheets/d/1D4KbaA__xO9x_iBm08KvZASjrrFLYLKX/edit#gid=335720294dngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=0), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
       requiredArtifacts: ["origin"],
     };
   }
@@ -164,24 +164,17 @@ class LoadAudit extends Audit {
       missingMandatoryItems.push(mandatoryBodyVoices[0]);
     }
 
-    const foundMandatoryVoicesPercentage =
-      ((totalMandatoryVoices - missingMandatoryItems.length) /
-        totalMandatoryVoices) *
-      100;
-    const foundMandatoryVoicesNotCorrectOrderPercentage =
-      (orderResult.numberOfElementsNotInSequence / totalMandatoryVoices) * 100;
+    const missingVoicesAmount =
+      totalMandatoryVoices - missingMandatoryItems.length;
+    const voicesNotInCorrectOrderAmount =
+      orderResult.numberOfElementsNotInSequence;
 
-    if (
-      foundMandatoryVoicesPercentage < 90 ||
-      foundMandatoryVoicesNotCorrectOrderPercentage > 10
-    ) {
+    if (missingVoicesAmount > 2 || voicesNotInCorrectOrderAmount > 1) {
       score = 0;
       item[0].result = redResult;
     } else if (
-      (foundMandatoryVoicesPercentage > 90 &&
-        foundMandatoryVoicesPercentage < 100) ||
-      (foundMandatoryVoicesNotCorrectOrderPercentage > 0 &&
-        foundMandatoryVoicesNotCorrectOrderPercentage < 10)
+      (missingVoicesAmount > 0 && missingVoicesAmount <= 2) ||
+      voicesNotInCorrectOrderAmount === 1
     ) {
       score = 0.5;
       item[0].result = yellowResult;
