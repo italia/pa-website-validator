@@ -5,7 +5,7 @@ import lighthouse from "lighthouse";
 import * as https from "https";
 import * as http from "http";
 import { CheerioAPI } from "cheerio";
-import { loadPageData } from "../../utils/utils";
+import { buildUrl, isInternalUrl, loadPageData } from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 const currentVersion = "1.1.0";
@@ -80,6 +80,9 @@ class LoadAudit extends Audit {
 
       if (linkTag.attribs.href.includes("style.css")) {
         styleCSSurl = linkTag.attribs.href;
+        if ((await isInternalUrl(styleCSSurl)) && !styleCSSurl.includes(url)) {
+          styleCSSurl = await buildUrl(url, styleCSSurl);
+        }
 
         let CSS = "";
         try {
@@ -101,7 +104,7 @@ class LoadAudit extends Audit {
                 [{ key: "result", itemType: "text", text: "Risultato" }],
                 [
                   {
-                    result: notExecuted + errorMessage,
+                    result: notExecuted + " " + errorMessage,
                   },
                 ]
               ),
