@@ -8,6 +8,12 @@ export const contentTypeItems = {
     "Condizioni di servizio",
     "Contatti",
   ],
-  Header: ["Titolo", "Descrizione", "Stato", "Tassonomie argomenti"],
+  Header: [
+    "Titolo",
+    "Descrizione",
+    "Stato",
+    "Tassonomie argomenti",
+    "Breadcrumb",
+  ],
   Body: ["Area"],
 };

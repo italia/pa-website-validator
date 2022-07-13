@@ -14,6 +14,7 @@ import {
 } from "../../utils/utils";
 
 import { contentTypeItems } from "../../storage/municipality/contentTypeItems";
+import { secondLevelPageNames } from "../../storage/municipality/controlledVocabulary";
 
 const greenResult =
   "Tutte le voci obbligatorie sono presenti e nell'ordine corretto.";
@@ -134,6 +135,28 @@ class LoadAudit extends Audit {
     );
     if (argumentsTag.length <= 0) {
       missingMandatoryItems.push(mandatoryHeaderVoices[3]);
+    }
+
+    const breadcrumbElements = await getPageElementDataAttribute(
+      $,
+      '[data-element="breadcrumb"]',
+      "li"
+    );
+
+    let breadcrumbArgumentInVocabulary = false;
+    for (const breadcrumbElement of breadcrumbElements) {
+      if (
+        secondLevelPageNames.includes(
+          breadcrumbElement.trim().toLowerCase().replaceAll("/", "")
+        )
+      ) {
+        breadcrumbArgumentInVocabulary = true;
+        break;
+      }
+    }
+
+    if (!breadcrumbArgumentInVocabulary) {
+      missingMandatoryItems.push(mandatoryHeaderVoices[4]);
     }
 
     const area = $('[data-element="service-area"]').text().trim() ?? "";
