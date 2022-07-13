@@ -14,18 +14,12 @@ type ExpectedEntry = [
     number,
     number,
     number,
-    number,
-    number,
-    number,
     number
   ]
 ];
 
 const expected: Array<ExpectedEntry> = [
-  [
-    "https://www.ismonnet.edu.it",
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-  ],
+  ["https://www.ismonnet.edu.it", [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0]],
 ];
 
 const audits = [
@@ -41,9 +35,6 @@ const audits = [
   "common-security-ip-location",
   "school-controlled-vocabularies",
   "school-servizi-structure-match-model",
-  "school-informative-reuse",
-  "school-informative-license-and-attribution",
-  "school-informative-cloud-infrastructure",
 ] as const;
 
 const descriptions = [
@@ -59,9 +50,6 @@ const descriptions = [
   "IP location",
   "Vocabularies",
   "Services",
-  "Resue",
-  "License",
-  "Cloud",
 ] as const;
 
 type Audits = typeof audits[number];
@@ -96,5 +84,13 @@ describe.each(expected)("%s", (url, expectedResults) => {
 
   test.each(expandExpected(expectedResults))("%s", (_, audit, expected) => {
     expect(report.audits[audit].score).toBe(expected);
+  });
+
+  test.each([
+    ["Reuse", "school-informative-reuse"],
+    ["License", "school-informative-license-and-attribution"],
+    ["Cloud", "school-informative-cloud-infrastructure"],
+  ])("%s", (_, audit) => {
+    expect(report.audits[audit].score).toBe(null);
   });
 });
