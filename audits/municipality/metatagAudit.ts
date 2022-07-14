@@ -251,6 +251,6 @@ const getMissingVoices = async (result: ValidatorResult) => {
   }
 
   return voices.map(function (x) {
-    return x.replace("instance.", "").replace(/[0-9]/g, "");
+    return x.replace("instance.", "").replace(/[0-9]/g, "").slice(0, -1);
   });
 };
