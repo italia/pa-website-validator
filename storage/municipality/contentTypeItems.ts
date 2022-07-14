@@ -5,6 +5,7 @@ export const contentTypeItems = {
     "Cosa serve",
     "Cosa si ottiene",
     "Tempi e scadenze",
+    "Accedi al servizio",
     "Condizioni di servizio",
     "Contatti",
   ],

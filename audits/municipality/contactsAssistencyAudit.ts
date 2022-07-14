@@ -3,6 +3,7 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import {
+  getPageElementDataAttribute,
   getRandomMunicipalityServiceUrl,
   loadPageData,
   urlExists,
@@ -26,7 +27,7 @@ class LoadAudit extends Audit {
         "C.SI.2.2 - RICHIESTA DI ASSISTENZA / CONTATTI - All'interno del sito comunale, nel contenuto della scheda servizio, devono essere comunicati i contatti dell'ufficio preposto all'erogazione del servizio.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        'CONDIZIONI DI SUCCESSO: la funzionalità di richiesta di assistenza è presente in tutte le schede servizio; MODALITÀ DI VERIFICA: viene verificata la presenza del componente "Richiedi assistenza" all\'interno di una scheda servizio selezionata casualmente, ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+        "CONDIZIONI DI SUCCESSO: i contatti dell'ufficio preposto all'erogazione del servizio sono presenti in tutte le schede servizio; MODALITÀ DI VERIFICA: viene verificata la presenza della voce \"Contatti\" all'interno dell'indice di una scheda servizio selezionata casualmente, ricercando uno specifico attributo \"data-element\" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
       requiredArtifacts: ["origin"],
     };
   }
@@ -42,16 +43,6 @@ class LoadAudit extends Audit {
         key: "result",
         itemType: "text",
         text: "Risultato",
-      },
-      {
-        key: "link_name",
-        itemType: "text",
-        text: "Nome del link",
-      },
-      {
-        key: "link_destination",
-        itemType: "text",
-        text: "Destinazione link",
       },
       {
         key: "inspected_page",
@@ -74,7 +65,7 @@ class LoadAudit extends Audit {
 
     if (!randomServiceToBeScanned) {
       return {
-        score: 0,
+        score: score,
         details: Audit.makeTableDetails(
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
@@ -87,29 +78,21 @@ class LoadAudit extends Audit {
     }
 
     item[0].inspected_page = randomServiceToBeScanned;
+
     const $: CheerioAPI = await loadPageData(randomServiceToBeScanned);
-    const contactsElement = $('[data-element="contacts"]');
-    const elementObj = $(contactsElement).attr();
-    item[0].link_name = contactsElement.text().trim() ?? "";
-    item[0].link_destination = elementObj?.href ?? "";
 
-    if (
-      elementObj &&
-      "href" in elementObj &&
-      elementObj.href !== "#" &&
-      elementObj.href !== ""
-    ) {
-      const checkUrl = await urlExists(url, elementObj.href);
-      item[0].link_destination = checkUrl.inspectedUrl;
+    const indexList = await getPageElementDataAttribute(
+      $,
+      '[data-element="page-index"]',
+      "> li > a"
+    );
 
-      if (!checkUrl.result) {
-        item[0].result += checkUrl.reason;
-        return {
-          score: 0,
-          details: Audit.makeTableDetails(headings, item),
-        };
-      }
+    let contactsPresent = false;
+    if (indexList.includes("Contatti")) {
+      contactsPresent = true;
+    }
 
+    if (contactsPresent) {
       item[0].result = greenResult;
       score = 1;
     }
