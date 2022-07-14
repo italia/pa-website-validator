@@ -7,8 +7,9 @@ import { loadPageData, urlExists } from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
-const greenResult = "Il link è corretto e nella posizione corretta.";
-const redResult = "Il link è errato o non è nella posizione corretta.";
+const greenResult = "Il link è nel footer ed è nominato correttamente.";
+const yellowResult = "Il link è nel footer ma non è nominato correttamente.";
+const redResult = "Il link non è nel footer.";
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -20,7 +21,7 @@ class LoadAudit extends Audit {
         "C.SI.2.3 - RICHIESTA DI ASSISTENZA / DOMANDE FREQUENTI - Il sito comunale deve contenere una sezione per le domande più frequenti (FAQ).",
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
-        'CONDIZIONI DI SUCCESSO: nel footer del sito comunale è presente un link che rimanda alla sezione di FAQ; MODALITÀ DI VERIFICA: viene analizzato il footer del sito alla ricerca di un link che contenga nel nome i termini "FAQ" oppure "domande frequenti"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni, EGovernment benchmark method paper 2020-2023](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/v2022.1/index.html)',
+        'CONDIZIONI DI SUCCESSO: nel footer del sito è presente un link alle domande più frequenti che contenga le espressioni "FAQ" oppure "domande frequenti"; MODALITÀ DI VERIFICA: viene verificata la presenza del link nel footer, ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica, e che il testo del link contenga almeno una delle espressioni richieste, senza fare distinzione tra caratteri minuscoli o maiuscoli; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](), [eGovernment benchmark method paper 2020-2023](), Documentazione tecnica.',
       requiredArtifacts: ["origin"],
     };
   }
@@ -63,12 +64,7 @@ class LoadAudit extends Audit {
 
     const label = privacyPolicyElement.text().trim().toLowerCase() ?? "";
     items[0].link_name = label;
-    if (!label.includes("faq") && !label.includes("domande frequenti")) {
-      return {
-        score: 0,
-        details: Audit.makeTableDetails(headings, items),
-      };
-    }
+    items[0].link_destination = elementObj?.href ?? "";
 
     if (
       elementObj &&
@@ -83,6 +79,14 @@ class LoadAudit extends Audit {
         items[0].result += checkUrl.reason;
         return {
           score: 0,
+          details: Audit.makeTableDetails(headings, items),
+        };
+      }
+
+      if (!label.includes("faq") && !label.includes("domande frequenti")) {
+        items[0].result = yellowResult;
+        return {
+          score: 0.5,
           details: Audit.makeTableDetails(headings, items),
         };
       }

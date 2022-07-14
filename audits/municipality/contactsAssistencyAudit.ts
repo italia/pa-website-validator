@@ -11,10 +11,10 @@ import { CheerioAPI } from "cheerio";
 
 const Audit = lighthouse.Audit;
 
-const greenResult = 'La voce "Contatti" è presente.';
-const redResult = 'La voce "Contatti" non è presente.';
+const greenResult = "Il componente è presente.";
+const redResult = "Il componente non è presente.";
 const notExecuted =
-  "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.";
+  "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.";
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -26,7 +26,7 @@ class LoadAudit extends Audit {
         "C.SI.2.2 - RICHIESTA DI ASSISTENZA / CONTATTI - All'interno del sito comunale, nel contenuto della scheda servizio, devono essere comunicati i contatti dell'ufficio preposto all'erogazione del servizio.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        'CONDIZIONI DI SUCCESSO: in ogni scheda servizio è presente la voce "Richiedi assistenza" (NB: questo audit è correlato a C.SI.1.3); MODALITÀ DI VERIFICA: viene verificata la presenza della voce "Contatti" in una scheda servizio casualmente selezionata; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni, EGovernment benchmark method paper 2020-2023](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/v2022.1/index.html)',
+        'CONDIZIONI DI SUCCESSO: la funzionalità di richiesta di assistenza è presente in tutte le schede servizio; MODALITÀ DI VERIFICA: viene verificata la presenza del componente "Richiedi assistenza" all\'interno di una scheda servizio selezionata casualmente, ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
       requiredArtifacts: ["origin"],
     };
   }
@@ -91,6 +91,7 @@ class LoadAudit extends Audit {
     const contactsElement = $('[data-element="contacts"]');
     const elementObj = $(contactsElement).attr();
     item[0].link_name = contactsElement.text().trim() ?? "";
+    item[0].link_destination = elementObj?.href ?? "";
 
     if (
       elementObj &&

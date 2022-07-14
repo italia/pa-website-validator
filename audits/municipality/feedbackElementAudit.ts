@@ -11,10 +11,11 @@ import {
 
 const Audit = lighthouse.Audit;
 
-const greenResult = "Il componente è presente.";
-const redResult = "Il componente non è presente.";
+const greenResult = "Il componente è presente in tutte le pagine valutate.";
+const redResult =
+  "Il componente non è presente in una o più delle pagine valutate.";
 const notExecuted =
-  'Non è stato possibile condurre il test. Controlla le "Modalità di verifica" per scoprire di più.';
+  "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.";
 
 class LoadAudit extends lighthouse.Audit {
   static get meta() {
@@ -26,7 +27,7 @@ class LoadAudit extends lighthouse.Audit {
         "C.SI.2.5 - VALUTAZIONE DELL'ESPERIENZA D'USO, CHIAREZZA DELLE PAGINE INFORMATIVE - Il sito comunale deve consentire al cittadino di fornire una valutazione della chiarezza di ogni pagina di primo e secondo livello.",
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
       description:
-        "CONDIZIONI DI SUCCESSO: la funzionalità per valutare la chiarezza informativa è presente su tutte le pagine di primo e secondo livello; MODALITÀ DI VERIFICA: viene verificata la presenza del componente, tramite il suo attributo, su una pagina di primo o secondo livello selezionata casualmente; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni, EGovernment benchmark method paper 2020-2023](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/v2022.1/index.html)",
+        'CONDIZIONI DI SUCCESSO: la funzionalità per valutare la chiarezza informativa è presente su tutte le pagine di primo e secondo livello del sito; MODALITÀ DI VERIFICA: viene verificata la presenza del componente su una pagina di primo livello selezionata casualmente e su una pagina di secondo livello selezionata casualmente a partire dalla pagina "Servizi", ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
       requiredArtifacts: ["origin"],
     };
   }
@@ -100,7 +101,7 @@ class LoadAudit extends lighthouse.Audit {
 
     if (firstLevelPages.length <= 0) {
       items[0].result =
-        notExecuted + " nessuna pagina di primo livello trovata";
+        notExecuted + " Nessuna pagina di primo livello trovata.";
       return {
         score: 0,
         details: Audit.makeTableDetails(headings, items),
@@ -125,7 +126,7 @@ class LoadAudit extends lighthouse.Audit {
     }
 
     if (servicesPage.length <= 0) {
-      items[0].result = notExecuted + " pagina servizi non trovata";
+      items[0].result = notExecuted + " Pagina servizi non trovata.";
       return {
         score: 0,
         details: Audit.makeTableDetails(headings, items),
@@ -145,7 +146,7 @@ class LoadAudit extends lighthouse.Audit {
 
     if (servicesSecondLevelPages.length <= 0) {
       items[0].result =
-        notExecuted + " - pagina servizio di secondo livello non trovata";
+        notExecuted + " Pagina servizio di secondo livello non trovata.";
       return {
         score: 0,
         details: Audit.makeTableDetails(headings, items),
