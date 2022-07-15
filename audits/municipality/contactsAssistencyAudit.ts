@@ -6,7 +6,6 @@ import {
   getPageElementDataAttribute,
   getRandomMunicipalityServiceUrl,
   loadPageData,
-  urlExists,
 } from "../../utils/utils";
 import { CheerioAPI } from "cheerio";
 
