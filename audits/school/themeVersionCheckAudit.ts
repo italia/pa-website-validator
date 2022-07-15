@@ -8,7 +8,7 @@ import { CheerioAPI } from "cheerio";
 import { buildUrl, isInternalUrl, loadPageData } from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
-const currentVersion = "1.1.0";
+const currentVersion = "2.0.0";
 const textDomain = "design_scuole_italia";
 
 const greenResult =
