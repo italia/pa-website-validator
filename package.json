@@ -39,6 +39,7 @@
     "yargs": "^17.0.10"
   },
   "devDependencies": {
+    "@fastify/static": "^6.4.0",
     "@swc/core": "^1.2.208",
     "@swc/jest": "^0.2.21",
     "@types/geoip-lite": "^1.4.1",
@@ -51,6 +52,7 @@
     "@typescript-eslint/parser": "^5.25.0",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
+    "fastify": "^4.2.1",
     "jest": "^28.1.2",
     "prettier": "^2.6.2",
     "ts-node": "^10.7.0",
@@ -60,8 +62,9 @@
     "extensionsToTreatAsEsm": [
       ".ts"
     ],
-    "modulePaths": [
-      "<rootDir>"
+    "testPathIgnorePatterns": [
+      "/node_modules",
+      "/__tests__/schools"
     ],
     "testTimeout": 300000,
     "transform": {
