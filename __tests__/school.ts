@@ -14,7 +14,7 @@ type ExpectedLocalEntry = [
 ];
 
 const expectedLocal: Array<ExpectedLocalEntry> = [
-  ["master", [1, 1, 0.5, 1, 1, 0, 0, 0, 0]],
+  ["master", [1, 1, 0.5, 1, 1, 0, 0, 1, 0]],
 ];
 
 type ExpectedOnlineEntry = [
