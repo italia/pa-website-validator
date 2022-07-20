@@ -69,9 +69,32 @@ const run = async (
     };
   }
 
-  const certificate = await checkCertificateValidation(url);
-  const tls = await checkTLSVersion(url);
-  const cipherSuite = await checkCipherSuite(url);
+  let certificate = {
+    valid: false,
+    valid_from: "",
+    valid_to: "",
+  };
+  let tls = {
+    valid: false,
+    tls_version: "",
+  };
+  let cipherSuite = {
+    valid: false,
+    version: "",
+  };
+
+  try {
+    certificate = await checkCertificateValidation(url);
+    tls = await checkTLSVersion(url);
+    cipherSuite = await checkCipherSuite(url);
+  } catch (e) {
+    item[0].protocol = protocol;
+    item[0].result = redResult + " Internal exception: " + JSON.stringify(e);
+    return {
+      score: 0,
+      details: Audit.makeTableDetails(headings, item),
+    };
+  }
 
   item[0].protocol = protocol;
 
