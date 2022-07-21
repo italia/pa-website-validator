@@ -15,136 +15,135 @@ import {
 
 const modelComplianceInformationAudits = [
   {
-    id: "municipality-menu-structure-match-model",
-    weight: 100,
-    group: "user-experience",
-  },
-  {
-    id: "municipality-second-level-pages",
-    weight: 100,
-    group: "user-experience",
-  },
-  {
-    id: "municipality-ux-ui-consistency-bootstrap-italia-double-check",
-    weight: 100,
-    group: "user-experience",
-  },
-  {
-    id: "municipality-informative-license-and-attribution",
-    weight: 100,
-    group: "legislation",
-  },
-  {
-    id: "municipality-informative-user-experience-evaluation",
-    weight: 100,
-    group: "function",
-  },
-
-  {
-    id: "municipality-legislation-cookie-domain-check",
-    weight: 100,
-    group: "security",
-  },
-  {
-    id: "municipality-security",
-    weight: 100,
-    group: "security",
-  },
-  {
-    id: "municipality-legislation-accessibility-declaration-is-present",
-    weight: 100,
-    group: "legislation",
-  },
-  {
-    id: "municipality-legislation-privacy-is-present",
-    weight: 100,
-    group: "legislation",
-  },
-  {
-    id: "municipality-faq-is-present",
-    weight: 100,
-    group: "function",
-  },
-  {
-    id: "municipality-inefficiency-report",
-    weight: 100,
-    group: "function",
-  },
-  {
     id: "municipality-ux-ui-consistency-fonts-check",
     weight: 100,
     group: "user-experience",
   },
   {
-    id: "municipality-booking-appointment-check",
-    weight: 100,
-    group: "function",
-  },
-  {
-    id: "municipality-controlled-vocabularies",
-    weight: 100,
+    id: "municipality-ux-ui-consistency-bootstrap-italia-double-check",
+    weight: 99,
     group: "user-experience",
   },
   {
-    id: "municipality-contacts-assistency",
-    weight: 100,
-    group: "function",
-  },
-  {
-    id: "municipality-feedback-element",
-    weight: 100,
-    group: "function",
-  },
-  {
-    id: "municipality-domain",
-    weight: 100,
-    group: "security",
-  },
-  {
     id: "municipality-servizi-structure-match-model",
-    weight: 100,
+    weight: 98,
     group: "user-experience",
   },
   {
     id: "municipality-ux-ui-consistency-theme-version-check",
-    weight: 100,
+    weight: 97,
     group: "user-experience",
+  },
+  {
+    id: "municipality-controlled-vocabularies",
+    weight: 96,
+    group: "user-experience",
+  },
+  {
+    id: "municipality-menu-structure-match-model",
+    weight: 95,
+    group: "user-experience",
+  },
+  {
+    id: "municipality-second-level-pages",
+    weight: 94,
+    group: "user-experience",
+  },
+  {
+    id: "municipality-booking-appointment-check",
+    weight: 93,
+    group: "function",
+  },
+  {
+    id: "municipality-contacts-assistency",
+    weight: 92,
+    group: "function",
+  },
+  {
+    id: "municipality-faq-is-present",
+    weight: 91,
+    group: "function",
+  },
+  {
+    id: "municipality-inefficiency-report",
+    weight: 90,
+    group: "function",
+  },
+  {
+    id: "municipality-feedback-element",
+    weight: 89,
+    group: "function",
+  },
+  {
+    id: "municipality-informative-user-experience-evaluation",
+    weight: 88,
+    group: "function",
+  },
+  {
+    id: "municipality-legislation-cookie-domain-check",
+    weight: 87,
+    group: "security",
+  },
+  {
+    id: "municipality-legislation-accessibility-declaration-is-present",
+    weight: 86,
+    group: "legislation",
+  },
+  {
+    id: "municipality-legislation-privacy-is-present",
+    weight: 85,
+    group: "legislation",
+  },
+  {
+    id: "municipality-informative-license-and-attribution",
+    weight: 84,
+    group: "legislation",
+  },
+  {
+    id: "municipality-security",
+    weight: 83,
+    group: "security",
+  },
+  {
+    id: "municipality-domain",
+    weight: 82,
+    group: "security",
   },
 ];
 
 const modelComplianceActiveAudits = [
   {
     id: "municipality-personal-area-security",
-    weight: 100,
+    weight: 81,
     group: "security",
   },
   {
     id: "municipality-subdomain",
-    weight: 100,
+    weight: 80,
     group: "security",
   },
 ];
 
 const reccomandationsAndAdditionalTestsAudits = [
   {
+    id: "municipality-metatag",
+    weight: 79,
+    group: "user-experience",
+  },
+  {
     id: "municipality-informative-cloud-infrastructure",
-    weight: 100,
+    weight: 78,
     group: "legislation",
   },
   {
     id: "municipality-informative-reuse",
-    weight: 100,
+    weight: 77,
     group: "legislation",
-  },
-  {
-    id: "municipality-metatag",
-    weight: 100,
-    group: "user-experience",
   },
 ];
 
 const additionalTestsAudit = [
-  { id: "common-security-ip-location", weight: 100 },
+  { id: "common-security-ip-location", weight: 76 },
 ];
 
 export default {
