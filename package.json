@@ -55,7 +55,7 @@
       "/node_modules",
       "/__tests__/schools"
     ],
-    "testTimeout": 300000,
+    "testTimeout": 600000,
     "transform": {
       "^.+\\.(t|j)sx?$": [
         "@swc/jest"
