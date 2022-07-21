@@ -4,11 +4,16 @@
 import lighthouse from "lighthouse";
 const Audit = lighthouse.Audit;
 
+import { CheerioAPI } from "cheerio";
+import { buildUrl, isInternalUrl, loadPageData } from "../../utils/utils";
+
 import { domains } from "../../storage/municipality/allowedDomains";
 
 const greenResult = "Il sottodominio utilizzato è corretto.";
 const redResult =
   "Il sottodominio utilizzato non è congruente al dominio del sito o non fa riferimento a un dominio riservato.";
+const notExecuted =
+  "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.";
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -39,31 +44,70 @@ class LoadAudit extends Audit {
         text: "Risultato",
       },
       {
+        key: "domain",
+        itemType: "text",
+        text: "Dominio utilizzato",
+      },
+      {
         key: "subdomain",
         itemType: "text",
         text: "Sottodominio utilizzato",
       },
     ];
 
-    const urlParts = url.split(".");
-
     const items = [
       {
         result: redResult,
-        subdomain: urlParts[1],
+        domain: "",
+        subdomain: "",
       },
     ];
 
-    let correctDomain = false;
+    const $: CheerioAPI = await loadPageData(url);
+    const loginAreaElement = $('[data-element="personal-area-login"]');
+    const elementObj = $(loginAreaElement).attr();
+
+    if (
+      !elementObj ||
+      !("href" in elementObj) ||
+      elementObj.href === "#" ||
+      elementObj.href === ""
+    ) {
+      items[0].result = notExecuted;
+      return {
+        score: score,
+        details: Audit.makeTableDetails(headings, items),
+      };
+    }
+
+    if (
+      !elementObj.href.includes(url) &&
+      (await isInternalUrl(elementObj.href))
+    ) {
+      elementObj.href = await buildUrl(url, elementObj.href);
+    }
+    const serviceAreaUrlHostnameParts = new URL(elementObj.href).hostname
+      .replace("www.", "")
+      .split(".");
+    const subDomain = serviceAreaUrlHostnameParts[0];
+
+    const hostnameParts = new URL(url).hostname.split(".");
+    const domain = hostnameParts.slice(hostnameParts.length > 3 ? -2 : -1);
+    const originFinalDomain = domain.join(".").split(".")[0];
+
+    items[0].domain = originFinalDomain;
+    items[0].subdomain = subDomain;
+
+    let correctSubDomain = false;
     for (const domain of domains) {
       const splitDomain = domain.split(".");
-      if (urlParts[1] === splitDomain[0]) {
-        correctDomain = true;
+      if (subDomain === splitDomain[0]) {
+        correctSubDomain = true;
         break;
       }
     }
 
-    if (correctDomain) {
+    if (subDomain === originFinalDomain && correctSubDomain) {
       score = 1;
       items[0].result = greenResult;
     }

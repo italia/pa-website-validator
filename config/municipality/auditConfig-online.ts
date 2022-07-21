@@ -204,29 +204,29 @@ export default {
   categories: {
     performance: {
       title:
-        "Pacchetto Cittadino Informato: C.SI.4.1 - Velocità e tempi di risposta",
+        'Pacchetto Cittadino Informato: criterio "C.SI.4.1 - Velocità e tempi di risposta"',
       description:
-        "Nel caso in cui il sito presenti livelli di prestazioni (media pesata di 6 metriche standard) inferiori a 50 secondo quanto calcolato e verificato tramite le librerie Lighthouse, il Comune deve pubblicare sul sito un “Piano di miglioramento del sito” che mostri, per ciascuna delle 6 metriche che impatta negativamente le prestazioni, le azioni future di miglioramento e le relative tempistiche di realizzazione attese. RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/)",
+        "CONDIZIONI DI SUCCESSO: il sito presenta livelli di prestazioni (media pesata di 6 metriche standard) pari o superiori a 50. Se il punteggio è inferiore a 50, il Comune deve pubblicare sul sito un “Piano di miglioramento del sito” che mostri, per ciascuna delle 6 metriche che impatta negativamente le prestazioni, le azioni future di miglioramento e le relative tempistiche di realizzazione attese; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/).\n",
     },
 
     modelComplianceInformation: {
       title: "Pacchetto Cittadino Informato: criteri di conformità",
       description:
-        "Il validatore mostra i risultati degli audit per le raccomandazioni in riferimento all'[allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000dk829QAA#allegati). A questi sono aggiunti ulteriori test per facilitare le attività di sviluppo e garantire un buon risultato.",
+        "Vengono mostrati i risultati degli audit relativi ad alcuni dei criteri di conformità del Pacchetto Cittadino Informato illustrati nell'[allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000dk829QAA#allegati).",
       auditRefs: [...modelComplianceInformationAudits],
     },
 
     modelComplianceActive: {
       title: "Pacchetto Cittadino Attivo: criteri di conformità",
       description:
-        "Vengono mostrati i risultati degli audit, relativi ad alcuni dei criteri di conformità del Pacchetto Cittadino Attivo, in riferimento all'[allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000dk829QAA#allegati).",
+        "Vengono mostrati i risultati degli audit relativi ad alcuni dei criteri di conformità del Pacchetto Cittadino Attivo illustrati nell'[allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000dk829QAA#allegati).",
       auditRefs: [...modelComplianceActiveAudits],
     },
 
     reccomandationsAndAdditionalTests: {
-      title: "Raccomandazioni progettuali e test aggiuntivi",
+      title: "Pacchetto Cittadino Informato: raccomandazioni progettuali",
       description:
-        "Vengono mostrati i risultati degli audit, relativi ad alcune delle raccomandazioni progettuali del Pacchetto Cittadino Informato, in riferimento all'[allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000dk829QAA#allegati). A questi sono aggiunti ulteriori test per facilitare le attività di sviluppo e garantire un buon risultato.",
+        "Vengono mostrati i risultati degli audit relativi ad alcune delle raccomandazioni progettuali del Pacchetto Cittadino Informato illustrati nell'[allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000dk829QAA#allegati).",
       auditRefs: [...reccomandationsAndAdditionalTestsAudits],
     },
 
