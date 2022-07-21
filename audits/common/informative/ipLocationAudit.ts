@@ -16,14 +16,32 @@ class LoadAudit extends Audit {
         "LOCALIZZAZIONE IP - Il sito deve essere hostato su datacenter localizzati su territorio europeo.",
       scoreDisplayMode: Audit.SCORING_MODES.INFORMATIVE,
       description:
-        "Questo audit produce un risultato solo quando viene effettuato su un sito pubblicato online.",
+        "CONDIZIONI DI SUCCESSO: l'indirizzo IP fa riferimento a un datacenter localizzato su territorio europeo; MODALITÀ DI VERIFICA: verifica che la localizzazione dell'IP rientri all'interno di uno dei confini degli stati membri dell'UE; RIFERIMENTI TECNICI E NORMATIVI: GDPR",
       requiredArtifacts: [],
     };
   }
 
-  static async audit(): Promise<{ score: number }> {
+  static async audit(): Promise<{
+    score: number;
+    details: LH.Audit.Details.Table;
+  }> {
     return {
       score: 1,
+      details: Audit.makeTableDetails(
+        [
+          {
+            key: "result",
+            itemType: "text",
+            text: "Risultato",
+          },
+        ],
+        [
+          {
+            result:
+              "Questo audit produce un risultato solo quando viene effettuato su un sito pubblicato online.",
+          },
+        ]
+      ),
     };
   }
 }
