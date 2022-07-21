@@ -87,8 +87,7 @@ class LoadAudit extends lighthouse.Audit {
       '[data-element="all-topics"]'
     );
     if (allArgumentsHREF.length <= 0) {
-      item[0].result =
-        notExecuted + " - pagina tutti gli argomenti non trovata";
+      item[0].result = notExecuted;
       return {
         score: 0,
         details: Audit.makeTableDetails(headings, item),

@@ -41,10 +41,7 @@ class LoadAudit extends Audit {
       { key: "result", itemType: "text", text: "Risultato" },
       { key: "inspected_url", itemType: "text", text: "URL ispezionato" },
     ];
-    const item = [
-      { result: notExecuted + " URL area privata non valido " },
-      { inspected_url: "" },
-    ];
+    const item = [{ result: notExecuted }, { inspected_url: "" }];
 
     const $: CheerioAPI = await loadPageData(origin);
     const loginAreaElement = $('[data-element="personal-area-login"]');

@@ -76,7 +76,7 @@ class LoadAudit extends lighthouse.Audit {
       '[data-element="all-services"]'
     );
     if (secondLevelPageHref.length <= 0) {
-      items[0].result = notExecuted + " - pagina servizi non trovata";
+      items[0].result = notExecuted;
       return {
         score: score,
         details: Audit.makeTableDetails(headings, items),
