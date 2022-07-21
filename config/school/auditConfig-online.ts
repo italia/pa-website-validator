@@ -21,71 +21,71 @@ const customModelComplianceAudits = [
   },
   {
     id: "school-ux-ui-consistency-bootstrap-italia-double-check",
-    weight: 100,
+    weight: 99,
     group: "user-experience",
   },
   {
     id: "school-ux-ui-consistency-theme-version-check",
-    weight: 100,
+    weight: 98,
     group: "user-experience",
   },
   {
     id: "school-menu-structure-match-model",
-    weight: 100,
+    weight: 97,
     group: "user-experience",
   },
   {
     id: "school-menu-scuola-second-level-structure-match-model",
-    weight: 100,
+    weight: 96,
     group: "user-experience",
   },
   {
-    id: "school-legislation-cookie-domain-check",
-    weight: 100,
+    id: "school-legislation-privacy-is-present",
+    weight: 95,
     group: "legislation",
   },
   {
     id: "school-legislation-accessibility-declaration-is-present",
-    weight: 100,
+    weight: 94,
     group: "legislation",
   },
   {
-    id: "school-legislation-privacy-is-present",
-    weight: 100,
+    id: "school-legislation-cookie-domain-check",
+    weight: 93,
     group: "legislation",
   },
   {
     id: "school-security",
-    weight: 100,
+    weight: 92,
     group: "security",
   },
 ];
 const customReccomendationsAudits = [
   {
-    id: "school-servizi-structure-match-model",
-    weight: 100,
+    id: "school-controlled-vocabularies",
+    weight: 91,
     group: "user-experience",
   },
   {
-    id: "school-controlled-vocabularies",
-    weight: 100,
+    id: "school-servizi-structure-match-model",
+    weight: 90,
     group: "user-experience",
   },
-  { id: "school-informative-reuse", weight: 100, group: "legislation" },
+  { id: "school-informative-reuse", weight: 89, group: "legislation" },
   {
     id: "school-informative-license-and-attribution",
-    weight: 100,
+    weight: 88,
     group: "legislation",
   },
   {
     id: "school-informative-cloud-infrastructure",
-    weight: 100,
+    weight: 87,
     group: "legislation",
   },
 ];
 
 const customAdditionalAudits = [
-  { id: "common-security-ip-location", weight: 100, group: "security" },
+  { id: "common-security-ip-location", weight: 86, group: "security" },
 ];
 
 export default {
