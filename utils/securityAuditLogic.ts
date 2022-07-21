@@ -43,7 +43,7 @@ const run = async (
     {
       key: "certificate_validation",
       itemType: "text",
-      text: "Validità certificato",
+      text: "Validità del certificato",
     },
     { key: "tls_version", itemType: "text", text: "Versione TLS" },
     { key: "cipher_suite", itemType: "text", text: "Suite di cifratura" },

@@ -11,8 +11,8 @@ import { CheerioAPI } from "cheerio";
 
 const Audit = lighthouse.Audit;
 
-const greenResult = "Il componente è presente.";
-const redResult = "Il componente non è presente.";
+const greenResult = 'La voce "Contatti" è presente.';
+const redResult = 'La voce "Contatti" è assente.';
 const notExecuted =
   "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.";
 
