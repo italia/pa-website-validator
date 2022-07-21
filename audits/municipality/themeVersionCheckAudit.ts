@@ -94,18 +94,13 @@ class LoadAudit extends Audit {
             CSS = await getCSShttp(styleCSSurl);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
           } catch (ex: any) {
-            let errorMessage = "";
-            if (Object.values(ex)) {
-              errorMessage = Object.values(ex).toString();
-            }
-
             return {
               score: 0,
               details: Audit.makeTableDetails(
                 [{ key: "result", itemType: "text", text: "Risultato" }],
                 [
                   {
-                    result: notExecuted + " " + errorMessage,
+                    result: notExecuted,
                   },
                 ]
               ),

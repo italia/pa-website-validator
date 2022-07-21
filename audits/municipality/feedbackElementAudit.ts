@@ -100,8 +100,7 @@ class LoadAudit extends lighthouse.Audit {
     ];
 
     if (firstLevelPages.length <= 0) {
-      items[0].result =
-        notExecuted + " Nessuna pagina di primo livello trovata.";
+      items[0].result = notExecuted;
       return {
         score: 0,
         details: Audit.makeTableDetails(headings, items),
@@ -126,7 +125,7 @@ class LoadAudit extends lighthouse.Audit {
     }
 
     if (servicesPage.length <= 0) {
-      items[0].result = notExecuted + " Pagina servizi non trovata.";
+      items[0].result = notExecuted;
       return {
         score: 0,
         details: Audit.makeTableDetails(headings, items),
@@ -145,8 +144,7 @@ class LoadAudit extends lighthouse.Audit {
     );
 
     if (servicesSecondLevelPages.length <= 0) {
-      items[0].result =
-        notExecuted + " Pagina servizio di secondo livello non trovata.";
+      items[0].result = notExecuted;
       return {
         score: 0,
         details: Audit.makeTableDetails(headings, items),
