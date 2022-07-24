@@ -45,12 +45,12 @@ class LoadAudit extends Audit {
       {
         key: "link_name",
         itemType: "text",
-        text: "Nome del link",
+        text: "Testo del link",
       },
       {
         key: "link_destination",
         itemType: "text",
-        text: "Destinazione link",
+        text: "Pagina di destinazione del link",
       },
       {
         key: "existing_page",
@@ -78,8 +78,7 @@ class LoadAudit extends Audit {
     if (elementObj && "href" in elementObj) {
       items[0].link_destination = elementObj.href;
 
-      if (!elementObj.href.includes("https://form.agid.gov.it")) {
-        items[0].result += " L'url deve iniziare con: https://form.agid.gov.it";
+      if (!elementObj.href.includes("https://form.agid.gov.it/view/")) {
         return {
           score: 0,
           details: Audit.makeTableDetails(headings, items),

@@ -44,12 +44,12 @@ class LoadAudit extends Audit {
       {
         key: "link_name",
         itemType: "text",
-        text: "Nome del link",
+        text: "Testo del link",
       },
       {
         key: "link_destination",
         itemType: "text",
-        text: "Destinazione link",
+        text: "Pagina di destinazione del link",
       },
       {
         key: "existing_page",

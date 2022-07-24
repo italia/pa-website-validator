@@ -9,7 +9,7 @@ import { buildUrl, isInternalUrl, loadPageData } from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 const currentVersion = "1.0.0";
-const textDomain = "design_comuni_italia";
+const textDomain = "Text Domain: design_comuni_italia";
 
 const greenResult =
   "Il sito utilizza una versione idonea del tema CMS del modello.";
@@ -107,20 +107,24 @@ class LoadAudit extends Audit {
           }
         }
 
-        if (CSS.includes(versionToCheck) && CSS.includes(textDomain)) {
-          score = 1;
-          items[0].result = greenResult;
-          items[0].theme_version = await getCurrentVersion(CSS);
-          items[0].checked_element = styleCSSurl;
+        items[0].checked_element = styleCSSurl;
 
-          break;
-        } else if (!CSS.includes(versionToCheck) && CSS.includes(textDomain)) {
-          score = 0;
-          items[0].result = redResult;
-          items[0].theme_version = await getCurrentVersion(CSS);
-          items[0].checked_element = styleCSSurl;
+        if (!CSS.includes(textDomain)) {
+          score = 0.5;
+          items[0].result = yellowResult;
+        } else {
+          const currentVersion = await getCurrentVersion(CSS);
+          items[0].theme_version = currentVersion;
+          const splittedVersion = currentVersion.split(".");
 
-          break;
+          if (
+            splittedVersion.length > 2 &&
+            parseInt(splittedVersion[0]) >= 1 &&
+            parseInt(splittedVersion[1]) >= 0
+          ) {
+            score = 1;
+            items[0].result = greenResult;
+          }
         }
       }
     }
