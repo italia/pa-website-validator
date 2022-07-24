@@ -47,12 +47,12 @@ class LoadAudit extends lighthouse.Audit {
       {
         key: "element_in_school_model_percentage",
         itemType: "text",
-        text: "% di argomenti inclusi nell'elenco del modello scuole",
+        text: "% di argomenti presenti nell'elenco del modello",
       },
       {
         key: "element_not_in_school_model",
         itemType: "text",
-        text: "Argomenti non inclusi nell'elenco del modello scuole",
+        text: "Argomenti non presenti nell'elenco del modello",
       },
     ];
 

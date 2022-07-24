@@ -38,8 +38,8 @@ class LoadAudit extends lighthouse.Audit {
     const url = artifacts.origin;
 
     let score = 0;
-    let pagesWithComponent = ""
-    let pagesWithoutComponent = ""
+    let pagesWithComponent = "";
+    let pagesWithoutComponent = "";
 
     const headings = [
       { key: "result", itemType: "text", text: "Risultato" },
@@ -52,14 +52,14 @@ class LoadAudit extends lighthouse.Audit {
         key: "page_without_component",
         itemType: "text",
         text: "Pagine dove non è stato rilevato il componente",
-      }
+      },
     ];
 
     const items = [
       {
         result: redResult,
         page_with_component: pagesWithComponent,
-        page_without_component: pagesWithoutComponent
+        page_without_component: pagesWithoutComponent,
       },
     ];
 
@@ -164,21 +164,23 @@ class LoadAudit extends lighthouse.Audit {
     }
 
     if (firstLevelFeedbackElement && secondLevelFeedbackElement) {
-      pagesWithComponent = randomFirstLevelPage + " " + randomSecondLevelServicePage
+      pagesWithComponent =
+        randomFirstLevelPage + " " + randomSecondLevelServicePage;
       items[0].result = greenResult;
       score = 1;
     } else if (firstLevelFeedbackElement && !randomSecondLevelServicePage) {
-      pagesWithComponent = randomFirstLevelPage
-      pagesWithoutComponent = randomSecondLevelServicePage
+      pagesWithComponent = randomFirstLevelPage;
+      pagesWithoutComponent = randomSecondLevelServicePage;
     } else if (!firstLevelFeedbackElement && randomSecondLevelServicePage) {
-      pagesWithComponent = randomSecondLevelServicePage
-      pagesWithoutComponent = randomFirstLevelPage
+      pagesWithComponent = randomSecondLevelServicePage;
+      pagesWithoutComponent = randomFirstLevelPage;
     } else {
-      pagesWithoutComponent = randomFirstLevelPage + " " + randomSecondLevelServicePage
+      pagesWithoutComponent =
+        randomFirstLevelPage + " " + randomSecondLevelServicePage;
     }
 
-    items[0].page_with_component = pagesWithComponent
-    items[0].page_without_component = pagesWithoutComponent
+    items[0].page_with_component = pagesWithComponent;
+    items[0].page_without_component = pagesWithoutComponent;
 
     return {
       score: score,
