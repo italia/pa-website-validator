@@ -39,7 +39,7 @@ class LoadAudit extends Audit {
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
 
-    let score = 0;
+    let score = 0.5;
     const headings = [
       {
         key: "result",
@@ -60,7 +60,7 @@ class LoadAudit extends Audit {
 
     const items = [
       {
-        result: redResult,
+        result: yellowResult,
         theme_version: "",
         checked_element: "",
       },
@@ -109,6 +109,8 @@ class LoadAudit extends Audit {
         if (!CSS.includes(textDomain)) {
           score = 0.5;
           items[0].result = yellowResult;
+
+          break;
         } else {
           const currentVersion = await getCurrentVersion(CSS);
           items[0].theme_version = currentVersion;
@@ -121,6 +123,13 @@ class LoadAudit extends Audit {
           ) {
             score = 1;
             items[0].result = greenResult;
+
+            break;
+          } else {
+            score = 0;
+            items[0].result = redResult;
+
+            break;
           }
         }
       }

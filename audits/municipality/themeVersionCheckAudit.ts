@@ -8,7 +8,6 @@ import { CheerioAPI } from "cheerio";
 import { buildUrl, isInternalUrl, loadPageData } from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
-const currentVersion = "1.0.0";
 const textDomain = "Text Domain: design_comuni_italia";
 
 const greenResult =
@@ -70,8 +69,6 @@ class LoadAudit extends Audit {
     const $: CheerioAPI = await loadPageData(url);
     const linkTags = $("link");
 
-    const versionToCheck = "Version: " + currentVersion;
-
     let styleCSSurl = "";
     for (const linkTag of linkTags) {
       if (!linkTag.attribs || !("href" in linkTag.attribs)) {
@@ -112,6 +109,8 @@ class LoadAudit extends Audit {
         if (!CSS.includes(textDomain)) {
           score = 0.5;
           items[0].result = yellowResult;
+
+          break;
         } else {
           const currentVersion = await getCurrentVersion(CSS);
           items[0].theme_version = currentVersion;
@@ -124,6 +123,13 @@ class LoadAudit extends Audit {
           ) {
             score = 1;
             items[0].result = greenResult;
+
+            break;
+          } else {
+            score = 0;
+            items[0].result = redResult;
+
+            break;
           }
         }
       }
