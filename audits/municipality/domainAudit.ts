@@ -45,21 +45,18 @@ class LoadAudit extends Audit {
       },
     ];
 
-    const hostnameParts = new URL(url).hostname.split(".");
-    const domain = hostnameParts.slice(hostnameParts.length >= 3 ? -2 : -1);
-    const domainResult = domain.join(".").split(".")[0];
+    const hostname = new URL(url).hostname.replace("www.", "");
 
     const items = [
       {
         result: redResult,
-        domain: domainResult,
+        domain: hostname,
       },
     ];
 
     let correctDomain = false;
     for (const domain of domains) {
-      const splitDomain = domain.split(".");
-      if (domainResult === splitDomain[1]) {
+      if (hostname.includes(domain)) {
         correctDomain = true;
         break;
       }
