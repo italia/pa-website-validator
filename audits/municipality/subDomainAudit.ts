@@ -92,8 +92,7 @@ class LoadAudit extends Audit {
     const subDomain = serviceAreaUrlHostnameParts[0];
 
     const hostnameParts = new URL(url).hostname.split(".");
-    const domain = hostnameParts.slice(hostnameParts.length > 3 ? -2 : -1);
-    const originFinalDomain = domain.join(".").split(".")[0];
+    const originFinalDomain = hostnameParts[hostnameParts.length - 2];
 
     items[0].domain = originFinalDomain;
     items[0].subdomain = subDomain;
