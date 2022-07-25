@@ -46,7 +46,7 @@ class LoadAudit extends Audit {
     ];
 
     const hostnameParts = new URL(url).hostname.split(".");
-    const domain = hostnameParts.slice(hostnameParts.length > 3 ? -2 : -1);
+    const domain = hostnameParts.slice(hostnameParts.length >= 3 ? -2 : -1);
     const domainResult = domain.join(".").split(".")[0];
 
     const items = [
