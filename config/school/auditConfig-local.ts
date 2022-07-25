@@ -21,74 +21,74 @@ const customModelComplianceAudits = [
   },
   {
     id: "school-ux-ui-consistency-bootstrap-italia-double-check",
-    weight: 100,
+    weight: 99,
     group: "user-experience",
   },
   {
     id: "school-ux-ui-consistency-theme-version-check",
-    weight: 100,
+    weight: 98,
     group: "user-experience",
   },
   {
     id: "school-menu-structure-match-model",
-    weight: 100,
+    weight: 97,
     group: "user-experience",
   },
   {
     id: "school-menu-scuola-second-level-structure-match-model",
-    weight: 100,
+    weight: 96,
     group: "user-experience",
   },
   {
-    id: "school-legislation-accessibility-declaration-is-present",
-    weight: 100,
+    id: "school-legislation-privacy-is-present",
+    weight: 95,
     group: "legislation",
   },
   {
-    id: "school-legislation-privacy-is-present",
-    weight: 100,
+    id: "school-legislation-accessibility-declaration-is-present",
+    weight: 94,
     group: "legislation",
   },
   {
     id: "school-informative-cookie-domain-check",
-    weight: 100,
+    weight: 93,
     group: "legislation",
   },
   {
     id: "school-informative-security",
-    weight: 100,
+    weight: 92,
     group: "security",
   },
 ];
 
 const customReccomendationsAudits = [
-  { id: "school-informative-reuse", weight: 100, group: "legislation" },
+  {
+    id: "school-controlled-vocabularies",
+    weight: 91,
+    group: "user-experience",
+  },
+  {
+    id: "school-servizi-structure-match-model",
+    weight: 90,
+    group: "user-experience",
+  },
+  { id: "school-informative-reuse", weight: 89, group: "legislation" },
   {
     id: "school-informative-license-and-attribution",
-    weight: 100,
+    weight: 88,
     group: "legislation",
   },
   {
     id: "school-informative-cloud-infrastructure",
-    weight: 100,
+    weight: 87,
     group: "legislation",
-  },
-  {
-    id: "school-servizi-structure-match-model",
-    weight: 100,
-    group: "user-experience",
-  },
-  {
-    id: "school-controlled-vocabularies",
-    weight: 100,
-    group: "user-experience",
   },
 ];
 
 const customAdditionalAudits = [
   {
     id: "common-informative-ip-location",
-    weight: 100,
+    weight: 86,
     group: "security",
   },
 ];
@@ -144,14 +144,14 @@ export default {
     modelCompliance: {
       title: "Criteri di conformità",
       description:
-        "Vengono mostrati i risultati degli audit relativi ai criteri di conformità illustrati nell'[Allegato 2 dell'Avviso 1.4.1.](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000ocbtrQAA#allegati).",
+        "Vengono mostrati i risultati degli audit relativi ai criteri di conformità illustrati nell'[Allegato 2 dell'Avviso 1.4.1.](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000ocbtrQAA#allegati)",
       auditRefs: [...customModelComplianceAudits],
     },
 
     recommendations: {
       title: "Raccomandazioni progettuali",
       description:
-        "Vengono mostrati i risultati degli audit relativi ad alcune delle raccomandazioni progettuali illustrate nell'[Allegato 2 dell'Avviso 1.4.1.](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000ocbtrQAA#allegati).",
+        "Vengono mostrati i risultati degli audit relativi ad alcune delle raccomandazioni progettuali illustrate nell'[Allegato 2 dell'Avviso 1.4.1.](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000ocbtrQAA#allegati)",
       auditRefs: [...customReccomendationsAudits],
     },
 

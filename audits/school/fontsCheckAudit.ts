@@ -61,9 +61,7 @@ class LoadAudit extends Audit {
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result:
-                notExecuted +
-                " Nessuna pagina servizio trovata su cui effettuare il test.",
+              result: notExecuted,
             },
           ]
         ),

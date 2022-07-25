@@ -31,7 +31,7 @@ class LoadAudit extends Audit {
         "R.SI.1.1 - METATAG - Nel sito comunale, le voci della scheda servizio devono presentare i metatag descritti dal modello, in base agli standard internazionali.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        'CONDIZIONI DI SUCCESSO: le voci delle schede servizio presentano tutti i metatag richiesti dal modello; MODALITÀ DI VERIFICA: viene verificata la presenza e correttezza dei metatag indicati nella sezione "Dati strutturati e interoperabilità" della documentazione in una scheda servizio selezionata casualmente; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Schema](http://www.schema.org/).',
+        'CONDIZIONI DI SUCCESSO: le voci delle schede servizio presentano tutti i metatag richiesti dal modello; MODALITÀ DI VERIFICA: viene verificata la presenza e correttezza dei metatag indicati nella sezione "Dati strutturati e interoperabilità" della documentazione in una scheda servizio selezionata casualmente, ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Schema](http://www.schema.org/), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
       requiredArtifacts: ["origin"],
     };
   }
@@ -44,11 +44,15 @@ class LoadAudit extends Audit {
 
     const headings = [
       { key: "result", itemType: "text", text: "Risultato" },
-      { key: "inspected_page", itemType: "text", text: "Pagina ispezionata" },
+      {
+        key: "inspected_page",
+        itemType: "text",
+        text: "Scheda servizio ispezionata",
+      },
       {
         key: "missing_keys",
         itemType: "text",
-        text: "Chiavi metatag mancanti",
+        text: "Metatag non presenti o errati",
       },
     ];
 
@@ -70,7 +74,7 @@ class LoadAudit extends Audit {
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: notExecuted + " Pagina servizio non trovata.",
+              result: notExecuted,
             },
           ]
         ),

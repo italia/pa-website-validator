@@ -50,12 +50,12 @@ class LoadAudit extends lighthouse.Audit {
       {
         key: "missing_menu_voices",
         itemType: "text",
-        text: "Voci del menù mancanti",
+        text: "Voci obbligatorie del menù mancanti",
       },
       {
         key: "wrong_order_menu_voices",
         itemType: "text",
-        text: "Voci del menù in ordine errato",
+        text: "Voci del menù nell'ordine errato",
       },
     ];
 

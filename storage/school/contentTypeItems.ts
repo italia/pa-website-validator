@@ -14,7 +14,7 @@ export const contentTypeItems = {
     "Tassonomie argomenti",
   ],
   Body: ["A cosa serve", "Struttura responsabile del servizio", "Metadati"],
-  Luogo: ["indirizzo", "cap", "orari", "gps", "email", "pec", "telefono"],
+  Luogo: ["indirizzo", "orari", "gps", "email", "pec", "telefono"],
 
   Metadati: ["Pubblicato", "Revisione"],
   Breadcrumb: ["Famiglie e studenti", "Personale scolastico"],

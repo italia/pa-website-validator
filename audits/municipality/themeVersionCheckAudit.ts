@@ -8,15 +8,13 @@ import { CheerioAPI } from "cheerio";
 import { buildUrl, isInternalUrl, loadPageData } from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
-const currentVersion = "1.0.0";
-const textDomain = "design_comuni_italia";
+const textDomain = "Text Domain: design_comuni_italia";
 
 const greenResult =
-  "Il sito utilizza una versione recente del tema CMS del modello comuni.";
-const yellowResult =
-  "Il sito non sembra utilizzare il tema CMS del modello comuni.";
+  "Il sito utilizza una versione idonea del tema CMS del modello.";
+const yellowResult = "Il sito non sembra utilizzare il tema CMS del modello.";
 const redResult =
-  "Il sito utilizza una versione datata del tema CMS del modello comuni.";
+  "Il sito utilizza una versione datata del tema CMS del modello.";
 
 const notExecuted =
   'Non è stato possibile condurre il test. Controlla le "Modalità di verifica" per scoprire di più.';
@@ -31,7 +29,7 @@ class LoadAudit extends Audit {
         "C.SI.1.4 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito comunale, deve utilizzarne la versione più recente disponibile alla data di inizio lavori.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        "CONDIZIONI DI SUCCESSO: la versione di tema CMS del modello Comuni in uso è superiore alla 1.0; MODALITÀ DI VERIFICA: viene verificata la versione indicata nel file style.css, nel caso sia presente la chiave design_comuni_italia; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/v2022.1/index.html).",
+        "C.SI.1.4 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito comunale, deve utilizzarne la versione più recente disponibile alla data di inizio lavori.",
       requiredArtifacts: ["origin"],
     };
   }
@@ -71,8 +69,6 @@ class LoadAudit extends Audit {
     const $: CheerioAPI = await loadPageData(url);
     const linkTags = $("link");
 
-    const versionToCheck = "Version: " + currentVersion;
-
     let styleCSSurl = "";
     for (const linkTag of linkTags) {
       if (!linkTag.attribs || !("href" in linkTag.attribs)) {
@@ -94,18 +90,13 @@ class LoadAudit extends Audit {
             CSS = await getCSShttp(styleCSSurl);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
           } catch (ex: any) {
-            let errorMessage = "";
-            if (Object.values(ex)) {
-              errorMessage = Object.values(ex).toString();
-            }
-
             return {
               score: 0,
               details: Audit.makeTableDetails(
                 [{ key: "result", itemType: "text", text: "Risultato" }],
                 [
                   {
-                    result: notExecuted + " " + errorMessage,
+                    result: notExecuted,
                   },
                 ]
               ),
@@ -113,20 +104,33 @@ class LoadAudit extends Audit {
           }
         }
 
-        if (CSS.includes(versionToCheck) && CSS.includes(textDomain)) {
-          score = 1;
-          items[0].result = greenResult;
-          items[0].theme_version = await getCurrentVersion(CSS);
-          items[0].checked_element = styleCSSurl;
+        items[0].checked_element = styleCSSurl;
+
+        if (!CSS.includes(textDomain)) {
+          score = 0.5;
+          items[0].result = yellowResult;
 
           break;
-        } else if (!CSS.includes(versionToCheck) && CSS.includes(textDomain)) {
-          score = 0;
-          items[0].result = redResult;
-          items[0].theme_version = await getCurrentVersion(CSS);
-          items[0].checked_element = styleCSSurl;
+        } else {
+          const currentVersion = await getCurrentVersion(CSS);
+          items[0].theme_version = currentVersion;
+          const splittedVersion = currentVersion.split(".");
 
-          break;
+          if (
+            splittedVersion.length > 2 &&
+            parseInt(splittedVersion[0]) >= 1 &&
+            parseInt(splittedVersion[1]) >= 0
+          ) {
+            score = 1;
+            items[0].result = greenResult;
+
+            break;
+          } else {
+            score = 0;
+            items[0].result = redResult;
+
+            break;
+          }
         }
       }
     }

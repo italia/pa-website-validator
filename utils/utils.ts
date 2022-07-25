@@ -398,7 +398,7 @@ const areAllElementsInVocabulary = async (
   const elementNotIncluded = [];
   const elementIncluded = [];
   for (const pageArgument of pageArguments) {
-    if (!lowerCasedVocabulary.includes(pageArgument.toLowerCase())) {
+    if (lowerCasedVocabulary.indexOf(pageArgument.toLowerCase()) === -1) {
       result = false;
       elementNotIncluded.push(pageArgument.toLowerCase());
     } else {

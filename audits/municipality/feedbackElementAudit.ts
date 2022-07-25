@@ -38,38 +38,28 @@ class LoadAudit extends lighthouse.Audit {
     const url = artifacts.origin;
 
     let score = 0;
+    let pagesWithComponent = "";
+    let pagesWithoutComponent = "";
 
     const headings = [
       { key: "result", itemType: "text", text: "Risultato" },
       {
-        key: "inspected_first_level_page",
+        key: "page_with_component",
         itemType: "text",
-        text: "Pagina di primo livello ispezionata",
+        text: "Pagine dove è stato rilevato il componente",
       },
       {
-        key: "first_level_feedback",
+        key: "page_without_component",
         itemType: "text",
-        text: "Componente feedback presente",
-      },
-      {
-        key: "inspected_second_level_page",
-        itemType: "text",
-        text: "Pagina di primo livello ispezionata",
-      },
-      {
-        key: "second_level_feedback",
-        itemType: "text",
-        text: "Componente feedback presente",
+        text: "Pagine dove non è stato rilevato il componente",
       },
     ];
 
     const items = [
       {
         result: redResult,
-        inspected_first_level_page: "",
-        first_level_feedback: "",
-        inspected_second_level_page: "",
-        second_level_feedback: "",
+        page_with_component: pagesWithComponent,
+        page_without_component: pagesWithoutComponent,
       },
     ];
 
@@ -100,8 +90,7 @@ class LoadAudit extends lighthouse.Audit {
     ];
 
     if (firstLevelPages.length <= 0) {
-      items[0].result =
-        notExecuted + " Nessuna pagina di primo livello trovata.";
+      items[0].result = notExecuted;
       return {
         score: 0,
         details: Audit.makeTableDetails(headings, items),
@@ -126,7 +115,7 @@ class LoadAudit extends lighthouse.Audit {
     }
 
     if (servicesPage.length <= 0) {
-      items[0].result = notExecuted + " Pagina servizi non trovata.";
+      items[0].result = notExecuted;
       return {
         score: 0,
         details: Audit.makeTableDetails(headings, items),
@@ -145,8 +134,7 @@ class LoadAudit extends lighthouse.Audit {
     );
 
     if (servicesSecondLevelPages.length <= 0) {
-      items[0].result =
-        notExecuted + " Pagina servizio di secondo livello non trovata.";
+      items[0].result = notExecuted;
       return {
         score: 0,
         details: Audit.makeTableDetails(headings, items),
@@ -176,14 +164,23 @@ class LoadAudit extends lighthouse.Audit {
     }
 
     if (firstLevelFeedbackElement && secondLevelFeedbackElement) {
+      pagesWithComponent =
+        randomFirstLevelPage + " " + randomSecondLevelServicePage;
       items[0].result = greenResult;
       score = 1;
+    } else if (firstLevelFeedbackElement && !randomSecondLevelServicePage) {
+      pagesWithComponent = randomFirstLevelPage;
+      pagesWithoutComponent = randomSecondLevelServicePage;
+    } else if (!firstLevelFeedbackElement && randomSecondLevelServicePage) {
+      pagesWithComponent = randomSecondLevelServicePage;
+      pagesWithoutComponent = randomFirstLevelPage;
+    } else {
+      pagesWithoutComponent =
+        randomFirstLevelPage + " " + randomSecondLevelServicePage;
     }
 
-    items[0].inspected_first_level_page = randomFirstLevelPage;
-    items[0].first_level_feedback = firstLevelFeedbackElement ? "Sì" : "No";
-    items[0].inspected_second_level_page = randomSecondLevelServicePage;
-    items[0].second_level_feedback = secondLevelFeedbackElement ? "Sì" : "No";
+    items[0].page_with_component = pagesWithComponent;
+    items[0].page_without_component = pagesWithoutComponent;
 
     return {
       score: score,

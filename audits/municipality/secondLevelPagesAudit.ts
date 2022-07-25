@@ -30,7 +30,7 @@ class LoadAudit extends lighthouse.Audit {
         "C.SI.1.7 - TITOLI DELLE PAGINE DI SECONDO LIVELLO - Nel sito comunale, i titoli delle pagine di secondo livello devono rispettare il vocabolario descritto dalla documentazione del modello di sito comunale.",
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       description:
-        'CONDIZIONI DI SUCCESSO: i titoli delle pagine di secondo livello corrispondono a quelli indicati nel documento di architettura dell\'informazione del modello Comuni; MODALITÀ DI VERIFICA: vengono confrontati i titoli delle categorie di servizi presentati nella pagina di primo livello "Servizi" con i titoli richiesti dal modello, ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+        'CONDIZIONI DI SUCCESSO: i titoli delle pagine di secondo livello corrispondono a quelli indicati nel documento di architettura dell\'informazione del modello Comuni; MODALITÀ DI VERIFICA: vengono confrontati i titoli delle categorie di servizi presentati nella pagina di primo livello "Servizi" con i titoli richiesti dal modello nell\'elenco Tassonomia categorie dei servizi del documento di architettura dell\'informazione, ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Tassonomia categorie dei servizi](https://docs.google.com/spreadsheets/d/1D4KbaA__xO9x_iBm08KvZASjrrFLYLKX/edit#gid=938683089), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
       requiredArtifacts: ["origin"],
     };
   }
@@ -76,7 +76,7 @@ class LoadAudit extends lighthouse.Audit {
       '[data-element="all-services"]'
     );
     if (secondLevelPageHref.length <= 0) {
-      items[0].result = notExecuted + " - pagina servizi non trovata";
+      items[0].result = notExecuted;
       return {
         score: score,
         details: Audit.makeTableDetails(headings, items),

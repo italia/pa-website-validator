@@ -8,8 +8,7 @@ import { CheerioAPI } from "cheerio";
 import { buildUrl, isInternalUrl, loadPageData } from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
-const currentVersion = "2.0.0";
-const textDomain = "design_scuole_italia";
+const textDomain = "Text Domain: design_scuole_italia";
 
 const greenResult =
   "Il sito utilizza una versione idonea del tema CMS del modello.";
@@ -70,8 +69,6 @@ class LoadAudit extends Audit {
     const $: CheerioAPI = await loadPageData(url);
     const linkTags = $("link");
 
-    const versionToCheck = "Version: " + currentVersion;
-
     let styleCSSurl = "";
     for (const linkTag of linkTags) {
       if (!linkTag.attribs || !("href" in linkTag.attribs)) {
@@ -93,18 +90,13 @@ class LoadAudit extends Audit {
             CSS = await getCSShttp(styleCSSurl);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
           } catch (ex: any) {
-            let errorMessage = "";
-            if (Object.values(ex)) {
-              errorMessage = Object.values(ex).toString();
-            }
-
             return {
               score: 0,
               details: Audit.makeTableDetails(
                 [{ key: "result", itemType: "text", text: "Risultato" }],
                 [
                   {
-                    result: notExecuted + " " + errorMessage,
+                    result: notExecuted,
                   },
                 ]
               ),
@@ -112,20 +104,33 @@ class LoadAudit extends Audit {
           }
         }
 
-        if (CSS.includes(versionToCheck) && CSS.includes(textDomain)) {
-          score = 1;
-          items[0].result = greenResult;
-          items[0].theme_version = await getCurrentVersion(CSS);
-          items[0].checked_element = styleCSSurl;
+        items[0].checked_element = styleCSSurl;
+
+        if (!CSS.includes(textDomain)) {
+          score = 0.5;
+          items[0].result = yellowResult;
 
           break;
-        } else if (!CSS.includes(versionToCheck) && CSS.includes(textDomain)) {
-          score = 0;
-          items[0].result = redResult;
-          items[0].theme_version = await getCurrentVersion(CSS);
-          items[0].checked_element = styleCSSurl;
+        } else {
+          const currentVersion = await getCurrentVersion(CSS);
+          items[0].theme_version = currentVersion;
+          const splittedVersion = currentVersion.split(".");
 
-          break;
+          if (
+            splittedVersion.length > 2 &&
+            parseInt(splittedVersion[0]) >= 1 &&
+            parseInt(splittedVersion[1]) >= 1
+          ) {
+            score = 1;
+            items[0].result = greenResult;
+
+            break;
+          } else {
+            score = 0;
+            items[0].result = redResult;
+
+            break;
+          }
         }
       }
     }
