@@ -4,4 +4,7 @@ __tests__
 .github
 .prettierignore
 *.ts
+/validatore-comuni*
+/validatore-scuole*
+dist/app.js
 tsconfig*.json
