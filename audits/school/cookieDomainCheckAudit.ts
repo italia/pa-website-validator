@@ -1,10 +1,15 @@
 "use strict";
-import { run as cookieAudit } from "../../utils/cookieAuditLogic";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
+import { auditDictionary } from "../../storage/auditDictionary"
+import { run as cookieAudit } from "../../utils/cookieAuditLogic";
+
 const Audit = lighthouse.Audit;
+
+const auditId = "school-legislation-cookie-domain-check"
+const auditData = auditDictionary[auditId]
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -26,7 +31,7 @@ class LoadAudit extends Audit {
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
 
-    return await cookieAudit(url);
+    return await cookieAudit(url, auditData);
   }
 }
 
