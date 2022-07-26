@@ -1,36 +1,34 @@
 "use strict";
 
-import { CheerioAPI } from "cheerio";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-
 import {
   checkOrder,
   getPageElementDataAttribute,
   loadPageData,
 } from "../../utils/utils";
 import { secondaryMenuItems } from "../../storage/school/menuItems";
+import { auditDictionary } from "../../storage/auditDictionary"
+import { CheerioAPI } from "cheerio";
 
 const Audit = lighthouse.Audit;
 
-const greenResult =
-  "Almeno il 30% delle voci sono corrette e si trovano nell'ordine giusto.";
-const yellowResult =
-  "Almeno il 30% delle voci sono corrette ma l'ordine è sbagliato.";
-const redResult = "Più del 30% delle voci sono errate.";
+const auditId = "school-menu-scuola-second-level-structure-match-model"
+const auditData = auditDictionary[auditId]
+
+const greenResult = auditData.greenResult
+const yellowResult = auditData.yellowResult
+const redResult = auditData.redResult
 
 class LoadAudit extends Audit {
   static get meta() {
     return {
-      id: "school-menu-scuola-second-level-structure-match-model",
-      title:
-        "C.SC.1.5 - VOCI DI MENÙ DI SECONDO LIVELLO - Il sito presenta almeno il 30% delle voci di menu di secondo livello in base a quanto descritto dal modello di sito per le scuole.",
-      failureTitle:
-        "C.SC.1.5 - VOCI DI MENÙ DI SECONDO LIVELLO - Il sito presenta almeno il 30% delle voci di menu di secondo livello in base a quanto descritto dal modello di sito per le scuole.",
+      id: auditId,
+      title: auditData.title,
+      failureTitle: auditData.failureTitle,
+      description: auditData.description,
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
-      description:
-        'CONDIZIONI DI SUCCESSO: le voci del menù di secondo livello corrispondono a quelle indicate nel documento di architettura dell\'informazione del modello scuole e sono nell\'ordine corretto; MODALITÀ DI VERIFICA: ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica, viene verificata la correttezza e l\'ordine delle voci del menù di secondo livello riferite alla voce di primo livello "Scuola"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
       requiredArtifacts: ["origin"],
     };
   }

@@ -1,10 +1,8 @@
 "use strict";
 
-import { CheerioAPI } from "cheerio";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-
 import {
   checkOrder,
   getElementHrefValuesDataAttribute,
@@ -13,29 +11,27 @@ import {
   loadPageData,
 } from "../../utils/utils";
 import { contentTypeItems } from "../../storage/school/contentTypeItems";
+import { auditDictionary } from "../../storage/auditDictionary"
+import { CheerioAPI } from "cheerio";
 
 const Audit = lighthouse.Audit;
 
-const greenResult =
-  "Tutte le voci obbligatorie sono presenti e nell'ordine corretto.";
-const yellowResult =
-  "Fino a 2 voci obbligatorie non sono presenti o 1 voce non è nell'ordine corretto.";
-const redResult =
-  "Più di 2 voci obbligatorie non sono presenti o più di 1 voce non è nell'ordine corretto.";
-const notExecuted =
-  "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.";
+const auditId = "school-servizi-structure-match-model"
+const auditData = auditDictionary[auditId]
+
+const greenResult = auditData.greenResult
+const yellowResult = auditData.yellowResult
+const redResult = auditData.redResult
+const notExecuted = auditData.nonExecuted
 
 class LoadAudit extends Audit {
   static get meta() {
     return {
-      id: "school-servizi-structure-match-model",
-      title:
-        "R.SC.1.2 - SCHEDE INFORMATIVE DI SERVIZIO - Tutte le schede informative dei servizi devono mostrare le voci segnalate come obbligatorie all'interno dell'architettura dell'informazione, nell'ordine segnalato dal modello.",
-      failureTitle:
-        "R.SC.1.2 - SCHEDE INFORMATIVE DI SERVIZIO - Tutte le schede informative dei servizi devono mostrare le voci segnalate come obbligatorie all'interno dell'architettura dell'informazione, nell'ordine segnalato dal modello.",
+      id: auditId,
+      title: auditData.title,
+      failureTitle: auditData.failureTitle,
+      description: auditData.description,
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
-      description:
-        "CONDIZIONI DI SUCCESSO: nelle schede informative di servizio le voci indicate come obbligatorie sono presenti e sono nell'ordine corretto; MODALITÀ DI VERIFICA: viene verificato se le voci indicate come obbligatorie all'interno del documento di architettura dell'informazione sono presenti. Inoltre viene verificato se le voci obbligatorie presenti nell'indice della pagina sono nell'ordine corretto. La verifica viene effettuata su una scheda servizio casualmente selezionata, ricercando le voci indicate nella documentazione tecnica tramite specifici attributi \"data-element\"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Content type: scheda servizio](https://docs.google.com/spreadsheets/d/1MoayTY05SE4ixtgBsfsdngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=0), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
       requiredArtifacts: ["origin"],
     };
   }

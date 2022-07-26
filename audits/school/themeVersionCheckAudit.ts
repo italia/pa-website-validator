@@ -1,4 +1,5 @@
 "use strict";
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
@@ -6,30 +7,27 @@ import * as https from "https";
 import * as http from "http";
 import { CheerioAPI } from "cheerio";
 import { buildUrl, isInternalUrl, loadPageData } from "../../utils/utils";
+import { auditDictionary } from "../../storage/auditDictionary"
 
-const Audit = lighthouse.Audit;
 const textDomain = "Text Domain: design_scuole_italia";
+const Audit = lighthouse.Audit;
 
-const greenResult =
-  "Il sito utilizza una versione idonea del tema CMS del modello.";
-const yellowResult = "Il sito non sembra utilizzare il tema CMS del modello.";
-const redResult =
-  "Il sito utilizza una versione datata del tema CMS del modello.";
+const auditId = "school-ux-ui-consistency-theme-version-check"
+const auditData = auditDictionary[auditId]
 
-const notExecuted =
-  'Non è stato possibile condurre il test. Controlla le "Modalità di verifica" per scoprire di più.';
+const greenResult = auditData.greenResult
+const yellowResult = auditData.yellowResult
+const redResult = auditData.redResult
+const notExecuted = auditData.nonExecuted
 
 class LoadAudit extends Audit {
   static get meta() {
     return {
-      id: "school-ux-ui-consistency-theme-version-check",
-      title:
-        "C.SC.1.3 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito della scuola, deve utilizzarne la versione più recente disponibile alla data di inizio lavori.",
-      failureTitle:
-        "C.SC.1.3 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito della scuola, deve utilizzarne la versione più recente disponibile alla data di inizio lavori.",
+      id: auditId,
+      title: auditData.title,
+      failureTitle: auditData.failureTitle,
+      description: auditData.description,
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
-      description:
-        'CONDIZIONI DI SUCCESSO: se è in uso il tema CMS del modello scuole, la versione utilizzata è uguale o superiore alla 1.1; MODALITÀ DI VERIFICA: viene verificata la versione indicata nel file style.css, nel caso sia presente la chiave "Text Domain: design_scuole_italia"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs).',
       requiredArtifacts: ["origin"],
     };
   }
