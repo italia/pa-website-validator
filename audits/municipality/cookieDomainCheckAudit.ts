@@ -1,14 +1,14 @@
 "use strict";
-import { run as cookieAudit } from "../../utils/cookieAuditLogic";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
+import { auditDictionary } from "../../storage/auditDictionary"
+import { run as cookieAudit } from "../../utils/cookieAuditLogic";
 
 const Audit = lighthouse.Audit;
 
 const auditId = "municipality-legislation-cookie-domain-check"
-import { auditDictionary } from "../../storage/auditDictionary"
 const auditData = auditDictionary[auditId]
 
 class LoadAudit extends Audit {

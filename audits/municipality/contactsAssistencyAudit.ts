@@ -8,11 +8,11 @@ import {
   loadPageData,
 } from "../../utils/utils";
 import { CheerioAPI } from "cheerio";
+import { auditDictionary } from "../../storage/auditDictionary"
 
 const Audit = lighthouse.Audit;
 
 const auditId = "municipality-contacts-assistency"
-import { auditDictionary } from "../../storage/auditDictionary"
 const auditData = auditDictionary[auditId]
 
 const greenResult = auditData.greenResult

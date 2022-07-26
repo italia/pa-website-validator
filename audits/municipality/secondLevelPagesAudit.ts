@@ -1,6 +1,5 @@
 "use strict";
 
-import { CheerioAPI } from "cheerio";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
@@ -11,11 +10,12 @@ import {
   loadPageData,
 } from "../../utils/utils";
 import { secondLevelPageNames } from "../../storage/municipality/controlledVocabulary";
+import { auditDictionary } from "../../storage/auditDictionary"
+import { CheerioAPI } from "cheerio";
 
 const Audit = lighthouse.Audit;
 
 const auditId = "municipality-second-level-pages"
-import { auditDictionary } from "../../storage/auditDictionary"
 const auditData = auditDictionary[auditId]
 
 const greenResult = auditData.greenResult

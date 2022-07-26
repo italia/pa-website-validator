@@ -5,11 +5,11 @@ import lighthouse from "lighthouse";
 import { allowedFonts } from "../../storage/municipality/allowedFonts";
 import { getRandomMunicipalityServiceUrl } from "../../utils/utils";
 import puppeteer from "puppeteer";
+import { auditDictionary } from "../../storage/auditDictionary"
 
 const Audit = lighthouse.Audit;
 
 const auditId = "municipality-ux-ui-consistency-fonts-check"
-import { auditDictionary } from "../../storage/auditDictionary"
 const auditData = auditDictionary[auditId]
 
 const greenResult = auditData.greenResult

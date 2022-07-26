@@ -1,23 +1,22 @@
 "use strict";
 
-import { CheerioAPI } from "cheerio";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-const Audit = lighthouse.Audit;
-
+import { CheerioAPI } from "cheerio";
 import {
   checkOrder,
   getPageElementDataAttribute,
   getRandomMunicipalityServiceUrl,
   loadPageData,
 } from "../../utils/utils";
-
 import { contentTypeItems } from "../../storage/municipality/contentTypeItems";
 import { secondLevelPageNames } from "../../storage/municipality/controlledVocabulary";
+import { auditDictionary } from "../../storage/auditDictionary"
+
+const Audit = lighthouse.Audit;
 
 const auditId = "municipality-servizi-structure-match-model"
-import { auditDictionary } from "../../storage/auditDictionary"
 const auditData = auditDictionary[auditId]
 
 const greenResult = auditData.greenResult

@@ -9,11 +9,11 @@ import {
 import { CheerioAPI } from "cheerio";
 import { ValidatorResult } from "jsonschema";
 import * as jsonschema from "jsonschema";
+import { auditDictionary } from "../../storage/auditDictionary"
 
 const Audit = lighthouse.Audit;
 
 const auditId = "municipality-metatag"
-import { auditDictionary } from "../../storage/auditDictionary"
 const auditData = auditDictionary[auditId]
 
 const greenResult = auditData.greenResult

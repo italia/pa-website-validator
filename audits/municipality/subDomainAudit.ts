@@ -1,16 +1,16 @@
 "use strict";
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-const Audit = lighthouse.Audit;
-
+import { auditDictionary } from "../../storage/auditDictionary"
 import { CheerioAPI } from "cheerio";
 import { buildUrl, isInternalUrl, loadPageData } from "../../utils/utils";
-
 import { domains } from "../../storage/municipality/allowedDomains";
 
+const Audit = lighthouse.Audit;
+
 const auditId = "municipality-subdomain"
-import { auditDictionary } from "../../storage/auditDictionary"
 const auditData = auditDictionary[auditId]
 
 const greenResult = auditData.greenResult

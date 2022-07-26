@@ -1,14 +1,14 @@
 "use strict";
 
-import { run as securityAudit } from "../../utils/securityAuditLogic";
-
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
+import { auditDictionary } from "../../storage/auditDictionary"
+import { run as securityAudit } from "../../utils/securityAuditLogic";
+
 const Audit = lighthouse.Audit;
 
 const auditId = "municipality-security"
-import { auditDictionary } from "../../storage/auditDictionary"
 const auditData = auditDictionary[auditId]
 
 class LoadAudit extends Audit {
