@@ -74,10 +74,6 @@ class LoadAudit extends Audit {
     const mandatoryIndexVoices = contentTypeItems.Indice;
     const mandatoryHeaderVoices = contentTypeItems.Header;
     const mandatoryBodyVoices = contentTypeItems.Body;
-    const totalMandatoryVoices =
-      mandatoryIndexVoices.length +
-      mandatoryHeaderVoices.length +
-      mandatoryBodyVoices.length;
 
     const randomServiceToBeScanned: string =
       await getRandomMunicipalityServiceUrl(url);
