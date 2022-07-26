@@ -73,7 +73,18 @@ class LoadAudit extends Audit {
         continue;
       }
 
-      if (linkTag.attribs.href.includes("style.css")) {
+      let styleFound = false;
+      const styleParts = linkTag.attribs.href.split("/");
+      for (const stylePart of styleParts) {
+        if (stylePart.includes("style.css")) {
+          const filenameParts = stylePart.split("?");
+          if (filenameParts[0] === "style.css") {
+            styleFound = true;
+          }
+        }
+      }
+
+      if (styleFound) {
         styleCSSurl = linkTag.attribs.href;
         if ((await isInternalUrl(styleCSSurl)) && !styleCSSurl.includes(url)) {
           styleCSSurl = await buildUrl(url, styleCSSurl);
