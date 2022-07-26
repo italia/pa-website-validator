@@ -171,8 +171,7 @@ class LoadAudit extends Audit {
       missingMandatoryItems.push(mandatoryBodyVoices[2]);
     }
 
-    const missingVoicesAmount =
-      totalMandatoryVoices - missingMandatoryItems.length;
+    const missingVoicesAmount = missingMandatoryItems.length
     const voicesNotInCorrectOrderAmount =
       orderResult.numberOfElementsNotInSequence;
 
