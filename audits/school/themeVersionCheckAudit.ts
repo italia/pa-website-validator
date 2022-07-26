@@ -7,18 +7,18 @@ import * as https from "https";
 import * as http from "http";
 import { CheerioAPI } from "cheerio";
 import { buildUrl, isInternalUrl, loadPageData } from "../../utils/utils";
-import { auditDictionary } from "../../storage/auditDictionary"
+import { auditDictionary } from "../../storage/auditDictionary";
 
 const textDomain = "Text Domain: design_scuole_italia";
 const Audit = lighthouse.Audit;
 
-const auditId = "school-ux-ui-consistency-theme-version-check"
-const auditData = auditDictionary[auditId]
+const auditId = "school-ux-ui-consistency-theme-version-check";
+const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult
-const yellowResult = auditData.yellowResult
-const redResult = auditData.redResult
-const notExecuted = auditData.nonExecuted
+const greenResult = auditData.greenResult;
+const yellowResult = auditData.yellowResult;
+const redResult = auditData.redResult;
+const notExecuted = auditData.nonExecuted;
 
 class LoadAudit extends Audit {
   static get meta() {

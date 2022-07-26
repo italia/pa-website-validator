@@ -11,18 +11,18 @@ import {
   loadPageData,
 } from "../../utils/utils";
 import { contentTypeItems } from "../../storage/school/contentTypeItems";
-import { auditDictionary } from "../../storage/auditDictionary"
+import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
 
 const Audit = lighthouse.Audit;
 
-const auditId = "school-servizi-structure-match-model"
-const auditData = auditDictionary[auditId]
+const auditId = "school-servizi-structure-match-model";
+const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult
-const yellowResult = auditData.yellowResult
-const redResult = auditData.redResult
-const notExecuted = auditData.nonExecuted
+const greenResult = auditData.greenResult;
+const yellowResult = auditData.yellowResult;
+const redResult = auditData.redResult;
+const notExecuted = auditData.nonExecuted;
 
 class LoadAudit extends Audit {
   static get meta() {

@@ -8,16 +8,16 @@ import {
   loadPageData,
 } from "../../utils/utils";
 import { CheerioAPI } from "cheerio";
-import { auditDictionary } from "../../storage/auditDictionary"
+import { auditDictionary } from "../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
 
-const auditId = "municipality-contacts-assistency"
-const auditData = auditDictionary[auditId]
+const auditId = "municipality-contacts-assistency";
+const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult
-const redResult = auditData.redResult
-const notExecuted = auditData.nonExecuted
+const greenResult = auditData.greenResult;
+const redResult = auditData.redResult;
+const notExecuted = auditData.nonExecuted;
 
 class LoadAudit extends Audit {
   static get meta() {

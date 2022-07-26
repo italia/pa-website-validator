@@ -4,15 +4,15 @@
 import lighthouse from "lighthouse";
 import { CheerioAPI } from "cheerio";
 import { loadPageData, urlExists } from "../../utils/utils";
-import { auditDictionary } from "../../storage/auditDictionary"
+import { auditDictionary } from "../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
 
-const auditId = "municipality-faq-is-present"
-const auditData = auditDictionary[auditId]
-const greenResult = auditData.greenResult
-const yellowResult = auditData.yellowResult
-const redResult = auditData.redResult
+const auditId = "municipality-faq-is-present";
+const auditData = auditDictionary[auditId];
+const greenResult = auditData.greenResult;
+const yellowResult = auditData.yellowResult;
+const redResult = auditData.redResult;
 
 class LoadAudit extends Audit {
   static get meta() {
