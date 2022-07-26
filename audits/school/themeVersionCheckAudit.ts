@@ -128,7 +128,7 @@ class LoadAudit extends Audit {
           if (
             splittedVersion.length > 2 &&
             parseInt(splittedVersion[0]) >= 1 &&
-            parseInt(splittedVersion[1]) >= 1
+            parseInt(splittedVersion[1]) >= 0
           ) {
             score = 1;
             items[0].result = greenResult;
