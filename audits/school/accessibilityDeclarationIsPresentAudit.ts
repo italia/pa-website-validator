@@ -5,15 +5,15 @@
 import lighthouse from "lighthouse";
 import { loadPageData, urlExists } from "../../utils/utils";
 import { CheerioAPI } from "cheerio";
-import { auditDictionary } from "../../storage/auditDictionary"
+import { auditDictionary } from "../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
 
-const auditId = "school-legislation-accessibility-declaration-is-present"
-const auditData = auditDictionary[auditId]
+const auditId = "school-legislation-accessibility-declaration-is-present";
+const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult
-const redResult = auditData.redResult
+const greenResult = auditData.greenResult;
+const redResult = auditData.redResult;
 
 class LoadAudit extends Audit {
   static get meta() {

@@ -3,15 +3,15 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import { auditDictionary } from "../../storage/auditDictionary"
+import { auditDictionary } from "../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
 
-const auditId = "municipality-ux-ui-consistency-bootstrap-italia-double-check"
-const auditData = auditDictionary[auditId]
+const auditId = "municipality-ux-ui-consistency-bootstrap-italia-double-check";
+const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult
-const redResult = auditData.redResult
+const greenResult = auditData.greenResult;
+const redResult = auditData.redResult;
 
 const libraryName = "Bootstrap italia";
 

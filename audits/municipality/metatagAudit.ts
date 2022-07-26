@@ -9,17 +9,17 @@ import {
 import { CheerioAPI } from "cheerio";
 import { ValidatorResult } from "jsonschema";
 import * as jsonschema from "jsonschema";
-import { auditDictionary } from "../../storage/auditDictionary"
+import { auditDictionary } from "../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
 
-const auditId = "municipality-metatag"
-const auditData = auditDictionary[auditId]
+const auditId = "municipality-metatag";
+const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult
-const yellowResult = auditData.yellowResult
-const redResult = auditData.redResult
-const notExecuted = auditData.nonExecuted
+const greenResult = auditData.greenResult;
+const yellowResult = auditData.yellowResult;
+const redResult = auditData.redResult;
+const notExecuted = auditData.nonExecuted;
 
 const totalJSONVoices = 10;
 

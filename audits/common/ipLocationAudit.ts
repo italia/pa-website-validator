@@ -1,28 +1,30 @@
 "use strict";
-import * as dns from "dns";
-import * as util from "util";
-import geoip from "geoip-lite";
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
+import * as dns from "dns";
+import * as util from "util";
+import geoip from "geoip-lite";
 import { allowedCountries } from "../../storage/common/allowedCountries";
+import { auditDictionary } from "../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
 
-const greenResult = "L'hosting è su territorio europeo.";
-const redResult = "L'hosting non è su territorio europeo.";
+const auditId = "common-security-ip-location";
+const auditData = auditDictionary[auditId];
+
+const greenResult = auditData.greenResult;
+const redResult = auditData.redResult;
 
 class LoadAudit extends Audit {
   static get meta() {
     return {
-      id: "common-security-ip-location",
-      title:
-        "LOCALIZZAZIONE IP - Il sito deve essere hostato su datacenter localizzati su territorio europeo.",
-      failureTitle:
-        "LOCALIZZAZIONE IP - Il sito deve essere hostato su datacenter localizzati su territorio europeo.",
+      id: auditId,
+      title: auditData.title,
+      failureTitle: auditData.failureTitle,
+      description: auditData.description,
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
-      description:
-        "CONDIZIONI DI SUCCESSO: l'indirizzo IP fa riferimento a un datacenter localizzato su territorio europeo; MODALITÀ DI VERIFICA: verifica che la localizzazione dell'IP rientri all'interno di uno dei confini degli stati membri dell'UE; RIFERIMENTI TECNICI E NORMATIVI: GDPR",
       requiredArtifacts: ["hostname"],
     };
   }

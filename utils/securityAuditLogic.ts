@@ -26,6 +26,7 @@ const errorLogging = [
 
 const run = async (
   url: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   auditData: any
 ): Promise<{ score: number; details: LH.Audit.Details.Table }> => {
   const greenResult = auditData.greenResult.replace("[url]", url);

@@ -4,12 +4,12 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { run as securityAudit } from "../../utils/securityAuditLogic";
-import { auditDictionary } from "../../storage/auditDictionary"
+import { auditDictionary } from "../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
 
-const auditId = "school-security"
-const auditData = auditDictionary[auditId]
+const auditId = "school-security";
+const auditData = auditDictionary[auditId];
 
 class LoadAudit extends Audit {
   static get meta() {

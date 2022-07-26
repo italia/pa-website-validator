@@ -9,17 +9,17 @@ import {
   getPageElementDataAttribute,
   loadPageData,
 } from "../../utils/utils";
-import { auditDictionary } from "../../storage/auditDictionary"
+import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
 
 const Audit = lighthouse.Audit;
 
-const auditId = "school-menu-structure-match-model"
-const auditData = auditDictionary[auditId]
+const auditId = "school-menu-structure-match-model";
+const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult
-const yellowResult = auditData.yellowResult
-const redResult = auditData.redResult
+const greenResult = auditData.greenResult;
+const yellowResult = auditData.yellowResult;
+const redResult = auditData.redResult;
 
 class LoadAudit extends lighthouse.Audit {
   static get meta() {

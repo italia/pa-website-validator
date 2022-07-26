@@ -6,17 +6,17 @@ import lighthouse from "lighthouse";
 import { allowedFonts } from "../../storage/school/allowedFonts";
 import { getRandomSchoolServiceUrl } from "../../utils/utils";
 import puppeteer from "puppeteer";
-import { auditDictionary } from "../../storage/auditDictionary"
+import { auditDictionary } from "../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
 
-const auditId = "school-ux-ui-consistency-fonts-check"
-const auditData = auditDictionary[auditId]
+const auditId = "school-ux-ui-consistency-fonts-check";
+const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult
-const yellowResult = auditData.yellowResult
-const redResult = auditData.redResult
-const notExecuted = auditData.nonExecuted
+const greenResult = auditData.greenResult;
+const yellowResult = auditData.yellowResult;
+const redResult = auditData.redResult;
+const notExecuted = auditData.nonExecuted;
 
 class LoadAudit extends Audit {
   static get meta() {

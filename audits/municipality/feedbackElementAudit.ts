@@ -8,16 +8,16 @@ import {
   getHREFValuesDataAttribute,
   loadPageData,
 } from "../../utils/utils";
-import { auditDictionary } from "../../storage/auditDictionary"
+import { auditDictionary } from "../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
 
-const auditId = "municipality-feedback-element"
-const auditData = auditDictionary[auditId]
+const auditId = "municipality-feedback-element";
+const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult
-const redResult = auditData.redResult
-const notExecuted = auditData.nonExecuted
+const greenResult = auditData.greenResult;
+const redResult = auditData.redResult;
+const notExecuted = auditData.nonExecuted;
 
 class LoadAudit extends lighthouse.Audit {
   static get meta() {

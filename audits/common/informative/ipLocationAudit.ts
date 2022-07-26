@@ -3,20 +3,21 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
+import { auditDictionary } from "../../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
+
+const auditId = "common-informative-ip-location";
+const auditData = auditDictionary[auditId];
 
 class LoadAudit extends Audit {
   static get meta() {
     return {
-      id: "common-informative-ip-location",
-      title:
-        "LOCALIZZAZIONE IP - Il sito deve essere hostato su datacenter localizzati su territorio europeo.",
-      failureTitle:
-        "LOCALIZZAZIONE IP - Il sito deve essere hostato su datacenter localizzati su territorio europeo.",
+      id: auditId,
+      title: auditData.title,
+      failureTitle: auditData.failureTitle,
+      description: auditData.description,
       scoreDisplayMode: Audit.SCORING_MODES.INFORMATIVE,
-      description:
-        "CONDIZIONI DI SUCCESSO: l'indirizzo IP fa riferimento a un datacenter localizzato su territorio europeo; MODALITÀ DI VERIFICA: verifica che la localizzazione dell'IP rientri all'interno di uno dei confini degli stati membri dell'UE; RIFERIMENTI TECNICI E NORMATIVI: GDPR",
       requiredArtifacts: [],
     };
   }

@@ -12,10 +12,10 @@ import { allowedNames } from "../storage/common/allowedCookieBtnNames";
 
 const Audit = lighthouse.Audit;
 
-
 const run = async (
   url: string,
-  auditData: any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  auditData: any
 ): Promise<{ score: number; details: LH.Audit.Details.Table }> => {
   const headings = [
     { key: "cookie_name", itemType: "text", text: "Nome del Cookie" },
@@ -26,7 +26,7 @@ const run = async (
 
   const items = [];
   let score = 1;
-  let cookies: Protocol.Network.Cookie[] = []
+  let cookies: Protocol.Network.Cookie[] = [];
 
   const browser = await puppeteer.launch();
   try {
@@ -124,6 +124,7 @@ async function sleep(time: number) {
 async function checkCookieDomain(
   url: string,
   cookies: Protocol.Network.Cookie[],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   auditData: any
 ): Promise<cookie[]> {
   const returnValue = [];

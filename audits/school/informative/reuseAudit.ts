@@ -3,20 +3,21 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
+import { auditDictionary } from "../../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
+
+const auditId = "school-informative-reuse";
+const auditData = auditDictionary[auditId];
 
 class LoadAudit extends Audit {
   static get meta() {
     return {
-      id: "school-informative-reuse",
-      title:
-        "R.SC.2.1 - RIUSO - La scuola deve mettere a riuso sotto licenza aperta il software secondo le Linee Guida “acquisizione e riuso di software e riuso di software per le pubbliche amministrazioni“.",
-      failureTitle:
-        "R.SC.2.1 - RIUSO - La scuola deve mettere a riuso sotto licenza aperta il software secondo le Linee Guida “acquisizione e riuso di software e riuso di software per le pubbliche amministrazioni“.",
+      id: auditId,
+      title: auditData.title,
+      failureTitle: auditData.failureTitle,
+      description: auditData.description,
       scoreDisplayMode: Audit.SCORING_MODES.INFORMATIVE,
-      description:
-        "RIFERIMENTI TECNICI E NORMATIVI: CAD: Art. 69. (Riuso delle soluzioni e standard aperti), Art. 69. (Riuso delle soluzioni e standard aperti), AgID Linee guida su acquisizione e riuso di software per le pubbliche amministrazioni.",
       requiredArtifacts: [],
     };
   }

@@ -10,15 +10,15 @@ import {
   loadPageData,
   urlExists,
 } from "../../utils/utils";
-import { auditDictionary } from "../../storage/auditDictionary"
+import { auditDictionary } from "../../storage/auditDictionary";
 import { run as securityAudit } from "../../utils/securityAuditLogic";
 
 const Audit = lighthouse.Audit;
 
-const auditId = "municipality-personal-area-security"
-const auditData = auditDictionary[auditId]
+const auditId = "municipality-personal-area-security";
+const auditData = auditDictionary[auditId];
 
-const notExecuted = auditData.nonExecuted
+const notExecuted = auditData.nonExecuted;
 
 class LoadAudit extends Audit {
   static get meta() {
