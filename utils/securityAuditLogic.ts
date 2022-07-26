@@ -197,7 +197,7 @@ async function checkCertificateValidation(
       returnObj.valid_to = certificate.valid_to;
     }
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
 
   return returnObj;
