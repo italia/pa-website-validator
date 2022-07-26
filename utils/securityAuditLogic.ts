@@ -10,6 +10,7 @@ import * as sslCertificate from "get-ssl-certificate";
 import crawlerTypes from "../types/crawler-types";
 import cipher = crawlerTypes.cipher;
 import cipherInfo = crawlerTypes.cipherInfo;
+import { hostnameExists } from "./utils";
 
 const Audit = lighthouse.Audit;
 const allowedTlsVersions = ["TLSv1.2", "TLSv1.3"];
@@ -88,7 +89,7 @@ const run = async (
     cipherSuite = await checkCipherSuite(url);
   } catch (e) {
     item[0].protocol = protocol;
-    item[0].result = redResult + " Internal exception: " + JSON.stringify(e);
+    item[0].result = redResult + " Internal exception";
     return {
       score: 0,
       details: Audit.makeTableDetails(headings, item),
@@ -97,21 +98,23 @@ const run = async (
 
   item[0].protocol = protocol;
 
-  const validFrom = new Date(certificate.valid_from.toString());
-  const validTo = new Date(certificate.valid_to.toString());
-  item[0].certificate_validation =
-    "Valido dal: " +
-    validFrom.getDate() +
-    "/" +
-    validFrom.getMonth() +
-    "/" +
-    validFrom.getFullYear() +
-    " al: " +
-    validTo.getDate() +
-    "/" +
-    validTo.getMonth() +
-    "/" +
-    validTo.getFullYear();
+  if (certificate.valid_from && certificate.valid_to) {
+    const validFrom = new Date(certificate.valid_from.toString());
+    const validTo = new Date(certificate.valid_to.toString());
+    item[0].certificate_validation =
+      "Valido dal: " +
+      validFrom.getDate() +
+      "/" +
+      validFrom.getMonth() +
+      "/" +
+      validFrom.getFullYear() +
+      " al: " +
+      validTo.getDate() +
+      "/" +
+      validTo.getMonth() +
+      "/" +
+      validTo.getFullYear();
+  }
 
   if (tls.tls_version === "TLSv1.2") {
     item[0].tls_version = "1.2";
@@ -172,34 +175,28 @@ async function checkCertificateValidation(
     valid_to: "",
   };
 
-  const hostname = url.split("://");
-  if (hostname.length <= 1) {
-    return returnObj;
-  }
+  try {
+    const hostname = new URL(url).hostname;
 
-  const parsedHost = hostname[1].split("www.");
-  if (parsedHost.length <= 1) {
-    return returnObj;
-  }
+    const certificate = await sslCertificate.get(hostname);
+    if (certificate) {
+      const validFromTimestamp = Date.parse(certificate.valid_from ?? null);
+      const validToTimestamp = Date.parse(certificate.valid_to ?? null);
 
-  const certificate = await sslCertificate.get(parsedHost[1]);
-  if (certificate) {
-    const validFromTimestamp = Date.parse(certificate.valid_from ?? null);
-    const validToTimestamp = Date.parse(certificate.valid_to ?? null);
-
-    if (!isNaN(validFromTimestamp) && !isNaN(validToTimestamp)) {
-      const todayTimestamp = Date.now();
-      if (
-        todayTimestamp > validFromTimestamp &&
-        todayTimestamp < validToTimestamp
-      ) {
-        returnObj.valid = true;
+      if (!isNaN(validFromTimestamp) && !isNaN(validToTimestamp)) {
+        const todayTimestamp = Date.now();
+        if (
+          todayTimestamp > validFromTimestamp &&
+          todayTimestamp < validToTimestamp
+        ) {
+          returnObj.valid = true;
+        }
       }
-    }
-  }
 
-  returnObj.valid_from = certificate.valid_from;
-  returnObj.valid_to = certificate.valid_to;
+      returnObj.valid_from = certificate.valid_from;
+      returnObj.valid_to = certificate.valid_to;
+    }
+  } catch (e) {}
 
   return returnObj;
 }
@@ -266,6 +263,11 @@ async function checkCipherSuite(
 }
 
 async function getCipherVersion(hostname: string): Promise<string> {
+  const hostnameInfo = await hostnameExists(hostname);
+  if (!hostnameInfo.exists) {
+    return "";
+  }
+
   return new Promise(function (resolve) {
     https
       .request(hostname, function (res) {
@@ -276,6 +278,11 @@ async function getCipherVersion(hostname: string): Promise<string> {
 }
 
 async function getCipherStandardName(hostname: string): Promise<string> {
+  const hostnameInfo = await hostnameExists(hostname);
+  if (!hostnameInfo.exists) {
+    return "";
+  }
+
   return new Promise(function (resolve) {
     https
       .request(hostname, function (res) {

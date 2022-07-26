@@ -261,21 +261,25 @@ async function hostnameExists(
 ): Promise<{ hostname: string; exists: boolean }> {
   const newURL = new URL(url);
 
-  if (!("hostname" in newURL)) {
+  try {
+    if (!("hostname" in newURL)) {
+      throw new Error("Hostname does not exists");
+    }
+
+    let hostname = newURL.hostname;
+    hostname = hostname.replace(/(^\w+:|^)\/\//, "");
+    hostname = hostname.replace("www.", "");
+    hostname = hostname.replace("/", "");
+
+    return new Promise((resolve) => {
+      dns.lookup(hostname, (error) => resolve({ hostname, exists: !error }));
+    });
+  } catch (e) {
     return {
       hostname: "",
       exists: false,
     };
   }
-
-  let hostname = newURL.hostname;
-  hostname = hostname.replace(/(^\w+:|^)\/\//, "");
-  hostname = hostname.replace("www.", "");
-  hostname = hostname.replace("/", "");
-
-  return new Promise((resolve) => {
-    dns.lookup(hostname, (error) => resolve({ hostname, exists: !error }));
-  });
 }
 
 const urlExists = async (
@@ -341,7 +345,7 @@ const urlExists = async (
 
     return {
       result: false,
-      reason: "Internal exception",
+      reason: "",
       inspectedUrl: inspectUrl,
     };
   }
