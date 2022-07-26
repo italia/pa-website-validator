@@ -9,22 +9,23 @@ import {
 
 const Audit = lighthouse.Audit;
 
-const greenResult = "Il componente è presente.";
-const yellowResult = "Il componente è assente.";
-const notExecuted =
-  "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.";
+const auditId = "municipality-booking-appointment-check"
+import { auditDictionary } from "../../storage/auditDictionary"
+const auditData = auditDictionary[auditId]
+
+const greenResult = auditData.greenResult
+const yellowResult = auditData.yellowResult
+const redResult = auditData.redResult
+const notExecuted = auditData.nonExecuted
 
 class LoadAudit extends Audit {
   static get meta() {
     return {
-      id: "municipality-booking-appointment-check",
-      title:
-        "C.SI.2.1 - PRENOTAZIONE APPUNTAMENTI - Il sito comunale deve consentire, per tutti i servizi che prevedono una erogazione a sportello, di prenotare un appuntamento presso lo sportello di competenza.",
-      failureTitle:
-        "C.SI.2.1 - PRENOTAZIONE APPUNTAMENTI - Il sito comunale deve consentire, per tutti i servizi che prevedono una erogazione a sportello, di prenotare un appuntamento presso lo sportello di competenza.",
+      id: auditId,
+      title: auditData.title,
+      failureTitle: auditData.failureTitle,
+      description: auditData.description,
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
-      description:
-        'CONDIZIONI DI SUCCESSO: la funzionalità di prenotazione di un appuntamento presso lo sportello è presente in tutte le schede servizio che lo richiedono; MODALITÀ DI VERIFICA: viene verificata la presenza del componente "Prenota appuntamento" all\'interno di una scheda servizio selezionata casualmente, ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica. Questo test non ha una condizione di fallimento in quanto dipende dal servizio specifico analizzato; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
       requiredArtifacts: ["origin"],
     };
   }

@@ -7,24 +7,22 @@ import { loadPageData, urlExists } from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
-const greenResult =
-  "Il link è nel footer, la pagina di destinazione esiste e la label è nominata correttamente.";
-const yellowResult =
-  "Il link è nel footer, la pagina di destinazione esiste ma la label non è nominata correttamente.";
-const redResult =
-  "Il link non è nel footer o la pagina di destinazione è inesistente.";
+const auditId = "municipality-inefficiency-report"
+import { auditDictionary } from "../../storage/auditDictionary"
+const auditData = auditDictionary[auditId]
+
+const greenResult = auditData.greenResult
+const yellowResult = auditData.yellowResult
+const redResult = auditData.redResult
 
 class LoadAudit extends Audit {
   static get meta() {
     return {
-      id: "municipality-inefficiency-report",
-      title:
-        "C.SI.2.4 - SEGNALAZIONE DISSERVIZIO - Il sito comunale deve fornire al cittadino la possibilità di segnalare un disservizio, tramite email o servizio dedicato.",
-      failureTitle:
-        "C.SI.2.4 - SEGNALAZIONE DISSERVIZIO - Il sito comunale deve fornire al cittadino la possibilità di segnalare un disservizio, tramite email o servizio dedicato.",
+      id: auditId,
+      title: auditData.title,
+      failureTitle: auditData.failureTitle,
+      description: auditData.description,
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
-      description:
-        'CONDIZIONI DI SUCCESSO: nel footer del sito è presente un link per la segnalazione di un disservizio che contenga le espressioni "disservizio" oppure "segnala disservizio" oppure "segnalazione disservizio"; MODALITÀ DI VERIFICA: viene verificata la presenza del link nel footer, ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica, che il link invii ad una pagina esistente e che il testo del link contenga almeno una delle espressioni richieste, senza fare distinzione tra caratteri minuscoli o maiuscoli; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
       requiredArtifacts: ["origin"],
     };
   }

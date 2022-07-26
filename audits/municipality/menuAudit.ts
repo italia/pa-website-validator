@@ -13,23 +13,22 @@ import {
 
 const Audit = lighthouse.Audit;
 
-const greenResult = "Le voci del menù sono corrette e nell'ordine giusto.";
-const yellowResult =
-  "L'ordine delle voci del menu è corretto ma sono presenti fino a 3 voci aggiuntive.";
-const redResult =
-  "Almeno una delle voci obbligatorie è assente o inesatta e/o le voci obbligatorie sono in ordine errato e/o sono presenti 8 o più voci nel menù del sito.";
+const auditId = "municipality-menu-structure-match-model"
+import { auditDictionary } from "../../storage/auditDictionary"
+const auditData = auditDictionary[auditId]
+
+const greenResult = auditData.greenResult
+const yellowResult = auditData.yellowResult
+const redResult = auditData.redResult
 
 class LoadAudit extends lighthouse.Audit {
   static get meta() {
     return {
-      id: "municipality-menu-structure-match-model",
-      title:
-        "C.SI.1.6 - VOCI DI MENÙ DI PRIMO LIVELLO - Il sito comunale deve presentare tutte le voci di menù di primo livello, nell'esatto ordine descritto dalla documentazione del modello di sito comunale.",
-      failureTitle:
-        "C.SI.1.6 - VOCI DI MENÙ DI PRIMO LIVELLO - Il sito comunale deve presentare tutte le voci di menù di primo livello, nell'esatto ordine descritto dalla documentazione del modello di sito comunale.",
+      id: auditId,
+      title: auditData.title,
+      failureTitle: auditData.failureTitle,
+      description: auditData.description,
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
-      description:
-        "CONDIZIONI DI SUCCESSO: le voci del menù di primo livello del sito sono esattamente quelle indicate nel documento di architettura dell'informazione e sono nell'ordine indicato (ovvero Amministrazione, Novità, Servizi, Vivere il Comune); MODALITÀ DI VERIFICA: ricercando uno specifico attributo \"data-element\" come spiegato nella documentazione tecnica, vengono identificate le voci presenti nel menù del sito, il loro ordine e confrontate con quanto indicato nel documento di architettura dell'informazione, applicando una tolleranza di massimo 3 voci aggiuntive; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
       requiredArtifacts: ["origin"],
     };
   }

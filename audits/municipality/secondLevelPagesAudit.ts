@@ -14,23 +14,23 @@ import { secondLevelPageNames } from "../../storage/municipality/controlledVocab
 
 const Audit = lighthouse.Audit;
 
-const greenResult = "Tutti i titoli sono corretti.";
-const yellowResult = "Almeno il 50% dei titoli è corretto.";
-const redResult = "Meno del 50% dei titoli è corretto.";
-const notExecuted =
-  'Non è stato possibile condurre il test. Controlla le "Modalità di verifica" per scoprire di più.';
+const auditId = "municipality-second-level-pages"
+import { auditDictionary } from "../../storage/auditDictionary"
+const auditData = auditDictionary[auditId]
+
+const greenResult = auditData.greenResult
+const yellowResult = auditData.yellowResult
+const redResult = auditData.redResult
+const notExecuted = auditData.nonExecuted
 
 class LoadAudit extends lighthouse.Audit {
   static get meta() {
     return {
-      id: "municipality-second-level-pages",
-      title:
-        "C.SI.1.7 - TITOLI DELLE PAGINE DI SECONDO LIVELLO - Nel sito comunale, i titoli delle pagine di secondo livello devono rispettare il vocabolario descritto dalla documentazione del modello di sito comunale.",
-      failureTitle:
-        "C.SI.1.7 - TITOLI DELLE PAGINE DI SECONDO LIVELLO - Nel sito comunale, i titoli delle pagine di secondo livello devono rispettare il vocabolario descritto dalla documentazione del modello di sito comunale.",
+      id: auditId,
+      title: auditData.title,
+      failureTitle: auditData.failureTitle,
+      description: auditData.description,
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
-      description:
-        'CONDIZIONI DI SUCCESSO: i titoli delle pagine di secondo livello corrispondono a quelli indicati nel documento di architettura dell\'informazione del modello Comuni; MODALITÀ DI VERIFICA: vengono confrontati i titoli delle categorie di servizi presentati nella pagina di primo livello "Servizi" con i titoli richiesti dal modello nell\'elenco Tassonomia categorie dei servizi del documento di architettura dell\'informazione, ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Tassonomia categorie dei servizi](https://docs.google.com/spreadsheets/d/1D4KbaA__xO9x_iBm08KvZASjrrFLYLKX/edit#gid=938683089), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
       requiredArtifacts: ["origin"],
     };
   }

@@ -10,26 +10,23 @@ import { buildUrl, isInternalUrl, loadPageData } from "../../utils/utils";
 const Audit = lighthouse.Audit;
 const textDomain = "Text Domain: design_comuni_italia";
 
-const greenResult =
-  "Il sito utilizza una versione idonea del tema CMS del modello.";
-const yellowResult = "Il sito non sembra utilizzare il tema CMS del modello.";
-const redResult =
-  "Il sito utilizza una versione datata del tema CMS del modello.";
+const auditId = "municipality-ux-ui-consistency-theme-version-check"
+import { auditDictionary } from "../../storage/auditDictionary"
+const auditData = auditDictionary[auditId]
 
-const notExecuted =
-  'Non è stato possibile condurre il test. Controlla le "Modalità di verifica" per scoprire di più.';
+const greenResult = auditData.greenResult
+const yellowResult = auditData.yellowResult
+const redResult = auditData.redResult
+const notExecuted = auditData.nonExecuted
 
 class LoadAudit extends Audit {
   static get meta() {
     return {
-      id: "municipality-ux-ui-consistency-theme-version-check",
-      title:
-        "C.SI.1.4 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito comunale, deve utilizzarne la versione più recente disponibile alla data di inizio lavori.",
-      failureTitle:
-        "C.SI.1.4 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito comunale, deve utilizzarne la versione più recente disponibile alla data di inizio lavori.",
+      id: auditId,
+      title: auditData.title,
+      failureTitle: auditData.failureTitle,
+      description: auditData.description,
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
-      description:
-        "C.SI.1.4 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito comunale, deve utilizzarne la versione più recente disponibile alla data di inizio lavori.",
       requiredArtifacts: ["origin"],
     };
   }

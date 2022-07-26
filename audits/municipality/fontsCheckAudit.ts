@@ -8,24 +8,23 @@ import puppeteer from "puppeteer";
 
 const Audit = lighthouse.Audit;
 
-const greenResult = "Il sito utilizza tutti i font necessari.";
-const yellowResult =
-  "Il sito utilizza il font Titillium Web ma non il font Lora.";
-const redResult = "Il sito non utilizza i font del modello.";
-const notExecuted =
-  "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.";
+const auditId = "municipality-ux-ui-consistency-fonts-check"
+import { auditDictionary } from "../../storage/auditDictionary"
+const auditData = auditDictionary[auditId]
+
+const greenResult = auditData.greenResult
+const yellowResult = auditData.yellowResult
+const redResult = auditData.redResult
+const notExecuted = auditData.nonExecuted
 
 class LoadAudit extends Audit {
   static get meta() {
     return {
-      id: "municipality-ux-ui-consistency-fonts-check",
-      title:
-        "C.SI.1.1 - CONSISTENZA DELL'UTILIZZO DEI FONT (librerie di caratteri) - Il sito comunale deve utilizzare i font indicati dalla documentazione del modello di sito comunale.",
-      failureTitle:
-        "C.SI.1.1 - CONSISTENZA DELL'UTILIZZO DEI FONT (librerie di caratteri) - Il sito comunale deve utilizzare i font indicati dalla documentazione del modello di sito comunale.",
+      id: auditId,
+      title: auditData.title,
+      failureTitle: auditData.failureTitle,
+      description: auditData.description,
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
-      description:
-        'CONDIZIONI DI SUCCESSO: il sito utilizza almeno i font Titillium Web e Lora; MODALITÀ DI VERIFICA: ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica, viene verificata la presenza dei font all\'interno di una scheda servizio casualmente selezionata; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
       requiredArtifacts: ["origin"],
     };
   }
