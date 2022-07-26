@@ -142,5 +142,4 @@ dist
 .DS_Store
 
 # Bundles
-/validatore-comuni*
-/validatore-scuole*
+/app-valutazione-*

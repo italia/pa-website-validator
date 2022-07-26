@@ -10,8 +10,8 @@
   "scripts": {
     "build:lighthouse": "tsc && echo '{\n  \"type\": \"commonjs\"\n}' > dist/lighthouse/package.json",
     "build:main": "tsc -p tsconfig.main.json",
-    "bundle:municipality": "caxa -i . -o validatore-comuni -m 'Caricamento...' -e \"*\" -e \".*\" -e \"!dist\" -e \"!node_modules\" -e \"!package.json\" -- env PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=1 \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/dist/app.js\" municipality",
-    "bundle:school": "caxa -i . -o validatore-scuole -m 'Caricamento...' -e \"*\" -e \".*\" -e \"!dist\" -e \"!node_modules\" -e \"!package.json\" -- env PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=1 \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/dist/app.js\" school",
+    "bundle:municipality": "caxa -i . -o app-valutazione-comuni -e \"*\" -e \".*\" -e \"!dist\" -e \"!node_modules\" -e \"!package.json\" -- env PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=1 \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/dist/app.js\" municipality",
+    "bundle:school": "caxa -i . -o app-valutazione-scuole -e \"*\" -e \".*\" -e \"!dist\" -e \"!node_modules\" -e \"!package.json\" -- env PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=1 \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/dist/app.js\" school",
     "format:check": "prettier -c .",
     "lint:check": "eslint --ext .js,.ts --max-warnings 0 .",
     "prepare": "npm run build:lighthouse && npm run build:main",
