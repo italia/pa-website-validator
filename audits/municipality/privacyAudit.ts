@@ -4,11 +4,11 @@
 import lighthouse from "lighthouse";
 import { CheerioAPI } from "cheerio";
 import { loadPageData, urlExists } from "../../utils/utils";
+import { auditDictionary } from "../../storage/auditDictionary"
 
 const Audit = lighthouse.Audit;
 
 const auditId = "municipality-legislation-privacy-is-present"
-import { auditDictionary } from "../../storage/auditDictionary"
 const auditData = auditDictionary[auditId]
 
 const greenResult = auditData.greenResult

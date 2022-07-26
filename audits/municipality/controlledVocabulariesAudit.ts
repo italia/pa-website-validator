@@ -14,11 +14,11 @@ import {
   getPageElementDataAttribute,
   loadPageData,
 } from "../../utils/utils";
+import { auditDictionary } from "../../storage/auditDictionary"
 
 const Audit = lighthouse.Audit;
 
 const auditId = "municipality-controlled-vocabularies"
-import { auditDictionary } from "../../storage/auditDictionary"
 const auditData = auditDictionary[auditId]
 
 const greenResult = auditData.greenResult

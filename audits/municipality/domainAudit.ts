@@ -2,12 +2,12 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
+import { domains } from "../../storage/municipality/allowedDomains";
+import { auditDictionary } from "../../storage/auditDictionary"
+
 const Audit = lighthouse.Audit;
 
-import { domains } from "../../storage/municipality/allowedDomains";
-
 const auditId = "municipality-domain"
-import { auditDictionary } from "../../storage/auditDictionary"
 const auditData = auditDictionary[auditId]
 
 const greenResult = auditData.greenResult

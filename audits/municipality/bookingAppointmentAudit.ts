@@ -6,16 +6,15 @@ import {
   getRandomMunicipalityServiceUrl,
   loadPageData,
 } from "../../utils/utils";
+import { auditDictionary } from "../../storage/auditDictionary"
 
 const Audit = lighthouse.Audit;
 
 const auditId = "municipality-booking-appointment-check"
-import { auditDictionary } from "../../storage/auditDictionary"
 const auditData = auditDictionary[auditId]
 
 const greenResult = auditData.greenResult
 const yellowResult = auditData.yellowResult
-const redResult = auditData.redResult
 const notExecuted = auditData.nonExecuted
 
 class LoadAudit extends Audit {
