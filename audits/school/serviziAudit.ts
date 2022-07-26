@@ -75,11 +75,6 @@ class LoadAudit extends Audit {
     const mandatoryHeaderVoices = contentTypeItems.Header;
     const mandatoryBodyVoices = contentTypeItems.Body;
     const mandatoryPlaceInfo = contentTypeItems.Luogo;
-    const totalMandatoryVoices =
-      mandatoryVoices.length +
-      mandatoryHeaderVoices.length +
-      mandatoryPlaceInfo.length +
-      mandatoryBodyVoices.length;
 
     const mandatoryMetadata = contentTypeItems.Metadati;
     const breadcrumbMandatoryElements = contentTypeItems.Breadcrumb;
