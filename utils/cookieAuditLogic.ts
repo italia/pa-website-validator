@@ -12,11 +12,10 @@ import { allowedNames } from "../storage/common/allowedCookieBtnNames";
 
 const Audit = lighthouse.Audit;
 
-const greenResult = "Cookie idoneo.";
-const redResult = "Cookie non idoneo.";
 
 const run = async (
-  url: string
+  url: string,
+  auditData: any,
 ): Promise<{ score: number; details: LH.Audit.Details.Table }> => {
   const headings = [
     { key: "cookie_name", itemType: "text", text: "Nome del Cookie" },
@@ -27,23 +26,27 @@ const run = async (
 
   const items = [];
   let score = 1;
+  let cookies: Protocol.Network.Cookie[] = []
 
   const browser = await puppeteer.launch();
-  const page: Page = await browser.newPage();
-  await page.goto(url, {
-    waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
-  });
+  try {
+    const page: Page = await browser.newPage();
+    await page.goto(url, {
+      waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
+    });
+    const links = await getLinksFromHTMLPage(page);
 
-  const links = await getLinksFromHTMLPage(page);
+    await clickOnAcceptCookiesButtonIfExists(page, links);
 
-  await clickOnAcceptCookiesButtonIfExists(page, links);
+    cookies = await page.cookies();
+    await browser.close();
+  } catch (e) {
+    await browser.close();
+  }
 
-  const cookies: Protocol.Network.Cookie[] = await page.cookies();
-  await browser.close();
-
-  const resultCookies = await checkCookieDomain(url, cookies);
+  const resultCookies = await checkCookieDomain(url, cookies, auditData);
   for (const resultCookie of resultCookies) {
-    if (resultCookie.result === redResult) {
+    if (resultCookie.result === auditData.redResult) {
       score = 0;
     }
 
@@ -120,7 +123,8 @@ async function sleep(time: number) {
 
 async function checkCookieDomain(
   url: string,
-  cookies: Protocol.Network.Cookie[]
+  cookies: Protocol.Network.Cookie[],
+  auditData: any
 ): Promise<cookie[]> {
   const returnValue = [];
 
@@ -129,11 +133,11 @@ async function checkCookieDomain(
       cookie_name: cookie.name,
       cookie_value: cookie.value,
       cookie_domain: cookie.domain,
-      result: redResult,
+      result: auditData.redResult,
     };
 
     if (url.includes(cookie.domain)) {
-      cookieValues.result = greenResult;
+      cookieValues.result = auditData.greenResult;
     }
 
     returnValue.push(cookieValues);

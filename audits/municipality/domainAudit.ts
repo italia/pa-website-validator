@@ -6,21 +6,21 @@ const Audit = lighthouse.Audit;
 
 import { domains } from "../../storage/municipality/allowedDomains";
 
-const greenResult = "Il dominio utilizzato è corretto.";
-const redResult =
-  "Il dominio utilizzato non è presente nell'elenco dei domini riservati.";
+const auditId = "municipality-domain"
+import { auditDictionary } from "../../storage/auditDictionary"
+const auditData = auditDictionary[auditId]
+
+const greenResult = auditData.greenResult
+const redResult = auditData.redResult
 
 class LoadAudit extends Audit {
   static get meta() {
     return {
-      id: "municipality-domain",
-      title:
-        "C.SI.5.2 - DOMINIO ISTITUZIONALE - Il sito comunale deve utilizzare un dominio istituzionale presente all’interno dell’Anagrafe dei domini.",
-      failureTitle:
-        "C.SI.5.2 - DOMINIO ISTITUZIONALE - Il sito comunale deve utilizzare un dominio istituzionale presente all’interno dell’Anagrafe dei domini.",
+      id: auditId,
+      title: auditData.title,
+      failureTitle: auditData.failureTitle,
+      description: auditData.description,
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
-      description:
-        "CONDIZIONI DI SUCCESSO: il dominio istituzione del sito è valido; MODALITÀ DI VERIFICA: viene verificato che il dominio utilizzato dal sito sia presente nell'Elenco Nomi a Dominio Riservati per i Comuni Italiani; RIFERIMENTI TECNICI E NORMATIVI: [Elenco Nomi a Dominio Riservati Per i Comuni Italiani](https://www.nic.it/sites/default/files/docs/comuni_list.html).",
       requiredArtifacts: ["origin"],
     };
   }

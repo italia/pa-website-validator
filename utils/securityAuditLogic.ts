@@ -6,16 +6,13 @@ import lighthouse from "lighthouse";
 import https from "https";
 import { TLSSocket } from "tls";
 import { allowedCiphers } from "../storage/common/allowedCiphers";
-const allowedTlsVersions = ["TLSv1.2", "TLSv1.3"];
 import * as sslCertificate from "get-ssl-certificate";
 import crawlerTypes from "../types/crawler-types";
 import cipher = crawlerTypes.cipher;
 import cipherInfo = crawlerTypes.cipherInfo;
 
 const Audit = lighthouse.Audit;
-
-let greenResult = "Il certificato del sito [url] è attivo e valido.";
-let redResult = "Il certificato del sito [url] non è attivo o valido: ";
+const allowedTlsVersions = ["TLSv1.2", "TLSv1.3"];
 
 const errorLogging = [
   "il sito non utilizza il protocollo HTTPS",
@@ -28,10 +25,11 @@ const errorLogging = [
 ];
 
 const run = async (
-  url: string
+  url: string,
+  auditData: any
 ): Promise<{ score: number; details: LH.Audit.Details.Table }> => {
-  greenResult = greenResult.replace("[url]", url);
-  redResult = redResult.replace("[url]", url);
+  const greenResult = auditData.greenResult.replace("[url]", url);
+  const redResult = auditData.redResult.replace("[url]", url);
 
   const headings = [
     { key: "result", itemType: "text", text: "Risultato" },

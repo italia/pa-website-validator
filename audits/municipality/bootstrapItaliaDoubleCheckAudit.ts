@@ -6,23 +6,23 @@ import lighthouse from "lighthouse";
 
 const Audit = lighthouse.Audit;
 
-const greenResult =
-  "Il sito utilizza la libreria Bootstrap Italia in una versione idonea.";
-const redResult =
-  "Il sito non utilizza la libreria Bootstrap Italia o ne utilizza una versione datata.";
+const auditId = "municipality-ux-ui-consistency-bootstrap-italia-double-check"
+import { auditDictionary } from "../../storage/auditDictionary"
+const auditData = auditDictionary[auditId]
+
+const greenResult = auditData.greenResult
+const redResult = auditData.redResult
+
 const libraryName = "Bootstrap italia";
 
 class LoadAudit extends Audit {
   static get meta() {
     return {
-      id: "municipality-ux-ui-consistency-bootstrap-italia-double-check",
-      title:
-        "C.SI.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito comunale deve utilizzare la libreria Bootstrap Italia.",
-      failureTitle:
-        "C.SI.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito comunale deve utilizzare la libreria Bootstrap Italia.",
+      id: auditId,
+      title: auditData.title,
+      failureTitle: auditData.failureTitle,
+      description: auditData.description,
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
-      description:
-        "CONDIZIONI DI SUCCESSO: il sito usa la libreria Bootstrap Italia in una versione uguale o superiore alla 2.0; MODALITÀ DI VERIFICA: viene verificata la presenza della libreria Bootstrap Italia e la versione in uso individuando la proprietà CSS --bootstrap-italia-version all’interno del selettore :root o la variabile globale window.BOOTSTRAP_ITALIA_VERSION; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/).",
       requiredArtifacts: [
         "bootstrapItaliaSelectorCheck",
         "bootstrapItaliaCheck",

@@ -9,26 +9,23 @@ import { buildUrl, isInternalUrl, loadPageData } from "../../utils/utils";
 
 import { domains } from "../../storage/municipality/allowedDomains";
 
-const greenResult =
-  "La pagina utilizza un sottodominio congruente al dominio del sito e fa riferimento a un dominio riservato.";
-const yellowResult =
-  "La pagina non utilizza un sottodominio ma il dominio utilizzato è valido.";
-const redResult =
-  "La pagina utilizza un sottodominio non congruente al dominio del sito o non fa riferimento a un dominio valido.";
-const notExecuted =
-  "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.";
+const auditId = "municipality-subdomain"
+import { auditDictionary } from "../../storage/auditDictionary"
+const auditData = auditDictionary[auditId]
+
+const greenResult = auditData.greenResult
+const yellowResult = auditData.yellowResult
+const redResult = auditData.redResult
+const notExecuted = auditData.nonExecuted
 
 class LoadAudit extends Audit {
   static get meta() {
     return {
-      id: "municipality-subdomain",
-      title:
-        "C.SE.5.2 - SOTTODOMINIO ISTITUZIONALE - L'area servizi per il cittadino del sito comunale deve utilizzare un sottodominio istituzionale congruente al dominio istituzionale del sito, presente all’interno dell’Anagrafe dei domini.",
-      failureTitle:
-        "C.SE.5.2 - SOTTODOMINIO ISTITUZIONALE - L'area servizi per il cittadino del sito comunale deve utilizzare un sottodominio istituzionale congruente al dominio istituzionale del sito, presente all’interno dell’Anagrafe dei domini.",
+      id: auditId,
+      title: auditData.title,
+      failureTitle: auditData.failureTitle,
+      description: auditData.description,
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
-      description:
-        "CONDIZIONI DI SUCCESSO: l'area servizi fa riferimento a un sottodominio istituzionale valido; MODALITÀ DI VERIFICA: ricercando uno specifico attributo \"data-element\" come spiegato nella documentazione tecnica, viene verificato che il sottodominio/dominio della pagina di accesso all'area privata sia congruente al dominio utilizzato dal sito e che questo dominio sia presente nell'Elenco Nomi a Dominio Riservati per i Comuni Italiani; RIFERIMENTI TECNICI E NORMATIVI: [Elenco Nomi a Dominio Riservati Per i Comuni Italiani](https://www.nic.it/sites/default/files/docs/comuni_list.html), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
       requiredArtifacts: ["origin"],
     };
   }
