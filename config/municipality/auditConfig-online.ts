@@ -82,7 +82,7 @@ const modelComplianceInformationAudits = [
   {
     id: "municipality-legislation-cookie-domain-check",
     weight: 87,
-    group: "security",
+    group: "legislation",
   },
   {
     id: "municipality-legislation-accessibility-declaration-is-present",
