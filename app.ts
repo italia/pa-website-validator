@@ -46,6 +46,8 @@ try {
   ]);
 
   console.log();
+  const currentDate = new Date();
+  const hostname = new URL(url).hostname;
   await run(
     url,
     type,
@@ -53,7 +55,7 @@ try {
     logLevels.display_info,
     true,
     process.cwd(),
-    "report",
+    `report-${hostname}-${currentDate.toISOString()}`,
     true
   );
 
