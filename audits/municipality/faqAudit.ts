@@ -60,7 +60,7 @@ class LoadAudit extends Audit {
         result: redResult,
         link_name: "",
         link_destination: "",
-        existing_page: "Sì",
+        existing_page: "No",
       },
     ];
 
@@ -83,12 +83,13 @@ class LoadAudit extends Audit {
 
       if (!checkUrl.result) {
         items[0].result += checkUrl.reason;
-        items[0].existing_page = "No";
         return {
           score: 0,
           details: Audit.makeTableDetails(headings, items),
         };
       }
+
+      items[0].existing_page = "Sì";
 
       if (!label.includes("faq") && !label.includes("domande frequenti")) {
         items[0].result = yellowResult;
