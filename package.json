@@ -1,8 +1,9 @@
 {
   "name": "pa-website-validator",
   "version": "1.0.0",
-  "description": "TBD",
-  "private": true,
+  "author": "Presidenza del Consiglio dei Ministri",
+  "license": "BSD-3-Clause",
+  "description": "Tool di validazione per i siti di comuni e scuole",
   "type": "module",
   "engines": {
     "node": ">=16.0.0"
