@@ -207,7 +207,7 @@ export const auditDictionary = {
   "municipality-personal-area-security": {
     greenResult: "Il certificato del sito [url] è attivo e valido.",
     yellowResult: "",
-    redResult: "Il certificato del sito [url] non è attivo o valido:",
+    redResult: "Il certificato del sito [url] non è attivo o valido: ",
     nonExecuted:
       "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
     title:
