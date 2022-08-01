@@ -8,5 +8,6 @@ export const secondaryMenuItems = {
     "Organizzazione",
     "Persone",
     "I numeri della Scuola",
+    "La storia",
   ],
 };
