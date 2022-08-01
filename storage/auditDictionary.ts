@@ -209,7 +209,7 @@ export const auditDictionary = {
     yellowResult: "",
     redResult: "Il certificato del sito [url] non è attivo o valido:",
     nonExecuted:
-      'Non è stato possibile condurre il test. Controlla le "Modalità di verifica" per scoprire di più.',
+      "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
     title:
       "C.SE.5.1 - CERTIFICATO HTTPS AREA SERVIZI PER IL CITTADINO - L'area servizi per il cittadino del sito comunale ha un certificato https valido e attivo.",
     failureTitle:
