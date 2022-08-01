@@ -102,6 +102,13 @@ class LoadAudit extends lighthouse.Audit {
       '[data-element="topic-element"]'
     );
 
+    if (argumentList.length === 0) {
+      return {
+        score: score,
+        details: Audit.makeTableDetails(headings, item),
+      };
+    }
+
     const elementInfoMunicipalityVocabulary = await areAllElementsInVocabulary(
       argumentList,
       municipalityModelVocabulary
