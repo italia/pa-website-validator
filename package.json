@@ -33,6 +33,7 @@
     "lighthouse": "^9.5.0",
     "open": "^8.4.0",
     "puppeteer": "^15.3.2",
+    "semver": "^7.3.7",
     "yargs": "^17.0.10"
   },
   "devDependencies": {
@@ -44,6 +45,7 @@
     "@types/inquirer": "^8.2.1",
     "@types/jest": "^28.1.4",
     "@types/puppeteer": "^5.4.6",
+    "@types/semver": "^7.3.10",
     "@types/yargs": "^17.0.10",
     "@typescript-eslint/eslint-plugin": "^5.25.0",
     "@typescript-eslint/parser": "^5.25.0",

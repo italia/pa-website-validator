@@ -3,6 +3,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
+import semver from "semver";
 import { auditDictionary } from "../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
@@ -75,28 +76,32 @@ class LoadAudit extends Audit {
     ];
     let score = 0;
 
-    if (
-      bootstrapItaliaVariableVersion !== null &&
-      bootstrapItaliaVariableVersion
-    ) {
-      items[0].library_version = bootstrapItaliaVariableVersion;
-      items[0].library_name = libraryName;
+    try {
+      if (
+        bootstrapItaliaVariableVersion !== null &&
+        bootstrapItaliaVariableVersion
+      ) {
+        items[0].library_version = bootstrapItaliaVariableVersion;
+        items[0].library_name = libraryName;
 
-      if (await checkVersion(bootstrapItaliaVariableVersion)) {
-        score = 1;
-        items[0].result = greenResult;
-      }
-    } else if (
-      bootstrapItaliaSelectorVariableVersion !== null &&
-      bootstrapItaliaSelectorVariableVersion
-    ) {
-      items[0].library_version = bootstrapItaliaSelectorVariableVersion;
-      items[0].library_name = libraryName;
+        if (semver.gte(bootstrapItaliaVariableVersion, "1.6.0")) {
+          score = 1;
+          items[0].result = greenResult;
+        }
+      } else if (
+        bootstrapItaliaSelectorVariableVersion !== null &&
+        bootstrapItaliaSelectorVariableVersion
+      ) {
+        items[0].library_version = bootstrapItaliaSelectorVariableVersion;
+        items[0].library_name = libraryName;
 
-      if (await checkVersion(bootstrapItaliaSelectorVariableVersion)) {
-        score = 1;
-        items[0].result = greenResult;
+        if (semver.gte(bootstrapItaliaSelectorVariableVersion, "1.6.0")) {
+          score = 1;
+          items[0].result = greenResult;
+        }
       }
+    } catch (e) {
+      //eslint-disable-next-line
     }
 
     return {
@@ -107,19 +112,3 @@ class LoadAudit extends Audit {
 }
 
 module.exports = LoadAudit;
-
-const checkVersion = async (version: string) => {
-  let result = false;
-
-  const versionValues = version.split(".");
-  if (versionValues.length > 1) {
-    const majorVersion = parseInt(versionValues[0]);
-    const middleVersion = parseInt(versionValues[1]);
-
-    if (majorVersion >= 1 && middleVersion >= 6) {
-      result = true;
-    }
-  }
-
-  return result;
-};
