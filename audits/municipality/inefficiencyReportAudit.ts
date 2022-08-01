@@ -85,7 +85,6 @@ class LoadAudit extends Audit {
       items[0].link_destination = checkUrl.inspectedUrl;
 
       if (!checkUrl.result) {
-        items[0].result += checkUrl.reason;
         return {
           score: 0,
           details: Audit.makeTableDetails(headings, items),

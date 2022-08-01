@@ -86,7 +86,6 @@ class LoadAudit extends Audit {
 
       const checkUrl = await urlExists(url, elementObj.href);
       if (!checkUrl.result) {
-        items[0].result += checkUrl.reason;
         return {
           score: 0,
           details: Audit.makeTableDetails(headings, items),
