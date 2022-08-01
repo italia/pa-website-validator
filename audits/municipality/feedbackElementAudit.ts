@@ -164,7 +164,7 @@ class LoadAudit extends lighthouse.Audit {
 
     if (firstLevelFeedbackElement && secondLevelFeedbackElement) {
       pagesWithComponent =
-        randomFirstLevelPage + " " + randomSecondLevelServicePage;
+        randomFirstLevelPage + " e " + randomSecondLevelServicePage;
       items[0].result = greenResult;
       score = 1;
     } else if (firstLevelFeedbackElement && !randomSecondLevelServicePage) {
@@ -175,7 +175,7 @@ class LoadAudit extends lighthouse.Audit {
       pagesWithoutComponent = randomFirstLevelPage;
     } else {
       pagesWithoutComponent =
-        randomFirstLevelPage + " " + randomSecondLevelServicePage;
+        randomFirstLevelPage + " e " + randomSecondLevelServicePage;
     }
 
     items[0].page_with_component = pagesWithComponent;
