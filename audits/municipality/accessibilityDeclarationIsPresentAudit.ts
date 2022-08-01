@@ -78,13 +78,6 @@ class LoadAudit extends Audit {
     if (elementObj && "href" in elementObj) {
       items[0].link_destination = elementObj.href;
 
-      if (!elementObj.href.includes("https://form.agid.gov.it/view/")) {
-        return {
-          score: 0,
-          details: Audit.makeTableDetails(headings, items),
-        };
-      }
-
       const checkUrl = await urlExists(url, elementObj.href);
       if (!checkUrl.result) {
         return {
@@ -94,6 +87,14 @@ class LoadAudit extends Audit {
       }
 
       items[0].existing_page = "Sì";
+
+      if (!elementObj.href.includes("https://form.agid.gov.it/view/")) {
+        return {
+          score: 0,
+          details: Audit.makeTableDetails(headings, items),
+        };
+      }
+
       items[0].result = greenResult;
       score = 1;
     }
