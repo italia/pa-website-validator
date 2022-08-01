@@ -61,6 +61,7 @@
     ],
     "testPathIgnorePatterns": [
       "/node_modules",
+      "__tests__/municipalities",
       "/__tests__/schools"
     ],
     "testTimeout": 600000,

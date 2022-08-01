@@ -1,13 +1,10 @@
-/*
 import Fastify from "fastify";
 import fastifyStatic from "@fastify/static";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
-*/
 
 import { logLevels, run } from "../dist/controller/launchLighthouse.js";
 
-/*
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const fastify = Fastify();
 
@@ -33,9 +30,8 @@ type ExpectedLocalEntry = [
 ];
 
 const expectedLocal: Array<ExpectedLocalEntry> = [
-  ["master", [1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0.5, 0]],
+  ["2.0.2", [1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0.5, 1]],
 ];
-*/
 
 type ExpectedOnlineEntry = [
   string,
@@ -67,7 +63,7 @@ type ExpectedOnlineEntry = [
 const expectedOnline: Array<ExpectedOnlineEntry> = [
   [
     "https://www.comune.bergamo.it",
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.5, 0, 0, 1, 0, 1, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.5, 0, 0, 1, 1, 1, 0, 0],
   ],
 ];
 
@@ -132,19 +128,17 @@ const onlineDescriptions = [
   ...extraDescriptions,
 ] as const;
 
-//type LocalAudits = typeof localAudits[number];
+type LocalAudits = typeof localAudits[number];
 type OnlineAudits = typeof onlineAudits[number];
-//type LocalDescriptions = typeof localDescriptions[number];
+type LocalDescriptions = typeof localDescriptions[number];
 type OnlineDescriptions = typeof onlineDescriptions[number];
 
-/*
 const expandExpectedLocal = (line: ExpectedLocalEntry[1]) =>
   localAudits.map((e, ix): [LocalDescriptions, LocalAudits, number] => [
     localDescriptions[ix],
     e,
     line[ix],
   ]);
-*/
 
 const expandExpectedOnline = (line: ExpectedOnlineEntry[1]) =>
   onlineAudits.map((e, ix): [OnlineDescriptions, OnlineAudits, number] => [
@@ -153,14 +147,13 @@ const expandExpectedOnline = (line: ExpectedOnlineEntry[1]) =>
     line[ix],
   ]);
 
-/*
 describe.each(expectedLocal)("Local: %s", (url, expectedResults) => {
   let report: { audits: Record<string, Record<string, unknown>> };
 
   beforeAll(async () => {
     fastify.register(fastifyStatic, {
-      index: "scuole-home.html",
-      root: join(__dirname, "schools", url),
+      index: "sito/template-homepage.html",
+      root: join(__dirname, "municipalities", url),
     });
 
     await fastify.listen({ port: 8080 });
@@ -203,7 +196,6 @@ describe.each(expectedLocal)("Local: %s", (url, expectedResults) => {
     expect(report.audits[audit].score).toBe(null);
   });
 });
-*/
 
 describe.each(expectedOnline)("Online: %s", (url, expectedResults) => {
   let report: { audits: Record<string, Record<string, unknown>> };
