@@ -6,7 +6,6 @@ import { fileURLToPath } from "url";
 import { logLevels, run } from "../dist/controller/launchLighthouse.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const fastify = Fastify();
 
 type ExpectedLocalEntry = [
   string,
@@ -149,6 +148,7 @@ const expandExpectedOnline = (line: ExpectedOnlineEntry[1]) =>
 
 describe.each(expectedLocal)("Local: %s", (url, expectedResults) => {
   let report: { audits: Record<string, Record<string, unknown>> };
+  const fastify = Fastify();
 
   beforeAll(async () => {
     fastify.register(fastifyStatic, {
