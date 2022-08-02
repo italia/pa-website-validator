@@ -196,7 +196,7 @@ const checkOrder = async (
     }
   }
 
-  for (let i = 1; i < newFoundElements.length; i++) {
+  for (let i = 0; i < newFoundElements.length; i++) {
     const indexInMandatory = newMandatoryElements.indexOf(newFoundElements[i]);
     let isInSequence = true;
 
