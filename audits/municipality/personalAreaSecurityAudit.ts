@@ -67,10 +67,6 @@ class LoadAudit extends Audit {
         elementObj.href !== ""
       ) {
         urlInfo = await urlExists(origin, elementObj.href);
-        if (!urlInfo.result) {
-          item[0].result += urlInfo.reason;
-        }
-
         item[0].inspected_url = urlInfo.inspectedUrl;
       }
 

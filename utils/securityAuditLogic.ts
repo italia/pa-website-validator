@@ -102,13 +102,13 @@ const run = async (
     const validFrom = new Date(certificate.valid_from.toString());
     const validTo = new Date(certificate.valid_to.toString());
     item[0].certificate_validation =
-      "Valido dal: " +
+      "Dal " +
       validFrom.getDate() +
       "/" +
       validFrom.getMonth() +
       "/" +
       validFrom.getFullYear() +
-      " al: " +
+      " al " +
       validTo.getDate() +
       "/" +
       validTo.getMonth() +

@@ -18,10 +18,10 @@ const run = async (
   auditData: any
 ): Promise<{ score: number; details: LH.Audit.Details.Table }> => {
   const headings = [
+    { key: "result", itemType: "text", text: "Risultato" },
+    { key: "cookie_domain", itemType: "text", text: "Dominio del Cookie" },
     { key: "cookie_name", itemType: "text", text: "Nome del Cookie" },
     { key: "cookie_value", itemType: "text", text: "Valore del Cookie" },
-    { key: "cookie_domain", itemType: "text", text: "Dominio del cookie" },
-    { key: "result", itemType: "text", text: "Risultato" },
   ];
 
   const items = [];

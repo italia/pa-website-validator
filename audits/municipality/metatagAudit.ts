@@ -102,7 +102,7 @@ class LoadAudit extends Audit {
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: notExecuted + " JSON non valido.",
+              result: notExecuted,
             },
           ]
         ),
@@ -254,6 +254,6 @@ const getMissingVoices = async (result: ValidatorResult) => {
   }
 
   return voices.map(function (x) {
-    return x.replace("instance.", "").replace(/[0-9]/g, "").slice(0, -1);
+    return x.replace("instance.", "").replace(/[0-9]/g, "");
   });
 };

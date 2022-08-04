@@ -164,18 +164,18 @@ class LoadAudit extends lighthouse.Audit {
 
     if (firstLevelFeedbackElement && secondLevelFeedbackElement) {
       pagesWithComponent =
-        randomFirstLevelPage + " " + randomSecondLevelServicePage;
+        randomFirstLevelPage + " e " + randomSecondLevelServicePage;
       items[0].result = greenResult;
       score = 1;
-    } else if (firstLevelFeedbackElement && !randomSecondLevelServicePage) {
+    } else if (firstLevelFeedbackElement && !secondLevelFeedbackElement) {
       pagesWithComponent = randomFirstLevelPage;
       pagesWithoutComponent = randomSecondLevelServicePage;
-    } else if (!firstLevelFeedbackElement && randomSecondLevelServicePage) {
+    } else if (!firstLevelFeedbackElement && secondLevelFeedbackElement) {
       pagesWithComponent = randomSecondLevelServicePage;
       pagesWithoutComponent = randomFirstLevelPage;
     } else {
       pagesWithoutComponent =
-        randomFirstLevelPage + " " + randomSecondLevelServicePage;
+        randomFirstLevelPage + " e " + randomSecondLevelServicePage;
     }
 
     items[0].page_with_component = pagesWithComponent;

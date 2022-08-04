@@ -104,15 +104,19 @@ class LoadAudit extends lighthouse.Audit {
       }
     }
 
-    let pagesFoundInVocabularyPercentage = 0;
-    if (servicesSecondLevelPagesNames.length > 0) {
-      pagesFoundInVocabularyPercentage = parseInt(
-        (
-          (pagesInVocabulary.length / servicesSecondLevelPagesNames.length) *
-          100
-        ).toFixed(0)
-      );
+    if (servicesSecondLevelPagesNames.length === 0) {
+      return {
+        score: score,
+        details: Audit.makeTableDetails(headings, items),
+      };
     }
+
+    const pagesFoundInVocabularyPercentage = parseInt(
+      (
+        (pagesInVocabulary.length / servicesSecondLevelPagesNames.length) *
+        100
+      ).toFixed(0)
+    );
 
     if (pagesFoundInVocabularyPercentage === 100) {
       items[0].result = greenResult;

@@ -5,6 +5,7 @@
 import lighthouse from "lighthouse";
 import * as https from "https";
 import * as http from "http";
+import semver from "semver";
 import { CheerioAPI } from "cheerio";
 import { buildUrl, isInternalUrl, loadPageData } from "../../utils/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
@@ -120,26 +121,23 @@ class LoadAudit extends Audit {
           items[0].result = yellowResult;
 
           break;
-        } else {
-          const currentVersion = await getCurrentVersion(CSS);
-          items[0].theme_version = currentVersion;
-          const splittedVersion = currentVersion.split(".");
+        }
 
-          if (
-            splittedVersion.length > 2 &&
-            parseInt(splittedVersion[0]) >= 1 &&
-            parseInt(splittedVersion[1]) >= 0
-          ) {
+        score = 0;
+        items[0].result = redResult;
+
+        try {
+          const currentVersion = (await getCurrentVersion(CSS)).trim() ?? "";
+          items[0].theme_version = currentVersion;
+
+          if (semver.gte(currentVersion, "1.1.0")) {
             score = 1;
             items[0].result = greenResult;
 
             break;
-          } else {
-            score = 0;
-            items[0].result = redResult;
-
-            break;
           }
+        } catch (e) {
+          break;
         }
       }
     }
