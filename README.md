@@ -27,8 +27,7 @@ PA Website validator è un tool che integra la libreria [Lightouse][lighthouse] 
 | Pacchetto Cittadino Informato: criteri di conformità                              | Vengono mostrati i risultati degli audit relativi ad alcuni dei criteri di conformità del Pacchetto Cittadino Informato illustrati nell'[allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000dk829QAA#allegati).                                                                                                                                                                                                                                                                                |
 | Pacchetto Cittadino Attivo: criteri di conformità                                 | Vengono mostrati i risultati degli audit relativi ad alcuni dei criteri di conformità del Pacchetto Cittadino Attivo illustrati nell'[allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000dk829QAA#allegati).                                                                                                                                                                                                                                                                                   |
 | Pacchetto Cittadino Informato: raccomandazioni progettuali                        | Vengono mostrati i risultati degli audit relativi ad alcune delle raccomandazioni progettuali del Pacchetto Cittadino Informato illustrati nell'[allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q00000dk829QAA#allegati).                                                                                                                                                                                                                                                                        |
-
-| Test aggiuntivi | Vengono mostrati i risultati di test aggiuntivi utili a facilitare le attività di sviluppo e garantire un buon risultato. |
+| Test aggiuntivi                                                                   | Vengono mostrati i risultati di test aggiuntivi utili a facilitare le attività di sviluppo e garantire un buon risultato.                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 
 ## Tecnologie
 
@@ -113,7 +112,7 @@ Mappa opzioni comando
 | ------ | ------ | ------ | ------ | ------ |
 | - -help | Mostra la mappa comando | ❌ | |
 | - -version | Versione del pacchetto | ❌ | |
-| - -type | Tipologia di crawler da lanciare | ✅ | "municipality""school"| |
+| - -type | Tipologia di crawler da lanciare | ✅ | "municipality" "school" |
 | - -detination | Folder dove salvare la reportistica | ✅ |
 | - -report | Nome da assegnare al report | ✅ | |
 | - -website | Url sito web da analizzare | ✅ | |
