@@ -150,19 +150,7 @@ const getRandomSchoolServiceUrl = async (url: string): Promise<string> => {
 };
 
 const buildUrl = async (url: string, service: string): Promise<string> => {
-  const urlParts = url.split("//");
-
-  if (urlParts.length <= 0) {
-    return "";
-  }
-
-  const hostname = urlParts[1].split("/");
-
-  if (hostname.length <= 0) {
-    return "";
-  }
-
-  return urlParts[0] + "//" + hostname[0] + service;
+  return new URL(service, url).href;
 };
 
 const isInternalUrl = async (url: string) => {
