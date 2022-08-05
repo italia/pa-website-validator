@@ -7,7 +7,12 @@ import * as https from "https";
 import * as http from "http";
 import semver from "semver";
 import { CheerioAPI } from "cheerio";
-import { buildUrl, isInternalUrl, loadPageData } from "../../utils/utils";
+import {
+  buildUrl,
+  hostnameExists,
+  isInternalUrl,
+  loadPageData,
+} from "../../utils/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
@@ -142,6 +147,11 @@ class LoadAudit extends Audit {
 module.exports = LoadAudit;
 
 async function getCSShttps(hostname: string): Promise<string> {
+  const hostnameInfo = await hostnameExists(hostname);
+  if (!hostnameInfo.exists) {
+    return "";
+  }
+
   return new Promise(function (resolve) {
     https
       .request(hostname, function (res) {
@@ -159,6 +169,11 @@ async function getCSShttps(hostname: string): Promise<string> {
 }
 
 async function getCSShttp(hostname: string): Promise<string> {
+  const hostnameInfo = await hostnameExists(hostname);
+  if (!hostnameInfo.exists) {
+    return "";
+  }
+
   return new Promise(function (resolve) {
     http
       .request(hostname, function (res) {
