@@ -2,27 +2,42 @@
 
 set -e
 
-version=$1
-os=$2
-arch=$3
+version=$(jq -r .version package.json)
+os=$1
+arch=$2
 
-declare -A types=(
-  [municipality]=comuni
-  [school]=scuole
+types_en=(
+  municipality
+  school
+)
+
+types_it=(
+  comuni
+  scuole
 )
 
 if [ "$os" == "Windows" ]; then
+  build_variant=":windows"
   ext=".exe"
+  is_win=1
 else
+  build_variant=""
   ext=""
+  is_win=0
 fi
 
-for type in "${!types[@]}"; do
-  dir=${types[$type]}-$version-$os-$arch
+for i in 0 1; do
+  type_en=${types_en[$i]}
+  type_it=${types_it[$i]}
+  dir=$type_it-$version-$os-$arch
   mkdir "$dir"
-  npm run "bundle:$type"
-  mv "app-valutazione-${types[$type]}$ext" "$dir"
-  cp "README-${types[$type]}.md" "$dir/README.md"
-  zip -r "$dir.zip" "$dir"
+  npm run "bundle:$type_en$build_variant"
+  mv "app-valutazione-$type_it$ext" "$dir"
+  cp "README-$type_it.md" "$dir/README.md"
+  if [ $is_win == 0 ]; then
+    zip -r "$dir.zip" "$dir"
+  else
+    7z a -tzip "$dir.zip" "$dir"
+  fi
   rm -r "$dir"
 done
