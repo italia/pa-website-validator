@@ -9,7 +9,7 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "build:lighthouse": "tsc && (echo '{' && echo '\"type\": \"commonjs\"' && echo '}') > dist/lighthouse/package.json",
+    "build:lighthouse": "tsc && shx cp package-json-commonjs.json dist/lighthouse/package.json",
     "build:main": "tsc -p tsconfig.main.json",
     "bundle:municipality": "caxa -i . -o app-valutazione-comuni -e \"*\" -e \".*\" -e \"!dist\" -e \"!node_modules\" -e \"!package.json\" -m \"Caricamento...\" -- env PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=1 \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/dist/app.js\" municipality",
     "bundle:municipality:windows": "caxa -i . -o app-valutazione-comuni.exe -e \"*\" -e \".*\" -e \"!dist\" -e \"!node_modules\" -e \"!package.json\" -m \"Caricamento...\" -- \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/dist/app.js\" municipality",
@@ -55,6 +55,7 @@
     "fastify": "^4.2.1",
     "jest": "^28.1.2",
     "prettier": "^2.6.2",
+    "shx": "^0.3.4",
     "typescript": "^4.6.3"
   },
   "jest": {
