@@ -1,24 +1,65 @@
 name: Generate new release
+
 on:
   push:
     tags:
       - "v1*"
+
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-linux:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm ci
+      - name: Generate ZIP files for Linux
+        run: ./scripts/create-zips.sh Linux x64
+      - uses: actions/upload-artifact@v3
+        with:
+          name: linux
+          path: "*.zip"
+  build-mac:
+    runs-on: macos-12
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm ci
+      - name: Generate ZIP files for macOS
+        run: ./scripts/create-zips.sh macOS intel
+        shell: bash
+      - uses: actions/upload-artifact@v3
+        with:
+          name: mac
+          path: "*.zip"
+  build-win:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm ci
+      - name: Generate ZIP files for Windows
+        run: ./scripts/create-zips.sh Windows x64
+        shell: bash
+      - uses: actions/upload-artifact@v3
+        with:
+          name: win
+          path: "*.zip"
+  publish:
+    needs:
+      - build-linux
+      - build-mac
+      - build-win
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-          ref: main
-      - name: Use Node.js 14.x
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
-      - name: git config
-        run: |
-          git config user.name "${GITHUB_ACTOR}"
-          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+      - uses: actions/download-artifact@v3
       - uses: ncipollo/release-action@v1
         with:
+          artifacts: "linux/*.zip,mac/*.zip,win/*.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
