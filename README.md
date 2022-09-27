@@ -2,7 +2,7 @@
 
 #### _Il crawler di validazione della pubblica amministrazione_
 
-PA Website validator è un tool che integra la libreria [Lightouse][lighthouse] esponendo test custom per la validazione dei siti web di scuole & comuni.
+PA Website validator è un tool che integra la libreria [Lighthouse][lighthouse] esponendo test custom per la validazione dei siti web di scuole & comuni.
 
 ## Funzionalità
 
