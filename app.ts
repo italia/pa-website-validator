@@ -1,3 +1,4 @@
+import dateFormat from "dateformat";
 import inquirer from "inquirer";
 import { homedir } from "os";
 
@@ -57,7 +58,7 @@ try {
     logLevels.display_info,
     true,
     dest,
-    `report-${hostname}-${currentDate.toISOString()}`,
+    `report-${hostname}-${dateFormat(currentDate, "UTC:yyyymmdd'T'HHMMss'Z'")}`,
     true
   );
 
