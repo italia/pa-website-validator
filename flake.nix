@@ -13,6 +13,7 @@
         devShells.default = pkgs.mkShell {
           packages = [
             pkgs.cocogitto
+            pkgs.jq
             pkgs.nodejs-16_x
             pkgs.pandoc
             pkgs.shellcheck
