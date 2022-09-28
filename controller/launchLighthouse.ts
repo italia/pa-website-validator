@@ -4,7 +4,7 @@
 //@ts-ignore
 import lighthouse from "lighthouse";
 
-import * as fs from "fs";
+import { mkdir, writeFile } from "fs/promises";
 import open from "open";
 import puppeteer from "puppeteer";
 
@@ -82,16 +82,12 @@ const run = async (
       };
     }
 
-    if (!fs.existsSync(destination)) {
-      console.log("[WARNING] Directory does not exist..");
-      fs.mkdirSync(destination, { recursive: true });
-      console.log("[INFO] Directory created at: " + destination);
-    }
+    await mkdir(destination, { recursive: true });
 
     const htmlPath: string = destination + "/" + reportName + ".html";
     const jsonPath: string = destination + "/" + reportName + ".json";
-    fs.writeFileSync(htmlPath, reportHtml);
-    fs.writeFileSync(jsonPath, reportJSON);
+    await writeFile(htmlPath, reportHtml);
+    await writeFile(jsonPath, reportJSON);
 
     if (view) {
       await open(htmlPath);
