@@ -1,4 +1,5 @@
 import inquirer from "inquirer";
+import { homedir } from "os";
 
 import { run, logLevels } from "./controller/launchLighthouse.js";
 
@@ -48,13 +49,14 @@ try {
   console.log();
   const currentDate = new Date();
   const hostname = new URL(url).hostname;
+  const dest = homedir();
   await run(
     url,
     type,
     scope,
     logLevels.display_info,
     true,
-    process.cwd(),
+    dest,
     `report-${hostname}-${currentDate.toISOString()}`,
     true
   );
@@ -65,7 +67,7 @@ try {
     "[--L'analisi è terminata. Il report si aprirà automaticamente nel tuo browser--]"
   );
   console.log(
-    `Se non dovesse aprirsi, una copia HTML e JSON del report è stata salvata nella cartella ${process.cwd()}`
+    `Se non dovesse aprirsi, una copia HTML e JSON del report è stata salvata nella cartella ${dest}}`
   );
 } catch (e) {
   console.error(e);
