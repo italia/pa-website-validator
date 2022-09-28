@@ -146,3 +146,5 @@ dist
 /comuni-*
 /scuole-*
 
+# direnv
+/.direnv
