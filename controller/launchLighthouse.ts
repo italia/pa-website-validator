@@ -6,6 +6,7 @@ import lighthouse from "lighthouse";
 
 import { mkdir, writeFile } from "fs/promises";
 import open from "open";
+import { format } from "path";
 import puppeteer from "puppeteer";
 
 import schoolOnlineConfig from "../config/school/auditConfig-online.js";
@@ -84,8 +85,16 @@ const run = async (
 
     await mkdir(destination, { recursive: true });
 
-    const htmlPath: string = destination + "/" + reportName + ".html";
-    const jsonPath: string = destination + "/" + reportName + ".json";
+    const htmlPath = format({
+      dir: destination,
+      name: reportName,
+      ext: ".html",
+    });
+    const jsonPath = format({
+      dir: destination,
+      name: reportName,
+      ext: ".json",
+    });
     await writeFile(htmlPath, reportHtml);
     await writeFile(jsonPath, reportJSON);
 
