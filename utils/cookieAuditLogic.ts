@@ -28,7 +28,9 @@ const run = async (
   let score = 1;
   let cookies: Protocol.Network.Cookie[] = [];
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox"],
+  });
   try {
     const page: Page = await browser.newPage();
     await page.goto(url, {

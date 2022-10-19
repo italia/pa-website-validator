@@ -112,7 +112,9 @@ module.exports = LoadAudit;
 
 async function getArgumentsElements(url: string): Promise<string[]> {
   let elements: string[] = [];
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox"],
+  });
 
   try {
     const page = await browser.newPage();

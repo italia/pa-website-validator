@@ -66,7 +66,9 @@ class LoadAudit extends Audit {
       };
     }
 
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      args: ["--no-sandbox"],
+    });
 
     let fonts: string[] = [];
     try {
