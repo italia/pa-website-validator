@@ -10,7 +10,9 @@ import dns from "dns";
 import vocabularyResult = crawlerTypes.vocabularyResult;
 
 const loadPageData = async (url: string): Promise<CheerioAPI> => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox"],
+  });
   let data = "";
 
   try {
