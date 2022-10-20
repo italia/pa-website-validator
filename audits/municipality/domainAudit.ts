@@ -56,7 +56,7 @@ class LoadAudit extends Audit {
 
     let correctDomain = false;
     for (const domain of domains) {
-      if (hostname.includes(domain)) {
+      if (hostname.includes("comune." + domain)) {
         correctDomain = true;
         break;
       }
