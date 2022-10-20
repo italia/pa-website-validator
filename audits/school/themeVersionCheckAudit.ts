@@ -135,7 +135,7 @@ class LoadAudit extends Audit {
           const currentVersion = (await getCurrentVersion(CSS)).trim() ?? "";
           items[0].theme_version = currentVersion;
 
-          if (semver.gte(currentVersion, "1.1.0")) {
+          if (semver.gte(currentVersion, "2.0.0")) {
             score = 1;
             items[0].result = greenResult;
 
