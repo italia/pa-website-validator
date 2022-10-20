@@ -84,7 +84,7 @@ class LoadAudit extends Audit {
       elementObj.href = await buildUrl(url, elementObj.href);
     }
 
-    const serviceAreaPathName = new URL(elementObj.href).pathname
+    const serviceAreaPathName = new URL(elementObj.href).pathname;
     const serviceAreaHostname = new URL(elementObj.href).hostname.replace(
       "www.",
       ""
@@ -134,10 +134,13 @@ class LoadAudit extends Audit {
 
     let score = 0;
     if (correctDomain && sameDomain && isServiziSubdomain) {
-      score = 1
+      score = 1;
       items[0].result = greenResult;
-    } else if ((correctDomain && sameDomain && isServiziPath) || originHostnameParts.length === serviceAreaHostnameParts.length) {
-      score = 0.5
+    } else if (
+      (correctDomain && sameDomain && isServiziPath) ||
+      originHostnameParts.length === serviceAreaHostnameParts.length
+    ) {
+      score = 0.5;
       items[0].result = yellowResult;
     }
 
