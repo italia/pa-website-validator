@@ -32,11 +32,11 @@ export const auditDictionary = {
       "Il link non è nel footer o non invia alla pagina corretta o la pagina non esiste.",
     nonExecuted: "",
     title:
-      "C.SI.3.2 - DICHIARAZIONE DI ACCESSIBILITÀ - Il sito comunale deve esporre la dichiarazione di accessibilità.",
+      "C.SI.3.2 - DICHIARAZIONE DI ACCESSIBILITÀ - Il sito comunale deve esporre la dichiarazione di accessibilità in conformità al modello e alle linee guida rese disponibili da AgID in ottemperanza alla normativa vigente in materia di accessibilità e con livelli di accessibilità contemplati nelle specifiche tecniche WCAG 2.1.",
     failureTitle:
-      "C.SI.3.2 - DICHIARAZIONE DI ACCESSIBILITÀ - Il sito comunale deve esporre la dichiarazione di accessibilità.",
+      "C.SI.3.2 - DICHIARAZIONE DI ACCESSIBILITÀ - Il sito comunale deve esporre la dichiarazione di accessibilità in conformità al modello e alle linee guida rese disponibili da AgID in ottemperanza alla normativa vigente in materia di accessibilità e con livelli di accessibilità contemplati nelle specifiche tecniche WCAG 2.1.",
     description:
-      'CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta alla dichiarazione di accessibilità di AgID, in conformità al modello e alle linee guida rese disponibile da AgID in ottemperanza alla normativa vigente in materia di accessibilità, con livelli di accessibilità contemplati nelle specifiche tecniche WCAG 2.1; MODALITÀ DI VERIFICA: viene verificata la presenza del link nel footer, che riporti a una pagina esistente e che sia quella contenente la dichiarazione di accessibilità (il link deve iniziare con "https://form.agid.gov.it/view/"), ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: AgID Linee guida sull’accessibilità degli strumenti informatici, Direttiva UE n. 2102/2016, Legge 9 gennaio 2004 n. 4, Web Content Accessibility Guidelines WCAG 2.1, [AgID dichiarazione di accessibilità](https://www.agid.gov.it/it/design-servizi/accessibilita/dichiarazione-accessibilita), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+      'CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta alla dichiarazione di accessibilità di AgID valida; MODALITÀ DI VERIFICA: viene verificata la presenza del link nel footer, che riporti a una pagina esistente e che sia quella contenente la dichiarazione di accessibilità (il link deve iniziare con "https://form.agid.gov.it/view/"), ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [AgID Linee guida sull’accessibilità degli strumenti informatici](https://docs.italia.it/AgID/documenti-in-consultazione/lg-accessibilita-docs/it/), [Direttiva UE n. 2102/2016](https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX%3A32016L2102), [Legge 9 gennaio 2004 n. 4](https://www.normattiva.it/atto/caricaDettaglioAtto?atto.dataPubblicazioneGazzetta=2004-01-17&atto.codiceRedazionale=004G0015&atto.articolo.numero=0&atto.articolo.sottoArticolo=1&atto.articolo.sottoArticolo1=10&qId=cb6b9a05-f5c3-40ac-81b8-f89e73e5b4c7&tabID=0.029511124589268523&title=lbl.dettaglioAtto), [Web Content Accessibility Guidelines WCAG 2.1](https://www.w3.org/Translations/WCAG21-it/#background-on-wcag-2), [AgID dichiarazione di accessibilità](https://www.agid.gov.it/it/design-servizi/accessibilita/dichiarazione-accessibilita), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "municipality-booking-appointment-check": {
     greenResult: "Il componente è presente.",
@@ -45,9 +45,9 @@ export const auditDictionary = {
     nonExecuted:
       "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
     title:
-      "C.SI.2.1 - PRENOTAZIONE APPUNTAMENTI - Il sito comunale deve consentire, per tutti i servizi che prevedono una erogazione a sportello, di prenotare un appuntamento presso lo sportello di competenza.",
+      "C.SI.2.1 - PRENOTAZIONE APPUNTAMENTI - Il sito comunale deve consentire di prenotare un appuntamento presso lo sportello di competenza.",
     failureTitle:
-      "C.SI.2.1 - PRENOTAZIONE APPUNTAMENTI - Il sito comunale deve consentire, per tutti i servizi che prevedono una erogazione a sportello, di prenotare un appuntamento presso lo sportello di competenza.",
+      "C.SI.2.1 - PRENOTAZIONE APPUNTAMENTI - Il sito comunale deve consentire di prenotare un appuntamento presso lo sportello di competenza.",
     description:
       'CONDIZIONI DI SUCCESSO: la funzionalità di prenotazione di un appuntamento presso lo sportello è presente in tutte le schede servizio che lo richiedono; MODALITÀ DI VERIFICA: viene verificata la presenza del componente "Prenota appuntamento" all\'interno di una scheda servizio selezionata casualmente, ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica. Questo test non ha una condizione di fallimento in quanto dipende dal servizio specifico analizzato; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
@@ -63,7 +63,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito comunale deve utilizzare la libreria Bootstrap Italia.",
     description:
-      "CONDIZIONI DI SUCCESSO: il sito usa la libreria Bootstrap Italia in una versione uguale o superiore alla 2.0; MODALITÀ DI VERIFICA: viene verificata la presenza della libreria Bootstrap Italia e la versione in uso individuando la proprietà CSS --bootstrap-italia-version all’interno del selettore :root o la variabile globale window.BOOTSTRAP_ITALIA_VERSION; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/).",
+      "CONDIZIONI DI SUCCESSO: il sito usa la libreria Bootstrap Italia in una versione uguale o superiore alla 2.0; MODALITÀ DI VERIFICA: viene verificata la presenza della libreria Bootstrap Italia e la versione in uso individuando la proprietà CSS --bootstrap-italia-version all’interno del selettore :root o la variabile globale window.BOOTSTRAP_ITALIA_VERSION; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/).",
   },
   "municipality-contacts-assistency": {
     greenResult: 'La voce "Contatti" è presente.',
@@ -76,7 +76,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.2.2 - RICHIESTA DI ASSISTENZA / CONTATTI - All'interno del sito comunale, nel contenuto della scheda servizio, devono essere comunicati i contatti dell'ufficio preposto all'erogazione del servizio.",
     description:
-      "CONDIZIONI DI SUCCESSO: i contatti dell'ufficio preposto all'erogazione del servizio sono presenti in tutte le schede servizio; MODALITÀ DI VERIFICA: viene verificata la presenza della voce \"Contatti\" all'interno dell'indice di una scheda servizio selezionata casualmente, ricercando uno specifico attributo \"data-element\" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
+      "CONDIZIONI DI SUCCESSO: i contatti dell'ufficio preposto all'erogazione del servizio sono presenti in tutte le schede servizio; MODALITÀ DI VERIFICA: viene verificata la presenza della voce \"Contatti\" all'interno dell'indice di una scheda servizio selezionata casualmente, ricercando uno specifico attributo \"data-element\" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
   },
   "municipality-controlled-vocabularies": {
     greenResult:
@@ -88,11 +88,11 @@ export const auditDictionary = {
     nonExecuted:
       "Non è stato possibile trovare gli argomenti o la pagina che li contiene. Controlla le “Modalità di verifica” per scoprire di più.",
     title:
-      "C.SI.1.5 - VOCABOLARI CONTROLLATI - Il sito comunale deve utilizzare argomenti forniti dal modello di sito comunale o appartenenti al vocabolario controllato europeo EuroVoc.",
+      "C.SI.1.5 - VOCABOLARI CONTROLLATI - Il sito comunale deve utilizzare argomenti forniti dal modello di sito comunale ovvero quelli appartenenti al vocabolario controllato europeo EuroVoc.",
     failureTitle:
-      "C.SI.1.5 - VOCABOLARI CONTROLLATI - Il sito comunale deve utilizzare argomenti forniti dal modello di sito comunale o appartenenti al vocabolario controllato europeo EuroVoc.",
+      "C.SI.1.5 - VOCABOLARI CONTROLLATI - Il sito comunale deve utilizzare argomenti forniti dal modello di sito comunale ovvero quelli appartenenti al vocabolario controllato europeo EuroVoc.",
     description:
-      "CONDIZIONI DI SUCCESSO: gli argomenti utilizzati appartengono alla lista indicata all'interno del documento di architettura dell'informazione del modello Comuni alla voce \"Tassonomia ARGOMENTI\" o al vocabolario controllato EuroVoc; MODALITÀ DI VERIFICA: gli argomenti identificati all'interno della funzione di ricerca del sito vengono confrontati con l'elenco di voci presente nel documento di architettura dell'informazione e con il vocabolario controllato EuroVoc, ricercandoli usando specifici attributi \"data-element\" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/), [Elenco degli argomenti del Modello Comuni](https://docs.google.com/spreadsheets/d/1D4KbaA__xO9x_iBm08KvZASjrrFLYLKX/edit#gid=428595160), [Vocabolario EuroVoc](https://eur-lex.europa.eu/browse/eurovoc.html?locale=it).",
+      "CONDIZIONI DI SUCCESSO: gli argomenti utilizzati appartengono alla lista indicata all'interno del documento di architettura dell'informazione del modello Comuni alla voce \"Tassonomia ARGOMENTI\" o al vocabolario controllato EuroVoc; MODALITÀ DI VERIFICA: gli argomenti identificati all'interno della funzione di ricerca del sito vengono confrontati con l'elenco di voci presente nel documento di architettura dell'informazione e con il vocabolario controllato EuroVoc, ricercandoli usando specifici attributi \"data-element\" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Elenco degli argomenti del Modello Comuni](https://docs.google.com/spreadsheets/d/1D4KbaA__xO9x_iBm08KvZASjrrFLYLKX/edit#gid=428595160), [Vocabolario EuroVoc](https://eur-lex.europa.eu/browse/eurovoc.html?locale=it), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
   },
   "municipality-legislation-cookie-domain-check": {
     greenResult: "Cookie idoneo.",
@@ -104,7 +104,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.3.1 - COOKIE - Il sito comunale deve presentare cookie tecnici in linea con la normativa vigente.",
     description:
-      "CONDIZIONI DI SUCCESSO: il sito presenta solo cookie idonei come definito dalla normativa; MODALITÀ DI VERIFICA: viene verificato che il dominio dei cookie identificati sia corrispondente al dominio del sito web; RIFERIMENTI TECNICI E NORMATIVI: [Linee guida cookie e altri strumenti di tracciamento - 10 giugno 2021](https://www.garanteprivacy.it/home/docweb/-/docweb-display/docweb/9677876)",
+      "CONDIZIONI DI SUCCESSO: il sito presenta solo cookie idonei come definito dalla normativa; MODALITÀ DI VERIFICA: viene verificato che il dominio dei cookie identificati sia corrispondente al dominio del sito web. Se nella pagina analizzata non vengono rilevati cookie non verrà generata una tabella di risultati; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Linee guida cookie e altri strumenti di tracciamento - 10 giugno 2021](https://www.garanteprivacy.it/home/docweb/-/docweb-display/docweb/9677876)",
   },
   "municipality-domain": {
     greenResult: "Il dominio utilizzato è corretto.",
@@ -113,11 +113,11 @@ export const auditDictionary = {
       "Il dominio utilizzato non è presente nell'elenco dei domini riservati.",
     nonExecuted: "",
     title:
-      "C.SI.5.2 - DOMINIO ISTITUZIONALE - Il sito comunale deve utilizzare un dominio istituzionale presente all’interno dell’Anagrafe dei domini.",
+      "C.SI.5.2 - DOMINIO ISTITUZIONALE - Il sito comunale utilizza un dominio istituzionale secondo le modalità indicate nella documentazione del modello di sito comunale.",
     failureTitle:
-      "C.SI.5.2 - DOMINIO ISTITUZIONALE - Il sito comunale deve utilizzare un dominio istituzionale presente all’interno dell’Anagrafe dei domini.",
+      "C.SI.5.2 - DOMINIO ISTITUZIONALE - Il sito comunale utilizza un dominio istituzionale secondo le modalità indicate nella documentazione del modello di sito comunale.",
     description:
-      "CONDIZIONI DI SUCCESSO: il dominio istituzione del sito è valido; MODALITÀ DI VERIFICA: viene verificato che il dominio utilizzato dal sito sia presente nell'Elenco Nomi a Dominio Riservati per i Comuni Italiani; RIFERIMENTI TECNICI E NORMATIVI: [Elenco Nomi a Dominio Riservati Per i Comuni Italiani](https://www.nic.it/sites/default/files/docs/comuni_list.html).",
+      "CONDIZIONI DI SUCCESSO: il sito comunale è raggiungibile senza necessità di inserimento del sottodominio “www.” e utilizza il sottodominio “comune.” immediatamente seguito da uno dei domini istituzionali per il Comune presente nell’Elenco Nomi a Dominio Riservati Per i Comuni Italiani (es: comune.anzio.roma.it) o dal nome del Comune se coincidente con il nome del capoluogo di provincia (es: comune.roma.it); MODALITÀ DI VERIFICA: viene verificato che il dominio utilizzato dal sito sia presente nell’Elenco Nomi a Dominio Riservati per i Comuni Italiani o sia un nome di capoluogo di provincia, che immediatamente prima di questo sia utilizzato il sottodominio “comune.” e che il sito sia raggiungibile senza inserire il sottodominio “www.”; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Elenco Nomi a Dominio Riservati Per i Comuni Italiani](https://www.nic.it/sites/default/files/docs/comuni_list.html).",
   },
   "municipality-faq-is-present": {
     greenResult:
@@ -132,7 +132,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.2.3 - RICHIESTA DI ASSISTENZA / DOMANDE FREQUENTI - Il sito comunale deve contenere una sezione per le domande più frequenti (FAQ).",
     description:
-      'CONDIZIONI DI SUCCESSO: nel footer del sito è presente un link alle domande più frequenti che contenga le espressioni "FAQ" oppure "domande frequenti"; MODALITÀ DI VERIFICA: viene verificata la presenza del link nel footer, ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica, che il link invii ad una pagina esistente e che il testo del link contenga almeno una delle espressioni richieste, senza fare distinzione tra caratteri minuscoli o maiuscoli; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+      'CONDIZIONI DI SUCCESSO: nel footer del sito è presente un link contenente le espressioni "FAQ" oppure "domande frequenti" che invia a una pagina di domande frequenti ; MODALITÀ DI VERIFICA: viene verificata la presenza del link nel footer, ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione, che il link invii ad una pagina esistente e che il testo del link contenga almeno una delle espressioni richieste, senza fare distinzione tra caratteri minuscoli o maiuscoli; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "municipality-feedback-element": {
     greenResult: "Il componente è presente in tutte le pagine valutate.",
@@ -155,9 +155,9 @@ export const auditDictionary = {
     nonExecuted:
       "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
     title:
-      "C.SI.1.1 - CONSISTENZA DELL'UTILIZZO DEI FONT (librerie di caratteri) - Il sito comunale deve utilizzare i font indicati dalla documentazione del modello di sito comunale.",
+      "C.SI.1.1 - COERENZA DELL'UTILIZZO DEI FONT (librerie di caratteri) - Il sito comunale deve utilizzare i font indicati dalla documentazione del modello di sito comunale.",
     failureTitle:
-      "C.SI.1.1 - CONSISTENZA DELL'UTILIZZO DEI FONT (librerie di caratteri) - Il sito comunale deve utilizzare i font indicati dalla documentazione del modello di sito comunale.",
+      "C.SI.1.1 - COERENZA DELL'UTILIZZO DEI FONT (librerie di caratteri) - Il sito comunale deve utilizzare i font indicati dalla documentazione del modello di sito comunale.",
     description:
       'CONDIZIONI DI SUCCESSO: il sito utilizza almeno i font Titillium Web e Lora; MODALITÀ DI VERIFICA: ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica, viene verificata la presenza dei font all\'interno di una scheda servizio casualmente selezionata; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
@@ -202,7 +202,7 @@ export const auditDictionary = {
     failureTitle:
       "R.SI.1.1 - METATAG - Nel sito comunale, le voci della scheda servizio devono presentare i metatag descritti dal modello, in base agli standard internazionali.",
     description:
-      'CONDIZIONI DI SUCCESSO: le voci delle schede servizio presentano tutti i metatag richiesti dal modello; MODALITÀ DI VERIFICA: viene verificata la presenza e correttezza dei metatag indicati nella sezione "Dati strutturati e interoperabilità" della documentazione in una scheda servizio selezionata casualmente, ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Schema](http://www.schema.org/), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+      'CONDIZIONI DI SUCCESSO: le voci delle schede servizio presentano tutti i metatag richiesti dal modello; MODALITÀ DI VERIFICA: viene verificata la presenza e correttezza dei metatag indicati nella sezione "Dati strutturati e interoperabilità" della documentazione in una scheda servizio selezionata casualmente, ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Schema](http://www.schema.org/), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "municipality-personal-area-security": {
     greenResult: "Il certificato del sito [url] è attivo e valido.",
@@ -211,11 +211,11 @@ export const auditDictionary = {
     nonExecuted:
       "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
     title:
-      "C.SE.5.1 - CERTIFICATO HTTPS AREA SERVIZI PER IL CITTADINO - L'area servizi per il cittadino del sito comunale ha un certificato https valido e attivo.",
+      "C.SE.5.1 - CERTIFICATO HTTPS SERVIZI DIGITALI PER IL CITTADINO - I servizi digitali del sito comunale hanno un certificato https valido e attivo.",
     failureTitle:
-      "C.SE.5.1 - CERTIFICATO HTTPS AREA SERVIZI PER IL CITTADINO - L'area servizi per il cittadino del sito comunale ha un certificato https valido e attivo.",
+      "C.SE.5.1 - CERTIFICATO HTTPS SERVIZI DIGITALI PER IL CITTADINO - I servizi digitali del sito comunale hanno un certificato https valido e attivo.",
     description:
-      "CONDIZIONI DI SUCCESSO: l'area privata del cittadino utilizza un certificato https valido e non obsoleto secondo le raccomandazioni AgID; MODALITÀ DI VERIFICA: viene verificato che la pagina di accesso all'area privata del sito abbia un certificato https valido e attivo, ricercando uno specifico attributo \"data-element\" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: [Agid Raccomandazioni in merito allo standard Transport Layer Security (TLS)](https://cert-agid.gov.it/wp-content/uploads/2020/11/AgID-RACCSECTLS-01.pdf), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
+      'CONDIZIONI DI SUCCESSO: i servizi digitali del cittadino utilizzano un certificato https valido e non obsoleto secondo le raccomandazioni AgID; MODALITÀ DI VERIFICA: viene verificato che la pagina di accesso all\'area privata del sito abbia un certificato https valido e attivo, ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Agid Raccomandazioni in merito allo standard Transport Layer Security (TLS)](https://cert-agid.gov.it/wp-content/uploads/2020/11/AgID-RACCSECTLS-01.pdf), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "municipality-legislation-privacy-is-present": {
     greenResult:
@@ -229,7 +229,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.3.3 - INFORMATIVA PRIVACY - Il sito comunale deve presentare l'informativa sul trattamento dei dati personali, secondo quanto previsto dalla normativa vigente.",
     description:
-      'CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta alla privacy policy; MODALITÀ DI VERIFICA: viene verificata la presenza del link nel footer, che riporti a una pagina esistente e con certificato HTTPS valido e attivo, ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: GDPR Artt. 13 e 14, Reg. UE n. 679/2016, [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+      'CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta alla privacy policy; MODALITÀ DI VERIFICA: viene verificata la presenza del link nel footer, che riporti a una pagina esistente e con certificato HTTPS valido e attivo, ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [GDPR Artt. 13 e 14, Reg. UE n. 2016/679](https://www.garanteprivacy.it/regolamentoue), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "municipality-second-level-pages": {
     greenResult: "Tutti i titoli sono corretti.",
@@ -242,7 +242,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.1.7 - TITOLI DELLE PAGINE DI SECONDO LIVELLO - Nel sito comunale, i titoli delle pagine di secondo livello devono rispettare il vocabolario descritto dalla documentazione del modello di sito comunale.",
     description:
-      'CONDIZIONI DI SUCCESSO: i titoli delle pagine di secondo livello corrispondono a quelli indicati nel documento di architettura dell\'informazione del modello Comuni; MODALITÀ DI VERIFICA: vengono confrontati i titoli delle categorie di servizi presentati nella pagina di primo livello "Servizi" con i titoli richiesti dal modello nell\'elenco Tassonomia categorie dei servizi del documento di architettura dell\'informazione, ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Tassonomia categorie dei servizi](https://docs.google.com/spreadsheets/d/1D4KbaA__xO9x_iBm08KvZASjrrFLYLKX/edit#gid=938683089), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+      'CONDIZIONI DI SUCCESSO: i titoli delle pagine di secondo livello corrispondono a quelli indicati nel documento di architettura dell’informazione del modello Comuni; MODALITÀ DI VERIFICA: vengono confrontati i titoli delle categorie di servizi presentati nella pagina di primo livello "Servizi" con i titoli richiesti dal modello nell’elenco Tassonomia categorie dei servizi del documento di architettura dell’informazione, ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Tassonomia categorie dei servizi](https://docs.google.com/spreadsheets/d/1D4KbaA__xO9x_iBm08KvZASjrrFLYLKX/edit#gid=938683089), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "municipality-security": {
     greenResult: "Il certificato del sito [url] è attivo e valido.",
@@ -254,7 +254,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.5.1 - CERTIFICATO HTTPS - Il sito comunale deve avere un certificato https valido e attivo.",
     description:
-      "CONDIZIONI DI SUCCESSO: il sito utilizza un certificato https valido e non obsoleto secondo le raccomandazioni AgID; MODALITÀ DI VERIFICA: viene verificato che il certificato https del sito sia valido e attivo; RIFERIMENTI TECNICI E NORMATIVI: [Agid Raccomandazioni in merito allo standard Transport Layer Security (TLS)](https://cert-agid.gov.it/wp-content/uploads/2020/11/AgID-RACCSECTLS-01.pdf).",
+      "CONDIZIONI DI SUCCESSO: il sito utilizza un certificato https valido e non obsoleto secondo le raccomandazioni AgID; MODALITÀ DI VERIFICA: viene verificato che il certificato https del sito sia valido e attivo; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Agid Raccomandazioni in merito allo standard Transport Layer Security (TLS)](https://cert-agid.gov.it/wp-content/uploads/2020/11/AgID-RACCSECTLS-01.pdf).",
   },
   "municipality-servizi-structure-match-model": {
     greenResult:
@@ -270,7 +270,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.1.3 - SCHEDE INFORMATIVE DI SERVIZIO PER IL CITTADINO - Tutte le schede informative dei servizi per il cittadino devono mostrare le voci segnalate come obbligatorie all'interno dell'architettura dell'informazione, nell'ordine segnalato dal modello.",
     description:
-      "CONDIZIONI DI SUCCESSO: nelle schede informative di servizio le voci indicate come obbligatorie sono presenti e sono nell'ordine corretto; MODALITÀ DI VERIFICA: viene verificato se le voci indicate come obbligatorie all'interno del documento di architettura dell'informazione sono presenti. Inoltre viene verificato se le voci obbligatorie presenti nell'indice della pagina sono nell'ordine corretto. La verifica viene effettuata su una scheda servizio casualmente selezionata, ricercando le voci indicate nella documentazione tecnica tramite specifici attributi \"data-element\"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Content type: scheda servizio](https://docs.google.com/spreadsheets/d/1D4KbaA__xO9x_iBm08KvZASjrrFLYLKX/edit#gid=335720294dngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=0), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
+      "CONDIZIONI DI SUCCESSO: nelle schede informative di servizio le voci indicate come obbligatorie sono presenti e sono nell'ordine corretto; MODALITÀ DI VERIFICA: viene verificato se le voci indicate come obbligatorie all'interno del documento di architettura dell'informazione sono presenti. Inoltre viene verificato se le voci obbligatorie presenti nell'indice della pagina sono nell'ordine corretto. La verifica viene effettuata su una scheda servizio casualmente selezionata, ricercando le voci indicate nella Documentazione delle App di valutazione tramite specifici attributi \"data-element\"; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Content type: scheda servizio](https://docs.google.com/spreadsheets/d/1D4KbaA__xO9x_iBm08KvZASjrrFLYLKX/edit#gid=335720294dngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=0), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
   },
   "municipality-subdomain": {
     greenResult:
@@ -282,11 +282,11 @@ export const auditDictionary = {
     nonExecuted:
       "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
     title:
-      "C.SE.5.2 - SOTTODOMINIO ISTITUZIONALE - L'area servizi per il cittadino del sito comunale deve utilizzare un sottodominio istituzionale congruente al dominio istituzionale del sito, presente all’interno dell’Anagrafe dei domini.",
+      "C.SE.5.2 - SOTTODOMINIO ISTITUZIONALE - I servizi digitali del sito comunale devono utilizzare un sottodominio del sito istituzionale (come descritto dal criterio C.SI.5.2) secondo le modalità indicate nella documentazione del modello di sito comunale.",
     failureTitle:
-      "C.SE.5.2 - SOTTODOMINIO ISTITUZIONALE - L'area servizi per il cittadino del sito comunale deve utilizzare un sottodominio istituzionale congruente al dominio istituzionale del sito, presente all’interno dell’Anagrafe dei domini.",
+      "C.SE.5.2 - SOTTODOMINIO ISTITUZIONALE - I servizi digitali del sito comunale devono utilizzare un sottodominio del sito istituzionale (come descritto dal criterio C.SI.5.2) secondo le modalità indicate nella documentazione del modello di sito comunale.",
     description:
-      "CONDIZIONI DI SUCCESSO: l'area servizi fa riferimento a un sottodominio istituzionale valido; MODALITÀ DI VERIFICA: ricercando uno specifico attributo \"data-element\" come spiegato nella documentazione tecnica, viene verificato che il sottodominio/dominio della pagina di accesso all'area privata sia congruente al dominio utilizzato dal sito e che questo dominio sia presente nell'Elenco Nomi a Dominio Riservati per i Comuni Italiani; RIFERIMENTI TECNICI E NORMATIVI: [Elenco Nomi a Dominio Riservati Per i Comuni Italiani](https://www.nic.it/sites/default/files/docs/comuni_list.html), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
+      'CONDIZIONI DI SUCCESSO: i servizi digitali utilizzano il sottodominio “servizi.” e un dominio istituzionale valido secondo il criterio C.SI.5.2 (es: servizi.comune.roma.it); MODALITÀ DI VERIFICA: ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione, viene verificato che il sottodominio (o percorso) della pagina di accesso all\'area privata sia congruente al sottodominio-dominio utilizzato dal sito e che rispetti il criterio C.SI.5.2; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "municipality-ux-ui-consistency-theme-version-check": {
     greenResult:
@@ -300,7 +300,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.1.4 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito comunale, deve utilizzarne la versione più recente disponibile alla data di inizio lavori.",
     description:
-      'CONDIZIONI DI SUCCESSO: se è in uso il tema CMS del modello per i Comuni, la versione utilizzata è uguale o superiore alla 1.0; MODALITÀ DI VERIFICA: viene verificata la versione indicata nel file style.css, nel caso sia presente la chiave "Text Domain: design_comuni_italia"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/).',
+      'CONDIZIONI DI SUCCESSO: se è in uso il tema CMS del modello per i Comuni, la versione utilizzata è uguale o superiore alla 1.0; MODALITÀ DI VERIFICA: viene verificata la versione indicata nel file style.css ricercando la chiave "Text Domain: design_comuni_italia"; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/).',
   },
 
   "municipality-informative-cloud-infrastructure": {
@@ -325,7 +325,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.3.1 - COOKIE - Il sito comunale deve presentare cookie tecnici in linea con la normativa vigente.",
     description:
-      "CONDIZIONI DI SUCCESSO: il sito presenta solo cookie idonei come definito dalla normativa; MODALITÀ DI VERIFICA: viene verificato che il dominio dei cookie identificati sia corrispondente al dominio del sito web; RIFERIMENTI TECNICI E NORMATIVI: [Linee guida cookie e altri strumenti di tracciamento - 10 giugno 2021](https://www.garanteprivacy.it/home/docweb/-/docweb-display/docweb/9677876)",
+      "CONDIZIONI DI SUCCESSO: il sito presenta solo cookie idonei come definito dalla normativa; MODALITÀ DI VERIFICA: viene verificato che il dominio dei cookie identificati sia corrispondente al dominio del sito web. Se nella pagina analizzata non vengono rilevati cookie non verrà generata una tabella di risultati; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Linee guida cookie e altri strumenti di tracciamento - 10 giugno 2021](https://www.garanteprivacy.it/home/docweb/-/docweb-display/docweb/9677876)",
   },
   "municipality-informative-domain": {
     greenResult: "",
@@ -333,11 +333,11 @@ export const auditDictionary = {
     redResult: "",
     nonExecuted: "",
     title:
-      "C.SI.5.2 - DOMINIO ISTITUZIONALE - Il sito comunale deve utilizzare un dominio istituzionale presente all’interno dell’Anagrafe dei domini.",
+      "C.SI.5.2 - DOMINIO ISTITUZIONALE - Il sito comunale utilizza un dominio istituzionale secondo le modalità indicate nella documentazione del modello di sito comunale.",
     failureTitle:
-      "C.SI.5.2 - DOMINIO ISTITUZIONALE - Il sito comunale deve utilizzare un dominio istituzionale presente all’interno dell’Anagrafe dei domini.",
+      "C.SI.5.2 - DOMINIO ISTITUZIONALE - Il sito comunale utilizza un dominio istituzionale secondo le modalità indicate nella documentazione del modello di sito comunale.",
     description:
-      "CONDIZIONI DI SUCCESSO: il dominio istituzione del sito è valido; MODALITÀ DI VERIFICA: viene verificato che il dominio utilizzato dal sito sia presente nell'Elenco Nomi a Dominio Riservati per i Comuni Italiani; RIFERIMENTI TECNICI E NORMATIVI: [Elenco Nomi a Dominio Riservati Per i Comuni Italiani](https://www.nic.it/sites/default/files/docs/comuni_list.html).",
+      "CONDIZIONI DI SUCCESSO: il sito comunale è raggiungibile senza necessità di inserimento del sottodominio “www.” e utilizza il sottodominio “comune.” immediatamente seguito da uno dei domini istituzionali per il Comune presente nell’Elenco Nomi a Dominio Riservati Per i Comuni Italiani (es: comune.anzio.roma.it) o dal nome del Comune se coincidente con il nome del capoluogo di provincia (es: comune.roma.it); MODALITÀ DI VERIFICA: viene verificato che il dominio utilizzato dal sito sia presente nell’Elenco Nomi a Dominio Riservati per i Comuni Italiani o sia un nome di capoluogo di provincia, che immediatamente prima di questo sia utilizzato il sottodominio “comune.” e che il sito sia raggiungibile senza inserire il sottodominio “www.”; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Elenco Nomi a Dominio Riservati Per i Comuni Italiani](https://www.nic.it/sites/default/files/docs/comuni_list.html).",
   },
   "municipality-informative-license-and-attribution": {
     greenResult: "",
@@ -345,9 +345,9 @@ export const auditDictionary = {
     redResult: "",
     nonExecuted: "",
     title:
-      "C.SI.3.4 - LICENZA E ATTRIBUZIONE - Il sito comunale deve pubblicare dati, documenti e informazioni con licenza aperta (es. CC-BY 4.0).",
+      "C.SI.3.4 - LICENZA E ATTRIBUZIONE - Il sito comunale deve pubblicare dati, documenti e informazioni con licenza aperta comunicandolo come descritto nella documentazione del modello di sito comunale.",
     failureTitle:
-      "C.SI.3.4 - LICENZA E ATTRIBUZIONE - Il sito comunale deve pubblicare dati, documenti e informazioni con licenza aperta (es. CC-BY 4.0).",
+      "C.SI.3.4 - LICENZA E ATTRIBUZIONE - Il sito comunale deve pubblicare dati, documenti e informazioni con licenza aperta comunicandolo come descritto nella documentazione del modello di sito comunale.",
     description:
       "RIFERIMENTI TECNICI E NORMATIVI: CAD Art. 52 d.lgs. 82/2005, art. 7, comma 1, D.Lgs. n. 33/2013, d.lgs. n. 36/2006, AgID Linee guida su acquisizione e riuso di software per le pubbliche amministrazioni.",
   },
@@ -357,11 +357,11 @@ export const auditDictionary = {
     redResult: "",
     nonExecuted: "",
     title:
-      "C.SE.5.1 - CERTIFICATO HTTPS AREA SERVIZI PER IL CITTADINO - L'area servizi per il cittadino del sito comunale ha un certificato https valido e attivo.",
+      "C.SE.5.1 - CERTIFICATO HTTPS SERVIZI DIGITALI PER IL CITTADINO - I servizi digitali del sito comunale hanno un certificato https valido e attivo.",
     failureTitle:
-      "C.SE.5.1 - CERTIFICATO HTTPS AREA SERVIZI PER IL CITTADINO - L'area servizi per il cittadino del sito comunale ha un certificato https valido e attivo.",
+      "C.SE.5.1 - CERTIFICATO HTTPS SERVIZI DIGITALI PER IL CITTADINO - I servizi digitali del sito comunale hanno un certificato https valido e attivo.",
     description:
-      "CONDIZIONI DI SUCCESSO: l'area privata del cittadino utilizza un certificato https valido e non obsoleto secondo le raccomandazioni AgID; MODALITÀ DI VERIFICA: viene verificato che la pagina di accesso all'area privata del sito abbia un certificato https valido e attivo, ricercando uno specifico attributo \"data-element\" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: [Agid Raccomandazioni in merito allo standard Transport Layer Security (TLS)](https://cert-agid.gov.it/wp-content/uploads/2020/11/AgID-RACCSECTLS-01.pdf), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
+      'CONDIZIONI DI SUCCESSO: i servizi digitali del cittadino utilizzano un certificato https valido e non obsoleto secondo le raccomandazioni AgID; MODALITÀ DI VERIFICA: viene verificato che la pagina di accesso all\'area privata del sito abbia un certificato https valido e attivo, ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Agid Raccomandazioni in merito allo standard Transport Layer Security (TLS)](https://cert-agid.gov.it/wp-content/uploads/2020/11/AgID-RACCSECTLS-01.pdf), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "municipality-informative-reuse": {
     greenResult: "",
@@ -373,7 +373,7 @@ export const auditDictionary = {
     failureTitle:
       "R.SI.2.2 - RIUSO - Il Comune deve mettere a riuso sotto licenza aperta il software secondo le Linee Guida “acquisizione e riuso di software e riuso di software per le pubbliche amministrazioni.",
     description:
-      "RIFERIMENTI TECNICI E NORMATIVI: CAD: Art. 69. (Riuso delle soluzioni e standard aperti), Art. 69. (Riuso delle soluzioni e standard aperti): AgID Linee guida su acquisizione e riuso di software per le pubbliche amministrazioni.",
+      "RIFERIMENTI TECNICI E NORMATIVI: [CAD: Art. 69. (Riuso delle soluzioni e standard aperti)](https://docs.italia.it/italia/piano-triennale-ict/codice-amministrazione-digitale-docs/it/stabile/_rst/capo_VI-articolo_69.html), [AgID Linee guida su acquisizione e riuso di software per le pubbliche amministrazioni](https://www.agid.gov.it/it/design-servizi/riuso-open-source/linee-guida-acquisizione-riuso-software-pa).",
   },
   "municipality-informative-security": {
     greenResult: "",
@@ -385,7 +385,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.5.1 - CERTIFICATO HTTPS - Il sito comunale deve avere un certificato https valido e attivo.",
     description:
-      "CONDIZIONI DI SUCCESSO: il sito utilizza un certificato https valido e non obsoleto secondo le raccomandazioni AgID; MODALITÀ DI VERIFICA: viene verificato che il certificato https del sito sia valido e attivo; RIFERIMENTI TECNICI E NORMATIVI: [Agid Raccomandazioni in merito allo standard Transport Layer Security (TLS)](https://cert-agid.gov.it/wp-content/uploads/2020/11/AgID-RACCSECTLS-01.pdf).",
+      "CONDIZIONI DI SUCCESSO: il sito utilizza un certificato https valido e non obsoleto secondo le raccomandazioni AgID; MODALITÀ DI VERIFICA: viene verificato che il certificato https del sito sia valido e attivo; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Agid Raccomandazioni in merito allo standard Transport Layer Security (TLS)](https://cert-agid.gov.it/wp-content/uploads/2020/11/AgID-RACCSECTLS-01.pdf).",
   },
   "municipality-informative-subdomain": {
     greenResult: "",
@@ -393,11 +393,11 @@ export const auditDictionary = {
     redResult: "",
     nonExecuted: "",
     title:
-      "C.SE.5.2 - SOTTODOMINIO ISTITUZIONALE - L'area servizi per il cittadino del sito comunale deve utilizzare un sottodominio istituzionale congruente al dominio istituzionale del sito, presente all’interno dell’Anagrafe dei domini.",
+      "C.SE.5.2 - SOTTODOMINIO ISTITUZIONALE - I servizi digitali del sito comunale devono utilizzare un sottodominio del sito istituzionale (come descritto dal criterio C.SI.5.2) secondo le modalità indicate nella documentazione del modello di sito comunale.",
     failureTitle:
-      "C.SE.5.2 - SOTTODOMINIO ISTITUZIONALE - L'area servizi per il cittadino del sito comunale deve utilizzare un sottodominio istituzionale congruente al dominio istituzionale del sito, presente all’interno dell’Anagrafe dei domini.",
+      "C.SE.5.2 - SOTTODOMINIO ISTITUZIONALE - I servizi digitali del sito comunale devono utilizzare un sottodominio del sito istituzionale (come descritto dal criterio C.SI.5.2) secondo le modalità indicate nella documentazione del modello di sito comunale.",
     description:
-      "CONDIZIONI DI SUCCESSO: l'area servizi fa riferimento a un sottodominio istituzionale valido; MODALITÀ DI VERIFICA: ricercando uno specifico attributo \"data-element\" come spiegato nella documentazione tecnica, viene verificato che il sottodominio/dominio della pagina di accesso all'area privata sia congruente al dominio utilizzato dal sito e che questo dominio sia presente nell'Elenco Nomi a Dominio Riservati per i Comuni Italiani; RIFERIMENTI TECNICI E NORMATIVI: [Elenco Nomi a Dominio Riservati Per i Comuni Italiani](https://www.nic.it/sites/default/files/docs/comuni_list.html), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
+      'CONDIZIONI DI SUCCESSO: i servizi digitali utilizzano il sottodominio “servizi.” e un dominio istituzionale valido secondo il criterio C.SI.5.2 (es: servizi.comune.roma.it); MODALITÀ DI VERIFICA: ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione, viene verificato che il sottodominio (o percorso) della pagina di accesso all\'area privata sia congruente al sottodominio-dominio utilizzato dal sito e che rispetti il criterio C.SI.5.2; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "municipality-informative-user-experience-evaluation": {
     greenResult: "",
@@ -405,9 +405,9 @@ export const auditDictionary = {
     redResult: "",
     nonExecuted: "",
     title:
-      "C.SI.2.6 - VALUTAZIONE DELL’ESPERIENZA D’USO, CHIAREZZA INFORMATIVA DELLA SCHEDA DI SERVIZIO - Nel caso in cui il servizio non sia erogato in digitale, il sito deve permettere la valutazione dell’utilità della scheda di servizio, come per il criterio C.SI.2.5.",
+      "C.SI.2.6 - VALUTAZIONE DELL’ESPERIENZA D’USO, CHIAREZZA INFORMATIVA DELLA SCHEDA DI SERVIZIO - Il sito comunale deve permettere la valutazione della chiarezza informativa per ogni scheda di servizio secondo le modalità indicate nella documentazione del modello di sito comunale.",
     failureTitle:
-      "C.SI.2.6 - VALUTAZIONE DELL’ESPERIENZA D’USO, CHIAREZZA INFORMATIVA DELLA SCHEDA DI SERVIZIO - Nel caso in cui il servizio non sia erogato in digitale, il sito deve permettere la valutazione dell’utilità della scheda di servizio, come per il criterio C.SI.2.5.",
+      "C.SI.2.6 - VALUTAZIONE DELL’ESPERIENZA D’USO, CHIAREZZA INFORMATIVA DELLA SCHEDA DI SERVIZIO - Il sito comunale deve permettere la valutazione della chiarezza informativa per ogni scheda di servizio secondo le modalità indicate nella documentazione del modello di sito comunale.",
     description:
       "RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment Benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1).",
   },
@@ -423,7 +423,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SC.2.2 - DICHIARAZIONE DI ACCESSIBILITÀ - Il sito della scuola deve esporre la dichiarazione di accessibilità.",
     description:
-      'CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta alla dichiarazione di accessibilità di AgID, in conformità al modello e alle linee guida rese disponibile da AgID in ottemperanza alla normativa vigente in materia di accessibilità, con livelli di accessibilità contemplati nelle specifiche tecniche WCAG 2.1; MODALITÀ DI VERIFICA: viene verificata la presenza del link nel footer, che riporti a una pagina esistente e che sia quella contenente la dichiarazione di accessibilità (il link deve iniziare con "https://form.agid.gov.it/view/"), ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: AgID Linee guida sull’accessibilità degli strumenti informatici, Direttiva UE n. 2102/2016, Legge 9 gennaio 2004 n. 4, Web Content Accessibility Guidelines WCAG 2.1, [AgID dichiarazione di accessibilità](https://www.agid.gov.it/it/design-servizi/accessibilita/dichiarazione-accessibilita), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+      'CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta alla dichiarazione di accessibilità di AgID valida; MODALITÀ DI VERIFICA: viene verificata la presenza del link nel footer, che riporti a una pagina esistente e che sia quella contenente la dichiarazione di accessibilità (il link deve iniziare con "https://form.agid.gov.it/view/"), ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [AgID Linee guida sull’accessibilità degli strumenti informatici](https://docs.italia.it/AgID/documenti-in-consultazione/lg-accessibilita-docs/it/), [Direttiva UE n. 2102/2016](https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX%3A32016L2102), [Legge 9 gennaio 2004 n. 4](https://www.normattiva.it/atto/caricaDettaglioAtto?atto.dataPubblicazioneGazzetta=2004-01-17&atto.codiceRedazionale=004G0015&atto.articolo.numero=0&atto.articolo.sottoArticolo=1&atto.articolo.sottoArticolo1=10&qId=cb6b9a05-f5c3-40ac-81b8-f89e73e5b4c7&tabID=0.029511124589268523&title=lbl.dettaglioAtto), [Web Content Accessibility Guidelines WCAG 2.1](https://www.w3.org/Translations/WCAG21-it/#background-on-wcag-2), [AgID dichiarazione di accessibilità](https://www.agid.gov.it/it/design-servizi/accessibilita/dichiarazione-accessibilita), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "school-ux-ui-consistency-bootstrap-italia-double-check": {
     greenResult:
@@ -437,7 +437,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SC.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito della scuola deve utilizzare la libreria Bootstrap Italia.",
     description:
-      "CONDIZIONI DI SUCCESSO: il sito usa la libreria Bootstrap Italia in una versione uguale o superiore alla 1.6; MODALITÀ DI VERIFICA: viene verificata la presenza della libreria Bootstrap Italia e la versione in uso individuando la proprietà CSS --bootstrap-italia-version all’interno del selettore :root o la variabile globale window.BOOTSTRAP_ITALIA_VERSION; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs).",
+      "CONDIZIONI DI SUCCESSO: il sito usa la libreria Bootstrap Italia in una versione uguale o superiore alla 1.6; MODALITÀ DI VERIFICA: viene verificata la presenza della libreria Bootstrap Italia e la versione in uso individuando la proprietà CSS --bootstrap-italia-version all’interno del selettore :root o la variabile globale window.BOOTSTRAP_ITALIA_VERSION; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs).",
   },
   "school-controlled-vocabularies": {
     greenResult:
@@ -453,7 +453,7 @@ export const auditDictionary = {
     failureTitle:
       "R.SC.1.1 - VOCABOLARI CONTROLLATI - Il sito della scuola deve utilizzare argomenti forniti dal modello di sito scuola.",
     description:
-      "CONDIZIONI DI SUCCESSO: gli argomenti utilizzati appartengono alla lista indicata all'interno del documento di architettura dell'informazione del modello scuole alla voce \"Le parole della scuola\"; MODALITÀ DI VERIFICA: gli argomenti identificati all'interno della funzione di ricerca del sito vengono confrontati con l'elenco di voci presente nel documento di architettura dell'informazione, ricercandoli usando specifici attributi \"data-element\" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Elenco degli argomenti del Modello scuole](https://docs.google.com/spreadsheets/d/1MoayTY05SE4ixtgBsfsdngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=2135815526), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
+      "CONDIZIONI DI SUCCESSO: gli argomenti utilizzati appartengono alla lista indicata all'interno del documento di architettura dell'informazione del modello scuole alla voce “Le parole della scuola”; MODALITÀ DI VERIFICA: gli argomenti identificati all'interno della funzione di ricerca del sito vengono confrontati con l'elenco di voci presente nel documento di architettura dell'informazione, ricercandoli usando specifici attributi \"data-element\" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Elenco degli argomenti del Modello scuole](https://docs.google.com/spreadsheets/d/1MoayTY05SE4ixtgBsfsdngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=2135815526), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
   },
   "school-legislation-cookie-domain-check": {
     greenResult: "Cookie idoneo.",
@@ -465,7 +465,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SC.2.3 - COOKIE - Il sito della scuola deve presentare cookie tecnici in linea con la normativa vigente.",
     description:
-      "CONDIZIONI DI SUCCESSO: il sito presenta solo cookie idonei come definito dalla normativa; MODALITÀ DI VERIFICA: viene verificato che il dominio dei cookie identificati sia corrispondente al dominio del sito web; RIFERIMENTI TECNICI E NORMATIVI: [Linee guida cookie e altri strumenti di tracciamento - 10 giugno 2021](https://www.garanteprivacy.it/home/docweb/-/docweb-display/docweb/9677876)",
+      "CONDIZIONI DI SUCCESSO: il sito presenta solo cookie idonei come definito dalla normativa; MODALITÀ DI VERIFICA: viene verificato che il dominio dei cookie identificati sia corrispondente al dominio del sito web. Se nella pagina analizzata non vengono rilevati cookie non verrà generata una tabella di risultati; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Linee guida cookie e altri strumenti di tracciamento - 10 giugno 2021](https://www.garanteprivacy.it/home/docweb/-/docweb-display/docweb/9677876).",
   },
   "school-ux-ui-consistency-fonts-check": {
     greenResult: "Il sito utilizza tutti i font necessari.",
@@ -478,7 +478,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SC.1.1 - COERENZA DELL'UTILIZZO DEI FONT (librerie di caratteri) - Il sito della scuola deve utilizzare i font indicati dalla documentazione del modello di sito della scuola.",
     description:
-      'CONDIZIONI DI SUCCESSO: il sito utilizza almeno i font Titillium Web e Lora; MODALITÀ DI VERIFICA: ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica, viene verificata la presenza dei font all\'interno di una scheda servizio casualmente selezionata; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+      'CONDIZIONI DI SUCCESSO: il sito utilizza almeno i font Titillium Web e Lora; MODALITÀ DI VERIFICA: ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione, viene verificata la presenza dei font all’interno di una scheda servizio casualmente selezionata; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "school-menu-structure-match-model": {
     greenResult: "Le voci del menù sono corrette e nell'ordine giusto.",
@@ -492,7 +492,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SC.1.4 - VOCI DI MENÙ DI PRIMO LIVELLO - Il sito della scuola deve presentare tutte le voci di menù di primo livello, nell'esatto ordine descritto dalla documentazione del modello di sito scolastico.",
     description:
-      "CONDIZIONI DI SUCCESSO: le voci del menù di primo livello del sito sono esattamente quelle indicate nel documento di architettura dell'informazione e sono nell'ordine indicato (ovvero Scuola, Servizi, Novità, Didattica); MODALITÀ DI VERIFICA: ricercando uno specifico attributo \"data-element\" come spiegato nella documentazione tecnica, vengono identificate le voci presenti nel menù del sito, il loro ordine e confrontate con quanto indicato nel documento di architettura dell'informazione, applicando una tolleranza di massimo 3 voci aggiuntive; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
+      "CONDIZIONI DI SUCCESSO: le voci del menù di primo livello del sito sono esattamente quelle indicate nel documento di architettura dell'informazione e sono nell'ordine indicato (ovvero Scuola, Servizi, Novità, Didattica); MODALITÀ DI VERIFICA: ricercando uno specifico attributo \"data-element\" come spiegato nella Documentazione delle App di valutazione, vengono identificate le voci presenti nel menù del sito, il loro ordine e confrontate con quanto indicato nel documento di architettura dell'informazione, applicando una tolleranza di massimo 3 voci aggiuntive; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
   },
   "school-menu-scuola-second-level-structure-match-model": {
     greenResult:
@@ -506,7 +506,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SC.1.5 - VOCI DI MENÙ DI SECONDO LIVELLO - Il sito presenta almeno il 30% delle voci di menu di secondo livello in base a quanto descritto dal modello di sito per le scuole.",
     description:
-      'CONDIZIONI DI SUCCESSO: le voci del menù di secondo livello corrispondono a quelle indicate nel documento di architettura dell\'informazione del modello scuole e sono nell\'ordine corretto; MODALITÀ DI VERIFICA: ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica, viene verificata la correttezza e l\'ordine delle voci del menù di secondo livello riferite alla voce di primo livello "Scuola"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+      'CONDIZIONI DI SUCCESSO: le voci del menù di secondo livello corrispondono a quelle indicate nel documento di architettura dell’informazione del modello scuole e sono nell’ordine corretto; MODALITÀ DI VERIFICA: ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione, viene verificata la correttezza e l’ordine delle voci del menù di secondo livello riferite alla voce di primo livello "Scuola"; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "school-legislation-privacy-is-present": {
     greenResult:
@@ -520,7 +520,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SC.2.1 - INFORMATIVA PRIVACY - Il sito della scuola deve presentare l'informativa sul trattamento dei dati personali, secondo quanto previsto dalla normativa vigente.",
     description:
-      'CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta alla privacy policy; MODALITÀ DI VERIFICA: viene verificata la presenza del link nel footer, che riporti a una pagina esistente e con certificato HTTPS valido e attivo, ricercando uno specifico attributo "data-element" come spiegato nella documentazione tecnica; RIFERIMENTI TECNICI E NORMATIVI: GDPR Artt. 13 e 14, Reg. UE n. 679/2016, [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+      'CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta alla privacy policy; MODALITÀ DI VERIFICA: viene verificata la presenza del link nel footer, che riporti a una pagina esistente e con certificato HTTPS valido e attivo, ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [GDPR Artt. 13 e 14, Reg. UE n. 2016/679](https://www.garanteprivacy.it/regolamentoue), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "school-security": {
     greenResult: "Il certificato del sito [url] è attivo e valido.",
@@ -532,7 +532,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SC.3.1 - CERTIFICATO HTTPS - Il sito della scuola deve avere un certificato https valido e attivo.",
     description:
-      "CONDIZIONI DI SUCCESSO: il sito utilizza un certificato https valido e non obsoleto secondo le raccomandazioni AgID; MODALITÀ DI VERIFICA: viene verificato che il certificato https del sito sia valido e attivo; RIFERIMENTI TECNICI E NORMATIVI: [Agid Raccomandazioni in merito allo standard Transport Layer Security (TLS)](https://cert-agid.gov.it/wp-content/uploads/2020/11/AgID-RACCSECTLS-01.pdf).",
+      "CONDIZIONI DI SUCCESSO: il sito utilizza un certificato https valido e non obsoleto secondo le raccomandazioni AgID; MODALITÀ DI VERIFICA: viene verificato che il certificato https del sito sia valido e attivo; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Agid Raccomandazioni in merito allo standard Transport Layer Security (TLS)](https://cert-agid.gov.it/wp-content/uploads/2020/11/AgID-RACCSECTLS-01.pdf).",
   },
   "school-servizi-structure-match-model": {
     greenResult:
@@ -548,7 +548,7 @@ export const auditDictionary = {
     failureTitle:
       "R.SC.1.2 - SCHEDE INFORMATIVE DI SERVIZIO - Tutte le schede informative dei servizi devono mostrare le voci segnalate come obbligatorie all'interno dell'architettura dell'informazione, nell'ordine segnalato dal modello.",
     description:
-      "CONDIZIONI DI SUCCESSO: nelle schede informative di servizio le voci indicate come obbligatorie sono presenti e sono nell'ordine corretto; MODALITÀ DI VERIFICA: viene verificato se le voci indicate come obbligatorie all'interno del documento di architettura dell'informazione sono presenti. Inoltre viene verificato se le voci obbligatorie presenti nell'indice della pagina sono nell'ordine corretto. La verifica viene effettuata su una scheda servizio casualmente selezionata, ricercando le voci indicate nella documentazione tecnica tramite specifici attributi \"data-element\"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Content type: scheda servizio](https://docs.google.com/spreadsheets/d/1MoayTY05SE4ixtgBsfsdngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=0), [Documentazione tecnica](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
+      "CONDIZIONI DI SUCCESSO: nelle schede informative di servizio le voci indicate come obbligatorie sono presenti e sono nell'ordine corretto; MODALITÀ DI VERIFICA: viene verificato se le voci indicate come obbligatorie all'interno del documento di architettura dell'informazione sono presenti. Inoltre viene verificato se le voci obbligatorie presenti nell'indice della pagina sono nell'ordine corretto. La verifica viene effettuata su una scheda servizio casualmente selezionata, ricercando le voci indicate nella Documentazione delle App di valutazione tramite specifici attributi \"data-element\"; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Content type: scheda servizio](https://docs.google.com/spreadsheets/d/1MoayTY05SE4ixtgBsfsdngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=0), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
   },
   "school-ux-ui-consistency-theme-version-check": {
     greenResult:
@@ -562,7 +562,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SC.1.3 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito della scuola, deve utilizzarne la versione più recente disponibile alla data di inizio lavori.",
     description:
-      'CONDIZIONI DI SUCCESSO: se è in uso il tema CMS del modello scuole, la versione utilizzata è uguale o superiore alla 1.1; MODALITÀ DI VERIFICA: viene verificata la versione indicata nel file style.css, nel caso sia presente la chiave "Text Domain: design_scuole_italia"; RIFERIMENTI TECNICI E NORMATIVI: [Docs Italia, documentazione Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs).',
+      'CONDIZIONI DI SUCCESSO: se è in uso il tema CMS del modello scuole, la versione utilizzata è uguale o superiore alla 2.0; MODALITÀ DI VERIFICA: viene verificata la versione indicata nel file style.css, nel caso sia presente la chiave "Text Domain: design_scuole_italia"; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs).',
   },
 
   "school-informative-cloud-infrastructure": {
@@ -587,7 +587,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SC.2.3 - COOKIE - Il sito della scuola deve presentare cookie tecnici in linea con la normativa vigente.",
     description:
-      "CONDIZIONI DI SUCCESSO: il sito presenta solo cookie idonei come definito dalla normativa; MODALITÀ DI VERIFICA: viene verificato che il dominio dei cookie identificati sia corrispondente al dominio del sito web; RIFERIMENTI TECNICI E NORMATIVI: [Linee guida cookie e altri strumenti di tracciamento - 10 giugno 2021](https://www.garanteprivacy.it/home/docweb/-/docweb-display/docweb/9677876)",
+      "CONDIZIONI DI SUCCESSO: il sito presenta solo cookie idonei come definito dalla normativa; MODALITÀ DI VERIFICA: viene verificato che il dominio dei cookie identificati sia corrispondente al dominio del sito web. Se nella pagina analizzata non vengono rilevati cookie non verrà generata una tabella di risultati; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Linee guida cookie e altri strumenti di tracciamento - 10 giugno 2021](https://www.garanteprivacy.it/home/docweb/-/docweb-display/docweb/9677876).",
   },
   "school-informative-license-and-attribution": {
     greenResult: "",
@@ -599,7 +599,7 @@ export const auditDictionary = {
     failureTitle:
       "R.SC.2.2 - LICENZA E ATTRIBUZIONE - Il sito della scuola deve pubblicare dati, documenti e informazioni con licenza aperta (es. CC-BY 4.0).",
     description:
-      "RIFERIMENTI TECNICI E NORMATIVI: CAD Art. 52 d.lgs. 82/2005, art. 7, comma 1, D.Lgs. n. 33/2013, d.lgs. n. 36/2006, AgID Linee guida su acquisizione e riuso di software per le pubbliche amministrazioni.",
+      "RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [CAD Art. 52 d.lgs. 82/2005](https://docs.italia.it/italia/piano-triennale-ict/codice-amministrazione-digitale-docs/it/stabile/_rst/capo_V-sezione_I-articolo_52.html), [art. 7, comma 1, D.Lgs. n. 33/2013](https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2013-03-14;33), [d.lgs. n. 36/2006](https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2006-01-24;36!vig=), [AgID Linee guida su acquisizione e riuso di software per le pubbliche amministrazioni](https://www.agid.gov.it/it/design-servizi/riuso-open-source/linee-guida-acquisizione-riuso-software-pa).",
   },
   "school-informative-reuse": {
     greenResult: "",
@@ -611,7 +611,7 @@ export const auditDictionary = {
     failureTitle:
       "R.SC.2.1 - RIUSO - La scuola deve mettere a riuso sotto licenza aperta il software secondo le Linee Guida “acquisizione e riuso di software e riuso di software per le pubbliche amministrazioni“.",
     description:
-      "RIFERIMENTI TECNICI E NORMATIVI: CAD: Art. 69. (Riuso delle soluzioni e standard aperti), Art. 69. (Riuso delle soluzioni e standard aperti), AgID Linee guida su acquisizione e riuso di software per le pubbliche amministrazioni.",
+      "RIFERIMENTI TECNICI E NORMATIVI: [CAD: Art. 69. (Riuso delle soluzioni e standard aperti)](https://docs.italia.it/italia/piano-triennale-ict/codice-amministrazione-digitale-docs/it/stabile/_rst/capo_VI-articolo_69.html), [AgID Linee guida su acquisizione e riuso di software per le pubbliche amministrazioni](https://www.agid.gov.it/it/design-servizi/riuso-open-source/linee-guida-acquisizione-riuso-software-pa).",
   },
   "school-informative-security": {
     greenResult: "",
@@ -623,6 +623,6 @@ export const auditDictionary = {
     failureTitle:
       "C.SC.3.1 - CERTIFICATO HTTPS - Il sito della scuola deve avere un certificato https valido e attivo.",
     description:
-      "CONDIZIONI DI SUCCESSO: il sito utilizza un certificato https valido e non obsoleto secondo le raccomandazioni AgID; MODALITÀ DI VERIFICA: viene verificato che il certificato https del sito sia valido e attivo; RIFERIMENTI TECNICI E NORMATIVI: [Agid Raccomandazioni in merito allo standard Transport Layer Security (TLS)](https://cert-agid.gov.it/wp-content/uploads/2020/11/AgID-RACCSECTLS-01.pdf).",
+      "CONDIZIONI DI SUCCESSO: il sito utilizza un certificato https valido e non obsoleto secondo le raccomandazioni AgID; MODALITÀ DI VERIFICA: viene verificato che il certificato https del sito sia valido e attivo; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Agid Raccomandazioni in merito allo standard Transport Layer Security (TLS)](https://cert-agid.gov.it/wp-content/uploads/2020/11/AgID-RACCSECTLS-01.pdf).",
   },
 };
