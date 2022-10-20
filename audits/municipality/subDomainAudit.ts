@@ -53,7 +53,7 @@ class LoadAudit extends Audit {
     ];
     const items = [
       {
-        result: greenResult,
+        result: redResult,
         domain: "",
         subdomain: "",
       },
@@ -84,6 +84,7 @@ class LoadAudit extends Audit {
       elementObj.href = await buildUrl(url, elementObj.href);
     }
 
+    const serviceAreaPathName = new URL(elementObj.href).pathname
     const serviceAreaHostname = new URL(elementObj.href).hostname.replace(
       "www.",
       ""
@@ -107,13 +108,19 @@ class LoadAudit extends Audit {
 
     let correctDomain = false;
     for (const domain of domains) {
-      if (serviceAreaHostname.includes(domain)) {
+      if (serviceAreaHostname.includes("comune." + domain)) {
         correctDomain = true;
-        break;
       }
     }
 
-    let score = 1;
+    let isServiziSubdomain = false;
+    let isServiziPath = false;
+    if (correctDomain && serviceAreaHostname.includes("servizi.comune.")) {
+      isServiziSubdomain = true;
+    } else if (serviceAreaPathName.includes("/servizi")) {
+      isServiziPath = true;
+    }
+
     serviceAreaHostnameParts = serviceAreaHostnameParts.reverse();
     items[0].domain = serviceAreaHostnameParts
       .slice(
@@ -125,16 +132,13 @@ class LoadAudit extends Audit {
       .slice(0, serviceAreaHostnameParts.length - sameDomainChunkCount)
       .join(".");
 
-    if (!correctDomain || !sameDomain) {
-      score = 0;
-      items[0].result = redResult;
-      items[0].domain = serviceAreaHostname;
-      items[0].subdomain = "";
-    } else if (originHostnameParts.length === serviceAreaHostnameParts.length) {
-      score = 0.5;
+    let score = 0;
+    if (correctDomain && sameDomain && isServiziSubdomain) {
+      score = 1
+      items[0].result = greenResult;
+    } else if ((correctDomain && sameDomain && isServiziPath) || originHostnameParts.length === serviceAreaHostnameParts.length) {
+      score = 0.5
       items[0].result = yellowResult;
-      items[0].domain = serviceAreaHostname;
-      items[0].subdomain = "";
     }
 
     return {
