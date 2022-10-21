@@ -110,7 +110,7 @@ export const auditDictionary = {
     greenResult: "Il dominio utilizzato è corretto.",
     yellowResult: "",
     redResult:
-      "Il dominio utilizzato non è presente nell'elenco dei domini riservati.",
+      "Il dominio utilizzato è errato.",
     nonExecuted: "",
     title:
       "C.SI.5.2 - DOMINIO ISTITUZIONALE - Il sito comunale utilizza un dominio istituzionale secondo le modalità indicate nella documentazione del modello di sito comunale.",
@@ -274,11 +274,11 @@ export const auditDictionary = {
   },
   "municipality-subdomain": {
     greenResult:
-      "La pagina utilizza un sottodominio congruente al dominio del sito e fa riferimento a un dominio riservato.",
+      "La pagina utilizza il sottodominio \"servizi.\" e rispetta il criterio C.SI.5.2.",
     yellowResult:
-      "La pagina non utilizza un sottodominio ma il dominio utilizzato è valido.",
+      "La pagina non utilizza il sottodominio ma un percorso e rispetta il criterio C.SI.5.2.",
     redResult:
-      "La pagina utilizza un sottodominio non congruente al dominio del sito o non fa riferimento a un dominio valido.",
+      "La pagina non utilizza un sottodominio/percorso corretto o non rispetta il criterio C.SI.5.2.",
     nonExecuted:
       "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
     title:
