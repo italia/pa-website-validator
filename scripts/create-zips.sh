@@ -33,7 +33,7 @@ for i in 0 1; do
   mkdir "$dir"
   npm run "bundle:$type_en$build_variant"
   mv "app-valutazione-$type_it$ext" "$dir"
-  cp "docs/README-$type_it.html" "$dir/README.html"
+  cp "docs/README-$type_it-$os.html" "$dir/README.html"
   if [ $is_win == 0 ]; then
     zip -r "$dir.zip" "$dir"
   else
