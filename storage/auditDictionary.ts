@@ -109,8 +109,7 @@ export const auditDictionary = {
   "municipality-domain": {
     greenResult: "Il dominio utilizzato è corretto.",
     yellowResult: "",
-    redResult:
-      "Il dominio utilizzato è errato.",
+    redResult: "Il dominio utilizzato è errato.",
     nonExecuted: "",
     title:
       "C.SI.5.2 - DOMINIO ISTITUZIONALE - Il sito comunale utilizza un dominio istituzionale secondo le modalità indicate nella documentazione del modello di sito comunale.",
@@ -274,7 +273,7 @@ export const auditDictionary = {
   },
   "municipality-subdomain": {
     greenResult:
-      "La pagina utilizza il sottodominio \"servizi.\" e rispetta il criterio C.SI.5.2.",
+      'La pagina utilizza il sottodominio "servizi." e rispetta il criterio C.SI.5.2.',
     yellowResult:
       "La pagina non utilizza il sottodominio ma un percorso e rispetta il criterio C.SI.5.2.",
     redResult:
