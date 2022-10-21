@@ -9,9 +9,9 @@ const type = process.argv[2];
 const typeIT = type === "school" ? "scuola" : "comune";
 
 const urlSchoolMsg =
-  "Inserisci la URL della pagina principale (homepage) del sito web della scuola:";
+  "Inserisci la URL della pagina principale (homepage) del sito web della scuola includendo il protocollo (http:// o https://):";
 const urlMunicipalityMsg =
-  "Inserisci la URL della pagina principale (homepage) del sito web del Comune:";
+  "Inserisci la URL della pagina principale (homepage) del sito web del Comune includendo il protocollo (http:// o https://):";
 
 console.log();
 console.log();
