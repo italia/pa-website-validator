@@ -8,23 +8,31 @@ import https from "https";
 import http from "http";
 import dns from "dns";
 import vocabularyResult = crawlerTypes.vocabularyResult;
+import NodeCache from "node-cache";
+
+const loadPageCache = new NodeCache();
 
 const loadPageData = async (url: string): Promise<CheerioAPI> => {
+  let data = "";
+  const data_from_cache = loadPageCache.get(url);
+  if ( data_from_cache !== undefined ){
+    // console.log(`HIT ${url}`);
+    return <CheerioAPI>data_from_cache;
+  }
+  // console.log(`MISS ${url}`);
   const browser = await puppeteer.launch({
     args: ["--no-sandbox"],
   });
-  let data = "";
-
   try {
     const page = await browser.newPage();
     await page.goto(url);
     data = await page.content();
     await browser.close();
-
+    loadPageCache.set(url, cheerio.load(data))
     return cheerio.load(data);
   } catch (ex) {
     await browser.close();
-
+    loadPageCache.set(url, cheerio.load(data))
     return cheerio.load(data);
   }
 };
