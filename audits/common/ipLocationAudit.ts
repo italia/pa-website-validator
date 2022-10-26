@@ -52,9 +52,9 @@ class LoadAudit extends Audit {
         if (ipInformation !== null) {
           if (allowedCountries.includes(ipInformation.country)) {
             score = 1;
+            items[0].result = greenResult;
           }
 
-          items[0].result = greenResult;
           items[0].ip_city = ipInformation.city ?? "";
           items[0].ip_country = ipInformation.country ?? "";
         }
