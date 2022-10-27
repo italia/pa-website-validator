@@ -16,6 +16,8 @@ jobs:
       - run: npm ci
       - name: Update GeoIP database
         run: npm run updateGeoIPData
+        env:
+          LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
       - name: Generate ZIP files for Linux
         run: ./scripts/create-zips.sh Linux x64
       - uses: actions/upload-artifact@v3
@@ -32,6 +34,8 @@ jobs:
       - run: npm ci
       - name: Update GeoIP database
         run: npm run updateGeoIPData
+        env:
+          LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
       - name: Generate ZIP files for macOS
         run: ./scripts/create-zips.sh macOS intel
         shell: bash
@@ -49,6 +53,8 @@ jobs:
       - run: npm ci
       - name: Update GeoIP database
         run: npm run updateGeoIPData
+        env:
+          LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
       - name: Generate ZIP files for Windows
         run: ./scripts/create-zips.sh Windows x64
         shell: bash
