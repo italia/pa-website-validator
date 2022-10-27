@@ -19,7 +19,8 @@
     "lint:check": "eslint --ext .js,.ts --max-warnings 0 .",
     "prepare": "npm run build:lighthouse && npm run build:main",
     "test": "NODE_OPTIONS=--experimental-vm-modules PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=1 jest",
-    "type:check": "tsc --noEmit && tsc -p tsconfig.main.json --noEmit && tsc -p tsconfig.test.json --noEmit"
+    "type:check": "tsc --noEmit && tsc -p tsconfig.main.json --noEmit && tsc -p tsconfig.test.json --noEmit",
+    "updateGeoIPData": "npm explore geoip-lite -- npm run updatedb license_key=\"$GEOIP_LICENSE_KEY\""
   },
   "bin": {
     "pa-website-validator": "dist/index.js"
