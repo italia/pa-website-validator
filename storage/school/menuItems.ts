@@ -6,7 +6,7 @@ export const secondaryMenuItems = {
     "I luoghi della scuola",
     "Le carte della scuola",
     "Organizzazione",
-    "Persone",
+    "Le persone",
     "I numeri della Scuola",
     "La storia",
   ],
