@@ -5,6 +5,7 @@ import lighthouse from "lighthouse";
 import { CheerioAPI } from "cheerio";
 import { loadPageData, urlExists } from "../../utils/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
+import isEmail from "validator/lib/isEmail";
 
 const Audit = lighthouse.Audit;
 
@@ -66,12 +67,12 @@ class LoadAudit extends Audit {
     ];
 
     const $: CheerioAPI = await loadPageData(url);
-    const privacyPolicyElement = $("footer").find(
+    const reportInefficiencyElement = $("footer").find(
       '[data-element="report-inefficiency"]'
     );
-    const elementObj = $(privacyPolicyElement).attr();
+    const elementObj = $(reportInefficiencyElement).attr();
 
-    const label = privacyPolicyElement.text().trim().toLowerCase() ?? "";
+    const label = reportInefficiencyElement.text().trim().toLowerCase() ?? "";
     items[0].link_name = label;
     items[0].link_destination = elementObj?.href ?? "";
 
@@ -81,17 +82,22 @@ class LoadAudit extends Audit {
       elementObj.href !== "#" &&
       elementObj.href !== ""
     ) {
-      const checkUrl = await urlExists(url, elementObj.href);
-      items[0].link_destination = checkUrl.inspectedUrl;
+      if (isMailto(elementObj.href)) {
+        items[0].link_destination = elementObj.href;
+        items[0].existing_page = "N/A";
+      } else {
+        const checkUrl = await urlExists(url, elementObj.href);
+        items[0].link_destination = checkUrl.inspectedUrl;
 
-      if (!checkUrl.result) {
-        return {
-          score: 0,
-          details: Audit.makeTableDetails(headings, items),
-        };
+        if (!checkUrl.result) {
+          return {
+            score: 0,
+            details: Audit.makeTableDetails(headings, items),
+          };
+        }
+
+        items[0].existing_page = "Sì";
       }
-
-      items[0].existing_page = "Sì";
 
       if (
         label !== "disservizio" &&
@@ -115,5 +121,12 @@ class LoadAudit extends Audit {
     };
   }
 }
+
+const isMailto = (str: string) => {
+  if (!str.startsWith("mailto:")) return false;
+  const end = str.indexOf("?");
+  const emails = str.slice(7, end >= 0 ? end : undefined);
+  return emails.split(",").every((e) => isEmail(e));
+};
 
 module.exports = LoadAudit;
