@@ -3,7 +3,7 @@ name: Generate new release
 on:
   push:
     tags:
-      - "v1*"
+      - "v*"
 
 jobs:
   build-linux:
@@ -73,5 +73,6 @@ jobs:
       - uses: actions/download-artifact@v3
       - uses: ncipollo/release-action@v1
         with:
+          allowUpdates: true
           artifacts: "linux/*.zip,mac/*.zip,win/*.zip"
           token: ${{ secrets.GITHUB_TOKEN }}
