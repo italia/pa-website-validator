@@ -7,6 +7,7 @@ import {
   checkOrder,
   getPageElementDataAttribute,
   loadPageData,
+  toMenuItem,
 } from "../../utils/utils";
 import { secondaryMenuItems } from "../../storage/school/menuItems";
 import { auditDictionary } from "../../storage/auditDictionary";
@@ -107,8 +108,8 @@ class LoadAudit extends Audit {
     const missingVoicesPercentage: number = 100 - presentVoicesPercentage;
 
     let correctOrder = true;
-    const correctOrderResult = await checkOrder(
-      secondaryMenuScuolaItems,
+    const correctOrderResult = checkOrder(
+      secondaryMenuScuolaItems.map(toMenuItem),
       elementsFound
     );
     if (correctOrderResult.numberOfElementsNotInSequence > 0) {

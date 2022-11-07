@@ -9,6 +9,8 @@ import {
   getPageElementDataAttribute,
   getRandomMunicipalityServiceUrl,
   loadPageData,
+  missingMenuItems,
+  toMenuItem,
 } from "../../utils/utils";
 import { contentTypeItems } from "../../storage/municipality/contentTypeItems";
 import { secondLevelPageNames } from "../../storage/municipality/controlledVocabulary";
@@ -97,9 +99,11 @@ class LoadAudit extends Audit {
     const $: CheerioAPI = await loadPageData(randomServiceToBeScanned);
 
     const indexElements = await getServicesFromIndex($, mandatoryIndexVoices);
-    const orderResult = await checkOrder(mandatoryIndexVoices, indexElements);
-    const missingMandatoryItems = mandatoryIndexVoices.filter(
-      (val) => !indexElements.includes(val)
+    const mandatoryMenuItems = mandatoryIndexVoices.map(toMenuItem);
+    const orderResult = checkOrder(mandatoryMenuItems, indexElements);
+    const missingMandatoryItems = missingMenuItems(
+      indexElements,
+      mandatoryMenuItems
     );
 
     const title = $('[data-element="service-title"]').text().trim() ?? "";

@@ -8,6 +8,7 @@ import https from "https";
 import http from "http";
 import dns from "dns";
 import vocabularyResult = crawlerTypes.vocabularyResult;
+import { MenuItem } from "../types/menuItem";
 
 const loadPageData = async (url: string): Promise<CheerioAPI> => {
   const browser = await puppeteer.launch({
@@ -165,36 +166,37 @@ const isHttpsUrl = async (url: string) => {
   return url.includes("https");
 };
 
-const checkOrder = async (
-  mandatoryElements: string[],
+const toMenuItem = (str: string): MenuItem => ({
+  name: str,
+  regExp: new RegExp(`^${str}$`),
+});
+
+const checkOrder = (
+  mandatoryElements: MenuItem[],
   foundElements: string[]
-): Promise<orderType> => {
-  const newMandatoryElements = [];
-  const newFoundElements = [];
+): orderType => {
+  const newMandatoryElements = mandatoryElements.filter((e) =>
+    foundElements.some((f) => e.regExp.test(f))
+  );
+  const newFoundElements = foundElements.filter((e) =>
+    newMandatoryElements.some((f) => f.regExp.test(e))
+  );
   let numberOfElementsNotInSequence = 0;
   const elementsNotInSequence = [];
 
-  for (const mandatoryElement of mandatoryElements) {
-    if (foundElements.includes(mandatoryElement)) {
-      newMandatoryElements.push(mandatoryElement);
-    }
-  }
-
-  for (const foundElement of foundElements) {
-    if (newMandatoryElements.includes(foundElement)) {
-      newFoundElements.push(foundElement);
-    }
-  }
-
   for (let i = 0; i < newFoundElements.length; i++) {
-    const indexInMandatory = newMandatoryElements.indexOf(newFoundElements[i]);
+    const indexInMandatory = newMandatoryElements.findIndex((e) =>
+      e.regExp.test(newFoundElements[i])
+    );
     let isInSequence = true;
 
     if (indexInMandatory !== newMandatoryElements.length - 1) {
       if (i === newFoundElements.length - 1) {
         isInSequence = false;
       } else if (
-        newFoundElements[i + 1] !== newMandatoryElements[indexInMandatory + 1]
+        !newMandatoryElements[indexInMandatory + 1].regExp.test(
+          newFoundElements[i + 1]
+        )
       ) {
         isInSequence = false;
       }
@@ -204,7 +206,9 @@ const checkOrder = async (
       if (i === 0) {
         isInSequence = false;
       } else if (
-        newFoundElements[i - 1] !== newMandatoryElements[indexInMandatory - 1]
+        !newMandatoryElements[indexInMandatory - 1].regExp.test(
+          newFoundElements[i - 1]
+        )
       ) {
         isInSequence = false;
       }
@@ -221,6 +225,14 @@ const checkOrder = async (
     elementsNotInSequence: elementsNotInSequence,
   };
 };
+
+const missingMenuItems = (
+  menuElements: string[],
+  mandatoryElements: MenuItem[]
+): string[] =>
+  mandatoryElements
+    .filter((e) => menuElements.every((f) => !e.regExp.test(f)))
+    .map((e) => e.name);
 
 async function getHttpsRequestStatusCode(
   hostname: string
@@ -408,7 +420,9 @@ const areAllElementsInVocabulary = async (
 };
 
 export {
+  toMenuItem,
   checkOrder,
+  missingMenuItems,
   loadPageData,
   getRandomSchoolServiceUrl,
   getRandomMunicipalityServiceUrl,
