@@ -55,7 +55,7 @@ class LoadAudit extends Audit {
       {
         key: "cms_name",
         itemType: "text",
-        text: "Nome del CMS in uso",
+        text: "Tema CMS del modello in uso",
       },
       {
         key: "theme_version",
@@ -72,7 +72,7 @@ class LoadAudit extends Audit {
     const items = [
       {
         result: yellowResult,
-        cms_name: "",
+        cms_name: "Nessuno",
         theme_version: "",
         checked_element: "",
       },

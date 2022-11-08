@@ -420,12 +420,12 @@ const areAllElementsInVocabulary = async (
 };
 
 function getCmsVersion(css: string): {
-  name: string;
+  name: "Nessuno" | "Drupal" | "WordPress";
   version: string;
 } {
   const drupal = /^\s*\/\* =Drupal Core/;
   const wordpress = /^\s*\/\* =WordPress Core/;
-  let name = "";
+  let name: "Nessuno" | "Drupal" | "WordPress" | undefined;
   let version = "";
 
   const splittedCss = css.split("\n");
@@ -445,10 +445,10 @@ function getCmsVersion(css: string): {
       name = "WordPress";
     }
 
-    if (name !== "" && version !== "") break;
+    if (name && version !== "") break;
   }
 
-  return { name, version };
+  return { name: name || "Nessuno", version };
 }
 
 export {
