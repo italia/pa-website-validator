@@ -9,6 +9,7 @@ import semver from "semver";
 import { CheerioAPI } from "cheerio";
 import {
   buildUrl,
+  getCmsVersion,
   hostnameExists,
   isInternalUrl,
   loadPageData,
@@ -51,6 +52,11 @@ class LoadAudit extends Audit {
         text: "Risultato",
       },
       {
+        key: "cms_name",
+        itemType: "text",
+        text: "Nome del CMS in uso",
+      },
+      {
         key: "theme_version",
         itemType: "text",
         text: "Versione del tema CMS in uso",
@@ -65,6 +71,7 @@ class LoadAudit extends Audit {
     const items = [
       {
         result: yellowResult,
+        cms_name: "",
         theme_version: "",
         checked_element: "",
       },
@@ -132,10 +139,11 @@ class LoadAudit extends Audit {
         items[0].result = redResult;
 
         try {
-          const currentVersion = (await getCurrentVersion(CSS)).trim() ?? "";
-          items[0].theme_version = currentVersion;
+          const { name, version } = getCmsVersion(CSS);
+          items[0].cms_name = name;
+          items[0].theme_version = version;
 
-          if (semver.gte(currentVersion, "2.0.0")) {
+          if (semver.gte(version, "2.0.0")) {
             score = 1;
             items[0].result = greenResult;
 
@@ -198,22 +206,4 @@ async function getCSShttp(hostname: string): Promise<string> {
       })
       .end();
   });
-}
-
-async function getCurrentVersion(css: string): Promise<string> {
-  let version = "";
-
-  const splittedCss = css.split("\n");
-  for (const element of splittedCss) {
-    if (element.toLowerCase().match("(version)")) {
-      const splittedElement = element.split(" ");
-      if (splittedElement.length < 2) {
-        continue;
-      }
-
-      version = splittedElement[1];
-    }
-  }
-
-  return version;
 }

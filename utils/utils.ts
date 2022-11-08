@@ -419,6 +419,38 @@ const areAllElementsInVocabulary = async (
   };
 };
 
+function getCmsVersion(css: string): {
+  name: string;
+  version: string;
+} {
+  const drupal = /^\s*\/\* =Drupal Core/;
+  const wordpress = /^\s*\/\* =WordPress Core/;
+  let name = "";
+  let version = "";
+
+  const splittedCss = css.split("\n");
+  for (const element of splittedCss) {
+    if (element.toLowerCase().match("(version)")) {
+      const splittedElement = element.split(" ");
+      if (splittedElement.length < 2) {
+        continue;
+      }
+
+      version = splittedElement[1];
+    }
+
+    if (drupal.test(element)) {
+      name = "Drupal";
+    } else if (wordpress.test(element)) {
+      name = "WordPress";
+    }
+
+    if (name !== "" && version !== "") break;
+  }
+
+  return { name, version };
+}
+
 export {
   toMenuItem,
   checkOrder,
@@ -436,4 +468,5 @@ export {
   buildUrl,
   urlExists,
   areAllElementsInVocabulary,
+  getCmsVersion,
 };
