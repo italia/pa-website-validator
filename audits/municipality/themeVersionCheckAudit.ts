@@ -162,16 +162,20 @@ async function getCSShttps(hostname: string): Promise<string> {
 
   return new Promise(function (resolve) {
     https
-      .request(hostname, function (res) {
-        let data = "";
-        res.on("data", function (chunk) {
-          data += chunk;
-        });
+      .request(
+        hostname,
+        { headers: { "User-Agent": "pa-website-validator" } },
+        function (res) {
+          let data = "";
+          res.on("data", function (chunk) {
+            data += chunk;
+          });
 
-        res.on("end", function () {
-          resolve(data);
-        });
-      })
+          res.on("end", function () {
+            resolve(data);
+          });
+        }
+      )
       .end();
   });
 }
@@ -184,16 +188,20 @@ async function getCSShttp(hostname: string): Promise<string> {
 
   return new Promise(function (resolve) {
     http
-      .request(hostname, function (res) {
-        let data = "";
-        res.on("data", function (chunk) {
-          data += chunk;
-        });
+      .request(
+        hostname,
+        { headers: { "User-Agent": "pa-website-validator" } },
+        function (res) {
+          let data = "";
+          res.on("data", function (chunk) {
+            data += chunk;
+          });
 
-        res.on("end", function () {
-          resolve(data);
-        });
-      })
+          res.on("end", function () {
+            resolve(data);
+          });
+        }
+      )
       .end();
   });
 }
