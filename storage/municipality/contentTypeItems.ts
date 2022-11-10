@@ -14,7 +14,7 @@ export const contentTypeItems = {
     "Descrizione",
     "Stato",
     "Tassonomie argomenti",
-    "Tipologia servizio",
+    "Categoria del servizio",
   ],
   Body: ["Area"],
 };
