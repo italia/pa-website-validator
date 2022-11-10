@@ -10,7 +10,6 @@ import * as sslCertificate from "get-ssl-certificate";
 import crawlerTypes from "../types/crawler-types";
 import cipher = crawlerTypes.cipher;
 import cipherInfo = crawlerTypes.cipherInfo;
-import { hostnameExists } from "./utils";
 
 const Audit = lighthouse.Audit;
 const allowedTlsVersions = ["TLSv1.2", "TLSv1.3"];
@@ -265,11 +264,6 @@ async function checkCipherSuite(
 }
 
 async function getCipherVersion(hostname: string): Promise<string> {
-  const hostnameInfo = await hostnameExists(hostname);
-  if (!hostnameInfo.exists) {
-    return "";
-  }
-
   return new Promise(function (resolve) {
     https
       .request(hostname, function (res) {
@@ -280,11 +274,6 @@ async function getCipherVersion(hostname: string): Promise<string> {
 }
 
 async function getCipherStandardName(hostname: string): Promise<string> {
-  const hostnameInfo = await hostnameExists(hostname);
-  if (!hostnameInfo.exists) {
-    return "";
-  }
-
   return new Promise(function (resolve) {
     https
       .request(hostname, function (res) {

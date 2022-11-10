@@ -3,18 +3,16 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import * as https from "https";
-import * as http from "http";
 import semver from "semver";
 import { CheerioAPI } from "cheerio";
 import {
   buildUrl,
   getCmsVersion,
-  hostnameExists,
   isInternalUrl,
   loadPageData,
 } from "../../utils/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
+import axios from "axios";
 
 const Audit = lighthouse.Audit;
 
@@ -26,7 +24,6 @@ const auditData = auditDictionary[auditId];
 const greenResult = auditData.greenResult;
 const yellowResult = auditData.yellowResult;
 const redResult = auditData.redResult;
-const notExecuted = auditData.nonExecuted;
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -92,33 +89,17 @@ class LoadAudit extends Audit {
         if ((await isInternalUrl(styleCSSurl)) && !styleCSSurl.includes(url)) {
           styleCSSurl = await buildUrl(url, styleCSSurl);
         }
-
-        let CSS = "";
-        try {
-          CSS = await getCSShttps(styleCSSurl);
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (ex: any) {
-          try {
-            CSS = await getCSShttp(styleCSSurl);
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          } catch (ex: any) {
-            return {
-              score: 0,
-              details: Audit.makeTableDetails(
-                [{ key: "result", itemType: "text", text: "Risultato" }],
-                [
-                  {
-                    result: notExecuted,
-                  },
-                ]
-              ),
-            };
-          }
-        }
-
         items[0].checked_element = styleCSSurl;
 
-        if (!CSS.includes(textDomain)) {
+        let CSScontent = "";
+        try {
+          const response = await axios.get(styleCSSurl);
+          CSScontent = response.data;
+        } catch (e) {
+          CSScontent = "";
+        }
+
+        if (!CSScontent.includes(textDomain)) {
           score = 0.5;
           items[0].result = yellowResult;
 
@@ -129,7 +110,7 @@ class LoadAudit extends Audit {
         items[0].result = redResult;
 
         try {
-          const { name, version } = getCmsVersion(CSS);
+          const { name, version } = getCmsVersion(CSScontent);
           items[0].cms_name = name;
           items[0].theme_version = version;
 
@@ -153,55 +134,3 @@ class LoadAudit extends Audit {
 }
 
 module.exports = LoadAudit;
-
-async function getCSShttps(hostname: string): Promise<string> {
-  const hostnameInfo = await hostnameExists(hostname);
-  if (!hostnameInfo.exists) {
-    return "";
-  }
-
-  return new Promise(function (resolve) {
-    https
-      .request(
-        hostname,
-        { headers: { "User-Agent": "pa-website-validator" } },
-        function (res) {
-          let data = "";
-          res.on("data", function (chunk) {
-            data += chunk;
-          });
-
-          res.on("end", function () {
-            resolve(data);
-          });
-        }
-      )
-      .end();
-  });
-}
-
-async function getCSShttp(hostname: string): Promise<string> {
-  const hostnameInfo = await hostnameExists(hostname);
-  if (!hostnameInfo.exists) {
-    return "";
-  }
-
-  return new Promise(function (resolve) {
-    http
-      .request(
-        hostname,
-        { headers: { "User-Agent": "pa-website-validator" } },
-        function (res) {
-          let data = "";
-          res.on("data", function (chunk) {
-            data += chunk;
-          });
-
-          res.on("end", function () {
-            resolve(data);
-          });
-        }
-      )
-      .end();
-  });
-}

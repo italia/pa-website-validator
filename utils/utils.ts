@@ -4,9 +4,7 @@ import orderType = crawlerTypes.orderResult;
 import * as cheerio from "cheerio";
 import puppeteer from "puppeteer";
 import { CheerioAPI } from "cheerio";
-import https from "https";
-import http from "http";
-import dns from "dns";
+import axios from "axios";
 import vocabularyResult = crawlerTypes.vocabularyResult;
 import { MenuItem } from "../types/menuItem";
 
@@ -234,53 +232,6 @@ const missingMenuItems = (
     .filter((e) => menuElements.every((f) => !e.regExp.test(f)))
     .map((e) => e.name);
 
-async function getHttpsRequestStatusCode(
-  hostname: string
-): Promise<number | undefined> {
-  return new Promise(function (resolve) {
-    https
-      .request(hostname, function (res) {
-        resolve(res.statusCode);
-      })
-      .end();
-  });
-}
-
-async function getHttpRequestStatusCode(
-  hostname: string
-): Promise<number | undefined> {
-  return new Promise(function (resolve) {
-    http
-      .request(hostname, function (res) {
-        resolve(res.statusCode);
-      })
-      .end();
-  });
-}
-
-async function hostnameExists(
-  url: string
-): Promise<{ hostname: string; exists: boolean }> {
-  const newURL = new URL(url);
-
-  try {
-    if (!("hostname" in newURL)) {
-      throw new Error("Hostname does not exists");
-    }
-
-    const hostname = newURL.host;
-
-    return new Promise((resolve) => {
-      dns.lookup(hostname, (error) => resolve({ hostname, exists: !error }));
-    });
-  } catch (e) {
-    return {
-      hostname: "",
-      exists: false,
-    };
-  }
-}
-
 const urlExists = async (
   url: string,
   href: string,
@@ -302,28 +253,16 @@ const urlExists = async (
       }
     }
 
-    const hostExists = await hostnameExists(inspectUrl);
-    if (!hostExists.exists) {
-      return {
-        result: false,
-        reason: " Hostname non trovato.",
-        inspectedUrl: inspectUrl,
-      };
-    }
-
     let statusCode = undefined;
     try {
-      statusCode = await getHttpsRequestStatusCode(inspectUrl);
+      const response = await axios.get(inspectUrl);
+      statusCode = response.status;
     } catch (e) {
-      try {
-        statusCode = await getHttpRequestStatusCode(inspectUrl);
-      } catch (e) {
-        return {
-          result: false,
-          reason: " Internal exception.",
-          inspectedUrl: inspectUrl,
-        };
-      }
+      return {
+        result: false,
+        reason: " Hostname non valido.",
+        inspectedUrl: inspectUrl,
+      };
     }
 
     if (statusCode === undefined || statusCode < 200 || statusCode >= 400) {
@@ -458,8 +397,6 @@ export {
   getPageElementDataAttribute,
   getHREFValuesDataAttribute,
   getElementHrefValuesDataAttribute,
-  getHttpsRequestStatusCode,
-  hostnameExists,
   isInternalUrl,
   isHttpsUrl,
   buildUrl,
