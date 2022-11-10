@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.12](https://github.com/italia/pa-website-validator/compare/v1.0.11...v1.0.12) (2022-11-10)
+
+
+### Bug Fixes
+
+* aggiunto user-agent header versione tema comuni ([585d7db](https://github.com/italia/pa-website-validator/commit/585d7dba3f8adb97afc24dfcf158304cac998236))
+* C.SI.1.3 “Categoria del servizio” ([799b6f8](https://github.com/italia/pa-website-validator/commit/799b6f811e533abe78e95da9a6f99512c359121a))
+* fix hostname in verifica esistenza url ([359f9a3](https://github.com/italia/pa-website-validator/commit/359f9a37e0f7b6492749dc4ebde083fc679b5735))
+* integrazione Axios per verifica esistenza url ([f0fbde5](https://github.com/italia/pa-website-validator/commit/f0fbde5a9bb5c729959aab201ec09082ac447778))
+
 ## [1.0.11](https://github.com/italia/pa-website-validator/compare/v1.0.10...v1.0.11) (2022-11-10)
 
 
