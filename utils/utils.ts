@@ -268,10 +268,7 @@ async function hostnameExists(
       throw new Error("Hostname does not exists");
     }
 
-    let hostname = newURL.hostname;
-    hostname = hostname.replace(/(^\w+:|^)\/\//, "");
-    hostname = hostname.replace("www.", "");
-    hostname = hostname.replace("/", "");
+    const hostname = newURL.host;
 
     return new Promise((resolve) => {
       dns.lookup(hostname, (error) => resolve({ hostname, exists: !error }));
