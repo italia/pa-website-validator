@@ -329,7 +329,7 @@ const urlExists = async (
       }
     }
 
-    if (statusCode !== 200) {
+    if (statusCode === undefined || statusCode < 200 || statusCode >= 400) {
       return {
         result: false,
         reason: " Pagina non trovata.",
