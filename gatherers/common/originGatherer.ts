@@ -8,7 +8,7 @@ import lighthouse from "lighthouse";
 
 class origin extends lighthouse.Gatherer {
   afterPass(options: PassContext) {
-    const expression = `window.location.origin`;
+    const expression = `window.location.href`;
     const driver = options.driver;
 
     return driver.evaluateAsync(expression);
