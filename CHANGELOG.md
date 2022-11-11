@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.13](https://github.com/italia/pa-website-validator/compare/v1.0.12...v1.0.13) (2022-11-11)
+
+
+### Bug Fixes
+
+* modifica prelievo url di scansione da origin a href ([10da2ea](https://github.com/italia/pa-website-validator/commit/10da2ea2625162bd7bfdddfbd2ae87c2e9032bab))
+
 ## [1.0.12](https://github.com/italia/pa-website-validator/compare/v1.0.11...v1.0.12) (2022-11-10)
 
 
