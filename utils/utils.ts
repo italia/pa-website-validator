@@ -14,7 +14,7 @@ const loadPageCache = new NodeCache();
 const loadPageData = async (url: string): Promise<CheerioAPI> => {
   let data = "";
   const data_from_cache = loadPageCache.get(url);
-  if ( data_from_cache !== undefined ){
+  if (data_from_cache !== undefined) {
     return <CheerioAPI>data_from_cache;
   }
   const browser = await puppeteer.launch({
@@ -25,11 +25,11 @@ const loadPageData = async (url: string): Promise<CheerioAPI> => {
     await page.goto(url);
     data = await page.content();
     await browser.close();
-    loadPageCache.set(url, cheerio.load(data))
+    loadPageCache.set(url, cheerio.load(data));
     return cheerio.load(data);
   } catch (ex) {
     await browser.close();
-    loadPageCache.set(url, cheerio.load(data))
+    loadPageCache.set(url, cheerio.load(data));
     return cheerio.load(data);
   }
 };
