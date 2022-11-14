@@ -8,9 +8,11 @@ import {
   checkOrder,
   getPageElementDataAttribute,
   loadPageData,
+  missingMenuItems,
 } from "../../utils/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
+import { MenuItem } from "../../types/menuItem";
 
 const Audit = lighthouse.Audit;
 
@@ -75,47 +77,45 @@ class LoadAudit extends lighthouse.Audit {
       "> li > a"
     );
 
-    const menuElements = [];
-    for (const element of foundMenuElements) {
-      menuElements.push(element.toLowerCase());
-    }
+    items[0].found_menu_voices = foundMenuElements.join(", ");
 
-    items[0].found_menu_voices = menuElements.join(", ");
+    const mandatoryPrimaryMenuItems: MenuItem[] = primaryMenuItems.map(
+      (str) => ({
+        name: str,
+        regExp: new RegExp(`^${str}$`, "i"),
+      })
+    );
 
-    const primaryMenuItemsToLower: string[] = [];
-    for (const element of primaryMenuItems) {
-      primaryMenuItemsToLower.push(element.toLowerCase());
-    }
-
-    const missingMandatoryElements = missingMandatoryItems(
-      menuElements,
-      primaryMenuItemsToLower
+    const missingMandatoryElements = missingMenuItems(
+      foundMenuElements,
+      mandatoryPrimaryMenuItems
     );
     items[0].missing_menu_voices = missingMandatoryElements.join(", ");
 
-    const orderResult = await checkOrder(primaryMenuItemsToLower, menuElements);
+    const orderResult = checkOrder(
+      mandatoryPrimaryMenuItems,
+      foundMenuElements
+    );
     items[0].wrong_order_menu_voices =
       orderResult.elementsNotInSequence.join(", ");
 
-    const containsMandatoryElementsResult = containsMandatoryElements(
-      menuElements,
-      primaryMenuItemsToLower
-    );
+    const containsMandatoryElementsResult =
+      missingMandatoryElements.length === 0;
     const mandatoryElementsCorrectOrder = correctOrderMandatoryElements(
-      menuElements,
-      primaryMenuItemsToLower
+      foundMenuElements,
+      mandatoryPrimaryMenuItems
     );
 
     if (
-      menuElements.length === 4 &&
+      foundMenuElements.length === 4 &&
       containsMandatoryElementsResult &&
       mandatoryElementsCorrectOrder
     ) {
       score = 1;
       items[0].result = greenResult;
     } else if (
-      menuElements.length > 4 &&
-      menuElements.length < 8 &&
+      foundMenuElements.length > 4 &&
+      foundMenuElements.length < 8 &&
       containsMandatoryElementsResult &&
       mandatoryElementsCorrectOrder
     ) {
@@ -132,47 +132,17 @@ class LoadAudit extends lighthouse.Audit {
 
 module.exports = LoadAudit;
 
-function containsMandatoryElements(
-  menuElements: string[],
-  mandatoryElements: string[]
-): boolean {
-  let result = true;
-
-  for (const element of mandatoryElements) {
-    if (!menuElements.includes(element)) {
-      result = false;
-    }
-  }
-
-  return result;
-}
-
 function correctOrderMandatoryElements(
   menuElements: string[],
-  mandatoryElements: string[]
+  mandatoryElements: MenuItem[]
 ): boolean {
   let result = true;
 
   for (let i = 0; i < mandatoryElements.length; i++) {
-    if (menuElements[i] !== mandatoryElements[i]) {
+    if (!mandatoryElements[i].regExp.test(menuElements[i])) {
       result = false;
     }
   }
 
   return result;
-}
-
-function missingMandatoryItems(
-  menuElements: string[],
-  mandatoryElements: string[]
-): string[] {
-  const missingItems: string[] = [];
-
-  for (const mandatoryElement of mandatoryElements) {
-    if (!menuElements.includes(mandatoryElement)) {
-      missingItems.push(mandatoryElement);
-    }
-  }
-
-  return missingItems;
 }

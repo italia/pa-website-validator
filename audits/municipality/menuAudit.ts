@@ -9,6 +9,7 @@ import {
   checkOrder,
   getPageElementDataAttribute,
   loadPageData,
+  missingMenuItems,
 } from "../../utils/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
 
@@ -75,43 +76,31 @@ class LoadAudit extends lighthouse.Audit {
       "> li > a"
     );
 
-    const menuElements = [];
-    for (const element of foundMenuElements) {
-      menuElements.push(element.toLowerCase());
-    }
+    items[0].found_menu_voices = foundMenuElements.join(", ");
 
-    items[0].found_menu_voices = menuElements.join(", ");
-
-    const primaryMenuItemsToLower: string[] = [];
-    for (const element of primaryMenuItems) {
-      primaryMenuItemsToLower.push(element.toLowerCase());
-    }
-
-    const missingMandatoryElements = missingMandatoryItems(
-      menuElements,
-      primaryMenuItemsToLower
+    const missingMandatoryElements = missingMenuItems(
+      foundMenuElements,
+      primaryMenuItems
     );
     items[0].missing_menu_voices = missingMandatoryElements.join(", ");
 
-    const orderResult = await checkOrder(primaryMenuItemsToLower, menuElements);
+    const orderResult = checkOrder(primaryMenuItems, foundMenuElements);
     items[0].wrong_order_menu_voices =
       orderResult.elementsNotInSequence.join(", ");
 
-    const containsMandatoryElementsResult = containsMandatoryElements(
-      menuElements,
-      primaryMenuItemsToLower
-    );
+    const containsMandatoryElementsResult =
+      missingMandatoryElements.length === 0;
 
     if (
-      menuElements.length === 4 &&
+      foundMenuElements.length === 4 &&
       containsMandatoryElementsResult &&
       orderResult.numberOfElementsNotInSequence === 0
     ) {
       score = 1;
       items[0].result = greenResult;
     } else if (
-      menuElements.length > 4 &&
-      menuElements.length < 8 &&
+      foundMenuElements.length > 4 &&
+      foundMenuElements.length < 8 &&
       containsMandatoryElementsResult &&
       orderResult.numberOfElementsNotInSequence === 0
     ) {
@@ -127,33 +116,3 @@ class LoadAudit extends lighthouse.Audit {
 }
 
 module.exports = LoadAudit;
-
-function containsMandatoryElements(
-  menuElements: string[],
-  mandatoryElements: string[]
-): boolean {
-  let result = true;
-
-  for (const element of mandatoryElements) {
-    if (!menuElements.includes(element)) {
-      result = false;
-    }
-  }
-
-  return result;
-}
-
-function missingMandatoryItems(
-  menuElements: string[],
-  mandatoryElements: string[]
-): string[] {
-  const missingItems: string[] = [];
-
-  for (const mandatoryElement of mandatoryElements) {
-    if (!menuElements.includes(mandatoryElement)) {
-      missingItems.push(mandatoryElement);
-    }
-  }
-
-  return missingItems;
-}

@@ -115,7 +115,7 @@ Mappa opzioni comando
 | - -help | Mostra la mappa comando | ❌ | |
 | - -version | Versione del pacchetto | ❌ | |
 | - -type | Tipologia di crawler da lanciare | ✅ | "municipality" "school" |
-| - -detination | Folder dove salvare la reportistica | ✅ |
+| - -destination | Folder dove salvare la reportistica | ✅ |
 | - -report | Nome da assegnare al report | ✅ | |
 | - -website | Url sito web da analizzare | ✅ | |
 | - -scope | Scope di esecuzione | ❌ | "local" "online" | "online" |

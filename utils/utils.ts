@@ -4,11 +4,10 @@ import orderType = crawlerTypes.orderResult;
 import * as cheerio from "cheerio";
 import puppeteer from "puppeteer";
 import { CheerioAPI } from "cheerio";
-import https from "https";
-import http from "http";
-import dns from "dns";
+import axios from "axios";
 import vocabularyResult = crawlerTypes.vocabularyResult;
 import NodeCache from "node-cache";
+import { MenuItem } from "../types/menuItem";
 
 const loadPageCache = new NodeCache();
 
@@ -16,10 +15,8 @@ const loadPageData = async (url: string): Promise<CheerioAPI> => {
   let data = "";
   const data_from_cache = loadPageCache.get(url);
   if ( data_from_cache !== undefined ){
-    // console.log(`HIT ${url}`);
     return <CheerioAPI>data_from_cache;
   }
-  // console.log(`MISS ${url}`);
   const browser = await puppeteer.launch({
     args: ["--no-sandbox"],
   });
@@ -173,36 +170,37 @@ const isHttpsUrl = async (url: string) => {
   return url.includes("https");
 };
 
-const checkOrder = async (
-  mandatoryElements: string[],
+const toMenuItem = (str: string): MenuItem => ({
+  name: str,
+  regExp: new RegExp(`^${str}$`),
+});
+
+const checkOrder = (
+  mandatoryElements: MenuItem[],
   foundElements: string[]
-): Promise<orderType> => {
-  const newMandatoryElements = [];
-  const newFoundElements = [];
+): orderType => {
+  const newMandatoryElements = mandatoryElements.filter((e) =>
+    foundElements.some((f) => e.regExp.test(f))
+  );
+  const newFoundElements = foundElements.filter((e) =>
+    newMandatoryElements.some((f) => f.regExp.test(e))
+  );
   let numberOfElementsNotInSequence = 0;
   const elementsNotInSequence = [];
 
-  for (const mandatoryElement of mandatoryElements) {
-    if (foundElements.includes(mandatoryElement)) {
-      newMandatoryElements.push(mandatoryElement);
-    }
-  }
-
-  for (const foundElement of foundElements) {
-    if (newMandatoryElements.includes(foundElement)) {
-      newFoundElements.push(foundElement);
-    }
-  }
-
   for (let i = 0; i < newFoundElements.length; i++) {
-    const indexInMandatory = newMandatoryElements.indexOf(newFoundElements[i]);
+    const indexInMandatory = newMandatoryElements.findIndex((e) =>
+      e.regExp.test(newFoundElements[i])
+    );
     let isInSequence = true;
 
     if (indexInMandatory !== newMandatoryElements.length - 1) {
       if (i === newFoundElements.length - 1) {
         isInSequence = false;
       } else if (
-        newFoundElements[i + 1] !== newMandatoryElements[indexInMandatory + 1]
+        !newMandatoryElements[indexInMandatory + 1].regExp.test(
+          newFoundElements[i + 1]
+        )
       ) {
         isInSequence = false;
       }
@@ -212,7 +210,9 @@ const checkOrder = async (
       if (i === 0) {
         isInSequence = false;
       } else if (
-        newFoundElements[i - 1] !== newMandatoryElements[indexInMandatory - 1]
+        !newMandatoryElements[indexInMandatory - 1].regExp.test(
+          newFoundElements[i - 1]
+        )
       ) {
         isInSequence = false;
       }
@@ -230,55 +230,13 @@ const checkOrder = async (
   };
 };
 
-async function getHttpsRequestStatusCode(
-  hostname: string
-): Promise<number | undefined> {
-  return new Promise(function (resolve) {
-    https
-      .request(hostname, function (res) {
-        resolve(res.statusCode);
-      })
-      .end();
-  });
-}
-
-async function getHttpRequestStatusCode(
-  hostname: string
-): Promise<number | undefined> {
-  return new Promise(function (resolve) {
-    http
-      .request(hostname, function (res) {
-        resolve(res.statusCode);
-      })
-      .end();
-  });
-}
-
-async function hostnameExists(
-  url: string
-): Promise<{ hostname: string; exists: boolean }> {
-  const newURL = new URL(url);
-
-  try {
-    if (!("hostname" in newURL)) {
-      throw new Error("Hostname does not exists");
-    }
-
-    let hostname = newURL.hostname;
-    hostname = hostname.replace(/(^\w+:|^)\/\//, "");
-    hostname = hostname.replace("www.", "");
-    hostname = hostname.replace("/", "");
-
-    return new Promise((resolve) => {
-      dns.lookup(hostname, (error) => resolve({ hostname, exists: !error }));
-    });
-  } catch (e) {
-    return {
-      hostname: "",
-      exists: false,
-    };
-  }
-}
+const missingMenuItems = (
+  menuElements: string[],
+  mandatoryElements: MenuItem[]
+): string[] =>
+  mandatoryElements
+    .filter((e) => menuElements.every((f) => !e.regExp.test(f)))
+    .map((e) => e.name);
 
 const urlExists = async (
   url: string,
@@ -301,31 +259,19 @@ const urlExists = async (
       }
     }
 
-    const hostExists = await hostnameExists(inspectUrl);
-    if (!hostExists.exists) {
+    let statusCode = undefined;
+    try {
+      const response = await axios.get(inspectUrl);
+      statusCode = response.status;
+    } catch (e) {
       return {
         result: false,
-        reason: " Hostname non trovato.",
+        reason: " Hostname non valido.",
         inspectedUrl: inspectUrl,
       };
     }
 
-    let statusCode = undefined;
-    try {
-      statusCode = await getHttpsRequestStatusCode(inspectUrl);
-    } catch (e) {
-      try {
-        statusCode = await getHttpRequestStatusCode(inspectUrl);
-      } catch (e) {
-        return {
-          result: false,
-          reason: " Internal exception.",
-          inspectedUrl: inspectUrl,
-        };
-      }
-    }
-
-    if (statusCode !== 200) {
+    if (statusCode === undefined || statusCode < 200 || statusCode >= 400) {
       return {
         result: false,
         reason: " Pagina non trovata.",
@@ -415,19 +361,52 @@ const areAllElementsInVocabulary = async (
   };
 };
 
+function getCmsVersion(css: string): {
+  name: "Nessuno" | "Drupal" | "WordPress";
+  version: string;
+} {
+  const drupal = /^\s*\/\* =Drupal Core/;
+  const wordpress = /^\s*\/\* =WordPress Core/;
+  let name: "Nessuno" | "Drupal" | "WordPress" | undefined;
+  let version = "";
+
+  const splittedCss = css.split("\n");
+  for (const element of splittedCss) {
+    if (element.toLowerCase().match("(version)")) {
+      const splittedElement = element.split(" ");
+      if (splittedElement.length < 2) {
+        continue;
+      }
+
+      version = splittedElement[1];
+    }
+
+    if (drupal.test(element)) {
+      name = "Drupal";
+    } else if (wordpress.test(element)) {
+      name = "WordPress";
+    }
+
+    if (name && version !== "") break;
+  }
+
+  return { name: name || "Nessuno", version };
+}
+
 export {
+  toMenuItem,
   checkOrder,
+  missingMenuItems,
   loadPageData,
   getRandomSchoolServiceUrl,
   getRandomMunicipalityServiceUrl,
   getPageElementDataAttribute,
   getHREFValuesDataAttribute,
   getElementHrefValuesDataAttribute,
-  getHttpsRequestStatusCode,
-  hostnameExists,
   isInternalUrl,
   isHttpsUrl,
   buildUrl,
   urlExists,
   areAllElementsInVocabulary,
+  getCmsVersion,
 };

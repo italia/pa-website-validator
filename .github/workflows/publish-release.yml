@@ -3,7 +3,7 @@ name: Generate new release
 on:
   push:
     tags:
-      - "v1*"
+      - "v*"
 
 jobs:
   build-linux:
@@ -14,6 +14,10 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
+      - name: Update GeoIP database
+        run: npm run updateGeoIPData
+        env:
+          LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
       - name: Generate ZIP files for Linux
         run: ./scripts/create-zips.sh Linux x64
       - uses: actions/upload-artifact@v3
@@ -28,6 +32,10 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
+      - name: Update GeoIP database
+        run: npm run updateGeoIPData
+        env:
+          LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
       - name: Generate ZIP files for macOS
         run: ./scripts/create-zips.sh macOS intel
         shell: bash
@@ -43,6 +51,10 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
+      - name: Update GeoIP database
+        run: npm run updateGeoIPData
+        env:
+          LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
       - name: Generate ZIP files for Windows
         run: ./scripts/create-zips.sh Windows x64
         shell: bash
@@ -57,9 +69,12 @@ jobs:
       - build-win
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
       - uses: ncipollo/release-action@v1
         with:
+          allowUpdates: true
           artifacts: "linux/*.zip,mac/*.zip,win/*.zip"
+          omitBodyDuringUpdate: true
+          omitNameDuringUpdate: true
           token: ${{ secrets.GITHUB_TOKEN }}
