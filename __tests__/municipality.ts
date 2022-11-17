@@ -147,7 +147,9 @@ const expandExpectedOnline = (line: ExpectedOnlineEntry[1]) =>
     line[ix],
   ]);
 
-describe.each(expectedLocal)("Local: %s", (url, expectedResults) => {
+describe.each<[...ExpectedLocalEntry, number]>(
+  expectedLocal.map((e, i) => [...e, i])
+)("Local: %s", (url, expectedResults, i) => {
   let report: { audits: Record<string, Record<string, unknown>> };
   const fastify = Fastify();
 
@@ -157,10 +159,12 @@ describe.each(expectedLocal)("Local: %s", (url, expectedResults) => {
       root: join(__dirname, "municipalities", url),
     });
 
-    await fastify.listen({ port: 8080 });
+    const port = 8000 + i;
+
+    await fastify.listen({ port });
 
     const output = await run(
-      "http://localhost:8080",
+      `http://localhost:${port}`,
       "municipality",
       "local",
       logLevels.display_none,
