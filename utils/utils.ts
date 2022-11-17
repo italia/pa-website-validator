@@ -6,24 +6,30 @@ import puppeteer from "puppeteer";
 import { CheerioAPI } from "cheerio";
 import axios from "axios";
 import vocabularyResult = crawlerTypes.vocabularyResult;
+import NodeCache from "node-cache";
 import { MenuItem } from "../types/menuItem";
 
+const loadPageCache = new NodeCache();
+
 const loadPageData = async (url: string): Promise<CheerioAPI> => {
+  let data = "";
+  const data_from_cache = loadPageCache.get(url);
+  if (data_from_cache !== undefined) {
+    return <CheerioAPI>data_from_cache;
+  }
   const browser = await puppeteer.launch({
     args: ["--no-sandbox"],
   });
-  let data = "";
-
   try {
     const page = await browser.newPage();
     await page.goto(url);
     data = await page.content();
     await browser.close();
-
+    loadPageCache.set(url, cheerio.load(data));
     return cheerio.load(data);
   } catch (ex) {
     await browser.close();
-
+    loadPageCache.set(url, cheerio.load(data));
     return cheerio.load(data);
   }
 };
