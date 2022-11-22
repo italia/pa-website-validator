@@ -13,7 +13,10 @@ type ExpectedLocalEntry = [
 ];
 
 const expectedLocal: Array<ExpectedLocalEntry> = [
-  ["272423cfaecf27dd4848e1c5543b6dc380e97430", [1, 1, 0.5, 1, 1, 0, 0, 1, 0.5]],
+  [
+    "272423cfaecf27dd4848e1c5543b6dc380e97430",
+    [1, 1, 0.5, 1, 0.5, 0, 0, 1, 0.5],
+  ],
 ];
 
 type ExpectedOnlineEntry = [

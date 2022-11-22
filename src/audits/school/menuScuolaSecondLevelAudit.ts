@@ -105,7 +105,6 @@ class LoadAudit extends Audit {
         100
       ).toFixed(0)
     );
-    const missingVoicesPercentage: number = 100 - presentVoicesPercentage;
 
     let correctOrder = true;
     const correctOrderResult = checkOrder(
@@ -116,12 +115,12 @@ class LoadAudit extends Audit {
       correctOrder = false;
     }
 
-    if (missingVoicesPercentage > 30) {
+    if (presentVoicesPercentage < 30) {
       score = 0;
-    } else if (missingVoicesPercentage <= 30 && !correctOrder) {
+    } else if (presentVoicesPercentage >= 30 && !correctOrder) {
       score = 0.5;
       items[0].result = yellowResult;
-    } else if (missingVoicesPercentage <= 30 && correctOrder) {
+    } else if (presentVoicesPercentage >= 30 && correctOrder) {
       score = 1;
       items[0].result = greenResult;
     }
