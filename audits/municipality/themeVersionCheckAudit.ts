@@ -7,7 +7,7 @@ import semver from "semver";
 import { CheerioAPI } from "cheerio";
 import {
   buildUrl,
-  getCmsVersion,
+  cmsThemeRx,
   isInternalUrl,
   loadPageData,
 } from "../../utils/utils";
@@ -15,8 +15,6 @@ import { auditDictionary } from "../../storage/auditDictionary";
 import axios from "axios";
 
 const Audit = lighthouse.Audit;
-
-const textDomain = "Text Domain: design_comuni_italia";
 
 const auditId = "municipality-ux-ui-consistency-theme-version-check";
 const auditData = auditDictionary[auditId];
@@ -70,7 +68,7 @@ class LoadAudit extends Audit {
       {
         result: yellowResult,
         cms_name: "Nessuno",
-        theme_version: "",
+        theme_version: "N/A",
         checked_element: "",
       },
     ];
@@ -99,30 +97,27 @@ class LoadAudit extends Audit {
           CSScontent = "";
         }
 
-        if (!CSScontent.includes(textDomain)) {
+        const match = CSScontent.match(cmsThemeRx);
+
+        if (match === null || !match.groups) {
           score = 0.5;
           items[0].result = yellowResult;
 
           break;
         }
 
+        items[0].cms_name = match.groups.name;
+        const version = match.groups.version;
+        items[0].theme_version = version;
+
         score = 0;
         items[0].result = redResult;
 
-        try {
-          const { name, version } = getCmsVersion(CSScontent);
-          items[0].cms_name = name;
-          items[0].theme_version = version;
-
-          if (semver.gte(version, "1.0.0")) {
-            score = 1;
-            items[0].result = greenResult;
-
-            break;
-          }
-        } catch (e) {
-          break;
+        if (semver.gte(version, "1.0.0")) {
+          score = 1;
+          items[0].result = greenResult;
         }
+        break;
       }
     }
 

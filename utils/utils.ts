@@ -361,37 +361,8 @@ const areAllElementsInVocabulary = async (
   };
 };
 
-function getCmsVersion(css: string): {
-  name: "Nessuno" | "Drupal" | "WordPress";
-  version: string;
-} {
-  const drupal = /^\s*\/\* =Drupal Core/;
-  const wordpress = /^\s*\/\* =WordPress Core/;
-  let name: "Nessuno" | "Drupal" | "WordPress" | undefined;
-  let version = "";
-
-  const splittedCss = css.split("\n");
-  for (const element of splittedCss) {
-    if (element.toLowerCase().match("(version)")) {
-      const splittedElement = element.split(" ");
-      if (splittedElement.length < 2) {
-        continue;
-      }
-
-      version = splittedElement[1];
-    }
-
-    if (drupal.test(element)) {
-      name = "Drupal";
-    } else if (wordpress.test(element)) {
-      name = "WordPress";
-    }
-
-    if (name && version !== "") break;
-  }
-
-  return { name: name || "Nessuno", version };
-}
+const cmsThemeRx =
+  /\/\*!\s*Theme Name:.*\s+Author:.*\s+Description:\s+Design (Comuni|Scuole) Italia .*(?<name>WordPress|Drupal).*\s+Version:\s+(?<version>.*)\s+License:.*\s+Text Domain: design_(comuni|scuole)_italia\s*\*\//;
 
 export {
   toMenuItem,
@@ -408,5 +379,5 @@ export {
   buildUrl,
   urlExists,
   areAllElementsInVocabulary,
-  getCmsVersion,
+  cmsThemeRx,
 };
