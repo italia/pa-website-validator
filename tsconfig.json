@@ -8,5 +8,9 @@
     "strict": true,
     "target": "ES2022"
   },
-  "include": ["audits", "gatherers", "node_modules/lighthouse/types/**/*.d.ts"]
+  "include": [
+    "node_modules/lighthouse/types/**/*.d.ts",
+    "src/audits",
+    "src/gatherers"
+  ]
 }

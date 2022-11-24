@@ -9,7 +9,7 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "build:lighthouse": "tsc && shx cp package-json-commonjs.json dist/lighthouse/package.json",
+    "build:lighthouse": "tsc && shx cp src/package-json-commonjs.json dist/lighthouse/package.json",
     "build:main": "tsc -p tsconfig.main.json",
     "bundle:municipality": "caxa -i . -o app-valutazione-comuni -e \"*\" -e \".*\" -e \"!dist\" -e \"!node_modules\" -e \"!package.json\" -m \"Caricamento...\" -- env PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=1 \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/dist/app.js\" municipality",
     "bundle:municipality:windows": "caxa -i . -o app-valutazione-comuni.exe -e \"*\" -e \".*\" -e \"!dist\" -e \"!node_modules\" -e \"!package.json\" -m \"Caricamento...\" -- \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/dist/app.js\" municipality",
@@ -71,8 +71,11 @@
     ],
     "testPathIgnorePatterns": [
       "/node_modules",
-      "__tests__/municipalities",
-      "/__tests__/schools"
+      "/tests/municipalities",
+      "/tests/schools"
+    ],
+    "testMatch": [
+      "**/tests/*.ts"
     ],
     "testTimeout": 600000,
     "transform": {

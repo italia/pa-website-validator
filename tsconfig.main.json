@@ -3,6 +3,6 @@
   "compilerOptions": {
     "declaration": true
   },
-  "exclude": ["audits", "dist", "gatherers", "__tests__"],
-  "include": ["**/*.ts", "node_modules/lighthouse/types/**/*.d.ts"]
+  "exclude": ["src/audits", "dist", "src/gatherers", "__tests__"],
+  "include": ["src", "node_modules/lighthouse/types/**/*.d.ts"]
 }

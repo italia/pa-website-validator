@@ -1,4 +1,4 @@
 {
   "extends": "./tsconfig.esmodules",
-  "include": ["__tests__"]
+  "include": ["tests"]
 }
