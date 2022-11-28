@@ -58,77 +58,89 @@ PA Website validator utilizza le seguenti dipendenze esterne principali
 | Geo Ip              | [GitHub][geoip-url]               |
 | Get SSL Certificate | [GitHub][get-ssl-certificate-url] |
 
-## Installazione tramite build
+## Installazione locale
 
-Per l'installazione tramite build, partire dalla repository ed effettuare il clone, poi:
+Per l'installazione locale, una volta clonato il repository, eseguire:
 
-```sh
+```console
 cd pa-website-validator
-PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=1 npm install
+npm install
 ```
 
-Viene generata la folder "dist", utilizzo:
+La directory `dist` sarà popolata con l’output del processo di build.
 
-```sh
-node dist --type <type> --destination <folder> --report <report_name> --website <url> --scope <local|online [online]> --view
+Utilizzo:
+
+```console
+node dist --type <type> --destination <folder> --report <report_name> --website <url> --scope <local|online> --view
 ```
 
 Esempio:
 
-```bash
+```console
 node dist --type school --destination ~/pa-italia-crawler-reports --report myreport --website https://www.ismonnet.edu.it/ --scope online --view
+```
+
+**NB**: per i dispositivi basati su macOS con processore ARM occorre abilitare la variabile d’ambiente `PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM` per tutti i comandi descritti sopra, cioè:
+
+```console
+PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=1 npm install
+PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=1 node dist ...
 ```
 
 ## Installazione globale
 
-Per l'installazione in locale partendo dalla repository effettuare il clone, poi:
+Una volta effettuata l’installazione globale sarà possibile usare il comando `pa-website-validator` dal terminale, senza dover entrare nella directory clonata. Questa è la procedura per installare il comando globalmente:
 
-```sh
+```console
 cd pa-website-validator
 npm install
-npm install -g ./
+npm install -g --install-links
 ```
+
+(usare `PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM` se necessario come descritto sopra).
 
 NB: Potrebbe essere necessario riavviare la shell/terminale per la propagazione del comando e la pulizia della cache npm:
 
-```sh
+```console
 npm cache clean
 ```
 
-## Utilizzo
+Utilizzo:
 
-Comando:
-
-```bash
-pa-website-validator --type <type> --destination <folder> --report <report_name> --website <url> --scope <local|online [online]> --view
+```console
+pa-website-validator --type <type> --destination <folder> --report <report_name> --website <url> --scope <local|online> --view
 ```
 
 Esempio:
 
-```bash
+```console
 pa-website-validator --type school --destination ~/pa-italia-crawler-reports --report myreport --website https://www.ismonnet.edu.it/ --scope online --view
 ```
 
-Mappa opzioni comando
-| Parametro Comando | Descrizione | Obbligatorio | Possibili valori | Default
-| ------ | ------ | ------ | ------ | ------ |
-| - -help | Mostra la mappa comando | ❌ | |
-| - -version | Versione del pacchetto | ❌ | |
-| - -type | Tipologia di crawler da lanciare | ✅ | "municipality" "school" |
-| - -destination | Folder dove salvare la reportistica | ✅ |
-| - -report | Nome da assegnare al report | ✅ | |
-| - -website | Url sito web da analizzare | ✅ | |
-| - -scope | Scope di esecuzione | ❌ | "local" "online" | "online" |
-| - -view | Visualizzazione istantanea report | ❌ |
+## Opzioni comando
 
-> `--type` indica quale tipologia di sito web viene passato da ispezionare (comunale o scolastico).
+| Parametro Comando | Descrizione                         | Obbligatorio | Possibili valori        | Default  |
+| ----------------- | ----------------------------------- | ------------ | ----------------------- | -------- |
+| - -help           | Mostra la mappa comando             | ❌           |                         |
+| - -version        | Versione del pacchetto              | ❌           |                         |
+| - -type           | Tipologia di crawler da lanciare    | ✅           | "municipality" "school" |
+| - -destination    | Folder dove salvare la reportistica | ✅           |
+| - -report         | Nome da assegnare al report         | ✅           |                         |
+| - -website        | Url sito web da analizzare          | ✅           |                         |
+| - -scope          | Scope di esecuzione                 | ❌           | "local" "online"        | "online" |
+| - -view           | Visualizzazione istantanea report   | ❌           |
 
-> `--scope` indica la tipologia di audit da eseguire:
+Note:
 
-- `local` se il tool è lanciato su un sito web hostato in locale: esegue tutti gli audit che lavorano sulla struttura del sito ispezionato e mostra dei messaggi informativi per alcuni audit che non producono risultati se eseguiti in un ambiente locale.
-- `online` esegue tutti gli audit disponibili.
+- `--type` indica quale tipologia di sito web viene passato da ispezionare (comunale o scolastico).
 
-> `--view` se passato al comandoalla fine dell'auditing lancia un'istanza di chrome che mostra automaticamente la reportistica generata.
+- `--scope` indica la tipologia di audit da eseguire:
+
+  - `local` se il tool è lanciato su un sito web hostato in locale: esegue tutti gli audit che lavorano sulla struttura del sito ispezionato e mostra dei messaggi informativi per alcuni audit che non producono risultati se eseguiti in un ambiente locale.
+  - `online` esegue tutti gli audit disponibili.
+
+- `--view` se passato al comandoalla fine dell'auditing lancia un'istanza di chrome che mostra automaticamente la reportistica generata.
 
 [lighthouse]: https://www.npmjs.com/package/lighthouse
 [node.js]: http://nodejs.org
