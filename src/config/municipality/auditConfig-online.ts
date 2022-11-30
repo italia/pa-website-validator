@@ -111,19 +111,6 @@ const modelComplianceInformationAudits = [
   },
 ];
 
-const modelComplianceActiveAudits = [
-  {
-    id: "municipality-personal-area-security",
-    weight: 81,
-    group: "security",
-  },
-  {
-    id: "municipality-subdomain",
-    weight: 80,
-    group: "security",
-  },
-];
-
 const reccomandationsAndAdditionalTestsAudits = [
   {
     id: "municipality-metatag",
@@ -152,7 +139,6 @@ export default {
     onlyCategories: [
       "performance",
       "modelComplianceInformation",
-      "modelComplianceActive",
       "reccomandationsAndAdditionalTests",
       "additionalTests",
     ],
@@ -174,7 +160,6 @@ export default {
     municipalityAuditsFolder + "/secondLevelPagesAudit.js",
     municipalityAuditsFolder + "/bootstrapItaliaDoubleCheckAudit.js",
     municipalityAuditsFolder + "/cookieDomainCheckAudit.js",
-    municipalityAuditsFolder + "/securityAudit.js",
     municipalityAuditsFolder + "/accessibilityDeclarationIsPresentAudit.js",
     municipalityAuditsFolder + "/privacyAudit.js",
     municipalityAuditsFolder + "/faqAudit.js",
@@ -186,7 +171,6 @@ export default {
     municipalityAuditsFolder + "/personalAreaSecurityAudit.js",
     municipalityAuditsFolder + "/feedbackElementAudit.js",
     municipalityAuditsFolder + "/domainAudit.js",
-    municipalityAuditsFolder + "/subDomainAudit.js",
     municipalityAuditsFolder + "/serviziAudit.js",
     municipalityAuditsFolder + "/themeVersionCheckAudit.js",
     municipalityAuditsFolder + "/metatagAudit.js",
@@ -214,13 +198,6 @@ export default {
       description:
         "Vengono mostrati i risultati degli audit relativi ai criteri di conformità del Pacchetto Cittadino Informato illustrati nell'[allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q000017NZMCQA4#allegati).",
       auditRefs: [...modelComplianceInformationAudits],
-    },
-
-    modelComplianceActive: {
-      title: "Pacchetto Cittadino Attivo: criteri di conformità",
-      description:
-        "Vengono mostrati i risultati degli audit relativi ad alcuni dei criteri di conformità del Pacchetto Cittadino Attivo illustrati nell'[allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q000017NZMCQA4#allegati).",
-      auditRefs: [...modelComplianceActiveAudits],
     },
 
     reccomandationsAndAdditionalTests: {
