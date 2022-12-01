@@ -3,12 +3,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import {
-  checkOrder,
-  getPageElementDataAttribute,
-  loadPageData,
-  toMenuItem,
-} from "../../utils/utils";
+import { getPageElementDataAttribute, loadPageData } from "../../utils/utils";
 import { secondaryMenuItems } from "../../storage/school/menuItems";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
