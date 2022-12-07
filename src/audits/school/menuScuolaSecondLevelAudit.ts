@@ -79,6 +79,8 @@ class LoadAudit extends Audit {
       "li"
     );
 
+    if (headerUlTest[0] === "Panoramica") headerUlTest.shift();
+
     const elementsFound: string[] = [];
     const correctElementsFound: string[] = [];
     for (const element of headerUlTest) {
