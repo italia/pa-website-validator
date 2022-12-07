@@ -3,12 +3,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import {
-  checkOrder,
-  getPageElementDataAttribute,
-  loadPageData,
-  toMenuItem,
-} from "../../utils/utils";
+import { getPageElementDataAttribute, loadPageData } from "../../utils/utils";
 import { secondaryMenuItems } from "../../storage/school/menuItems";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
@@ -46,7 +41,7 @@ class LoadAudit extends Audit {
       {
         key: "correct_voices_percentage",
         itemType: "text",
-        text: "% di voci obbligatorie identificate",
+        text: "% di voci obbligatorie tra quelle usate",
       },
       {
         key: "correct_voices",
@@ -57,11 +52,6 @@ class LoadAudit extends Audit {
         key: "missing_voices",
         itemType: "text",
         text: "Voci di menù obbligatorie mancanti",
-      },
-      {
-        key: "wrong_voices_order",
-        itemType: "text",
-        text: "Voci di menù obbligatorie in ordine errato",
       },
     ];
 
@@ -100,27 +90,13 @@ class LoadAudit extends Audit {
     }
 
     const presentVoicesPercentage: number = parseInt(
-      (
-        (correctElementsFound.length / secondaryMenuScuolaItems.length) *
-        100
-      ).toFixed(0)
+      ((correctElementsFound.length / elementsFound.length) * 100).toFixed(0)
     );
 
-    let correctOrder = true;
-    const correctOrderResult = checkOrder(
-      secondaryMenuScuolaItems.map(toMenuItem),
-      elementsFound
-    );
-    if (correctOrderResult.numberOfElementsNotInSequence > 0) {
-      correctOrder = false;
-    }
-
-    if (presentVoicesPercentage < 30) {
-      score = 0;
-    } else if (presentVoicesPercentage >= 30 && !correctOrder) {
+    if (presentVoicesPercentage >= 30 && presentVoicesPercentage < 100) {
       score = 0.5;
       items[0].result = yellowResult;
-    } else if (presentVoicesPercentage >= 30 && correctOrder) {
+    } else if (presentVoicesPercentage === 100) {
       score = 1;
       items[0].result = greenResult;
     }
@@ -128,8 +104,6 @@ class LoadAudit extends Audit {
     items[0].correct_voices = correctElementsFound.join(", ");
     items[0].correct_voices_percentage =
       presentVoicesPercentage.toString() + "%";
-    items[0].wrong_voices_order =
-      correctOrderResult.elementsNotInSequence.join(", ");
     items[0].missing_voices = secondaryMenuScuolaItems
       .filter((x) => !correctElementsFound.includes(x))
       .join(", ");
