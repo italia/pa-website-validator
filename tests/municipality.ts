@@ -54,8 +54,6 @@ type ExpectedOnlineEntry = [
     number,
     number,
     number,
-    number,
-    number,
     number
   ]
 ];
@@ -63,7 +61,7 @@ type ExpectedOnlineEntry = [
 const expectedOnline: Array<ExpectedOnlineEntry> = [
   [
     "https://www.comune.bergamo.it",
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.5, 0, 0, 1, 1, 1, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.5, 0, 0, 1, 1, 1],
   ],
 ];
 
@@ -90,8 +88,6 @@ const extraAudits = [
   "municipality-domain",
   "municipality-security",
   "common-security-ip-location",
-  "municipality-personal-area-security",
-  "municipality-subdomain",
 ] as const;
 
 const onlineAudits = [...localAudits, ...extraAudits] as const;
