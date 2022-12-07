@@ -1,5 +1,4 @@
 "use strict";
-
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
@@ -17,6 +16,21 @@ const greenResult = auditData.greenResult;
 const yellowResult = auditData.yellowResult;
 const redResult = auditData.redResult;
 const notExecuted = auditData.nonExecuted;
+const maxLength = 100;
+
+type BadElement = [string, boolean]; // First value is element snippet, second is whether it is tolerable
+
+const headings: LH.Audit.Details.TableColumnHeading[] = [
+  {
+    key: "result",
+    itemType: "text",
+    text: "Risultato",
+    subItemsHeading: {
+      key: "node",
+      itemType: "node",
+    },
+  },
+];
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -32,23 +46,8 @@ class LoadAudit extends Audit {
 
   static async audit(
     artifacts: LH.Artifacts & { origin: string }
-  ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
+  ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
-    let score = 0;
-
-    const headings = [
-      { key: "result", itemType: "text", text: "Risultato" },
-      { key: "found_fonts", itemType: "text", text: "Font trovati" },
-      { key: "missing_fonts", itemType: "text", text: "Font mancanti" },
-    ];
-
-    const item = [
-      {
-        result: redResult,
-        found_fonts: "",
-        missing_fonts: allowedFonts.join(", "),
-      },
-    ];
 
     const randomServiceToBeScanned: string = await getRandomSchoolServiceUrl(
       url
@@ -72,104 +71,92 @@ class LoadAudit extends Audit {
       args: ["--no-sandbox"],
     });
 
-    let fonts: string[] = [];
     try {
       const page = await browser.newPage();
       await page.goto(randomServiceToBeScanned);
 
-      fonts = await page.evaluate(() => {
-        const values: string[] = [];
-        let val;
-        const nodes = window.document.body.getElementsByTagName("*");
+      const badElements: Array<BadElement> = await page.evaluate(
+        (requiredFonts) => {
+          const badElements: Array<BadElement> = [];
+          const outerElems = window.document.body.querySelectorAll(
+            "h1, h2, h3, h4, h5, h6, p"
+          );
 
-        for (let i = 0; i < nodes.length; i++) {
-          const currentNode = nodes[i];
+          const isBad = (e: Element) =>
+            !requiredFonts.includes(
+              window
+                .getComputedStyle(e)
+                .fontFamily.split(",", 1)
+                .map((s) => s.replace(/^"|"$/g, ""))[0] // "Titillium Web" => Titillium Web
+            );
 
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          if (currentNode.style) {
-            val =
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore
-              currentNode.style.fontFamily ||
-              window.getComputedStyle(currentNode, "")["fontFamily"];
-            if (val) {
-              if (values.indexOf(val) == -1) {
-                values.push(val);
-              }
-            }
-
-            const val_before = window.getComputedStyle(currentNode, ":before")[
-              "fontFamily"
-            ];
-            if (val_before) {
-              if (values.indexOf(val_before) == -1) {
-                values.push(val_before);
-              }
-            }
-
-            const val_after = window.getComputedStyle(currentNode, ":after")[
-              "fontFamily"
-            ];
-            if (val_after) {
-              if (values.indexOf(val_after) == -1) {
-                values.push(val_after);
-              }
+          for (const e of outerElems) {
+            if (isBad(e)) {
+              badElements.push([e.outerHTML, false]);
+            } else if ([...e.querySelectorAll("*")].some(isBad)) {
+              // If good parent element has some bad descendant we add it to the list in tolerance mode
+              badElements.push([e.outerHTML, true]);
             }
           }
-        }
+          return badElements;
+        },
+        allowedFonts
+      );
 
-        return values;
-      });
-      await browser.close();
-    } catch (ex) {
-      await browser.close();
+      if (badElements.length === 0) {
+        const item: LH.Audit.Details.TableItem = {
+          result: greenResult.replace("[url]", randomServiceToBeScanned),
+          subItems: {
+            type: "subitems",
+            items: [],
+          },
+        };
 
-      return {
-        score: 0,
-        details: Audit.makeTableDetails(headings, item),
-      };
-    }
-
-    if (fonts.length <= 0) {
-      item[0].missing_fonts = allowedFonts.join(", ");
-      return {
-        score: score,
-        details: Audit.makeTableDetails(headings, item),
-      };
-    }
-
-    let cleanFonts: string[] = [];
-    for (let font of fonts) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-ignore
-      font = font.toString().replaceAll('"', "") ?? "";
-      if (!font) {
-        continue;
+        return {
+          score: 1,
+          details: Audit.makeTableDetails(headings, [item]),
+        };
       }
 
-      cleanFonts = [...cleanFonts, ...font.split(",")];
+      const reallyBadElements = badElements.filter((e) => !e[1]);
+
+      const toSnippets = (
+        es: BadElement[]
+      ): { node: LH.Audit.Details.NodeValue }[] =>
+        es.map((e) => ({
+          node: {
+            type: "node",
+            snippet:
+              e[0].slice(0, maxLength) + (e[0].length > maxLength ? "..." : ""),
+          },
+        }));
+
+      const item: LH.Audit.Details.TableItem = {
+        result:
+          reallyBadElements.length > 0
+            ? redResult.replace("[url]", randomServiceToBeScanned)
+            : yellowResult.replace("[url]", randomServiceToBeScanned),
+        subItems: {
+          type: "subitems",
+          items:
+            reallyBadElements.length > 0
+              ? toSnippets(reallyBadElements)
+              : toSnippets(badElements),
+        },
+      };
+
+      return {
+        score: reallyBadElements.length > 0 ? 0 : 0.5,
+        details: Audit.makeTableDetails(headings, [item]),
+      };
+    } catch (e) {
+      return {
+        errorMessage: e instanceof Error ? e.message : "",
+        score: 0,
+      };
+    } finally {
+      await browser.close();
     }
-
-    if (
-      cleanFonts.includes(allowedFonts[0]) &&
-      cleanFonts.includes(allowedFonts[1])
-    ) {
-      score = 1;
-      item[0].result = greenResult;
-      item[0].missing_fonts = "";
-    } else if (cleanFonts.includes(allowedFonts[0])) {
-      score = 0.5;
-      item[0].result = yellowResult;
-      item[0].missing_fonts = allowedFonts[1];
-    }
-
-    item[0].found_fonts = cleanFonts.join(", ");
-
-    return {
-      score: score,
-      details: Audit.makeTableDetails(headings, item),
-    };
   }
 }
 

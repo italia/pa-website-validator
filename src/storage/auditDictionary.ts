@@ -148,9 +148,11 @@ export const auditDictionary = {
       'CONDIZIONI DI SUCCESSO: la funzionalità per valutare la chiarezza informativa è presente su tutte le pagine di primo e secondo livello del sito; MODALITÀ DI VERIFICA: viene verificata la presenza del componente su una pagina di primo livello selezionata casualmente e su una pagina di secondo livello selezionata casualmente a partire dalla pagina "Servizi", ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "municipality-ux-ui-consistency-fonts-check": {
-    greenResult: "Il sito utilizza tutti i font necessari.",
-    yellowResult: "Il sito utilizza il font Titillium Web ma non il font Lora.",
-    redResult: "Il sito non utilizza i font del modello.",
+    greenResult: "La pagina [url] utilizza i font come richiesto.",
+    yellowResult:
+      "Nella pagina [url] sono presenti <h> o <p> che utilizzano altri font oltre a quelli richiesti.",
+    redResult:
+      "Nella pagina [url] sono presenti <h> o <p> che non utilizzano i font come richiesto:",
     nonExecuted:
       "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
     title:
@@ -158,7 +160,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.1.1 - COERENZA DELL'UTILIZZO DEI FONT (librerie di caratteri) - Il sito comunale deve utilizzare i font indicati dalla documentazione del modello di sito comunale.",
     description:
-      'CONDIZIONI DI SUCCESSO: il sito utilizza almeno i font Titillium Web e Lora; MODALITÀ DI VERIFICA: ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione, viene verificata la presenza dei font all\'interno di una scheda servizio casualmente selezionata; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+      "CONDIZIONI DI SUCCESSO: tutti i titoli (heading) e tutti i paragrafi delle pagine del sito in lingua italiana devono usare esclusivamente i font Titillium Web, Lora e Roboto Mono; MODALITÀ DI VERIFICA: ricercando uno specifico attributo “data-element” come spiegato nella Documentazione delle App di valutazione, viene verificato che i font richiesti abbiano la precedenza tra i font a disposizione all’interno di tutti gli <h> e <p> in una scheda servizio casualmente selezionata; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs).",
   },
   "municipality-inefficiency-report": {
     greenResult:
@@ -468,9 +470,11 @@ export const auditDictionary = {
       "CONDIZIONI DI SUCCESSO: il sito presenta solo cookie idonei come definito dalla normativa; MODALITÀ DI VERIFICA: viene verificato che il dominio dei cookie identificati sia corrispondente al dominio del sito web. Se nella pagina analizzata non vengono rilevati cookie non verrà generata una tabella di risultati; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Linee guida cookie e altri strumenti di tracciamento - 10 giugno 2021](https://www.garanteprivacy.it/home/docweb/-/docweb-display/docweb/9677876).",
   },
   "school-ux-ui-consistency-fonts-check": {
-    greenResult: "Il sito utilizza tutti i font necessari.",
-    yellowResult: "Il sito utilizza il font Titillium Web ma non il font Lora.",
-    redResult: "Il sito non utilizza i font del modello.",
+    greenResult: "La pagina [url] utilizza i font come richiesto.",
+    yellowResult:
+      "Nella pagina [url] sono presenti <h> o <p> che utilizzano altri font oltre a quelli richiesti.",
+    redResult:
+      "Nella pagina [url] sono presenti <h> o <p> che non utilizzano i font come richiesto:",
     nonExecuted:
       "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
     title:
@@ -478,7 +482,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SC.1.1 - COERENZA DELL'UTILIZZO DEI FONT (librerie di caratteri) - Il sito della scuola deve utilizzare i font indicati dalla documentazione del modello di sito della scuola.",
     description:
-      'CONDIZIONI DI SUCCESSO: il sito utilizza almeno i font Titillium Web e Lora; MODALITÀ DI VERIFICA: ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione, viene verificata la presenza dei font all’interno di una scheda servizio casualmente selezionata; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+      "CONDIZIONI DI SUCCESSO: tutti i titoli (heading) e tutti i paragrafi delle pagine del sito in lingua italiana devono usare esclusivamente i font Titillium Web, Lora e Roboto Mono; MODALITÀ DI VERIFICA: ricercando uno specifico attributo “data-element” come spiegato nella Documentazione delle App di valutazione, viene verificato che i font richiesti abbiano la precedenza tra i font a disposizione all’interno di tutti gli <h> e <p> in una scheda servizio casualmente selezionata; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs)",
   },
   "school-menu-structure-match-model": {
     greenResult: "Le voci del menù sono corrette e nell'ordine giusto.",
