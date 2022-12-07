@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.1.0](https://github.com/italia/pa-website-validator/compare/v1.0.13...v1.1.0) (2022-12-07)
+
+
+### Features
+
+* cache loadPageData ([#71](https://github.com/italia/pa-website-validator/issues/71)) ([b72b188](https://github.com/italia/pa-website-validator/commit/b72b1886ce7a7ab81069adf7d7d0f411d945a555))
+* verify fonts on all headers and paragraphs ([1cebac3](https://github.com/italia/pa-website-validator/commit/1cebac39fb255064c2597625a3213d0fda05cf70))
+
+
+### Bug Fixes
+
+* calculation of the 30% of the schools' second level menu items ([177008a](https://github.com/italia/pa-website-validator/commit/177008a6edb7d55ffffab0c24b6813d582902ae3))
+* change percentage calculation in C.SC.1.5 ([#128](https://github.com/italia/pa-website-validator/issues/128)) ([c0ce054](https://github.com/italia/pa-website-validator/commit/c0ce054871eec4b907ce25d8cb3d7bbbeb1f5b30))
+* check full CSS comment header in CMS theme version audit ([34e4822](https://github.com/italia/pa-website-validator/commit/34e482228bc33bf88fa652613d41a0b3e8926c40))
+* don’t count header in C.SC.1.5 ([a45f981](https://github.com/italia/pa-website-validator/commit/a45f9810ad10ab6e6cd5f740f062b958f309fb79))
+* remove C.SE.5.1 and C.SE.5.2 ([c0ce054](https://github.com/italia/pa-website-validator/commit/c0ce054871eec4b907ce25d8cb3d7bbbeb1f5b30))
+* remove item position check in C.SC.1.5 ([c0ce054](https://github.com/italia/pa-website-validator/commit/c0ce054871eec4b907ce25d8cb3d7bbbeb1f5b30))
+* typos in domain list ([188843c](https://github.com/italia/pa-website-validator/commit/188843c7e75740dad985769be4b6d56619816019))
+* update audit messages ([d00a07a](https://github.com/italia/pa-website-validator/commit/d00a07a4343749faac9e253ff72c500fa9edab79))
+* wait until page is completely loaded ([6756449](https://github.com/italia/pa-website-validator/commit/6756449240c89a4976bfd8dcf7e2f61f9b322788))
+
 ## [1.0.13](https://github.com/italia/pa-website-validator/compare/v1.0.12...v1.0.13) (2022-11-11)
 
 
