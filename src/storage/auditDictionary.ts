@@ -150,7 +150,7 @@ export const auditDictionary = {
   "municipality-ux-ui-consistency-fonts-check": {
     greenResult: "La pagina [url] utilizza i font come richiesto.",
     yellowResult:
-      "Nella pagina [url] sono presenti <h> o <p> che utilizzano altri font oltre a quelli richiesti.",
+      "Nella pagina [url] sono presenti <h> o <p> che utilizzano altri font oltre a quelli richiesti:",
     redResult:
       "Nella pagina [url] sono presenti <h> o <p> che non utilizzano i font come richiesto:",
     nonExecuted:
@@ -372,7 +372,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SC.2.2 - DICHIARAZIONE DI ACCESSIBILITÀ - Il sito della scuola deve esporre la dichiarazione di accessibilità.",
     description:
-      'CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta alla dichiarazione di accessibilità di AgID valida; MODALITÀ DI VERIFICA: viene verificata la presenza del link nel footer, che riporti a una pagina esistente e che sia quella contenente la dichiarazione di accessibilità (il link deve iniziare con "https://form.agid.gov.it/view/"), ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [AgID Linee guida sull’accessibilità degli strumenti informatici](https://docs.italia.it/AgID/documenti-in-consultazione/lg-accessibilita-docs/it/), [Direttiva UE n. 2102/2016](https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX%3A32016L2102), [Legge 9 gennaio 2004 n. 4](https://www.normattiva.it/atto/caricaDettaglioAtto?atto.dataPubblicazioneGazzetta=2004-01-17&atto.codiceRedazionale=004G0015&atto.articolo.numero=0&atto.articolo.sottoArticolo=1&atto.articolo.sottoArticolo1=10&qId=cb6b9a05-f5c3-40ac-81b8-f89e73e5b4c7&tabID=0.029511124589268523&title=lbl.dettaglioAtto), [Web Content Accessibility Guidelines WCAG 2.1](https://www.w3.org/Translations/WCAG21-it/#background-on-wcag-2), [AgID dichiarazione di accessibilità](https://www.agid.gov.it/it/design-servizi/accessibilita/dichiarazione-accessibilita), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+      "CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta alla dichiarazione di accessibilità; MODALITÀ DI VERIFICA: viene verificata la presenza del link nel footer, che riporti a una pagina esistente e che sia quella contenente la dichiarazione di accessibilità (il link deve iniziare con “https://form.agid.gov.it/view/”), ricercando uno specifico attributo “data-element” come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [AgID Linee guida sull’accessibilità degli strumenti informatici](https://docs.italia.it/AgID/documenti-in-consultazione/lg-accessibilita-docs/it/), [Direttiva UE n. 2102/2016](https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX%3A32016L2102), [Legge 9 gennaio 2004 n. 4](https://www.normattiva.it/atto/caricaDettaglioAtto?atto.dataPubblicazioneGazzetta=2004-01-17&atto.codiceRedazionale=004G0015&atto.articolo.numero=0&atto.articolo.sottoArticolo=1&atto.articolo.sottoArticolo1=10&qId=cb6b9a05-f5c3-40ac-81b8-f89e73e5b4c7&tabID=0.029511124589268523&title=lbl.dettaglioAtto), [Web Content Accessibility Guidelines WCAG 2.1](https://www.w3.org/Translations/WCAG21-it/#background-on-wcag-2), [AgID dichiarazione di accessibilità](https://www.agid.gov.it/it/design-servizi/accessibilita/dichiarazione-accessibilita), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
   },
   "school-ux-ui-consistency-bootstrap-italia-double-check": {
     greenResult:
@@ -382,9 +382,9 @@ export const auditDictionary = {
       "Il sito non utilizza la libreria Bootstrap Italia o ne utilizza una versione datata.",
     nonExecuted: "",
     title:
-      "C.SC.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito della scuola deve utilizzare la libreria Bootstrap Italia.",
+      "C.SC.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito della scuola deve utilizzare la libreria Bootstrap Italia in una versione più recente di 1.6.",
     failureTitle:
-      "C.SC.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito della scuola deve utilizzare la libreria Bootstrap Italia.",
+      "C.SC.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito della scuola deve utilizzare la libreria Bootstrap Italia in una versione più recente di 1.6.",
     description:
       "CONDIZIONI DI SUCCESSO: il sito usa la libreria Bootstrap Italia in una versione uguale o superiore alla 1.6; MODALITÀ DI VERIFICA: viene verificata la presenza della libreria Bootstrap Italia e la versione in uso individuando la proprietà CSS --bootstrap-italia-version all’interno del selettore :root o la variabile globale window.BOOTSTRAP_ITALIA_VERSION; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs).",
   },
@@ -419,7 +419,7 @@ export const auditDictionary = {
   "school-ux-ui-consistency-fonts-check": {
     greenResult: "La pagina [url] utilizza i font come richiesto.",
     yellowResult:
-      "Nella pagina [url] sono presenti <h> o <p> che utilizzano altri font oltre a quelli richiesti.",
+      "Nella pagina [url] sono presenti <h> o <p> che utilizzano altri font oltre a quelli richiesti:",
     redResult:
       "Nella pagina [url] sono presenti <h> o <p> che non utilizzano i font come richiesto:",
     nonExecuted:
@@ -451,11 +451,11 @@ export const auditDictionary = {
     redResult: "Meno del 30% delle voci sono corrette.",
     nonExecuted: "",
     title:
-      "C.SC.1.5 - VOCI DI MENÙ DI SECONDO LIVELLO - Il sito presenta le voci di menù di secondo livello come descritto nella documentazione del modello di sito scolastico.",
+      "C.SC.1.5 - VOCI DI MENÙ DI SECONDO LIVELLO - Il sito presenta le voci di menù di secondo livello come descritto nella documentazione del modello di sito della scuola.",
     failureTitle:
-      "C.SC.1.5 - VOCI DI MENÙ DI SECONDO LIVELLO - Il sito presenta le voci di menù di secondo livello come descritto nella documentazione del modello di sito scolastico.",
+      "C.SC.1.5 - VOCI DI MENÙ DI SECONDO LIVELLO - Il sito presenta le voci di menù di secondo livello come descritto nella documentazione del modello di sito della scuola.",
     description:
-      'CONDIZIONI DI SUCCESSO: le voci del menù di secondo livello corrispondono a quelle indicate nel documento di architettura dell\'informazione del modello scuole; MODALITÀ DI VERIFICA: ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione, viene verificata la correttezza delle voci del menù di secondo livello riferite alla voce di primo livello "Scuola"; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+      "CONDIZIONI DI SUCCESSO: le voci del menù di secondo livello corrispondono a quelle indicate nel documento di architettura dell’informazione del modello scuole; MODALITÀ DI VERIFICA: ricercando uno specifico attributo “data-element” come spiegato nella Documentazione delle App di valutazione, viene verificata la correttezza delle voci del menù di secondo livello riferite alla voce di primo livello “Scuola”; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
   },
   "school-legislation-privacy-is-present": {
     greenResult:
@@ -507,11 +507,11 @@ export const auditDictionary = {
     nonExecuted:
       'Non è stato possibile condurre il test. Controlla le "Modalità di verifica" per scoprire di più.',
     title:
-      "C.SC.1.3 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito della scuola, deve utilizzarne la versione più recente disponibile alla data di inizio lavori.",
+      "C.SC.1.3 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito della scuola, lo utilizza nella versione 2.0 o successive.",
     failureTitle:
-      "C.SC.1.3 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito della scuola, deve utilizzarne la versione più recente disponibile alla data di inizio lavori.",
+      "C.SC.1.3 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito della scuola, lo utilizza nella versione 2.0 o successive.",
     description:
-      'CONDIZIONI DI SUCCESSO: se è in uso il tema CMS del modello scuole, la versione utilizzata è uguale o superiore alla 2.0; MODALITÀ DI VERIFICA: viene verificata la versione indicata nel file style.css, nel caso sia presente la chiave "Text Domain: design_scuole_italia"; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs).',
+      "CONDIZIONI DI SUCCESSO: se è in uso il tema CMS del modello scuole, la versione utilizzata è uguale o superiore alla 2.0; MODALITÀ DI VERIFICA: viene verificato l’uso del tema CMS del modello e la versione in uso ricercando il testo commentato presente [nel file style.css del tema Wordpress](https://github.com/italia/design-scuole-wordpress-theme/blob/main/style.css), se presente; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs).",
   },
 
   "school-informative-cloud-infrastructure": {
