@@ -69,6 +69,10 @@
     "extensionsToTreatAsEsm": [
       ".ts"
     ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/tests/municipalities",
+      "<rootDir>/tests/schools"
+    ],
     "testPathIgnorePatterns": [
       "/node_modules",
       "/tests/municipalities",
