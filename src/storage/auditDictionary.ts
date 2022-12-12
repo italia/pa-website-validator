@@ -273,7 +273,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.1.4 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito comunale, deve utilizzarne la versione più recente disponibile alla data di inizio lavori.",
     description:
-      'CONDIZIONI DI SUCCESSO: se è in uso il tema CMS del modello per i Comuni, la versione utilizzata è uguale o superiore alla 1.0; MODALITÀ DI VERIFICA: viene verificata la versione indicata nel file style.css ricercando la chiave "Text Domain: design_comuni_italia"; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/).',
+      "CONDIZIONI DI SUCCESSO: se è in uso il tema CMS del modello per i Comuni, la versione utilizzata è uguale o superiore alla 1.0; MODALITÀ DI VERIFICA: viene verificato l'uso del tema CMS del modello e la versione in uso ricercando il testo introduttivo commentato presente [nel file style.css del tema Wordpress](https://github.com/italia/design-comuni-wordpress-theme/blob/main/style.css) e [nel file style.css del tema Drupal](https://github.com/italia/design-comuni-drupal-theme/blob/main/comuni_theme/css/style.css), se presenti; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/).",
   },
 
   "municipality-informative-cloud-infrastructure": {
