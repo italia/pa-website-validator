@@ -76,7 +76,7 @@ class LoadAudit extends Audit {
     const headerUlTest = await getPageElementDataAttribute(
       $,
       '[data-element="school-submenu"]',
-      "li"
+      "a"
     );
 
     if (headerUlTest[0] === "Panoramica") headerUlTest.shift();
