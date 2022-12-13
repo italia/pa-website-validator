@@ -14,7 +14,7 @@ const auditId = "municipality-booking-appointment-check";
 const auditData = auditDictionary[auditId];
 
 const greenResult = auditData.greenResult;
-const yellowResult = auditData.yellowResult;
+const redResult = auditData.redResult;
 const notExecuted = auditData.nonExecuted;
 
 class LoadAudit extends Audit {
@@ -42,7 +42,7 @@ class LoadAudit extends Audit {
 
     const item = [
       {
-        result: yellowResult,
+        result: redResult,
         inspected_page: "",
       },
     ];
