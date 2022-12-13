@@ -49,7 +49,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.2.1 - PRENOTAZIONE APPUNTAMENTI - Il sito comunale deve consentire di prenotare un appuntamento presso lo sportello di competenza.",
     description:
-      'CONDIZIONI DI SUCCESSO: la funzionalità di prenotazione di un appuntamento presso lo sportello è presente in tutte le schede servizio che lo richiedono; MODALITÀ DI VERIFICA: viene verificata la presenza del componente "Prenota appuntamento" all\'interno di una scheda servizio selezionata casualmente, ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione. Questo test non ha una condizione di fallimento in quanto dipende dal servizio specifico analizzato; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+      'CONDIZIONI DI SUCCESSO: la funzionalità di prenotazione di un appuntamento presso lo sportello è presente in tutte le schede servizio; MODALITÀ DI VERIFICA: viene verificata la presenza del componente "Prenota appuntamento" all\'interno di una scheda servizio selezionata casualmente, ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "municipality-ux-ui-consistency-bootstrap-italia-double-check": {
     greenResult:
