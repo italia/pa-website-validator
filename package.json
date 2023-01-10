@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "author": "Presidenza del Consiglio dei Ministri",
   "license": "BSD-3-Clause",
-  "description": "Tool di validazione per i siti di comuni e scuole",
+  "description": "Applicativo desktop a supporto degli sviluppatori che aiuta a valutare la qualità dei siti istituzionali di Comuni e scuole.",
   "type": "module",
   "engines": {
     "node": ">=16.0.0"
