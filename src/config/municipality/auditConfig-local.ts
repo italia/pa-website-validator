@@ -136,15 +136,12 @@ const additionalTestsAudit = [
 export default {
   extends: "lighthouse:default",
   settings: {
-    onlyAudits: ["municipality-servizi-structure-match-model"],
-    /*
     onlyCategories: [
       "performance",
       "modelComplianceInformation",
       "reccomandationsAndAdditionalTests",
       "additionalTests",
     ],
-    */
   },
 
   passes: [
