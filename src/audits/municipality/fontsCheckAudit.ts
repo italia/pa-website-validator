@@ -3,7 +3,7 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { allowedFonts } from "../../storage/municipality/allowedFonts";
-import { getRandomMunicipalityServiceUrl } from "../../utils/utils";
+import { getRandomMunicipalityServicesUrl } from "../../utils/utils";
 import puppeteer from "puppeteer";
 import { auditDictionary } from "../../storage/auditDictionary";
 
@@ -49,10 +49,11 @@ class LoadAudit extends Audit {
   ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
 
-    const randomServiceToBeScanned: string =
-      await getRandomMunicipalityServiceUrl(url);
+    const randomServices: string[] = await getRandomMunicipalityServicesUrl(
+      url
+    );
 
-    if (!randomServiceToBeScanned) {
+    if (randomServices.length === 0) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
@@ -65,6 +66,8 @@ class LoadAudit extends Audit {
         ),
       };
     }
+
+    const randomServiceToBeScanned: string = randomServices[0];
 
     const browser = await puppeteer.launch({
       args: ["--no-sandbox"],

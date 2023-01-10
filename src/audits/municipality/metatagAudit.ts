@@ -3,7 +3,7 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import {
-  getRandomMunicipalityServiceUrl,
+  getRandomMunicipalityServicesUrl,
   loadPageData,
 } from "../../utils/utils";
 import { CheerioAPI } from "cheerio";
@@ -63,10 +63,11 @@ class LoadAudit extends Audit {
       },
     ];
 
-    const randomServiceToBeScanned: string =
-      await getRandomMunicipalityServiceUrl(url);
+    const randomServices: string[] = await getRandomMunicipalityServicesUrl(
+      url
+    );
 
-    if (!randomServiceToBeScanned) {
+    if (randomServices.length === 0) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
@@ -79,6 +80,8 @@ class LoadAudit extends Audit {
         ),
       };
     }
+
+    const randomServiceToBeScanned: string = randomServices[0];
 
     item[0].inspected_page = randomServiceToBeScanned;
     const $: CheerioAPI = await loadPageData(randomServiceToBeScanned);

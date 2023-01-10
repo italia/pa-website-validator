@@ -296,7 +296,10 @@ const urlExists = async (
   }
 };
 
-const getRandomMunicipalityServiceUrl = async (url: string) => {
+const getRandomMunicipalityServicesUrl = async (
+  url: string,
+  numberOfServices = -1
+) => {
   let $ = await loadPageData(url);
 
   const servicesPageHref = await getHREFValuesDataAttribute(
@@ -304,7 +307,7 @@ const getRandomMunicipalityServiceUrl = async (url: string) => {
     '[data-element="all-services"]'
   );
   if (servicesPageHref.length <= 0) {
-    return "";
+    return [];
   }
 
   let allServicesUrl = servicesPageHref[0];
@@ -314,20 +317,31 @@ const getRandomMunicipalityServiceUrl = async (url: string) => {
 
   $ = await loadPageData(allServicesUrl);
 
-  const serviceUrls = await getHREFValuesDataAttribute(
+  let serviceUrls = await getHREFValuesDataAttribute(
     $,
     '[data-element="service-link"]'
   );
   if (serviceUrls.length <= 0) {
-    return "";
+    return [];
   }
 
-  let randomUrl = serviceUrls[Math.floor(Math.random() * serviceUrls.length)];
-  if (!randomUrl.includes(url)) {
-    randomUrl = await buildUrl(url, randomUrl);
+  if (numberOfServices < 0) {
+    let randomUrl = serviceUrls[Math.floor(Math.random() * serviceUrls.length)];
+    if (!randomUrl.includes(url)) {
+      randomUrl = await buildUrl(url, randomUrl);
+    }
+
+    return [randomUrl];
   }
 
-  return randomUrl;
+  if (numberOfServices > serviceUrls.length) {
+    numberOfServices = serviceUrls.length;
+  }
+
+  serviceUrls = serviceUrls.sort(() => Math.random() - 0.5);
+  serviceUrls = serviceUrls.slice(0, numberOfServices);
+
+  return serviceUrls;
 };
 
 const areAllElementsInVocabulary = async (
@@ -371,7 +385,7 @@ export {
   missingMenuItems,
   loadPageData,
   getRandomSchoolServiceUrl,
-  getRandomMunicipalityServiceUrl,
+  getRandomMunicipalityServicesUrl,
   getPageElementDataAttribute,
   getHREFValuesDataAttribute,
   getElementHrefValuesDataAttribute,

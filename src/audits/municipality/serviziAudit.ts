@@ -7,7 +7,7 @@ import { CheerioAPI } from "cheerio";
 import {
   checkOrder,
   getPageElementDataAttribute,
-  getRandomMunicipalityServiceUrl,
+  getRandomMunicipalityServicesUrl,
   loadPageData,
   missingMenuItems,
   toMenuItem,
@@ -15,11 +15,14 @@ import {
 import { contentTypeItems } from "../../storage/municipality/contentTypeItems";
 import { secondLevelPageNames } from "../../storage/municipality/controlledVocabulary";
 import { auditDictionary } from "../../storage/auditDictionary";
+import { auditScanVariables } from "../../storage/auditScanVariables";
 
 const Audit = lighthouse.Audit;
 
 const auditId = "municipality-servizi-structure-match-model";
 const auditData = auditDictionary[auditId];
+
+const auditVariables = auditScanVariables[auditId];
 
 const greenResult = auditData.greenResult;
 const yellowResult = auditData.yellowResult;
@@ -62,25 +65,18 @@ class LoadAudit extends Audit {
       },
     ];
 
-    const item = [
-      {
-        result: greenResult,
-        missing_mandatory_elements_found: "",
-        mandatory_elements_not_right_order: "",
-        inspected_page: "",
-      },
-    ];
-
-    let score = 1;
-
     const mandatoryIndexVoices = contentTypeItems.Indice;
     const mandatoryHeaderVoices = contentTypeItems.Header;
     const mandatoryBodyVoices = contentTypeItems.Body;
 
-    const randomServiceToBeScanned: string =
-      await getRandomMunicipalityServiceUrl(url);
+    const numberOfServices = auditVariables.numberOfServicesToBeScanned;
 
-    if (!randomServiceToBeScanned) {
+    const randomServices: string[] = await getRandomMunicipalityServicesUrl(
+      url,
+      numberOfServices
+    );
+
+    if (!randomServices) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
@@ -94,92 +90,114 @@ class LoadAudit extends Audit {
       };
     }
 
-    item[0].inspected_page = randomServiceToBeScanned;
+    const items = [];
+    let score = 1;
 
-    const $: CheerioAPI = await loadPageData(randomServiceToBeScanned);
+    for (let i = 0; i < randomServices.length; i++) {
+      const randomServiceToBeScanned: string = randomServices[i];
 
-    const indexElements = await getServicesFromIndex($, mandatoryIndexVoices);
-    const mandatoryMenuItems = mandatoryIndexVoices.map(toMenuItem);
-    const orderResult = checkOrder(mandatoryMenuItems, indexElements);
-    const missingMandatoryItems = missingMenuItems(
-      indexElements,
-      mandatoryMenuItems
-    );
+      const item = {
+        result: greenResult,
+        missing_mandatory_elements_found: "",
+        mandatory_elements_not_right_order: "",
+        inspected_page: "",
+      };
 
-    const title = $('[data-element="service-title"]').text().trim() ?? "";
-    if (!title) {
-      missingMandatoryItems.push(mandatoryHeaderVoices[0]);
-    }
+      item.inspected_page = randomServiceToBeScanned;
 
-    const description =
-      $('[data-element="service-description"]').text().trim() ?? "";
-    if (!description) {
-      missingMandatoryItems.push(mandatoryHeaderVoices[1]);
-    }
+      const $: CheerioAPI = await loadPageData(randomServiceToBeScanned);
 
-    const status =
-      $('[data-element="service-status"]').text().trim().toLowerCase() ?? "";
-    if (!status || !status.includes("attivo")) {
-      missingMandatoryItems.push(mandatoryHeaderVoices[2]);
-    }
+      const indexElements = await getServicesFromIndex($, mandatoryIndexVoices);
+      const mandatoryMenuItems = mandatoryIndexVoices.map(toMenuItem);
+      const orderResult = checkOrder(mandatoryMenuItems, indexElements);
+      const missingMandatoryItems = missingMenuItems(
+        indexElements,
+        mandatoryMenuItems
+      );
 
-    const argumentsTag = await getPageElementDataAttribute(
-      $,
-      '[data-element="service-topic"]'
-    );
-    if (argumentsTag.length <= 0) {
-      missingMandatoryItems.push(mandatoryHeaderVoices[3]);
-    }
-
-    const breadcrumbElements = await getPageElementDataAttribute(
-      $,
-      '[data-element="breadcrumb"]',
-      "li"
-    );
-
-    let breadcrumbArgumentInVocabulary = false;
-    for (const breadcrumbElement of breadcrumbElements) {
-      if (
-        secondLevelPageNames.includes(
-          breadcrumbElement.trim().toLowerCase().replaceAll("/", "")
-        )
-      ) {
-        breadcrumbArgumentInVocabulary = true;
-        break;
+      const title = $('[data-element="service-title"]').text().trim() ?? "";
+      if (!title) {
+        missingMandatoryItems.push(mandatoryHeaderVoices[0]);
       }
+
+      const description =
+        $('[data-element="service-description"]').text().trim() ?? "";
+      if (!description) {
+        missingMandatoryItems.push(mandatoryHeaderVoices[1]);
+      }
+
+      const status =
+        $('[data-element="service-status"]').text().trim().toLowerCase() ?? "";
+      if (!status || !status.includes("attivo")) {
+        missingMandatoryItems.push(mandatoryHeaderVoices[2]);
+      }
+
+      const argumentsTag = await getPageElementDataAttribute(
+        $,
+        '[data-element="service-topic"]'
+      );
+      if (argumentsTag.length <= 0) {
+        missingMandatoryItems.push(mandatoryHeaderVoices[3]);
+      }
+
+      const breadcrumbElements = await getPageElementDataAttribute(
+        $,
+        '[data-element="breadcrumb"]',
+        "li"
+      );
+
+      let breadcrumbArgumentInVocabulary = false;
+      for (const breadcrumbElement of breadcrumbElements) {
+        if (
+          secondLevelPageNames.includes(
+            breadcrumbElement.trim().toLowerCase().replaceAll("/", "")
+          )
+        ) {
+          breadcrumbArgumentInVocabulary = true;
+          break;
+        }
+      }
+
+      if (!breadcrumbArgumentInVocabulary) {
+        missingMandatoryItems.push(mandatoryHeaderVoices[4]);
+      }
+
+      const area = $('[data-element="service-area"]').text().trim() ?? "";
+      if (!area) {
+        missingMandatoryItems.push(mandatoryBodyVoices[0]);
+      }
+
+      const missingVoicesAmount = missingMandatoryItems.length;
+      const voicesNotInCorrectOrderAmount =
+        orderResult.numberOfElementsNotInSequence;
+
+      if (missingVoicesAmount > 2 || voicesNotInCorrectOrderAmount > 1) {
+        if (score > 0) {
+          score = 0;
+        }
+
+        item.result = redResult;
+      } else if (
+        (missingVoicesAmount > 0 && missingVoicesAmount <= 2) ||
+        voicesNotInCorrectOrderAmount === 1
+      ) {
+        if (score > 0.5) {
+          score = 0.5;
+        }
+
+        item.result = yellowResult;
+      }
+
+      item.missing_mandatory_elements_found = missingMandatoryItems.join(", ");
+      item.mandatory_elements_not_right_order =
+        orderResult.elementsNotInSequence.join(", ");
+
+      items.push(item);
     }
-
-    if (!breadcrumbArgumentInVocabulary) {
-      missingMandatoryItems.push(mandatoryHeaderVoices[4]);
-    }
-
-    const area = $('[data-element="service-area"]').text().trim() ?? "";
-    if (!area) {
-      missingMandatoryItems.push(mandatoryBodyVoices[0]);
-    }
-
-    const missingVoicesAmount = missingMandatoryItems.length;
-    const voicesNotInCorrectOrderAmount =
-      orderResult.numberOfElementsNotInSequence;
-
-    if (missingVoicesAmount > 2 || voicesNotInCorrectOrderAmount > 1) {
-      score = 0;
-      item[0].result = redResult;
-    } else if (
-      (missingVoicesAmount > 0 && missingVoicesAmount <= 2) ||
-      voicesNotInCorrectOrderAmount === 1
-    ) {
-      score = 0.5;
-      item[0].result = yellowResult;
-    }
-
-    item[0].missing_mandatory_elements_found = missingMandatoryItems.join(", ");
-    item[0].mandatory_elements_not_right_order =
-      orderResult.elementsNotInSequence.join(", ");
 
     return {
       score: score,
-      details: Audit.makeTableDetails(headings, item),
+      details: Audit.makeTableDetails(headings, items),
     };
   }
 }
