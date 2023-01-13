@@ -42,6 +42,13 @@ const parser = yargs(hideBin(process.argv))
     describe: "View report after scan",
     type: "string",
     demandOption: false,
+  })
+  .option("accuracy", {
+    describe: "Indicates the precision with which scanning is done: the greater the precision the greater the number of pages scanned",
+    type: "string",
+    demandOption: true,
+    default: "suggested",
+    choices: ["min", "suggested", "max"],
   });
 
 try {
@@ -52,6 +59,8 @@ try {
     await mkdir(args.destination, { recursive: true });
     console.log("[INFO] Directory created at: " + args.destination);
   }
+
+  process.env['accuracy'] = args.accuracy;
 
   const result = await run(
     args.website,

@@ -5,11 +5,23 @@
 import lighthouse from "lighthouse";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { run as cookieAudit } from "../../utils/cookieAuditLogic";
+import {
+  getRandomSchoolFirstLevelPagesUrl,
+  getRandomSchoolLocationsUrl,
+  getRandomSchoolSecondLevelPagesUrl,
+  getRandomSchoolServicesUrl
+} from "../../utils/utils";
+import {auditScanVariables} from "../../storage/school/auditScanVariables";
 
 const Audit = lighthouse.Audit;
 
 const auditId = "school-legislation-cookie-domain-check";
 const auditData = auditDictionary[auditId];
+
+const accuracy = process.env['accuracy'] ?? 'suggested';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const auditVariables = auditScanVariables[accuracy][auditId];
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -30,6 +42,13 @@ class LoadAudit extends Audit {
     artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
+
+    const pageUrlToBeScanned = [
+      ...await getRandomSchoolFirstLevelPagesUrl(url, auditVariables.numberOfFirstLevelPageToBeScanned),
+      ...await getRandomSchoolSecondLevelPagesUrl(url, auditVariables.numberOfSecondLevelPageToBeScanned),
+      ...await getRandomSchoolServicesUrl(url, auditVariables.numberOfServicesToBeScanned),
+      ...await getRandomSchoolLocationsUrl(url, auditVariables.numberOfLocationsToBeScanned)
+    ];
 
     return await cookieAudit(url, auditData);
   }

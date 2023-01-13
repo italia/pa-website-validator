@@ -91,12 +91,16 @@ const customAdditionalAudits = [
 export default {
   extends: "lighthouse:default",
   settings: {
+    onlyAudits: [
+      "school-legislation-cookie-domain-check"
+    ],
+    /*
     onlyCategories: [
       "modelCompliance",
       "recommendations",
       "additionalTests",
       "performance",
-    ],
+    ],*/
   },
 
   passes: [
