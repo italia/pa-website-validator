@@ -8,6 +8,10 @@ import axios from "axios";
 import vocabularyResult = crawlerTypes.vocabularyResult;
 import NodeCache from "node-cache";
 import { MenuItem } from "../types/menuItem";
+import {
+  menuItems
+} from "../storage/school/menuItems";
+import {data} from "cheerio/lib/api/attributes";
 
 const loadPageCache = new NodeCache();
 
@@ -39,7 +43,7 @@ const getPageElementDataAttribute = async (
   $: CheerioAPI,
   elementDataAttribute: string,
   tag = ""
-): Promise<string[]> => {
+): Promise<string[]> =>  {
   const returnValues: string[] = [];
 
   let elements = $(elementDataAttribute);
@@ -124,41 +128,130 @@ const getHREFValuesDataAttribute = async (
   return serviceUrls;
 };
 
-const getRandomSchoolServiceUrl = async (url: string): Promise<string> => {
+const getRandomSchoolServicesUrl = async (url: string, numberOfServices = 1): Promise<string[]> => {
+  if (numberOfServices <= 1) {
+    numberOfServices = 1;
+  }
+
   let $ = await loadPageData(url);
 
-  const serviceUrls = await getHREFValuesDataAttribute(
+  const serviceTypeUrls = await getHREFValuesDataAttribute(
     $,
     '[data-element="service-type"]'
   );
-  if (serviceUrls.length <= 0) {
-    return "";
+  if (serviceTypeUrls.length <= 0) {
+    return [];
   }
 
-  let serviceUrl = serviceUrls[Math.floor(Math.random() * serviceUrls.length)];
-  if (!serviceUrl.includes(url)) {
-    serviceUrl = await buildUrl(url, serviceUrl);
+  let serviceTypeUrl = serviceTypeUrls[Math.floor(Math.random() * serviceTypeUrls.length)];
+  if (!serviceTypeUrl.includes(url)) {
+    serviceTypeUrl = await buildUrl(url, serviceTypeUrl);
   }
 
-  $ = await loadPageData(serviceUrl);
-  const cardUrls = await getHREFValuesDataAttribute(
+  $ = await loadPageData(serviceTypeUrl);
+  const servicesUrls = await getHREFValuesDataAttribute(
     $,
     '[data-element="service-link"]'
   );
-  if (cardUrls.length <= 0) {
-    return "";
-  }
-
-  let serviceToInspect = cardUrls[Math.floor(Math.random() * cardUrls.length)];
-  if (!serviceToInspect.includes(url)) {
-    serviceToInspect = await buildUrl(url, serviceToInspect);
-  }
-
-  return serviceToInspect;
+  return getRandomNString(servicesUrls, numberOfServices);
 };
 
-const buildUrl = async (url: string, service: string): Promise<string> => {
-  return new URL(service, url).href;
+const getRandomSchoolFirstLevelPagesUrl = async (
+  url: string,
+  numberOfPages = 1
+): Promise<string[]> => {
+  if (numberOfPages <= 1) {
+    numberOfPages = 1;
+  }
+
+  const $ = await loadPageData(url);
+
+  const pagesUrls = await getHREFValuesDataAttribute(
+    $,
+    '[data-element="overview"]'
+  );
+  return getRandomNString(pagesUrls, numberOfPages);
+};
+
+const getRandomSchoolSecondLevelPagesUrl = async (
+  url: string,
+  numberOfPages = 1
+): Promise<string[]> => {
+  if (numberOfPages <= 1) {
+    numberOfPages = 1;
+  }
+
+  const pagesUrls = [];
+  const $ = await loadPageData(url);
+
+  for (const [, value] of Object.entries(menuItems)) {
+    const dataElement = `[data-element="${value.data_element}"]`;
+
+    let elements = $(dataElement);
+
+    if (Object.keys(elements).length !== 0) {
+      elements = elements.find("li > a");
+      for (const element of elements) {
+        let secondLevelPageUrl = $(element).attr()?.href;
+        if (
+          secondLevelPageUrl &&
+          secondLevelPageUrl !== "#" &&
+          secondLevelPageUrl !== ""
+        ) {
+          if (!secondLevelPageUrl.includes(url)) {
+            secondLevelPageUrl = await buildUrl(url, secondLevelPageUrl);
+          }
+          pagesUrls.push(secondLevelPageUrl);
+        }
+      }
+    }
+  }
+  return getRandomNString(pagesUrls, numberOfPages);
+};
+
+const getRandomSchoolLocationsUrl = async (
+    url: string,
+    numberOfPages = 1
+): Promise<string[]> => {
+  if (numberOfPages <= 1) {
+    numberOfPages = 1;
+  }
+
+  let $ = await loadPageData(url);
+
+  const dataElement = '[data-element="school-locations"]';
+
+  let locationsElementsUrls = await getHREFValuesDataAttribute($, dataElement);
+  locationsElementsUrls = [... new Set(locationsElementsUrls)];
+  if(locationsElementsUrls.length > 1){
+    return [];
+  }
+
+  let locationUrl = locationsElementsUrls[0];
+
+  if (!locationUrl.includes(url)) {
+    locationUrl = await buildUrl(url, locationUrl);
+  }
+
+  $ = await loadPageData(locationUrl);
+
+  const pagesUrls = await getHREFValuesDataAttribute(
+      $,
+      '[data-element="location-link"]'
+  );
+
+  for (let i = 0; i < pagesUrls.length; i++){
+    const pageUrl = pagesUrls[i];
+    if(!pageUrl.includes(url)){
+      pagesUrls[i] = await buildUrl(url, pageUrl)
+    }
+  }
+
+  return getRandomNString(pagesUrls, numberOfPages);
+};
+
+const buildUrl = async (url: string, path: string): Promise<string> => {
+  return new URL(path, url).href;
 };
 
 const isInternalUrl = async (url: string) => {
@@ -298,8 +391,12 @@ const urlExists = async (
 
 const getRandomMunicipalityServicesUrl = async (
   url: string,
-  numberOfServices = -1
+  numberOfServices = 1
 ) => {
+  if (numberOfServices <= 1) {
+    numberOfServices = 1;
+  }
+
   let $ = await loadPageData(url);
 
   const servicesPageHref = await getHREFValuesDataAttribute(
@@ -317,31 +414,12 @@ const getRandomMunicipalityServicesUrl = async (
 
   $ = await loadPageData(allServicesUrl);
 
-  let serviceUrls = await getHREFValuesDataAttribute(
+  const servicesUrls = await getHREFValuesDataAttribute(
     $,
     '[data-element="service-link"]'
   );
-  if (serviceUrls.length <= 0) {
-    return [];
-  }
 
-  if (numberOfServices < 0) {
-    let randomUrl = serviceUrls[Math.floor(Math.random() * serviceUrls.length)];
-    if (!randomUrl.includes(url)) {
-      randomUrl = await buildUrl(url, randomUrl);
-    }
-
-    return [randomUrl];
-  }
-
-  if (numberOfServices > serviceUrls.length) {
-    numberOfServices = serviceUrls.length;
-  }
-
-  serviceUrls = serviceUrls.sort(() => Math.random() - 0.5);
-  serviceUrls = serviceUrls.slice(0, numberOfServices);
-
-  return serviceUrls;
+  return getRandomNString(servicesUrls, numberOfServices);
 };
 
 const areAllElementsInVocabulary = async (
@@ -376,6 +454,26 @@ const areAllElementsInVocabulary = async (
   };
 };
 
+const getRandomNString = async (
+    array: string[],
+    numberOfElements: number
+) => {
+  if (array.length <= 0) {
+    return [];
+  }
+
+  array = [... new Set(array)];
+
+  if (numberOfElements > array.length) {
+    return array;
+  }
+
+  array = array.sort(() => Math.random() - 0.5);
+  array = array.slice(0, numberOfElements);
+
+  return array;
+};
+
 const cmsThemeRx =
   /\/\*!\s*Theme Name:.*\s+Author:.*\s+Description:\s+Design (Comuni|Scuole) Italia .*(?<name>WordPress|Drupal).*\s+Version:\s+(?<version>.*)\s+License:.*\s+Text Domain: design_(comuni|scuole)_italia\s*\*\//;
 
@@ -384,7 +482,10 @@ export {
   checkOrder,
   missingMenuItems,
   loadPageData,
-  getRandomSchoolServiceUrl,
+  getRandomSchoolServicesUrl,
+  getRandomSchoolFirstLevelPagesUrl,
+  getRandomSchoolSecondLevelPagesUrl,
+  getRandomSchoolLocationsUrl,
   getRandomMunicipalityServicesUrl,
   getPageElementDataAttribute,
   getHREFValuesDataAttribute,

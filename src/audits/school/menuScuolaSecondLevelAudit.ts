@@ -4,7 +4,10 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { getPageElementDataAttribute, loadPageData } from "../../utils/utils";
-import { secondaryMenuItems } from "../../storage/school/menuItems";
+import {
+  menuItems,
+  customPrimaryMenuItemsDataElement,
+} from "../../storage/school/menuItems";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
 
@@ -53,6 +56,11 @@ class LoadAudit extends Audit {
         itemType: "text",
         text: "Voci di menù obbligatorie mancanti",
       },
+      {
+        key: "error_voices",
+        itemType: "text",
+        text: "Voci aggiuntive errate trovate",
+      },
     ];
 
     const items = [
@@ -62,39 +70,89 @@ class LoadAudit extends Audit {
         correct_voices: "",
         wrong_voices_order: "",
         missing_voices: "",
+        error_voices: "",
       },
     ];
 
-    let score = 0;
+    let elementsFound: string[] = [];
+    let correctElementsFound: string[] = [];
+    let missingElements: string[] = [];
+    for (const [, value] of Object.entries(menuItems)) {
+      const secondaryMenuItem = value;
 
-    const secondaryMenuScuolaItems: string[] = [];
-    for (const element of secondaryMenuItems.Scuola) {
-      secondaryMenuScuolaItems.push(element.toLowerCase());
-    }
+      const singleElementElementsFound: string[] = [];
+      const singleElementCorrectElementsFound: string[] = [];
 
-    const $: CheerioAPI = await loadPageData(url);
-    const headerUlTest = await getPageElementDataAttribute(
-      $,
-      '[data-element="school-submenu"]',
-      "a"
-    );
-
-    if (headerUlTest[0] === "Panoramica") headerUlTest.shift();
-
-    const elementsFound: string[] = [];
-    const correctElementsFound: string[] = [];
-    for (const element of headerUlTest) {
-      if (secondaryMenuScuolaItems.includes(element.toLowerCase())) {
-        correctElementsFound.push(element.toLowerCase());
+      const secondaryMenuItems: string[] = [];
+      for (const element of secondaryMenuItem.dictionary) {
+        secondaryMenuItems.push(element.toLowerCase());
       }
 
-      elementsFound.push(element.toLowerCase());
+      const $: CheerioAPI = await loadPageData(url);
+      const headerUlTest = await getPageElementDataAttribute(
+        $,
+        `[data-element="${secondaryMenuItem.data_element}"]`,
+        "a"
+      );
+
+      if (headerUlTest[0] === "Panoramica") headerUlTest.shift();
+
+      for (const element of headerUlTest) {
+        if (secondaryMenuItems.includes(element.toLowerCase())) {
+          singleElementCorrectElementsFound.push(element.toLowerCase());
+        }
+
+        singleElementElementsFound.push(element.toLowerCase());
+      }
+
+      elementsFound = [...elementsFound, ...singleElementElementsFound];
+      correctElementsFound = [
+        ...correctElementsFound,
+        ...singleElementCorrectElementsFound,
+      ];
+
+      missingElements = [
+        ...missingElements,
+        ...secondaryMenuItems.filter(
+          (x) => !singleElementCorrectElementsFound.includes(x)
+        ),
+      ];
+    }
+
+    let j = 0;
+    let checkExistence = true;
+    const errorVoices = [];
+
+    while (checkExistence) {
+      const $: CheerioAPI = await loadPageData(url);
+      const headerUlTest = await getPageElementDataAttribute(
+        $,
+        `[data-element="${customPrimaryMenuItemsDataElement + j.toString()}"]`,
+        "a"
+      );
+
+      if (headerUlTest.length === 0) {
+        checkExistence = false;
+        continue;
+      }
+
+      if (headerUlTest[0] === "Panoramica") headerUlTest.shift();
+
+      for (const element of headerUlTest) {
+        errorVoices.push(element.toLowerCase());
+      }
+      j++;
     }
 
     const presentVoicesPercentage: number = parseInt(
-      ((correctElementsFound.length / elementsFound.length) * 100).toFixed(0)
+      (
+        (correctElementsFound.length /
+          (elementsFound.length + errorVoices.length)) *
+        100
+      ).toFixed(0)
     );
 
+    let score = 0;
     if (presentVoicesPercentage >= 30 && presentVoicesPercentage < 100) {
       score = 0.5;
       items[0].result = yellowResult;
@@ -106,9 +164,8 @@ class LoadAudit extends Audit {
     items[0].correct_voices = correctElementsFound.join(", ");
     items[0].correct_voices_percentage =
       presentVoicesPercentage.toString() + "%";
-    items[0].missing_voices = secondaryMenuScuolaItems
-      .filter((x) => !correctElementsFound.includes(x))
-      .join(", ");
+    items[0].missing_voices = missingElements.join(", ");
+    items[0].error_voices = errorVoices.join(", ");
 
     return {
       score: score,

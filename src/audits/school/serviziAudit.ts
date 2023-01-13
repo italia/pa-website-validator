@@ -7,7 +7,7 @@ import {
   checkOrder,
   getElementHrefValuesDataAttribute,
   getPageElementDataAttribute,
-  getRandomSchoolServiceUrl,
+  getRandomSchoolServicesUrl,
   loadPageData,
   missingMenuItems,
   toMenuItem,
@@ -81,11 +81,11 @@ class LoadAudit extends Audit {
     const mandatoryMetadata = contentTypeItems.Metadati;
     const breadcrumbMandatoryElements = contentTypeItems.Breadcrumb;
 
-    const randomServiceToBeScanned: string = await getRandomSchoolServiceUrl(
+    const randomService: string[] = await getRandomSchoolServicesUrl(
       url
     );
 
-    if (!randomServiceToBeScanned) {
+    if (randomService.length === 0) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
@@ -99,6 +99,7 @@ class LoadAudit extends Audit {
       };
     }
 
+    const randomServiceToBeScanned = randomService[0];
     item[0].inspected_page = randomServiceToBeScanned;
 
     const $: CheerioAPI = await loadPageData(randomServiceToBeScanned);
