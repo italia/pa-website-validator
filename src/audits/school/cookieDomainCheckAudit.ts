@@ -29,7 +29,7 @@ class LoadAudit extends Audit {
   static async audit(artifacts: LH.Artifacts & { origin: string }) {
     ///** @type {LH.Audit.Details.TableItem[]} */
     //const results = [];
-//
+    //
     //results.push(
     //  {
     //    total_result: "Fino a 2 voci obbligatorie non sono presenti o 1 voce non è nell'ordine corretto.",
@@ -74,7 +74,7 @@ class LoadAudit extends Audit {
     //    },
     //  },
     //);
-//
+    //
     ///** @type {LH.Audit.Details.Table['headings']} */
     //const headings = [
     //  /* eslint-disable max-len */
@@ -105,9 +105,9 @@ class LoadAudit extends Audit {
     //  },
     //  /* eslint-enable max-len */
     //];
-//
+    //
     //const details = Audit.makeTableDetails(headings, results);
-//
+    //
     //return {
     //  score: 0.5,
     //  details,

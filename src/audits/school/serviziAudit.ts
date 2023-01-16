@@ -15,11 +15,17 @@ import {
 import { contentTypeItems } from "../../storage/school/contentTypeItems";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
+import { auditScanVariables } from "../../storage/school/auditScanVariables";
 
 const Audit = lighthouse.Audit;
 
 const auditId = "school-servizi-structure-match-model";
 const auditData = auditDictionary[auditId];
+
+const accuracy = process.env["accuracy"] ?? "suggested";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const auditVariables = auditScanVariables[accuracy][auditId];
 
 const greenResult = auditData.greenResult;
 const yellowResult = auditData.yellowResult;
@@ -70,7 +76,10 @@ class LoadAudit extends Audit {
     const mandatoryMetadata = contentTypeItems.Metadati;
     const breadcrumbMandatoryElements = contentTypeItems.Breadcrumb;
 
-    const randomServices: string[] = await getRandomSchoolServicesUrl(url, 100);
+    const randomServices: string[] = await getRandomSchoolServicesUrl(
+      url,
+      auditVariables.numberOfServicesToBeScanned
+    );
 
     if (randomServices.length === 0) {
       return {
@@ -86,18 +95,17 @@ class LoadAudit extends Audit {
       };
     }
 
-    const items = [
-    ];
+    const items = [];
 
     let score = 1;
 
-    for(const randomService of randomServices){
+    for (const randomService of randomServices) {
       const item = {
         result: greenResult,
         missing_mandatory_elements_found: "",
         mandatory_elements_not_right_order: "",
         inspected_page: "",
-      }
+      };
 
       item.inspected_page = randomService;
 
@@ -108,8 +116,8 @@ class LoadAudit extends Audit {
       const orderResult = checkOrder(mandatoryMenuItems, indexElements);
 
       let missingMandatoryItems = missingMenuItems(
-          indexElements,
-          mandatoryMenuItems
+        indexElements,
+        mandatoryMenuItems
       );
 
       const title = $('[data-element="service-title"]').text().trim() ?? "";
@@ -118,26 +126,26 @@ class LoadAudit extends Audit {
       }
 
       const description =
-          $('[data-element="service-description"]').text().trim() ?? "";
+        $('[data-element="service-description"]').text().trim() ?? "";
       if (!description) {
         missingMandatoryItems.push(mandatoryHeaderVoices[1]);
       }
 
       const breadcrumbElements = await getPageElementDataAttribute(
-          $,
-          '[data-element="breadcrumb"]',
-          "li"
+        $,
+        '[data-element="breadcrumb"]',
+        "li"
       );
       if (
-          !breadcrumbElements.includes(breadcrumbMandatoryElements[0]) &&
-          !breadcrumbElements.includes(breadcrumbMandatoryElements[1])
+        !breadcrumbElements.includes(breadcrumbMandatoryElements[0]) &&
+        !breadcrumbElements.includes(breadcrumbMandatoryElements[1])
       ) {
         missingMandatoryItems.push(mandatoryHeaderVoices[2]);
       }
 
       const argumentsTag = await getPageElementDataAttribute(
-          $,
-          '[data-element="topic-list"]'
+        $,
+        '[data-element="topic-list"]'
       );
       if (argumentsTag.length <= 0) {
         missingMandatoryItems.push(mandatoryHeaderVoices[3]);
@@ -149,9 +157,9 @@ class LoadAudit extends Audit {
       }
 
       const responsibleStructure = await getPageElementDataAttribute(
-          $,
-          '[data-element="structures"]',
-          "a"
+        $,
+        '[data-element="structures"]',
+        "a"
       );
       if (responsibleStructure.length <= 0) {
         missingMandatoryItems.push(mandatoryBodyVoices[1]);
@@ -164,15 +172,15 @@ class LoadAudit extends Audit {
 
       const metadata = $('[data-element="metadata"]').text().trim() ?? "";
       if (
-          !metadata.toLowerCase().includes(mandatoryMetadata[0].toLowerCase()) ||
-          !metadata.toLowerCase().includes(mandatoryMetadata[1].toLowerCase())
+        !metadata.toLowerCase().includes(mandatoryMetadata[0].toLowerCase()) ||
+        !metadata.toLowerCase().includes(mandatoryMetadata[1].toLowerCase())
       ) {
         missingMandatoryItems.push(mandatoryBodyVoices[2]);
       }
 
       const missingVoicesAmount = missingMandatoryItems.length;
       const voicesNotInCorrectOrderAmount =
-          orderResult.numberOfElementsNotInSequence;
+        orderResult.numberOfElementsNotInSequence;
 
       if (missingVoicesAmount > 2 || voicesNotInCorrectOrderAmount > 1) {
         if (score > 0) {
@@ -181,8 +189,8 @@ class LoadAudit extends Audit {
 
         item.result = redResult;
       } else if (
-          (missingVoicesAmount > 0 && missingVoicesAmount <= 2) ||
-          voicesNotInCorrectOrderAmount === 1
+        (missingVoicesAmount > 0 && missingVoicesAmount <= 2) ||
+        voicesNotInCorrectOrderAmount === 1
       ) {
         if (score > 0.5) {
           score = 0.5;
@@ -193,7 +201,7 @@ class LoadAudit extends Audit {
 
       item.missing_mandatory_elements_found = missingMandatoryItems.join(", ");
       item.mandatory_elements_not_right_order =
-          orderResult.elementsNotInSequence.join(", ");
+        orderResult.elementsNotInSequence.join(", ");
 
       items.push(item);
     }

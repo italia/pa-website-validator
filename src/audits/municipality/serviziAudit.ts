@@ -15,14 +15,17 @@ import {
 import { contentTypeItems } from "../../storage/municipality/contentTypeItems";
 import { secondLevelPageNames } from "../../storage/municipality/controlledVocabulary";
 import { auditDictionary } from "../../storage/auditDictionary";
-import { auditScanVariables } from "../../storage/auditScanVariables";
+import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 
 const Audit = lighthouse.Audit;
 
 const auditId = "municipality-servizi-structure-match-model";
 const auditData = auditDictionary[auditId];
 
-const auditVariables = auditScanVariables[auditId];
+const accuracy = process.env["accuracy"] ?? "suggested";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const auditVariables = auditScanVariables[accuracy][auditId];
 
 const greenResult = auditData.greenResult;
 const yellowResult = auditData.yellowResult;
@@ -69,11 +72,9 @@ class LoadAudit extends Audit {
     const mandatoryHeaderVoices = contentTypeItems.Header;
     const mandatoryBodyVoices = contentTypeItems.Body;
 
-    const numberOfServices = auditVariables.numberOfServicesToBeScanned;
-
     const randomServices: string[] = await getRandomMunicipalityServicesUrl(
       url,
-      numberOfServices
+      auditVariables.numberOfServicesToBeScanned
     );
 
     if (!randomServices) {
@@ -93,9 +94,7 @@ class LoadAudit extends Audit {
     const items = [];
     let score = 1;
 
-    for (let i = 0; i < randomServices.length; i++) {
-      const randomServiceToBeScanned: string = randomServices[i];
-
+    for (const randomService of randomServices) {
       const item = {
         result: greenResult,
         missing_mandatory_elements_found: "",
@@ -103,9 +102,9 @@ class LoadAudit extends Audit {
         inspected_page: "",
       };
 
-      item.inspected_page = randomServiceToBeScanned;
+      item.inspected_page = randomService;
 
-      const $: CheerioAPI = await loadPageData(randomServiceToBeScanned);
+      const $: CheerioAPI = await loadPageData(randomService);
 
       const indexElements = await getServicesFromIndex($, mandatoryIndexVoices);
       const mandatoryMenuItems = mandatoryIndexVoices.map(toMenuItem);

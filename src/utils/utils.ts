@@ -9,7 +9,6 @@ import vocabularyResult = crawlerTypes.vocabularyResult;
 import NodeCache from "node-cache";
 import { MenuItem } from "../types/menuItem";
 import { menuItems } from "../storage/school/menuItems";
-import { data } from "cheerio/lib/api/attributes";
 
 const loadPageCache = new NodeCache();
 
@@ -144,31 +143,38 @@ const getRandomSchoolServicesUrl = async (
     return [];
   }
 
-  serviceTypeUrls = [... new Set(serviceTypeUrls)];
+  serviceTypeUrls = [...new Set(serviceTypeUrls)];
 
   let servicesUrls: string[] = [];
-  for(let serviceTypeUrl of serviceTypeUrls){
+  for (let serviceTypeUrl of serviceTypeUrls) {
     if (!serviceTypeUrl.includes(url)) {
       serviceTypeUrl = await buildUrl(url, serviceTypeUrl);
     }
 
     $ = await loadPageData(serviceTypeUrl);
     servicesUrls = [
-        ...servicesUrls,
-        ...await getHREFValuesDataAttribute($, '[data-element="service-link"]')
+      ...servicesUrls,
+      ...(await getHREFValuesDataAttribute($, '[data-element="service-link"]')),
     ];
 
-    const pagerPagesUrls = [... new Set(await getHREFValuesDataAttribute($, '[data-element="pager-link"]'))];
-    for(let pagerPageUrl of pagerPagesUrls){
+    const pagerPagesUrls = [
+      ...new Set(
+        await getHREFValuesDataAttribute($, '[data-element="pager-link"]')
+      ),
+    ];
+    for (let pagerPageUrl of pagerPagesUrls) {
       if (!pagerPageUrl.includes(url)) {
         pagerPageUrl = await buildUrl(url, pagerPageUrl);
       }
 
-      if(pagerPageUrl !==serviceTypeUrl){
+      if (pagerPageUrl !== serviceTypeUrl) {
         $ = await loadPageData(pagerPageUrl);
         servicesUrls = [
           ...servicesUrls,
-          ...await getHREFValuesDataAttribute($, '[data-element="service-link"]')
+          ...(await getHREFValuesDataAttribute(
+            $,
+            '[data-element="service-link"]'
+          )),
         ];
       }
     }
