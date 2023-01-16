@@ -26,9 +26,93 @@ class LoadAudit extends Audit {
     };
   }
 
-  static async audit(
-    artifacts: LH.Artifacts & { origin: string }
-  ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
+  static async audit(artifacts: LH.Artifacts & { origin: string }) {
+    ///** @type {LH.Audit.Details.TableItem[]} */
+    //const results = [];
+//
+    //results.push(
+    //  {
+    //    total_result: "Fino a 2 voci obbligatorie non sono presenti o 1 voce non è nell'ordine corretto.",
+    //  },
+    //  {
+    //    subItems: {
+    //      type: "subitems",
+    //      items: [
+    //        {
+    //          single_result: "Corretto",
+    //          inspected_page: "https://www.icmarcellinara.edu.it/servizio/registro-elettronico-2/",
+    //          missing_mandatory_elements_found: "",
+    //          mandatory_elements_not_right_order: ""
+    //        },
+    //      ],
+    //    },
+    //  },
+    //  {
+    //    subItems: {
+    //      type: "subitems",
+    //      items: [
+    //        {
+    //          single_result: "Tolleranza",
+    //          inspected_page: "https://www.icmarcellinara.edu.it/servizio/registro-elettronico-2/",
+    //          missing_mandatory_elements_found: "Cosa serve; Tempi e scadenze",
+    //          mandatory_elements_not_right_order: ""
+    //        },
+    //      ],
+    //    },
+    //  },
+    //  {
+    //    subItems: {
+    //      type: "subitems",
+    //      items: [
+    //        {
+    //          single_result: "Tolleranza",
+    //          inspected_page: "https://www.icmarcellinara.edu.it/servizio/area-riservata-docenti/",
+    //          missing_mandatory_elements_found: "",
+    //          mandatory_elements_not_right_order: "Ulteriori informazioni; Contatti"
+    //        },
+    //      ],
+    //    },
+    //  },
+    //);
+//
+    ///** @type {LH.Audit.Details.Table['headings']} */
+    //const headings = [
+    //  /* eslint-disable max-len */
+    //  { key: "total_result", itemType: "text", text: "Risultato Totale" },
+    //  {
+    //    key: "node",
+    //    itemType: "node",
+    //    subItemsHeading: { key: "single_result", itemType: "text" },
+    //    text: "Risultato singolo",
+    //  },
+    //  {
+    //    key: null,
+    //    itemType: "text",
+    //    subItemsHeading: { key: "inspected_page", itemType: "text" },
+    //    text: "Inspected Page",
+    //  },
+    //  {
+    //    key: null,
+    //    itemType: "text",
+    //    subItemsHeading: { key: "missing_mandatory_elements_found", itemType: "text" },
+    //    text: "Missing Mandatory Elements Found",
+    //  },
+    //  {
+    //    key: null,
+    //    itemType: "text",
+    //    subItemsHeading: { key: "mandatory_elements_not_right_order", itemType: "text" },
+    //    text: "Mandatory Elements Not Right Order",
+    //  },
+    //  /* eslint-enable max-len */
+    //];
+//
+    //const details = Audit.makeTableDetails(headings, results);
+//
+    //return {
+    //  score: 0.5,
+    //  details,
+    //};
+
     const url = artifacts.origin;
 
     return await cookieAudit(url, auditData);

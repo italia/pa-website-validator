@@ -62,17 +62,6 @@ class LoadAudit extends Audit {
       },
     ];
 
-    const item = [
-      {
-        result: greenResult,
-        missing_mandatory_elements_found: "",
-        mandatory_elements_not_right_order: "",
-        inspected_page: "",
-      },
-    ];
-
-    let score = 1;
-
     const mandatoryVoices = contentTypeItems.Indice;
     const mandatoryHeaderVoices = contentTypeItems.Header;
     const mandatoryBodyVoices = contentTypeItems.Body;
@@ -81,11 +70,9 @@ class LoadAudit extends Audit {
     const mandatoryMetadata = contentTypeItems.Metadati;
     const breadcrumbMandatoryElements = contentTypeItems.Breadcrumb;
 
-    const randomService: string[] = await getRandomSchoolServicesUrl(
-      url
-    );
+    const randomServices: string[] = await getRandomSchoolServicesUrl(url, 100);
 
-    if (randomService.length === 0) {
+    if (randomServices.length === 0) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
@@ -99,100 +86,121 @@ class LoadAudit extends Audit {
       };
     }
 
-    const randomServiceToBeScanned = randomService[0];
-    item[0].inspected_page = randomServiceToBeScanned;
+    const items = [
+    ];
 
-    const $: CheerioAPI = await loadPageData(randomServiceToBeScanned);
+    let score = 1;
 
-    const indexElements = await getServicesFromIndex($, mandatoryVoices);
-    const mandatoryMenuItems = mandatoryVoices.map(toMenuItem);
-    const orderResult = checkOrder(mandatoryMenuItems, indexElements);
+    for(const randomService of randomServices){
+      const item = {
+        result: greenResult,
+        missing_mandatory_elements_found: "",
+        mandatory_elements_not_right_order: "",
+        inspected_page: "",
+      }
 
-    let missingMandatoryItems = missingMenuItems(
-      indexElements,
-      mandatoryMenuItems
-    );
+      item.inspected_page = randomService;
 
-    const title = $('[data-element="service-title"]').text().trim() ?? "";
-    if (!title) {
-      missingMandatoryItems.push(mandatoryHeaderVoices[0]);
+      const $: CheerioAPI = await loadPageData(randomService);
+
+      const indexElements = await getServicesFromIndex($, mandatoryVoices);
+      const mandatoryMenuItems = mandatoryVoices.map(toMenuItem);
+      const orderResult = checkOrder(mandatoryMenuItems, indexElements);
+
+      let missingMandatoryItems = missingMenuItems(
+          indexElements,
+          mandatoryMenuItems
+      );
+
+      const title = $('[data-element="service-title"]').text().trim() ?? "";
+      if (!title) {
+        missingMandatoryItems.push(mandatoryHeaderVoices[0]);
+      }
+
+      const description =
+          $('[data-element="service-description"]').text().trim() ?? "";
+      if (!description) {
+        missingMandatoryItems.push(mandatoryHeaderVoices[1]);
+      }
+
+      const breadcrumbElements = await getPageElementDataAttribute(
+          $,
+          '[data-element="breadcrumb"]',
+          "li"
+      );
+      if (
+          !breadcrumbElements.includes(breadcrumbMandatoryElements[0]) &&
+          !breadcrumbElements.includes(breadcrumbMandatoryElements[1])
+      ) {
+        missingMandatoryItems.push(mandatoryHeaderVoices[2]);
+      }
+
+      const argumentsTag = await getPageElementDataAttribute(
+          $,
+          '[data-element="topic-list"]'
+      );
+      if (argumentsTag.length <= 0) {
+        missingMandatoryItems.push(mandatoryHeaderVoices[3]);
+      }
+
+      const whatNeeds = $('[data-element="used-for"]').text().trim() ?? "";
+      if (!whatNeeds) {
+        missingMandatoryItems.push(mandatoryBodyVoices[0]);
+      }
+
+      const responsibleStructure = await getPageElementDataAttribute(
+          $,
+          '[data-element="structures"]',
+          "a"
+      );
+      if (responsibleStructure.length <= 0) {
+        missingMandatoryItems.push(mandatoryBodyVoices[1]);
+      }
+
+      const placeInfo = await getPlaceInfo($, mandatoryPlaceInfo);
+      if (placeInfo.length > 0) {
+        missingMandatoryItems = [...missingMandatoryItems, ...placeInfo];
+      }
+
+      const metadata = $('[data-element="metadata"]').text().trim() ?? "";
+      if (
+          !metadata.toLowerCase().includes(mandatoryMetadata[0].toLowerCase()) ||
+          !metadata.toLowerCase().includes(mandatoryMetadata[1].toLowerCase())
+      ) {
+        missingMandatoryItems.push(mandatoryBodyVoices[2]);
+      }
+
+      const missingVoicesAmount = missingMandatoryItems.length;
+      const voicesNotInCorrectOrderAmount =
+          orderResult.numberOfElementsNotInSequence;
+
+      if (missingVoicesAmount > 2 || voicesNotInCorrectOrderAmount > 1) {
+        if (score > 0) {
+          score = 0;
+        }
+
+        item.result = redResult;
+      } else if (
+          (missingVoicesAmount > 0 && missingVoicesAmount <= 2) ||
+          voicesNotInCorrectOrderAmount === 1
+      ) {
+        if (score > 0.5) {
+          score = 0.5;
+        }
+
+        item.result = yellowResult;
+      }
+
+      item.missing_mandatory_elements_found = missingMandatoryItems.join(", ");
+      item.mandatory_elements_not_right_order =
+          orderResult.elementsNotInSequence.join(", ");
+
+      items.push(item);
     }
-
-    const description =
-      $('[data-element="service-description"]').text().trim() ?? "";
-    if (!description) {
-      missingMandatoryItems.push(mandatoryHeaderVoices[1]);
-    }
-
-    const breadcrumbElements = await getPageElementDataAttribute(
-      $,
-      '[data-element="breadcrumb"]',
-      "li"
-    );
-    if (
-      !breadcrumbElements.includes(breadcrumbMandatoryElements[0]) &&
-      !breadcrumbElements.includes(breadcrumbMandatoryElements[1])
-    ) {
-      missingMandatoryItems.push(mandatoryHeaderVoices[2]);
-    }
-
-    const argumentsTag = await getPageElementDataAttribute(
-      $,
-      '[data-element="topic-list"]'
-    );
-    if (argumentsTag.length <= 0) {
-      missingMandatoryItems.push(mandatoryHeaderVoices[3]);
-    }
-
-    const whatNeeds = $('[data-element="used-for"]').text().trim() ?? "";
-    if (!whatNeeds) {
-      missingMandatoryItems.push(mandatoryBodyVoices[0]);
-    }
-
-    const responsibleStructure = await getPageElementDataAttribute(
-      $,
-      '[data-element="structures"]',
-      "a"
-    );
-    if (responsibleStructure.length <= 0) {
-      missingMandatoryItems.push(mandatoryBodyVoices[1]);
-    }
-
-    const placeInfo = await getPlaceInfo($, mandatoryPlaceInfo);
-    if (placeInfo.length > 0) {
-      missingMandatoryItems = [...missingMandatoryItems, ...placeInfo];
-    }
-
-    const metadata = $('[data-element="metadata"]').text().trim() ?? "";
-    if (
-      !metadata.toLowerCase().includes(mandatoryMetadata[0].toLowerCase()) ||
-      !metadata.toLowerCase().includes(mandatoryMetadata[1].toLowerCase())
-    ) {
-      missingMandatoryItems.push(mandatoryBodyVoices[2]);
-    }
-
-    const missingVoicesAmount = missingMandatoryItems.length;
-    const voicesNotInCorrectOrderAmount =
-      orderResult.numberOfElementsNotInSequence;
-
-    if (missingVoicesAmount > 2 || voicesNotInCorrectOrderAmount > 1) {
-      score = 0;
-      item[0].result = redResult;
-    } else if (
-      (missingVoicesAmount > 0 && missingVoicesAmount <= 2) ||
-      voicesNotInCorrectOrderAmount === 1
-    ) {
-      score = 0.5;
-      item[0].result = yellowResult;
-    }
-
-    item[0].missing_mandatory_elements_found = missingMandatoryItems.join(", ");
-    item[0].mandatory_elements_not_right_order =
-      orderResult.elementsNotInSequence.join(", ");
 
     return {
       score: score,
-      details: Audit.makeTableDetails(headings, item),
+      details: Audit.makeTableDetails(headings, items),
     };
   }
 }

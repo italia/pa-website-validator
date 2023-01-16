@@ -8,10 +8,8 @@ import axios from "axios";
 import vocabularyResult = crawlerTypes.vocabularyResult;
 import NodeCache from "node-cache";
 import { MenuItem } from "../types/menuItem";
-import {
-  menuItems
-} from "../storage/school/menuItems";
-import {data} from "cheerio/lib/api/attributes";
+import { menuItems } from "../storage/school/menuItems";
+import { data } from "cheerio/lib/api/attributes";
 
 const loadPageCache = new NodeCache();
 
@@ -43,7 +41,7 @@ const getPageElementDataAttribute = async (
   $: CheerioAPI,
   elementDataAttribute: string,
   tag = ""
-): Promise<string[]> =>  {
+): Promise<string[]> => {
   const returnValues: string[] = [];
 
   let elements = $(elementDataAttribute);
@@ -128,14 +126,17 @@ const getHREFValuesDataAttribute = async (
   return serviceUrls;
 };
 
-const getRandomSchoolServicesUrl = async (url: string, numberOfServices = 1): Promise<string[]> => {
+const getRandomSchoolServicesUrl = async (
+  url: string,
+  numberOfServices = 1
+): Promise<string[]> => {
   if (numberOfServices <= 1) {
     numberOfServices = 1;
   }
 
   let $ = await loadPageData(url);
 
-  const serviceTypeUrls = await getHREFValuesDataAttribute(
+  let serviceTypeUrls = await getHREFValuesDataAttribute(
     $,
     '[data-element="service-type"]'
   );
@@ -143,16 +144,36 @@ const getRandomSchoolServicesUrl = async (url: string, numberOfServices = 1): Pr
     return [];
   }
 
-  let serviceTypeUrl = serviceTypeUrls[Math.floor(Math.random() * serviceTypeUrls.length)];
-  if (!serviceTypeUrl.includes(url)) {
-    serviceTypeUrl = await buildUrl(url, serviceTypeUrl);
+  serviceTypeUrls = [... new Set(serviceTypeUrls)];
+
+  let servicesUrls: string[] = [];
+  for(let serviceTypeUrl of serviceTypeUrls){
+    if (!serviceTypeUrl.includes(url)) {
+      serviceTypeUrl = await buildUrl(url, serviceTypeUrl);
+    }
+
+    $ = await loadPageData(serviceTypeUrl);
+    servicesUrls = [
+        ...servicesUrls,
+        ...await getHREFValuesDataAttribute($, '[data-element="service-link"]')
+    ];
+
+    const pagerPagesUrls = [... new Set(await getHREFValuesDataAttribute($, '[data-element="pager-link"]'))];
+    for(let pagerPageUrl of pagerPagesUrls){
+      if (!pagerPageUrl.includes(url)) {
+        pagerPageUrl = await buildUrl(url, pagerPageUrl);
+      }
+
+      if(pagerPageUrl !==serviceTypeUrl){
+        $ = await loadPageData(pagerPageUrl);
+        servicesUrls = [
+          ...servicesUrls,
+          ...await getHREFValuesDataAttribute($, '[data-element="service-link"]')
+        ];
+      }
+    }
   }
 
-  $ = await loadPageData(serviceTypeUrl);
-  const servicesUrls = await getHREFValuesDataAttribute(
-    $,
-    '[data-element="service-link"]'
-  );
   return getRandomNString(servicesUrls, numberOfServices);
 };
 
@@ -210,8 +231,8 @@ const getRandomSchoolSecondLevelPagesUrl = async (
 };
 
 const getRandomSchoolLocationsUrl = async (
-    url: string,
-    numberOfPages = 1
+  url: string,
+  numberOfPages = 1
 ): Promise<string[]> => {
   if (numberOfPages <= 1) {
     numberOfPages = 1;
@@ -222,8 +243,8 @@ const getRandomSchoolLocationsUrl = async (
   const dataElement = '[data-element="school-locations"]';
 
   let locationsElementsUrls = await getHREFValuesDataAttribute($, dataElement);
-  locationsElementsUrls = [... new Set(locationsElementsUrls)];
-  if(locationsElementsUrls.length > 1){
+  locationsElementsUrls = [...new Set(locationsElementsUrls)];
+  if (locationsElementsUrls.length > 1) {
     return [];
   }
 
@@ -236,14 +257,14 @@ const getRandomSchoolLocationsUrl = async (
   $ = await loadPageData(locationUrl);
 
   const pagesUrls = await getHREFValuesDataAttribute(
-      $,
-      '[data-element="location-link"]'
+    $,
+    '[data-element="location-link"]'
   );
 
-  for (let i = 0; i < pagesUrls.length; i++){
+  for (let i = 0; i < pagesUrls.length; i++) {
     const pageUrl = pagesUrls[i];
-    if(!pageUrl.includes(url)){
-      pagesUrls[i] = await buildUrl(url, pageUrl)
+    if (!pageUrl.includes(url)) {
+      pagesUrls[i] = await buildUrl(url, pageUrl);
     }
   }
 
@@ -454,15 +475,12 @@ const areAllElementsInVocabulary = async (
   };
 };
 
-const getRandomNString = async (
-    array: string[],
-    numberOfElements: number
-) => {
+const getRandomNString = async (array: string[], numberOfElements: number) => {
   if (array.length <= 0) {
     return [];
   }
 
-  array = [... new Set(array)];
+  array = [...new Set(array)];
 
   if (numberOfElements > array.length) {
     return array;

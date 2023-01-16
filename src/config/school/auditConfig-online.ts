@@ -91,12 +91,15 @@ const customAdditionalAudits = [
 export default {
   extends: "lighthouse:default",
   settings: {
+    onlyAudits: ["school-servizi-structure-match-model"],
+    /*
     onlyCategories: [
       "modelCompliance",
       "recommendations",
       "additionalTests",
       "performance",
     ],
+    */
   },
 
   passes: [

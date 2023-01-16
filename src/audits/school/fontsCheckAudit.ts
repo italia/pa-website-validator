@@ -49,9 +49,7 @@ class LoadAudit extends Audit {
   ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
 
-    const randomService: string[] = await getRandomSchoolServicesUrl(
-      url
-    );
+    const randomService: string[] = await getRandomSchoolServicesUrl(url);
 
     if (randomService.length === 0) {
       return {
