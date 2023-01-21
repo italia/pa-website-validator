@@ -19,9 +19,6 @@ import { auditScanVariables } from "../../storage/school/auditScanVariables";
 const auditId = "school-ux-ui-consistency-bootstrap-italia-double-check";
 const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult;
-const redResult = auditData.redResult;
-
 const libraryName = "Bootstrap italia";
 
 const accuracy = process.env["accuracy"] ?? "suggested";
@@ -71,43 +68,32 @@ class LoadAudit extends Audit {
       {
         key: "result",
         itemType: "text",
-        text: "Risultato",
+        text: "Risultato totale",
         subItemsHeading: { key: "inspected_page", itemType: "text" },
       },
       {
-        key: null,
+        key: "title_row_result_0",
         itemType: "text",
-        text: "Risultato singolo",
-        subItemsHeading: { key: "single_result", itemType: "text" },
+        text: "",
+        subItemsHeading: { key: "row_result_0", itemType: "text" },
       },
       {
-        key: null,
+        key: "title_row_result_1",
         itemType: "text",
-        text: "Nome libreria in uso",
-        subItemsHeading: { key: "library_name", itemType: "text" },
-      },
-      {
-        key: null,
-        itemType: "text",
-        text: "Versione libreria in uso",
-        subItemsHeading: { key: "library_version", itemType: "text" },
-      },
-      {
-        key: null,
-        itemType: "text",
-        text: "Classi CSS non trovate",
-        subItemsHeading: { key: "missing_classes", itemType: "text" },
+        text: "",
+        subItemsHeading: { key: "row_result_1", itemType: "text" },
       },
     ];
-    const items = [
-      {
-        single_result: "Errato",
-        inspected_page: url,
-        library_name: "",
-        library_version: "",
-        missing_classes: "",
-      },
-    ];
+
+    const correctItems = [];
+    const wrongItems = [];
+
+    const resultVersion = [];
+    const itemVersion = {
+      inspected_page: url,
+      row_result_0: "",
+      row_result_1: "",
+    };
 
     let score = 0;
 
@@ -116,28 +102,47 @@ class LoadAudit extends Audit {
         bootstrapItaliaVariableVersion !== null &&
         bootstrapItaliaVariableVersion
       ) {
-        items[0].library_version = bootstrapItaliaVariableVersion;
-        items[0].library_name = libraryName;
+        itemVersion.row_result_1 = bootstrapItaliaVariableVersion;
+        itemVersion.row_result_0 = libraryName;
 
         if (semver.gte(bootstrapItaliaVariableVersion, "1.6.0")) {
           score = 1;
-          items[0].single_result = "Corretto";
         }
       } else if (
         bootstrapItaliaSelectorVariableVersion !== null &&
         bootstrapItaliaSelectorVariableVersion
       ) {
-        items[0].library_version = bootstrapItaliaSelectorVariableVersion;
-        items[0].library_name = libraryName;
+        itemVersion.row_result_1 = bootstrapItaliaSelectorVariableVersion;
+        itemVersion.row_result_0 = libraryName;
 
         if (semver.gte(bootstrapItaliaSelectorVariableVersion, "1.6.0")) {
           score = 1;
-          items[0].single_result = "Corretto";
         }
       }
     } catch (e) {
       //eslint-disable-next-line
     }
+
+    let resultTitleVersion = "";
+    if (score === 0) {
+      resultTitleVersion = "Libreria Bootstrap Italia mancante o errata";
+    } else {
+      resultTitleVersion =
+        "Libreria Bootstrap Italia è presente e ha la versione corretta";
+    }
+
+    resultVersion.push({
+      result: resultTitleVersion,
+      title_row_result_0: "Nome libreria in uso",
+      title_row_result_1: "Versione libreria in uso",
+    });
+
+    resultVersion.push({
+      subItems: {
+        type: "subitems",
+        items: [itemVersion],
+      },
+    });
 
     const pagesToBeAnalyzed = [
       url,
@@ -159,17 +164,18 @@ class LoadAudit extends Audit {
 
     for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
       const item = {
-        single_result: "Corretto",
         inspected_page: pageToBeAnalyzed,
-        library_name: "",
-        library_version: "",
-        missing_classes: "",
+        row_result_0: "",
+        row_result_1: "",
       };
 
       const foundClasses = await checkCSSClassesOnPage(
         pageToBeAnalyzed,
         cssClasses
       );
+
+      item.row_result_0 = foundClasses.join(", ");
+
       const missingClasses = cssClasses.filter(
         (x) => !foundClasses.includes(x)
       );
@@ -178,33 +184,67 @@ class LoadAudit extends Audit {
         if (score === 1) {
           score = 0;
         }
-        item.missing_classes = missingClasses.join(", ");
-        item.single_result = "Errato";
+        item.row_result_1 = missingClasses.join(", ");
+        wrongItems.push(item);
+      } else {
+        correctItems.push(item);
       }
-      items.push(item);
     }
 
-    const results = [];
+    let results = [];
     switch (score) {
       case 1:
         results.push({
-          result: greenResult,
+          result: auditData.greenResult,
         });
         break;
       case 0:
         results.push({
-          result: redResult,
+          result: auditData.redResult,
         });
         break;
     }
 
-    for (const item of items) {
+    results.push({});
+
+    results = [...results, ...resultVersion];
+
+    results.push({});
+
+    if (correctItems.length > 0) {
       results.push({
-        subItems: {
-          type: "subitems",
-          items: [item],
-        },
+        result: auditData.subItem.greenResult,
+        title_row_result_0: "Classi CSS trovate",
+        title_row_result_1: "Classi CSS non trovate",
       });
+
+      for (const item of correctItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
+    }
+
+    if (wrongItems.length > 0) {
+      results.push({
+        result: auditData.subItem.redResult,
+        title_row_result_0: "Classi CSS trovate",
+        title_row_result_1: "Classi CSS non trovate",
+      });
+
+      for (const item of wrongItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
     }
 
     return {

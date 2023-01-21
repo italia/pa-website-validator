@@ -91,12 +91,16 @@ const customAdditionalAudits = [
 export default {
   extends: "lighthouse:default",
   settings: {
-    onlyCategories: [
-      "modelCompliance",
-      "recommendations",
-      "additionalTests",
-      "performance",
-    ],
+    onlyAudits: ["school-ux-ui-consistency-bootstrap-italia-double-check"],
+    /*
+      onlyCategories:
+      [
+          "modelCompliance",
+          "recommendations",
+          "additionalTests",
+          "performance"
+      ]
+    */
   },
 
   passes: [

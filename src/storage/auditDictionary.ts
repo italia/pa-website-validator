@@ -379,7 +379,12 @@ export const auditDictionary = {
       "Il sito utilizza la libreria Bootstrap Italia in una versione idonea e utilizza le classi CSS corrette.",
     yellowResult: "",
     redResult:
-      "Il sito non utilizza la libreria Bootstrap Italia, utilizza una versione datata oppure almeno una delle classi CSS è errata.",
+      "Il sito non utilizza la libreria Bootstrap Italia, utilizza una versione datata oppure almeno una delle pagine utilizza delle classi CSS è errate.",
+    subItem: {
+      greenResult: "Pagine del sito che hanno classi CSS corrette ",
+      yellowResult: "",
+      redResult: "Pagine del sito che hanno almeno una classe css errata",
+    },
     nonExecuted: "",
     title:
       "C.SC.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito della scuola deve utilizzare la libreria Bootstrap Italia in una versione più recente di 1.6.",
