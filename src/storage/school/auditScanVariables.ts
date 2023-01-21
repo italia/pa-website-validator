@@ -47,4 +47,20 @@ export const auditScanVariables = {
       numberOfServicesToBeScanned: 10,
     },
   },
+  all: {
+    "school-ux-ui-consistency-bootstrap-italia-double-check": {
+      numberOfFirstLevelPageToBeScanned: -1,
+      numberOfSecondLevelPageToBeScanned: -1,
+      numberOfServicesToBeScanned: -1,
+    },
+    "school-legislation-cookie-domain-check": {
+      numberOfFirstLevelPageToBeScanned: -1,
+      numberOfSecondLevelPageToBeScanned: -1,
+      numberOfServicesToBeScanned: -1,
+      numberOfLocationsToBeScanned: -1,
+    },
+    "school-servizi-structure-match-model": {
+      numberOfServicesToBeScanned: -1,
+    },
+  },
 };

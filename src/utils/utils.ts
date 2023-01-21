@@ -130,10 +130,6 @@ const getRandomSchoolServicesUrl = async (
   url: string,
   numberOfServices = 1
 ): Promise<string[]> => {
-  if (numberOfServices <= 1) {
-    numberOfServices = 1;
-  }
-
   let $ = await loadPageData(url);
 
   let serviceTypeUrls = await getHREFValuesDataAttribute(
@@ -202,10 +198,6 @@ const getRandomSchoolFirstLevelPagesUrl = async (
   url: string,
   numberOfPages = 1
 ): Promise<string[]> => {
-  if (numberOfPages <= 1) {
-    numberOfPages = 1;
-  }
-
   const $ = await loadPageData(url);
 
   const pagesUrls = [
@@ -227,10 +219,6 @@ const getRandomSchoolSecondLevelPagesUrl = async (
   url: string,
   numberOfPages = 1
 ): Promise<string[]> => {
-  if (numberOfPages <= 1) {
-    numberOfPages = 1;
-  }
-
   const pagesUrls = [];
   const $ = await loadPageData(url);
 
@@ -262,10 +250,6 @@ const getRandomSchoolLocationsUrl = async (
   url: string,
   numberOfPages = 1
 ): Promise<string[]> => {
-  if (numberOfPages <= 1) {
-    numberOfPages = 1;
-  }
-
   let $ = await loadPageData(url);
 
   const dataElement = '[data-element="school-locations"]';
@@ -442,10 +426,6 @@ const getRandomMunicipalityServicesUrl = async (
   url: string,
   numberOfServices = 1
 ) => {
-  if (numberOfServices <= 1) {
-    numberOfServices = 1;
-  }
-
   let $ = await loadPageData(url);
 
   const servicesPageHref = await getHREFValuesDataAttribute(
@@ -507,10 +487,6 @@ const getRandomMunicipalityFirstLevelPagesUrl = async (
   url: string,
   numberOfPages = 1
 ): Promise<string[]> => {
-  if (numberOfPages <= 1) {
-    numberOfPages = 1;
-  }
-
   const $ = await loadPageData(url);
   const pagesUrls: string[] = [];
 
@@ -540,10 +516,6 @@ const getRandomMunicipalitySecondLevelPagesUrl = async (
   url: string,
   numberOfPages = 1
 ): Promise<string[]> => {
-  if (numberOfPages <= 1) {
-    numberOfPages = 1;
-  }
-
   const $ = await loadPageData(url);
   let pagesUrls: string[] = [];
 
@@ -621,7 +593,7 @@ const getRandomNString = async (array: string[], numberOfElements: number) => {
 
   array = [...new Set(array)];
 
-  if (numberOfElements > array.length) {
+  if (numberOfElements > array.length || numberOfElements === -1) {
     return array;
   }
 

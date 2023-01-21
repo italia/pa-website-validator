@@ -49,7 +49,7 @@ const parser = yargs(hideBin(process.argv))
     type: "string",
     demandOption: true,
     default: "suggested",
-    choices: ["min", "suggested", "max"],
+    choices: ["min", "suggested", "max", "all"],
   });
 
 try {

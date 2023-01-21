@@ -44,4 +44,19 @@ export const auditScanVariables = {
       numberOfServicesToBeScanned: 10,
     },
   },
+  all: {
+    "municipality-ux-ui-consistency-bootstrap-italia-double-check": {
+      numberOfFirstLevelPageToBeScanned: -1,
+      numberOfSecondLevelPageToBeScanned: -1,
+      numberOfServicesToBeScanned: -1,
+    },
+    "municipality-legislation-cookie-domain-check": {
+      numberOfFirstLevelPageToBeScanned: -1,
+      numberOfSecondLevelPageToBeScanned: -1,
+      numberOfServicesToBeScanned: -1,
+    },
+    "municipality-servizi-structure-match-model": {
+      numberOfServicesToBeScanned: -1,
+    },
+  },
 };
