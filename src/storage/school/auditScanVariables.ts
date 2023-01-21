@@ -1,5 +1,10 @@
 export const auditScanVariables = {
   min: {
+    "school-ux-ui-consistency-bootstrap-italia-double-check": {
+      numberOfFirstLevelPageToBeScanned: 1,
+      numberOfSecondLevelPageToBeScanned: 1,
+      numberOfServicesToBeScanned: 1,
+    },
     "school-legislation-cookie-domain-check": {
       numberOfFirstLevelPageToBeScanned: 1,
       numberOfSecondLevelPageToBeScanned: 1,
@@ -11,6 +16,11 @@ export const auditScanVariables = {
     },
   },
   suggested: {
+    "school-ux-ui-consistency-bootstrap-italia-double-check": {
+      numberOfFirstLevelPageToBeScanned: 3,
+      numberOfSecondLevelPageToBeScanned: 3,
+      numberOfServicesToBeScanned: 3,
+    },
     "school-legislation-cookie-domain-check": {
       numberOfFirstLevelPageToBeScanned: 3,
       numberOfSecondLevelPageToBeScanned: 3,
@@ -22,6 +32,11 @@ export const auditScanVariables = {
     },
   },
   max: {
+    "school-ux-ui-consistency-bootstrap-italia-double-check": {
+      numberOfFirstLevelPageToBeScanned: 10,
+      numberOfSecondLevelPageToBeScanned: 10,
+      numberOfServicesToBeScanned: 10,
+    },
     "school-legislation-cookie-domain-check": {
       numberOfFirstLevelPageToBeScanned: 10,
       numberOfSecondLevelPageToBeScanned: 10,

@@ -13,9 +13,9 @@ import {
   toMenuItem,
 } from "../../utils/utils";
 import { contentTypeItems } from "../../storage/municipality/contentTypeItems";
-import { secondLevelPageNames } from "../../storage/municipality/controlledVocabulary";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
+import { primaryMenuItems } from "../../storage/municipality/menuItems";
 
 const Audit = lighthouse.Audit;
 
@@ -38,6 +38,7 @@ class LoadAudit extends Audit {
       id: auditId,
       title: auditData.title,
       failureTitle: auditData.failureTitle,
+      toleranceTitle: "TEST YELLOW TITLE",
       description: auditData.description,
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       requiredArtifacts: ["origin"],
@@ -50,21 +51,35 @@ class LoadAudit extends Audit {
     const url = artifacts.origin;
 
     const headings = [
-      { key: "result", itemType: "text", text: "Risultato" },
       {
-        key: "inspected_page",
+        key: "result",
         itemType: "text",
-        text: "Scheda di servizio ispezionata",
+        text: "Risultato",
+        subItemsHeading: { key: "inspected_page", itemType: "text" },
       },
       {
-        key: "missing_mandatory_elements_found",
+        key: null,
+        itemType: "text",
+        text: "Risultato singolo",
+        subItemsHeading: { key: "single_result", itemType: "text" },
+      },
+      {
+        key: null,
         itemType: "text",
         text: "Voci obbligatorie mancanti",
+        subItemsHeading: {
+          key: "missing_mandatory_elements_found",
+          itemType: "text",
+        },
       },
       {
-        key: "mandatory_elements_not_right_order",
+        key: null,
         itemType: "text",
         text: "Voci obbligatorie che non rispettano l'ordine corretto",
+        subItemsHeading: {
+          key: "mandatory_elements_not_right_order",
+          itemType: "text",
+        },
       },
     ];
 
@@ -96,7 +111,7 @@ class LoadAudit extends Audit {
 
     for (const randomService of randomServices) {
       const item = {
-        result: greenResult,
+        single_result: "Corretto",
         missing_mandatory_elements_found: "",
         mandatory_elements_not_right_order: "",
         inspected_page: "",
@@ -148,7 +163,7 @@ class LoadAudit extends Audit {
       let breadcrumbArgumentInVocabulary = false;
       for (const breadcrumbElement of breadcrumbElements) {
         if (
-          secondLevelPageNames.includes(
+          primaryMenuItems.services.dictionary.includes(
             breadcrumbElement.trim().toLowerCase().replaceAll("/", "")
           )
         ) {
@@ -175,7 +190,7 @@ class LoadAudit extends Audit {
           score = 0;
         }
 
-        item.result = redResult;
+        item.single_result = "Errato";
       } else if (
         (missingVoicesAmount > 0 && missingVoicesAmount <= 2) ||
         voicesNotInCorrectOrderAmount === 1
@@ -184,7 +199,7 @@ class LoadAudit extends Audit {
           score = 0.5;
         }
 
-        item.result = yellowResult;
+        item.single_result = "Tolleranza";
       }
 
       item.missing_mandatory_elements_found = missingMandatoryItems.join(", ");
@@ -194,9 +209,37 @@ class LoadAudit extends Audit {
       items.push(item);
     }
 
+    const results = [];
+    switch (score) {
+      case 1:
+        results.push({
+          result: greenResult,
+        });
+        break;
+      case 0.5:
+        results.push({
+          result: yellowResult,
+        });
+        break;
+      case 0:
+        results.push({
+          result: redResult,
+        });
+        break;
+    }
+
+    for (const item of items) {
+      results.push({
+        subItems: {
+          type: "subitems",
+          items: [item],
+        },
+      });
+    }
+
     return {
       score: score,
-      details: Audit.makeTableDetails(headings, items),
+      details: Audit.makeTableDetails(headings, results),
     };
   }
 }

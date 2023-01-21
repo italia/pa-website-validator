@@ -3,13 +3,27 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
+import {
+  getRandomSchoolFirstLevelPagesUrl,
+  getRandomSchoolSecondLevelPagesUrl,
+  getRandomSchoolServicesUrl,
+  getRandomSchoolLocationsUrl,
+} from "../../utils/utils";
+import crawlerTypes from "../../types/crawler-types";
+import cookie = crawlerTypes.cookie;
 import { auditDictionary } from "../../storage/auditDictionary";
 import { run as cookieAudit } from "../../utils/cookieAuditLogic";
+import { auditScanVariables } from "../../storage/school/auditScanVariables";
 
 const Audit = lighthouse.Audit;
 
 const auditId = "school-legislation-cookie-domain-check";
 const auditData = auditDictionary[auditId];
+
+const accuracy = process.env["accuracy"] ?? "suggested";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const auditVariables = auditScanVariables[accuracy][auditId];
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -27,95 +41,99 @@ class LoadAudit extends Audit {
   }
 
   static async audit(artifacts: LH.Artifacts & { origin: string }) {
-    ///** @type {LH.Audit.Details.TableItem[]} */
-    //const results = [];
-    //
-    //results.push(
-    //  {
-    //    total_result: "Fino a 2 voci obbligatorie non sono presenti o 1 voce non è nell'ordine corretto.",
-    //  },
-    //  {
-    //    subItems: {
-    //      type: "subitems",
-    //      items: [
-    //        {
-    //          single_result: "Corretto",
-    //          inspected_page: "https://www.icmarcellinara.edu.it/servizio/registro-elettronico-2/",
-    //          missing_mandatory_elements_found: "",
-    //          mandatory_elements_not_right_order: ""
-    //        },
-    //      ],
-    //    },
-    //  },
-    //  {
-    //    subItems: {
-    //      type: "subitems",
-    //      items: [
-    //        {
-    //          single_result: "Tolleranza",
-    //          inspected_page: "https://www.icmarcellinara.edu.it/servizio/registro-elettronico-2/",
-    //          missing_mandatory_elements_found: "Cosa serve; Tempi e scadenze",
-    //          mandatory_elements_not_right_order: ""
-    //        },
-    //      ],
-    //    },
-    //  },
-    //  {
-    //    subItems: {
-    //      type: "subitems",
-    //      items: [
-    //        {
-    //          single_result: "Tolleranza",
-    //          inspected_page: "https://www.icmarcellinara.edu.it/servizio/area-riservata-docenti/",
-    //          missing_mandatory_elements_found: "",
-    //          mandatory_elements_not_right_order: "Ulteriori informazioni; Contatti"
-    //        },
-    //      ],
-    //    },
-    //  },
-    //);
-    //
-    ///** @type {LH.Audit.Details.Table['headings']} */
-    //const headings = [
-    //  /* eslint-disable max-len */
-    //  { key: "total_result", itemType: "text", text: "Risultato Totale" },
-    //  {
-    //    key: "node",
-    //    itemType: "node",
-    //    subItemsHeading: { key: "single_result", itemType: "text" },
-    //    text: "Risultato singolo",
-    //  },
-    //  {
-    //    key: null,
-    //    itemType: "text",
-    //    subItemsHeading: { key: "inspected_page", itemType: "text" },
-    //    text: "Inspected Page",
-    //  },
-    //  {
-    //    key: null,
-    //    itemType: "text",
-    //    subItemsHeading: { key: "missing_mandatory_elements_found", itemType: "text" },
-    //    text: "Missing Mandatory Elements Found",
-    //  },
-    //  {
-    //    key: null,
-    //    itemType: "text",
-    //    subItemsHeading: { key: "mandatory_elements_not_right_order", itemType: "text" },
-    //    text: "Mandatory Elements Not Right Order",
-    //  },
-    //  /* eslint-enable max-len */
-    //];
-    //
-    //const details = Audit.makeTableDetails(headings, results);
-    //
-    //return {
-    //  score: 0.5,
-    //  details,
-    //};
-
     const url = artifacts.origin;
+    const headings = [
+      {
+        key: "result",
+        itemType: "text",
+        text: "Risultato",
+        subItemsHeading: { key: "inspected_page", itemType: "text" },
+      },
+      {
+        key: null,
+        itemType: "text",
+        text: "Risultato singolo",
+        subItemsHeading: { key: "single_result", itemType: "text" },
+      },
+      {
+        key: null,
+        itemType: "text",
+        text: "Dominio del Cookie",
+        subItemsHeading: { key: "cookie_domain", itemType: "text" },
+      },
+      {
+        key: null,
+        itemType: "text",
+        text: "Nome del Cookie",
+        subItemsHeading: { key: "cookie_name", itemType: "text" },
+      },
+      {
+        key: null,
+        itemType: "text",
+        text: "Valore del Cookie",
+        subItemsHeading: { key: "cookie_value", itemType: "text" },
+      },
+    ];
 
-    return await cookieAudit(url, auditData);
+    const pagesToBeAnalyzed = [
+      url,
+      ...(await getRandomSchoolFirstLevelPagesUrl(
+        url,
+        auditVariables.numberOfFirstLevelPageToBeScanned
+      )),
+      ...(await getRandomSchoolSecondLevelPagesUrl(
+        url,
+        auditVariables.numberOfSecondLevelPageToBeScanned
+      )),
+      ...(await getRandomSchoolServicesUrl(
+        url,
+        auditVariables.numberOfServicesToBeScanned
+      )),
+      ...(await getRandomSchoolLocationsUrl(
+        url,
+        auditVariables.numberOfLocationsToBeScanned
+      )),
+    ];
+
+    let score = 1;
+    let items: cookie[] = [];
+
+    for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
+      const pageResult = await cookieAudit(pageToBeAnalyzed);
+      if (pageResult.score < score) {
+        score = pageResult.score;
+      }
+
+      items = [...items, ...pageResult.items];
+    }
+
+    const results = [];
+    switch (score) {
+      case 1:
+        results.push({
+          result: auditData.greenResult,
+        });
+        break;
+      case 0:
+        results.push({
+          result: auditData.redResult,
+        });
+        break;
+    }
+
+    for (const item of items) {
+      results.push({
+        subItems: {
+          type: "subitems",
+          items: [item],
+        },
+      });
+    }
+
+    return {
+      score: score,
+      details: Audit.makeTableDetails(headings, results),
+    };
   }
 }
 

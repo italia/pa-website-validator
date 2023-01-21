@@ -1,21 +1,3 @@
-export const secondLevelPageNames = [
-  "educazione e formazione",
-  "salute, benessere e assistenza",
-  "vita lavorativa",
-  "mobilità e trasporti",
-  "catasto e urbanistica",
-  "anagrafe e stato civile",
-  "turismo",
-  "giustizia e sicurezza pubblica",
-  "tributi, finanze e contravvenzioni",
-  "cultura e tempo libero",
-  "ambiente",
-  "imprese e commercio",
-  "autorizzazioni",
-  "appalti pubblici",
-  "agricoltura e pesca",
-];
-
 export const municipalityModelVocabulary = [
   "Accesso all'informazione",
   "Acqua",

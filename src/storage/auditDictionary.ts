@@ -376,10 +376,10 @@ export const auditDictionary = {
   },
   "school-ux-ui-consistency-bootstrap-italia-double-check": {
     greenResult:
-      "Il sito utilizza la libreria Bootstrap Italia in una versione idonea.",
+      "Il sito utilizza la libreria Bootstrap Italia in una versione idonea e utilizza le classi CSS corrette.",
     yellowResult: "",
     redResult:
-      "Il sito non utilizza la libreria Bootstrap Italia o ne utilizza una versione datata.",
+      "Il sito non utilizza la libreria Bootstrap Italia, utilizza una versione datata oppure almeno una delle classi CSS è errata.",
     nonExecuted: "",
     title:
       "C.SC.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito della scuola deve utilizzare la libreria Bootstrap Italia in una versione più recente di 1.6.",

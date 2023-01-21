@@ -12,6 +12,7 @@ import {
   missingMenuItems,
 } from "../../utils/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
+import { MenuItem } from "../../types/menuItem";
 
 const Audit = lighthouse.Audit;
 
@@ -78,13 +79,22 @@ class LoadAudit extends lighthouse.Audit {
 
     items[0].found_menu_voices = foundMenuElements.join(", ");
 
+    const menuItem: MenuItem[] = [];
+
+    for (const [, primaryMenuItem] of Object.entries(primaryMenuItems)) {
+      menuItem.push({
+        name: primaryMenuItem.name,
+        regExp: primaryMenuItem.regExp,
+      });
+    }
+
     const missingMandatoryElements = missingMenuItems(
       foundMenuElements,
-      primaryMenuItems
+      menuItem
     );
     items[0].missing_menu_voices = missingMandatoryElements.join(", ");
 
-    const orderResult = checkOrder(primaryMenuItems, foundMenuElements);
+    const orderResult = checkOrder(menuItem, foundMenuElements);
     items[0].wrong_order_menu_voices =
       orderResult.elementsNotInSequence.join(", ");
 

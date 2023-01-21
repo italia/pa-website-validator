@@ -2,13 +2,14 @@
 import crawlerTypes from "../types/crawler-types";
 import orderType = crawlerTypes.orderResult;
 import * as cheerio from "cheerio";
-import puppeteer from "puppeteer";
+import puppeteer, { Page } from "puppeteer";
 import { CheerioAPI } from "cheerio";
 import axios from "axios";
 import vocabularyResult = crawlerTypes.vocabularyResult;
 import NodeCache from "node-cache";
 import { MenuItem } from "../types/menuItem";
 import { menuItems } from "../storage/school/menuItems";
+import { primaryMenuItems } from "../storage/municipality/menuItems";
 
 const loadPageCache = new NodeCache();
 
@@ -183,6 +184,20 @@ const getRandomSchoolServicesUrl = async (
   return getRandomNString(servicesUrls, numberOfServices);
 };
 
+const checkCSSClassesOnPage = async (url: string, cssClasses: string[]) => {
+  const $ = await loadPageData(url);
+  const foundClasses: string[] = [];
+
+  for (const cssClass of cssClasses) {
+    const elements = $(`.${cssClass}`);
+    if (elements.length > 0) {
+      foundClasses.push(cssClass);
+    }
+  }
+
+  return foundClasses;
+};
+
 const getRandomSchoolFirstLevelPagesUrl = async (
   url: string,
   numberOfPages = 1
@@ -193,10 +208,18 @@ const getRandomSchoolFirstLevelPagesUrl = async (
 
   const $ = await loadPageData(url);
 
-  const pagesUrls = await getHREFValuesDataAttribute(
-    $,
-    '[data-element="overview"]'
-  );
+  const pagesUrls = [
+    ...new Set(
+      await getHREFValuesDataAttribute($, '[data-element="overview"]')
+    ),
+  ];
+
+  for (let i = 0; i < pagesUrls.length; i++) {
+    if (!pagesUrls[i].includes(url)) {
+      pagesUrls[i] = await buildUrl(url, pagesUrls[i]);
+    }
+  }
+
   return getRandomNString(pagesUrls, numberOfPages);
 };
 
@@ -215,8 +238,7 @@ const getRandomSchoolSecondLevelPagesUrl = async (
     const dataElement = `[data-element="${value.data_element}"]`;
 
     let elements = $(dataElement);
-
-    if (Object.keys(elements).length !== 0) {
+    if (Object.keys(elements).length > 0) {
       elements = elements.find("li > a");
       for (const element of elements) {
         let secondLevelPageUrl = $(element).attr()?.href;
@@ -250,7 +272,7 @@ const getRandomSchoolLocationsUrl = async (
 
   let locationsElementsUrls = await getHREFValuesDataAttribute($, dataElement);
   locationsElementsUrls = [...new Set(locationsElementsUrls)];
-  if (locationsElementsUrls.length > 1) {
+  if (locationsElementsUrls.length !== 1) {
     return [];
   }
 
@@ -439,7 +461,39 @@ const getRandomMunicipalityServicesUrl = async (
     allServicesUrl = await buildUrl(url, allServicesUrl);
   }
 
-  $ = await loadPageData(allServicesUrl);
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox"],
+  });
+  try {
+    const page: Page = await browser.newPage();
+    await page.goto(allServicesUrl, {
+      waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
+    });
+
+    let clickButton = true;
+    while (clickButton) {
+      try {
+        const element = await page.$('[data-element="load-other-services"]');
+        if (!element) {
+          clickButton = false;
+          continue;
+        }
+        const xhrCatcher = page.waitForResponse(
+          (r) => r.request().method() != "OPTIONS"
+        );
+        await element.click({ delay: 500 });
+        await xhrCatcher;
+        break;
+      } catch (e) {
+        continue;
+      }
+    }
+    const data = await page.content();
+    $ = cheerio.load(data);
+    await browser.close();
+  } catch (e) {
+    await browser.close();
+  }
 
   const servicesUrls = await getHREFValuesDataAttribute(
     $,
@@ -447,6 +501,85 @@ const getRandomMunicipalityServicesUrl = async (
   );
 
   return getRandomNString(servicesUrls, numberOfServices);
+};
+
+const getRandomMunicipalityFirstLevelPagesUrl = async (
+  url: string,
+  numberOfPages = 1
+): Promise<string[]> => {
+  if (numberOfPages <= 1) {
+    numberOfPages = 1;
+  }
+
+  const $ = await loadPageData(url);
+  const pagesUrls: string[] = [];
+
+  for (const [, primaryMenuItem] of Object.entries(primaryMenuItems)) {
+    const dataElement = `[data-element="${primaryMenuItem.data_element}"]`;
+
+    const element = $(dataElement);
+    if (element) {
+      let primaryLevelPageUrl = $(element).attr()?.href;
+      if (
+        primaryLevelPageUrl &&
+        primaryLevelPageUrl !== "#" &&
+        primaryLevelPageUrl !== ""
+      ) {
+        if (!primaryLevelPageUrl.includes(url)) {
+          primaryLevelPageUrl = await buildUrl(url, primaryLevelPageUrl);
+        }
+        pagesUrls.push(primaryLevelPageUrl);
+      }
+    }
+  }
+
+  return getRandomNString(pagesUrls, numberOfPages);
+};
+
+const getRandomMunicipalitySecondLevelPagesUrl = async (
+  url: string,
+  numberOfPages = 1
+): Promise<string[]> => {
+  if (numberOfPages <= 1) {
+    numberOfPages = 1;
+  }
+
+  const $ = await loadPageData(url);
+  let pagesUrls: string[] = [];
+
+  for (const [, primaryMenuItem] of Object.entries(primaryMenuItems)) {
+    const dataElement = `[data-element="${primaryMenuItem.data_element}"]`;
+
+    const element = $(dataElement);
+    if (element) {
+      let primaryLevelPageUrl = $(element).attr()?.href;
+      if (
+        primaryLevelPageUrl &&
+        primaryLevelPageUrl !== "#" &&
+        primaryLevelPageUrl !== ""
+      ) {
+        if (!primaryLevelPageUrl.includes(url)) {
+          primaryLevelPageUrl = await buildUrl(url, primaryLevelPageUrl);
+        }
+        const $2 = await loadPageData(primaryLevelPageUrl);
+        const dataElementSecondaryItem = `[data-element="${primaryMenuItem.secondary_item_data_element}"]`;
+        pagesUrls = [
+          ...pagesUrls,
+          ...new Set(
+            await getHREFValuesDataAttribute($2, dataElementSecondaryItem)
+          ),
+        ];
+      }
+    }
+  }
+
+  for (let i = 0; i < pagesUrls.length; i++) {
+    if (!pagesUrls[i].includes(url)) {
+      pagesUrls[i] = await buildUrl(url, pagesUrls[i]);
+    }
+  }
+
+  return getRandomNString(pagesUrls, numberOfPages);
 };
 
 const areAllElementsInVocabulary = async (
@@ -506,10 +639,13 @@ export {
   checkOrder,
   missingMenuItems,
   loadPageData,
+  checkCSSClassesOnPage,
   getRandomSchoolServicesUrl,
   getRandomSchoolFirstLevelPagesUrl,
   getRandomSchoolSecondLevelPagesUrl,
   getRandomSchoolLocationsUrl,
+  getRandomMunicipalityFirstLevelPagesUrl,
+  getRandomMunicipalitySecondLevelPagesUrl,
   getRandomMunicipalityServicesUrl,
   getPageElementDataAttribute,
   getHREFValuesDataAttribute,

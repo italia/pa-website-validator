@@ -9,9 +9,13 @@ import {
   getPageElementDataAttribute,
   loadPageData,
 } from "../../utils/utils";
-import { secondLevelPageNames } from "../../storage/municipality/controlledVocabulary";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
+import {
+  customSecondaryMenuItemsDataElement,
+  primaryMenuItems,
+} from "../../storage/municipality/menuItems";
+import { customPrimaryMenuItemsDataElement } from "../../storage/municipality/menuItems";
 
 const Audit = lighthouse.Audit;
 
@@ -71,40 +75,83 @@ class LoadAudit extends lighthouse.Audit {
 
     let $: CheerioAPI = await loadPageData(url);
 
-    const secondLevelPageHref = await getHREFValuesDataAttribute(
-      $,
-      '[data-element="all-services"]'
-    );
-    if (secondLevelPageHref.length <= 0) {
-      items[0].result = notExecuted;
-      return {
-        score: score,
-        details: Audit.makeTableDetails(headings, items),
-      };
-    }
-
-    let secondLevelPageUrl = secondLevelPageHref[0];
-    if (!secondLevelPageUrl.includes(url)) {
-      secondLevelPageUrl = await buildUrl(url, secondLevelPageHref[0]);
-    }
-
-    $ = await loadPageData(secondLevelPageUrl);
-    const servicesSecondLevelPagesNames = await getPageElementDataAttribute(
-      $,
-      '[data-element="service-category-link"]'
-    );
-
     const pagesInVocabulary = [];
     const pagesNotInVocabulary = [];
-    for (const pageTitle of servicesSecondLevelPagesNames) {
-      if (secondLevelPageNames.includes(pageTitle.toLowerCase())) {
-        pagesInVocabulary.push(pageTitle.toLowerCase());
-      } else {
-        pagesNotInVocabulary.push(pageTitle.toLowerCase());
+    let totalNumberOfTitleFound = 0;
+
+    for (const [, primaryMenuItem] of Object.entries(primaryMenuItems)) {
+      const primaryMenuDataElement = `[data-element="${primaryMenuItem.data_element}"]`;
+      const secondLevelPageHref = await getHREFValuesDataAttribute(
+        $,
+        primaryMenuDataElement
+      );
+      if (secondLevelPageHref.length <= 0) {
+        items[0].result = notExecuted;
+        return {
+          score: score,
+          details: Audit.makeTableDetails(headings, items),
+        };
+      }
+
+      let secondLevelPageUrl = secondLevelPageHref[0];
+      if (!secondLevelPageUrl.includes(url)) {
+        secondLevelPageUrl = await buildUrl(url, secondLevelPageHref[0]);
+      }
+
+      if (primaryMenuItem.dictionary.length > 0) {
+        $ = await loadPageData(secondLevelPageUrl);
+        const secondaryMenuDataElement = `[data-element="${primaryMenuItem.secondary_item_data_element}"]`;
+        const secondLevelPagesNames = await getPageElementDataAttribute(
+          $,
+          secondaryMenuDataElement
+        );
+
+        for (const pageTitle of secondLevelPagesNames) {
+          if (primaryMenuItem.dictionary.includes(pageTitle.toLowerCase())) {
+            pagesInVocabulary.push(pageTitle.toLowerCase());
+          } else {
+            pagesNotInVocabulary.push(pageTitle.toLowerCase());
+          }
+        }
+
+        totalNumberOfTitleFound += secondLevelPagesNames.length;
       }
     }
 
-    if (servicesSecondLevelPagesNames.length === 0) {
+    let j = 0;
+    let checkExistence = true;
+    let numberOfErrorVoices = 0;
+
+    while (checkExistence) {
+      const primaryMenuDataElement = `[data-element="${
+        customPrimaryMenuItemsDataElement + j.toString()
+      }"]`;
+      const secondLevelPageHref = await getHREFValuesDataAttribute(
+        $,
+        primaryMenuDataElement
+      );
+      if (secondLevelPageHref.length <= 0) {
+        checkExistence = false;
+        continue;
+      }
+
+      let secondLevelPageUrl = secondLevelPageHref[0];
+      if (!secondLevelPageUrl.includes(url)) {
+        secondLevelPageUrl = await buildUrl(url, secondLevelPageHref[0]);
+      }
+
+      $ = await loadPageData(secondLevelPageUrl);
+      const secondaryMenuDataElement = `[data-element="${customSecondaryMenuItemsDataElement}"]`;
+      const secondLevelPagesNames = await getPageElementDataAttribute(
+        $,
+        secondaryMenuDataElement
+      );
+
+      numberOfErrorVoices += secondLevelPagesNames.length;
+      j++;
+    }
+
+    if (totalNumberOfTitleFound === 0) {
       return {
         score: score,
         details: Audit.makeTableDetails(headings, items),
@@ -113,7 +160,8 @@ class LoadAudit extends lighthouse.Audit {
 
     const pagesFoundInVocabularyPercentage = parseInt(
       (
-        (pagesInVocabulary.length / servicesSecondLevelPagesNames.length) *
+        (pagesInVocabulary.length /
+          (totalNumberOfTitleFound + numberOfErrorVoices)) *
         100
       ).toFixed(0)
     );

@@ -5,11 +5,23 @@
 import lighthouse from "lighthouse";
 import semver from "semver";
 import { auditDictionary } from "../../storage/auditDictionary";
+import {
+  checkCSSClassesOnPage,
+  getRandomMunicipalityFirstLevelPagesUrl,
+  getRandomMunicipalitySecondLevelPagesUrl,
+  getRandomMunicipalityServicesUrl,
+} from "../../utils/utils";
+import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 
 const Audit = lighthouse.Audit;
 
 const auditId = "municipality-ux-ui-consistency-bootstrap-italia-double-check";
 const auditData = auditDictionary[auditId];
+
+const accuracy = process.env["accuracy"] ?? "suggested";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const auditVariables = auditScanVariables[accuracy][auditId];
 
 const greenResult = auditData.greenResult;
 const redResult = auditData.redResult;
@@ -27,6 +39,7 @@ class LoadAudit extends Audit {
       requiredArtifacts: [
         "bootstrapItaliaSelectorCheck",
         "bootstrapItaliaCheck",
+        "origin",
       ],
     };
   }
@@ -35,8 +48,11 @@ class LoadAudit extends Audit {
     artifacts: LH.Artifacts & {
       bootstrapItaliaCheck: string;
       bootstrapItaliaSelectorCheck: string;
+      origin: string;
     }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
+    const url = artifacts.origin;
+
     const bootstrapItaliaVariableVersion =
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
@@ -55,23 +71,40 @@ class LoadAudit extends Audit {
         key: "result",
         itemType: "text",
         text: "Risultato",
+        subItemsHeading: { key: "inspected_page", itemType: "text" },
       },
       {
-        key: "library_name",
+        key: null,
+        itemType: "text",
+        text: "Risultato singolo",
+        subItemsHeading: { key: "single_result", itemType: "text" },
+      },
+      {
+        key: null,
         itemType: "text",
         text: "Nome libreria in uso",
+        subItemsHeading: { key: "library_name", itemType: "text" },
       },
       {
-        key: "library_version",
+        key: null,
         itemType: "text",
         text: "Versione libreria in uso",
+        subItemsHeading: { key: "library_version", itemType: "text" },
+      },
+      {
+        key: null,
+        itemType: "text",
+        text: "Classi CSS non trovate",
+        subItemsHeading: { key: "missing_classes", itemType: "text" },
       },
     ];
     const items = [
       {
-        result: redResult,
+        single_result: "Errato",
+        inspected_page: url,
         library_name: "",
         library_version: "",
+        missing_classes: "",
       },
     ];
     let score = 0;
@@ -86,7 +119,7 @@ class LoadAudit extends Audit {
 
         if (semver.gte(bootstrapItaliaVariableVersion, "2.0.0")) {
           score = 1;
-          items[0].result = greenResult;
+          items[0].single_result = "Corretto";
         }
       } else if (
         bootstrapItaliaSelectorVariableVersion !== null &&
@@ -97,16 +130,84 @@ class LoadAudit extends Audit {
 
         if (semver.gte(bootstrapItaliaSelectorVariableVersion, "2.0.0")) {
           score = 1;
-          items[0].result = greenResult;
+          items[0].single_result = "Corretto";
         }
       }
     } catch (e) {
       //eslint-disable-next-line
     }
 
+    const pagesToBeAnalyzed = [
+      url,
+      ...(await getRandomMunicipalityFirstLevelPagesUrl(
+        url,
+        auditVariables.numberOfFirstLevelPageToBeScanned
+      )),
+      ...(await getRandomMunicipalitySecondLevelPagesUrl(
+        url,
+        auditVariables.numberOfSecondLevelPageToBeScanned
+      )),
+      ...(await getRandomMunicipalityServicesUrl(
+        url,
+        auditVariables.numberOfServicesToBeScanned
+      )),
+    ];
+
+    const cssClasses = ["nav-link"];
+
+    for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
+      const item = {
+        single_result: "Corretto",
+        inspected_page: pageToBeAnalyzed,
+        library_name: "",
+        library_version: "",
+        missing_classes: "",
+      };
+
+      const foundClasses = await checkCSSClassesOnPage(
+        pageToBeAnalyzed,
+        cssClasses
+      );
+      const missingClasses = cssClasses.filter(
+        (x) => !foundClasses.includes(x)
+      );
+
+      if (missingClasses.length > 0) {
+        if (score === 1) {
+          score = 0;
+        }
+        item.missing_classes = missingClasses.join(", ");
+        item.single_result = "Errato";
+      }
+      items.push(item);
+    }
+
+    const results = [];
+    switch (score) {
+      case 1:
+        results.push({
+          result: greenResult,
+        });
+        break;
+      case 0:
+        results.push({
+          result: redResult,
+        });
+        break;
+    }
+
+    for (const item of items) {
+      results.push({
+        subItems: {
+          type: "subitems",
+          items: [item],
+        },
+      });
+    }
+
     return {
       score: score,
-      details: Audit.makeTableDetails(headings, items),
+      details: Audit.makeTableDetails(headings, results),
     };
   }
 }
