@@ -22,11 +22,6 @@ const Audit = lighthouse.Audit;
 const auditId = "municipality-second-level-pages";
 const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult;
-const yellowResult = auditData.yellowResult;
-const redResult = auditData.redResult;
-const notExecuted = auditData.nonExecuted;
-
 class LoadAudit extends lighthouse.Audit {
   static get meta() {
     return {
@@ -66,7 +61,7 @@ class LoadAudit extends lighthouse.Audit {
 
     const items = [
       {
-        result: redResult,
+        result: auditData.redResult,
         correct_title_percentage: "",
         correct_title_found: "",
         wrong_title_found: "",
@@ -86,7 +81,7 @@ class LoadAudit extends lighthouse.Audit {
         primaryMenuDataElement
       );
       if (secondLevelPageHref.length <= 0) {
-        items[0].result = notExecuted;
+        items[0].result = auditData.nonExecuted;
         return {
           score: score,
           details: Audit.makeTableDetails(headings, items),
@@ -167,13 +162,13 @@ class LoadAudit extends lighthouse.Audit {
     );
 
     if (pagesFoundInVocabularyPercentage === 100) {
-      items[0].result = greenResult;
+      items[0].result = auditData.greenResult;
       score = 1;
     } else if (
       pagesFoundInVocabularyPercentage > 50 &&
       pagesFoundInVocabularyPercentage < 100
     ) {
-      items[0].result = yellowResult;
+      items[0].result = auditData.yellowResult;
       score = 0.5;
     }
 

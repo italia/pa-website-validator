@@ -94,6 +94,9 @@ export default {
     onlyAudits: [
       "school-ux-ui-consistency-bootstrap-italia-double-check",
       "school-legislation-cookie-domain-check",
+      "school-servizi-structure-match-model",
+      "school-menu-scuola-second-level-structure-match-model",
+      "school-legislation-accessibility-declaration-is-present",
     ],
     /*
       onlyCategories:

@@ -16,10 +16,6 @@ const Audit = lighthouse.Audit;
 const auditId = "school-menu-scuola-second-level-structure-match-model";
 const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult;
-const yellowResult = auditData.yellowResult;
-const redResult = auditData.redResult;
-
 class LoadAudit extends Audit {
   static get meta() {
     return {
@@ -65,7 +61,7 @@ class LoadAudit extends Audit {
 
     const items = [
       {
-        result: redResult,
+        result: auditData.redResult,
         correct_voices_percentage: "",
         correct_voices: "",
         wrong_voices_order: "",
@@ -155,10 +151,10 @@ class LoadAudit extends Audit {
     let score = 0;
     if (presentVoicesPercentage >= 30 && presentVoicesPercentage < 100) {
       score = 0.5;
-      items[0].result = yellowResult;
+      items[0].result = auditData.yellowResult;
     } else if (presentVoicesPercentage === 100) {
       score = 1;
-      items[0].result = greenResult;
+      items[0].result = auditData.greenResult;
     }
 
     items[0].correct_voices = correctElementsFound.join(", ");
