@@ -513,11 +513,19 @@ export const auditDictionary = {
   },
   "school-servizi-structure-match-model": {
     greenResult:
-      "Tutte le voci obbligatorie sono presenti e nell'ordine corretto.",
+      "Tutte le pagine analizzate hanno tutte le voci obbligatorie presenti e nell'ordine corretto.",
     yellowResult:
-      "Fino a 2 voci obbligatorie non sono presenti o 1 voce non è nell'ordine corretto.",
+      "Almeno una pagina analizzata ha fino a 2 voci obbligatorie mancanti o 1 voce non è nell'ordine corretto.",
     redResult:
-      "Più di 2 voci obbligatorie non sono presenti o più di 1 voce non è nell'ordine corretto.",
+      "Almeno una pagina analizzata ha più di 2 voci obbligatorie mancanti o più di 1 voce non è nell'ordine corretto.",
+    subItem: {
+      greenResult:
+        "Tutte le voci obbligatorie sono presenti e nell'ordine corretto.",
+      yellowResult:
+        "Fino a 2 voci obbligatorie non sono presenti o 1 voce non è nell'ordine corretto.",
+      redResult:
+        "Più di 2 voci obbligatorie non sono presenti o più di 1 voce non è nell'ordine corretto.",
+    },
     nonExecuted:
       "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
     title:
