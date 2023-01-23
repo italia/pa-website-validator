@@ -41,7 +41,7 @@ declare namespace crawlerTypes {
     cookie_name: string;
     cookie_value: string;
     cookie_domain: string;
-    single_result: string;
+    is_correct: boolean;
   }
 
   interface orderResult {

@@ -38,7 +38,7 @@ const run = async (
   const resultCookies = await checkCookieDomain(url, cookies);
 
   for (const resultCookie of resultCookies) {
-    if (resultCookie.single_result === "Errato") {
+    if (!resultCookie.is_correct) {
       score = 0;
     }
 
@@ -126,11 +126,11 @@ async function checkCookieDomain(
       cookie_name: cookie.name,
       cookie_value: cookie.value,
       cookie_domain: cookie.domain,
-      single_result: "Errato",
+      is_correct: false,
     };
 
     if (url.includes(cookie.domain)) {
-      cookieValues.single_result = "Corretto";
+      cookieValues.is_correct = true;
     }
 
     returnValue.push(cookieValues);

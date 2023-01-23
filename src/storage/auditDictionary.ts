@@ -410,9 +410,14 @@ export const auditDictionary = {
       "CONDIZIONI DI SUCCESSO: gli argomenti utilizzati appartengono alla lista indicata all'interno del documento di architettura dell'informazione del modello scuole alla voce “Le parole della scuola”; MODALITÀ DI VERIFICA: gli argomenti identificati all'interno della funzione di ricerca del sito vengono confrontati con l'elenco di voci presente nel documento di architettura dell'informazione, ricercandoli usando specifici attributi \"data-element\" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Elenco degli argomenti del Modello scuole](https://docs.google.com/spreadsheets/d/1MoayTY05SE4ixtgBsfsdngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=2135815526), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
   },
   "school-legislation-cookie-domain-check": {
-    greenResult: "Cookie idoneo.",
+    greenResult: "Il sito contiene solo Cookies idonei.",
     yellowResult: "",
-    redResult: "Cookie non idoneo.",
+    redResult: "Il sito contiene almeno un Cookie non idoneo",
+    subItem: {
+      greenResult: "Cookie idonei",
+      yellowResult: "",
+      redResult: "Cookie non idonei",
+    },
     nonExecuted: "",
     title:
       "C.SC.2.3 - COOKIE - Il sito della scuola deve presentare cookie tecnici in linea con la normativa vigente.",
