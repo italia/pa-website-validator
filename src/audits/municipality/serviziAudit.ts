@@ -27,11 +27,6 @@ const accuracy = process.env["accuracy"] ?? "suggested";
 // @ts-ignore
 const auditVariables = auditScanVariables[accuracy][auditId];
 
-const greenResult = auditData.greenResult;
-const yellowResult = auditData.yellowResult;
-const redResult = auditData.redResult;
-const notExecuted = auditData.nonExecuted;
-
 class LoadAudit extends Audit {
   static get meta() {
     return {
@@ -58,26 +53,20 @@ class LoadAudit extends Audit {
         subItemsHeading: { key: "inspected_page", itemType: "text" },
       },
       {
-        key: null,
+        key: "title_missing_elements",
         itemType: "text",
-        text: "Risultato singolo",
-        subItemsHeading: { key: "single_result", itemType: "text" },
-      },
-      {
-        key: null,
-        itemType: "text",
-        text: "Voci obbligatorie mancanti",
+        text: "",
         subItemsHeading: {
-          key: "missing_mandatory_elements_found",
+          key: "missing_elements",
           itemType: "text",
         },
       },
       {
-        key: null,
+        key: "title_wrong_order_elements",
         itemType: "text",
-        text: "Voci obbligatorie che non rispettano l'ordine corretto",
+        text: "",
         subItemsHeading: {
-          key: "mandatory_elements_not_right_order",
+          key: "wrong_order_elements",
           itemType: "text",
         },
       },
@@ -99,21 +88,23 @@ class LoadAudit extends Audit {
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: notExecuted,
+              result: auditData.nonExecuted,
             },
           ]
         ),
       };
     }
 
-    const items = [];
+    const correctItems = [];
+    const toleranceItems = [];
+    const wrongItems = [];
+
     let score = 1;
 
     for (const randomService of randomServices) {
       const item = {
-        single_result: "Corretto",
-        missing_mandatory_elements_found: "",
-        mandatory_elements_not_right_order: "",
+        missing_elements: "",
+        wrong_order_elements: "",
         inspected_page: "",
       };
 
@@ -181,6 +172,9 @@ class LoadAudit extends Audit {
         missingMandatoryItems.push(mandatoryBodyVoices[0]);
       }
 
+      item.missing_elements = missingMandatoryItems.join(", ");
+      item.wrong_order_elements = orderResult.elementsNotInSequence.join(", ");
+
       const missingVoicesAmount = missingMandatoryItems.length;
       const voicesNotInCorrectOrderAmount =
         orderResult.numberOfElementsNotInSequence;
@@ -190,7 +184,7 @@ class LoadAudit extends Audit {
           score = 0;
         }
 
-        item.single_result = "Errato";
+        wrongItems.push(item);
       } else if (
         (missingVoicesAmount > 0 && missingVoicesAmount <= 2) ||
         voicesNotInCorrectOrderAmount === 1
@@ -199,42 +193,91 @@ class LoadAudit extends Audit {
           score = 0.5;
         }
 
-        item.single_result = "Tolleranza";
+        toleranceItems.push(item);
+      } else {
+        correctItems.push(item);
       }
-
-      item.missing_mandatory_elements_found = missingMandatoryItems.join(", ");
-      item.mandatory_elements_not_right_order =
-        orderResult.elementsNotInSequence.join(", ");
-
-      items.push(item);
     }
 
     const results = [];
     switch (score) {
       case 1:
         results.push({
-          result: greenResult,
+          result: auditData.greenResult,
         });
         break;
       case 0.5:
         results.push({
-          result: yellowResult,
+          result: auditData.yellowResult,
         });
         break;
       case 0:
         results.push({
-          result: redResult,
+          result: auditData.redResult,
         });
         break;
     }
 
-    for (const item of items) {
+    results.push({});
+
+    if (correctItems.length > 0) {
       results.push({
-        subItems: {
-          type: "subitems",
-          items: [item],
-        },
+        result: auditData.subItem.greenResult,
+        title_missing_elements: "Voci obbligatorie mancanti",
+        title_wrong_order_elements:
+          "Voci obbligatorie che non rispettano l'ordine corretto",
       });
+
+      for (const item of correctItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
+    }
+
+    if (toleranceItems.length > 0) {
+      results.push({
+        result: auditData.subItem.yellowResult,
+        title_missing_elements: "Voci obbligatorie mancanti",
+        title_wrong_order_elements:
+          "Voci obbligatorie che non rispettano l'ordine corretto",
+      });
+
+      for (const item of toleranceItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
+    }
+
+    if (wrongItems.length > 0) {
+      results.push({
+        result: auditData.subItem.redResult,
+        title_missing_elements: "Voci obbligatorie mancanti",
+        title_wrong_order_elements:
+          "Voci obbligatorie che non rispettano l'ordine corretto",
+      });
+
+      for (const item of wrongItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
     }
 
     return {

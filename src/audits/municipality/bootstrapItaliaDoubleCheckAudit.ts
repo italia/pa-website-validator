@@ -23,9 +23,6 @@ const accuracy = process.env["accuracy"] ?? "suggested";
 // @ts-ignore
 const auditVariables = auditScanVariables[accuracy][auditId];
 
-const greenResult = auditData.greenResult;
-const redResult = auditData.redResult;
-
 const libraryName = "Bootstrap italia";
 
 class LoadAudit extends Audit {
@@ -130,7 +127,7 @@ class LoadAudit extends Audit {
       resultTitleVersion = "Libreria Bootstrap Italia mancante o errata";
     } else {
       resultTitleVersion =
-          "Libreria Bootstrap Italia è presente e ha la versione corretta";
+        "Libreria Bootstrap Italia è presente e ha la versione corretta";
     }
 
     resultVersion.push({
@@ -172,14 +169,14 @@ class LoadAudit extends Audit {
       };
 
       const foundClasses = await checkCSSClassesOnPage(
-          pageToBeAnalyzed,
-          cssClasses
+        pageToBeAnalyzed,
+        cssClasses
       );
 
       item.row_result_0 = foundClasses.join(", ");
 
       const missingClasses = cssClasses.filter(
-          (x) => !foundClasses.includes(x)
+        (x) => !foundClasses.includes(x)
       );
 
       if (missingClasses.length > 0) {
