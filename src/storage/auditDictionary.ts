@@ -53,10 +53,15 @@ export const auditDictionary = {
   },
   "municipality-ux-ui-consistency-bootstrap-italia-double-check": {
     greenResult:
-      "Il sito utilizza la libreria Bootstrap Italia in una versione idonea.",
+        "Il sito utilizza la libreria Bootstrap Italia in una versione idonea e utilizza le classi CSS corrette.",
     yellowResult: "",
     redResult:
-      "Il sito non utilizza la libreria Bootstrap Italia o ne utilizza una versione datata.",
+        "Il sito non utilizza la libreria Bootstrap Italia, utilizza una versione datata oppure almeno una delle pagine utilizza delle classi CSS è errate.",
+    subItem: {
+      greenResult: "Pagine del sito che hanno classi CSS corrette ",
+      yellowResult: "",
+      redResult: "Pagine del sito che hanno almeno una classe css errata",
+    },
     nonExecuted: "",
     title:
       "C.SI.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito comunale deve utilizzare la libreria Bootstrap Italia.",
