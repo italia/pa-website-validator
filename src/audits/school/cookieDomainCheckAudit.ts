@@ -101,14 +101,13 @@ class LoadAudit extends Audit {
       items = [...items, ...pageResult.items];
     }
 
-    const correctItems= [];
+    const correctItems = [];
     const wrongItems = [];
 
-    for (const item of items){
-      if(item.is_correct){
+    for (const item of items) {
+      if (item.is_correct) {
         correctItems.push(item);
-      }
-      else {
+      } else {
         wrongItems.push(item);
       }
     }
@@ -129,12 +128,12 @@ class LoadAudit extends Audit {
 
     results.push({});
 
-    if(correctItems.length > 0){
+    if (correctItems.length > 0) {
       results.push({
         result: auditData.subItem.greenResult,
         title_cookie_domain: "Cookie domain",
         title_cookie_name: "Cookie name",
-        title_cookie_value: "Cookie value"
+        title_cookie_value: "Cookie value",
       });
 
       for (const item of correctItems) {
@@ -149,12 +148,12 @@ class LoadAudit extends Audit {
       results.push({});
     }
 
-    if(wrongItems.length > 0){
+    if (wrongItems.length > 0) {
       results.push({
         result: auditData.subItem.redResult,
         title_cookie_domain: "Cookie domain",
         title_cookie_name: "Cookie name",
-        title_cookie_value: "Cookie value"
+        title_cookie_value: "Cookie value",
       });
 
       for (const item of wrongItems) {

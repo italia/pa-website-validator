@@ -41,11 +41,30 @@ class LoadAudit extends Audit {
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
     const headings = [
-      { key: "result", itemType: "text", text: "Risultato" },
-      { key: "inspected_page", itemType: "text", text: "Pagina ispezionata" },
-      { key: "cookie_domain", itemType: "text", text: "Dominio del Cookie" },
-      { key: "cookie_name", itemType: "text", text: "Nome del Cookie" },
-      { key: "cookie_value", itemType: "text", text: "Valore del Cookie" },
+      {
+        key: "result",
+        itemType: "text",
+        text: "Risultato totale",
+        subItemsHeading: { key: "inspected_page", itemType: "text" },
+      },
+      {
+        key: "title_cookie_domain",
+        itemType: "text",
+        text: "Dominio del Cookie",
+        subItemsHeading: { key: "cookie_domain", itemType: "text" },
+      },
+      {
+        key: "title_cookie_name",
+        itemType: "text",
+        text: "Nome del Cookie",
+        subItemsHeading: { key: "cookie_name", itemType: "text" },
+      },
+      {
+        key: "title_cookie_value",
+        itemType: "text",
+        text: "Valore del Cookie",
+        subItemsHeading: { key: "cookie_value", itemType: "text" },
+      },
     ];
 
     const pagesToBeAnalyzed = [
@@ -76,6 +95,17 @@ class LoadAudit extends Audit {
       items = [...items, ...pageResult.items];
     }
 
+    const correctItems = [];
+    const wrongItems = [];
+
+    for (const item of items) {
+      if (item.is_correct) {
+        correctItems.push(item);
+      } else {
+        wrongItems.push(item);
+      }
+    }
+
     const results = [];
     switch (score) {
       case 1:
@@ -90,13 +120,46 @@ class LoadAudit extends Audit {
         break;
     }
 
-    for (const item of items) {
+    results.push({});
+
+    if (correctItems.length > 0) {
       results.push({
-        subItems: {
-          type: "subitems",
-          items: [item],
-        },
+        result: auditData.subItem.greenResult,
+        title_cookie_domain: "Cookie domain",
+        title_cookie_name: "Cookie name",
+        title_cookie_value: "Cookie value",
       });
+
+      for (const item of correctItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
+    }
+
+    if (wrongItems.length > 0) {
+      results.push({
+        result: auditData.subItem.redResult,
+        title_cookie_domain: "Cookie domain",
+        title_cookie_name: "Cookie name",
+        title_cookie_value: "Cookie value",
+      });
+
+      for (const item of wrongItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
     }
 
     return {
