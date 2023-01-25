@@ -177,7 +177,7 @@ const getRandomSchoolServicesUrl = async (
     }
   }
 
-  for(let i = 0; i < servicesUrls.length; i++){
+  for (let i = 0; i < servicesUrls.length; i++) {
     if (!servicesUrls[i].includes(url)) {
       servicesUrls[i] = await buildUrl(url, servicesUrls[i]);
     }
@@ -486,7 +486,7 @@ const getRandomMunicipalityServicesUrl = async (
     '[data-element="service-link"]'
   );
 
-  for(let i = 0; i < servicesUrls.length; i++){
+  for (let i = 0; i < servicesUrls.length; i++) {
     if (!servicesUrls[i].includes(url)) {
       servicesUrls[i] = await buildUrl(url, servicesUrls[i]);
     }

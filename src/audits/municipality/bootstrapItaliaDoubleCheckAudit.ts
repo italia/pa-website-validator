@@ -12,6 +12,7 @@ import {
   getRandomMunicipalityServicesUrl,
 } from "../../utils/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
+import puppeteer from "puppeteer";
 
 const Audit = lighthouse.Audit;
 
@@ -33,42 +34,23 @@ class LoadAudit extends Audit {
       failureTitle: auditData.failureTitle,
       description: auditData.description,
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
-      requiredArtifacts: [
-        "bootstrapItaliaSelectorCheck",
-        "bootstrapItaliaCheck",
-        "origin",
-      ],
+      requiredArtifacts: ["origin"],
     };
   }
 
   static async audit(
     artifacts: LH.Artifacts & {
-      bootstrapItaliaCheck: string;
-      bootstrapItaliaSelectorCheck: string;
       origin: string;
     }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
-
-    const bootstrapItaliaVariableVersion =
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-ignore
-      artifacts.bootstrapItaliaCheck?.toString().trim().replaceAll('"', "") ??
-      "";
-    const bootstrapItaliaSelectorVariableVersion =
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-ignore
-      artifacts.bootstrapItaliaSelectorCheck
-        ?.toString()
-        .trim()
-        .replaceAll('"', "") ?? "";
 
     const headings = [
       {
         key: "result",
         itemType: "text",
         text: "Risultato totale",
-        subItemsHeading: { key: "inspected_page", itemType: "text" },
+        subItemsHeading: { key: "inspected_page", itemType: "url" },
       },
       {
         key: "title_row_result_0",
@@ -82,66 +64,18 @@ class LoadAudit extends Audit {
         text: "",
         subItemsHeading: { key: "row_result_1", itemType: "text" },
       },
+      {
+        key: "title_row_result_2",
+        itemType: "text",
+        text: "",
+        subItemsHeading: { key: "row_result_2", itemType: "text" },
+      },
     ];
 
     const correctItems = [];
     const wrongItems = [];
 
-    const resultVersion = [];
-    const itemVersion = {
-      inspected_page: url,
-      row_result_0: "",
-      row_result_1: "",
-    };
-
-    let score = 0;
-
-    try {
-      if (
-        bootstrapItaliaVariableVersion !== null &&
-        bootstrapItaliaVariableVersion
-      ) {
-        itemVersion.row_result_1 = bootstrapItaliaVariableVersion;
-        itemVersion.row_result_0 = libraryName;
-
-        if (semver.gte(bootstrapItaliaVariableVersion, "2.0.0")) {
-          score = 1;
-        }
-      } else if (
-        bootstrapItaliaSelectorVariableVersion !== null &&
-        bootstrapItaliaSelectorVariableVersion
-      ) {
-        itemVersion.row_result_1 = bootstrapItaliaSelectorVariableVersion;
-        itemVersion.row_result_0 = libraryName;
-
-        if (semver.gte(bootstrapItaliaSelectorVariableVersion, "2.0.0")) {
-          score = 1;
-        }
-      }
-    } catch (e) {
-      //eslint-disable-next-line
-    }
-
-    let resultTitleVersion = "";
-    if (score === 0) {
-      resultTitleVersion = "Libreria Bootstrap Italia mancante o errata";
-    } else {
-      resultTitleVersion =
-        "Libreria Bootstrap Italia è presente e ha la versione corretta";
-    }
-
-    resultVersion.push({
-      result: resultTitleVersion,
-      title_row_result_0: "Nome libreria in uso",
-      title_row_result_1: "Versione libreria in uso",
-    });
-
-    resultVersion.push({
-      subItems: {
-        type: "subitems",
-        items: [itemVersion],
-      },
-    });
+    let score = 1;
 
     const pagesToBeAnalyzed = [
       url,
@@ -161,36 +95,92 @@ class LoadAudit extends Audit {
 
     const cssClasses = ["nav-link"];
 
+    const browser = await puppeteer.launch({
+      args: ["--no-sandbox"],
+    });
+
     for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
+      let singleResult = 0;
       const item = {
         inspected_page: pageToBeAnalyzed,
         row_result_0: "",
         row_result_1: "",
+        row_result_2: "",
       };
+
+      try {
+        const page = await browser.newPage();
+        await page.goto(pageToBeAnalyzed);
+
+        const bootstrapItaliaVariableVersion = await page.evaluate(
+          async function () {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-ignore
+            return window.BOOTSTRAP_ITALIA_VERSION || null;
+          }
+        );
+        const bootstrapItaliaSelectorVariableVersion = await page.evaluate(
+          async function () {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-ignore
+            return (
+              getComputedStyle(document.body).getPropertyValue(
+                "--bootstrap-italia-version"
+              ) || null
+            );
+          }
+        );
+
+        if (
+          bootstrapItaliaVariableVersion !== null &&
+          bootstrapItaliaVariableVersion
+        ) {
+          item.row_result_1 = bootstrapItaliaVariableVersion;
+          item.row_result_0 = libraryName;
+
+          if (semver.gte(bootstrapItaliaVariableVersion, "2.0.0")) {
+            singleResult = 1;
+          }
+        } else if (
+          bootstrapItaliaSelectorVariableVersion !== null &&
+          bootstrapItaliaSelectorVariableVersion
+        ) {
+          item.row_result_1 = bootstrapItaliaSelectorVariableVersion;
+          item.row_result_0 = libraryName;
+
+          if (semver.gte(bootstrapItaliaSelectorVariableVersion, "2.0.0")) {
+            singleResult = 1;
+          }
+        }
+      } catch (e) {
+        // eslint-disable-next-line no-empty
+      }
 
       const foundClasses = await checkCSSClassesOnPage(
         pageToBeAnalyzed,
         cssClasses
       );
 
-      item.row_result_0 = foundClasses.join(", ");
-
       const missingClasses = cssClasses.filter(
         (x) => !foundClasses.includes(x)
       );
 
       if (missingClasses.length > 0) {
-        if (score === 1) {
-          score = 0;
-        }
-        item.row_result_1 = missingClasses.join(", ");
-        wrongItems.push(item);
-      } else {
+        singleResult = 0;
+        item.row_result_2 = missingClasses.join(", ");
+      }
+
+      if (singleResult === 1) {
         correctItems.push(item);
+      } else {
+        score = 0;
+        wrongItems.push(item);
       }
     }
 
-    let results = [];
+    await browser.close();
+
+    const results = [];
     switch (score) {
       case 1:
         results.push({
@@ -206,15 +196,12 @@ class LoadAudit extends Audit {
 
     results.push({});
 
-    results = [...results, ...resultVersion];
-
-    results.push({});
-
     if (correctItems.length > 0) {
       results.push({
         result: auditData.subItem.greenResult,
-        title_row_result_0: "Classi CSS trovate",
-        title_row_result_1: "Classi CSS non trovate",
+        title_row_result_0: "Nome libreria in uso",
+        title_row_result_1: "Versione libreria in uso",
+        title_row_result_2: "Classi CSS non trovate",
       });
 
       for (const item of correctItems) {
@@ -232,8 +219,9 @@ class LoadAudit extends Audit {
     if (wrongItems.length > 0) {
       results.push({
         result: auditData.subItem.redResult,
-        title_row_result_0: "Classi CSS trovate",
-        title_row_result_1: "Classi CSS non trovate",
+        title_row_result_0: "Nome libreria in uso",
+        title_row_result_1: "Versione libreria in uso",
+        title_row_result_2: "Classi CSS non trovate",
       });
 
       for (const item of wrongItems) {

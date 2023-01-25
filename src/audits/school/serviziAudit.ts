@@ -54,7 +54,7 @@ class LoadAudit extends Audit {
         key: "result",
         itemType: "text",
         text: "Risultato",
-        subItemsHeading: { key: "inspected_page", itemType: "text" },
+        subItemsHeading: { key: "inspected_page", itemType: "url" },
       },
       {
         key: "title_missing_elements",

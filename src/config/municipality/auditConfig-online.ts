@@ -141,7 +141,7 @@ export default {
       "modelComplianceInformation",
       "reccomandationsAndAdditionalTests",
       "additionalTests",
-    ]
+    ],
   },
 
   passes: [

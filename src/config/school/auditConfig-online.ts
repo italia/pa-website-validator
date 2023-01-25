@@ -91,13 +91,12 @@ const customAdditionalAudits = [
 export default {
   extends: "lighthouse:default",
   settings: {
-      onlyCategories:
-      [
-          "modelCompliance",
-          "recommendations",
-          "additionalTests",
-          "performance"
-      ]
+    onlyCategories: [
+      "modelCompliance",
+      "recommendations",
+      "additionalTests",
+      "performance",
+    ],
   },
 
   passes: [
