@@ -16,6 +16,12 @@ const Audit = lighthouse.Audit;
 const auditId = "school-menu-scuola-second-level-structure-match-model";
 const auditData = auditDictionary[auditId];
 
+interface itemPage {
+  key: string;
+  pagesInVocabulary: string[],
+  pagesNotInVocabulary: string[]
+}
+
 class LoadAudit extends Audit {
   static get meta() {
     return {
@@ -70,14 +76,17 @@ class LoadAudit extends Audit {
       },
     ];
 
-    let elementsFound: string[] = [];
-    let correctElementsFound: string[] = [];
-    let missingElements: string[] = [];
-    for (const [, value] of Object.entries(menuItems)) {
-      const secondaryMenuItem = value;
+    let totalNumberOfTitleFound = 0;
+    const itemsPage: itemPage[] = [];
 
-      const singleElementElementsFound: string[] = [];
-      const singleElementCorrectElementsFound: string[] = [];
+    for (const [key, value] of Object.entries(menuItems)) {
+      const item: itemPage = {
+        key: key,
+        pagesInVocabulary: [],
+        pagesNotInVocabulary: []
+      };
+
+      const secondaryMenuItem = value;
 
       const secondaryMenuItems: string[] = [];
       for (const element of secondaryMenuItem.dictionary) {
@@ -95,24 +104,17 @@ class LoadAudit extends Audit {
 
       for (const element of headerUlTest) {
         if (secondaryMenuItems.includes(element.toLowerCase())) {
-          singleElementCorrectElementsFound.push(element.toLowerCase());
+          item.pagesInVocabulary.push(element.toLowerCase());
         }
 
-        singleElementElementsFound.push(element.toLowerCase());
+        totalNumberOfTitleFound++;
       }
 
-      elementsFound = [...elementsFound, ...singleElementElementsFound];
-      correctElementsFound = [
-        ...correctElementsFound,
-        ...singleElementCorrectElementsFound,
-      ];
+      item.pagesNotInVocabulary = secondaryMenuItems.filter(
+          (x) => !item.pagesInVocabulary.includes(x)
+      );
 
-      missingElements = [
-        ...missingElements,
-        ...secondaryMenuItems.filter(
-          (x) => !singleElementCorrectElementsFound.includes(x)
-        ),
-      ];
+      itemsPage.push(item);
     }
 
     let j = 0;
@@ -140,10 +142,30 @@ class LoadAudit extends Audit {
       j++;
     }
 
+    let pagesInVocabulary = 0;
+    let correctTitleFound = "";
+    let wrongTitleFound = "";
+
+    for(const itemPage of itemsPage){
+      pagesInVocabulary += itemPage.pagesInVocabulary.length;
+
+      if(itemPage.pagesInVocabulary.length > 0){
+        correctTitleFound += itemPage.key + ': ';
+        correctTitleFound += itemPage.pagesInVocabulary.join(', ');
+        correctTitleFound += ' ';
+      }
+
+      if(itemPage.pagesNotInVocabulary.length > 0) {
+        wrongTitleFound += itemPage.key + ': ';
+        wrongTitleFound += itemPage.pagesNotInVocabulary.join(', ');
+        correctTitleFound += ' ';
+      }
+    }
+
     const presentVoicesPercentage: number = parseInt(
       (
-        (correctElementsFound.length /
-          (elementsFound.length + errorVoices.length)) *
+        (pagesInVocabulary /
+          (totalNumberOfTitleFound + errorVoices.length)) *
         100
       ).toFixed(0)
     );
@@ -157,10 +179,10 @@ class LoadAudit extends Audit {
       items[0].result = auditData.greenResult;
     }
 
-    items[0].correct_voices = correctElementsFound.join(", ");
+    items[0].correct_voices = correctTitleFound;
     items[0].correct_voices_percentage =
       presentVoicesPercentage.toString() + "%";
-    items[0].missing_voices = missingElements.join(", ");
+    items[0].missing_voices = wrongTitleFound;
     items[0].error_voices = errorVoices.join(", ");
 
     return {

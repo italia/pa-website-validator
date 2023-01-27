@@ -22,6 +22,12 @@ const Audit = lighthouse.Audit;
 const auditId = "municipality-second-level-pages";
 const auditData = auditDictionary[auditId];
 
+interface itemPage {
+  key: string;
+  pagesInVocabulary: string[],
+  pagesNotInVocabulary: string[]
+}
+
 class LoadAudit extends lighthouse.Audit {
   static get meta() {
     return {
@@ -57,6 +63,11 @@ class LoadAudit extends lighthouse.Audit {
         itemType: "text",
         text: "Titoli errati identificati",
       },
+      {
+        key: "error_voices",
+        itemType: "text",
+        text: "Voci aggiuntive errate trovate",
+      },
     ];
 
     const items = [
@@ -65,16 +76,23 @@ class LoadAudit extends lighthouse.Audit {
         correct_title_percentage: "",
         correct_title_found: "",
         wrong_title_found: "",
+        error_voices: "",
       },
     ];
 
     let $: CheerioAPI = await loadPageData(url);
 
-    const pagesInVocabulary = [];
-    const pagesNotInVocabulary = [];
     let totalNumberOfTitleFound = 0;
+    const itemsPage: itemPage[] = [];
 
-    for (const [, primaryMenuItem] of Object.entries(primaryMenuItems)) {
+    for (const [key, primaryMenuItem] of Object.entries(primaryMenuItems)) {
+
+      const item: itemPage = {
+        key: key,
+        pagesInVocabulary: [],
+        pagesNotInVocabulary: []
+      };
+
       const primaryMenuDataElement = `[data-element="${primaryMenuItem.data_element}"]`;
       const secondLevelPageHref = await getHREFValuesDataAttribute(
         $,
@@ -103,19 +121,21 @@ class LoadAudit extends lighthouse.Audit {
 
         for (const pageTitle of secondLevelPagesNames) {
           if (primaryMenuItem.dictionary.includes(pageTitle.toLowerCase())) {
-            pagesInVocabulary.push(pageTitle.toLowerCase());
+            item.pagesInVocabulary.push(pageTitle.toLowerCase());
           } else {
-            pagesNotInVocabulary.push(pageTitle.toLowerCase());
+            item.pagesNotInVocabulary.push(pageTitle.toLowerCase());
           }
         }
 
         totalNumberOfTitleFound += secondLevelPagesNames.length;
       }
+
+      itemsPage.push(item);
     }
 
     let j = 0;
     let checkExistence = true;
-    let numberOfErrorVoices = 0;
+    let errorVoices: string[] = [];
 
     while (checkExistence) {
       const primaryMenuDataElement = `[data-element="${
@@ -142,7 +162,7 @@ class LoadAudit extends lighthouse.Audit {
         secondaryMenuDataElement
       );
 
-      numberOfErrorVoices += secondLevelPagesNames.length;
+      errorVoices = [...errorVoices, ...secondLevelPagesNames];
       j++;
     }
 
@@ -153,10 +173,30 @@ class LoadAudit extends lighthouse.Audit {
       };
     }
 
+    let pagesInVocabulary = 0;
+    let correctTitleFound = "";
+    let wrongTitleFound = "";
+
+    for(const itemPage of itemsPage){
+      pagesInVocabulary += itemPage.pagesInVocabulary.length;
+
+      if(itemPage.pagesInVocabulary.length > 0){
+        correctTitleFound += itemPage.key + ': ';
+        correctTitleFound += itemPage.pagesInVocabulary.join(', ');
+        correctTitleFound += ' ';
+      }
+
+      if(itemPage.pagesNotInVocabulary.length > 0) {
+        wrongTitleFound += itemPage.key + ': ';
+        wrongTitleFound += itemPage.pagesNotInVocabulary.join(', ');
+        correctTitleFound += ' ';
+      }
+    }
+
     const pagesFoundInVocabularyPercentage = parseInt(
       (
-        (pagesInVocabulary.length /
-          (totalNumberOfTitleFound + numberOfErrorVoices)) *
+        ( pagesInVocabulary/
+          (totalNumberOfTitleFound + errorVoices.length)) *
         100
       ).toFixed(0)
     );
@@ -173,8 +213,9 @@ class LoadAudit extends lighthouse.Audit {
     }
 
     items[0].correct_title_percentage = pagesFoundInVocabularyPercentage + "%";
-    items[0].correct_title_found = pagesInVocabulary.join(", ");
-    items[0].wrong_title_found = pagesNotInVocabulary.join(", ");
+    items[0].correct_title_found = correctTitleFound;
+    items[0].wrong_title_found = wrongTitleFound;
+    items[0].error_voices = errorVoices.join(", ");
 
     return {
       score: score,
