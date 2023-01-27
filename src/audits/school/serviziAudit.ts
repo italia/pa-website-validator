@@ -125,25 +125,25 @@ class LoadAudit extends Audit {
 
       const indexElementsWithContent: string[] = [];
 
-      for(const mandatoryVoiceDataElement of mandatoryVoicesDataElements){
+      for (const mandatoryVoiceDataElement of mandatoryVoicesDataElements.paragraph) {
         const dataElement = `[data-element="${mandatoryVoiceDataElement.data_element}"]`;
-        const content = await getPageElementDataAttribute($, dataElement, 'p');
-        if(content && content.length > 0 && content[0].length > 3){
+        const content = await getPageElementDataAttribute($, dataElement, "p");
+        if (content && content.length > 0 && content[0].length > 3) {
           indexElementsWithContent.push(mandatoryVoiceDataElement.key);
         }
       }
 
-      const dataElementDeadLines = $("[data-element=service-deadlines]");
-      if(dataElementDeadLines.length > 0){
-        indexElementsWithContent.push("Tempi e scadenze");
+      for (const mandatoryVoiceDataElement of mandatoryVoicesDataElements.exist) {
+        const dataElement = `[data-element="${mandatoryVoiceDataElement.data_element}"]`;
+        const element = $(dataElement);
+        if (element.length > 0) {
+          indexElementsWithContent.push(mandatoryVoiceDataElement.key);
+        }
       }
 
-      const dataElementContacts = $("[data-element=service-contacts]");
-      if(dataElementContacts.length > 0){
-        indexElementsWithContent.push("Contatti");
-      }
-
-      indexElements = indexElements.filter(value => indexElementsWithContent.includes(value));
+      indexElements = indexElements.filter((value) =>
+        indexElementsWithContent.includes(value)
+      );
 
       const mandatoryMenuItems = mandatoryVoices.map(toMenuItem);
       const orderResult = checkOrder(mandatoryMenuItems, indexElements);

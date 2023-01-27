@@ -7,24 +7,36 @@ export const contentTypeItems = {
     "Contatti",
     "Ulteriori informazioni",
   ],
-  IndiceDataElements: [
-    {
-      key: "Cos'è",
-      data_element: "service-what-is",
-    },
-    {
-      key: "Come si accede al servizio",
-      data_element: "service-access",
-    },
-    {
-      key: "Cosa serve",
-      data_element: "service-needed",
-    },
-    {
-      key:  "Ulteriori informazioni",
-      data_element: "service-more-info",
-    },
-  ],
+  IndiceDataElements: {
+    paragraph: [
+      {
+        key: "Cos'è",
+        data_element: "service-what-is",
+      },
+      {
+        key: "Come si accede al servizio",
+        data_element: "service-access",
+      },
+      {
+        key: "Cosa serve",
+        data_element: "service-needed",
+      },
+      {
+        key: "Ulteriori informazioni",
+        data_element: "service-more-info",
+      },
+    ],
+    exist: [
+      {
+        key: "Tempi e scadenze",
+        data_element: "service-deadlines",
+      },
+      {
+        key: "Contatti",
+        data_element: "service-contacts",
+      },
+    ],
+  },
   Header: [
     "Titolo",
     "Descrizione",

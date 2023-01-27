@@ -72,6 +72,7 @@ class LoadAudit extends Audit {
     ];
 
     const mandatoryIndexVoices = contentTypeItems.Indice;
+    const mandatoryVoicesDataElements = contentTypeItems.IndiceDataElements;
     const mandatoryHeaderVoices = contentTypeItems.Header;
     const mandatoryBodyVoices = contentTypeItems.Body;
 
@@ -111,7 +112,30 @@ class LoadAudit extends Audit {
 
       const $: CheerioAPI = await loadPageData(randomService);
 
-      const indexElements = await getServicesFromIndex($, mandatoryIndexVoices);
+      let indexElements = await getServicesFromIndex($, mandatoryIndexVoices);
+
+      const indexElementsWithContent: string[] = [];
+
+      for (const mandatoryVoiceDataElement of mandatoryVoicesDataElements.paragraph) {
+        const dataElement = `[data-element="${mandatoryVoiceDataElement.data_element}"]`;
+        const content = await getPageElementDataAttribute($, dataElement, "p");
+        if (content && content.length > 0 && content[0].length > 3) {
+          indexElementsWithContent.push(mandatoryVoiceDataElement.key);
+        }
+      }
+
+      for (const mandatoryVoiceDataElement of mandatoryVoicesDataElements.exist) {
+        const dataElement = `[data-element="${mandatoryVoiceDataElement.data_element}"]`;
+        const element = $(dataElement);
+        if (element.length > 0) {
+          indexElementsWithContent.push(mandatoryVoiceDataElement.key);
+        }
+      }
+
+      indexElements = indexElements.filter((value) =>
+        indexElementsWithContent.includes(value)
+      );
+
       const mandatoryMenuItems = mandatoryIndexVoices.map(toMenuItem);
       const orderResult = checkOrder(mandatoryMenuItems, indexElements);
       const missingMandatoryItems = missingMenuItems(
