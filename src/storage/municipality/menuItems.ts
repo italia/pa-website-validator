@@ -1,5 +1,6 @@
 export const primaryMenuItems = {
   management: {
+    label: "AMMINISTRAZIONE",
     name: "Amministrazione",
     regExp: /^Amministrazione$/i,
     data_element: "management",
@@ -15,6 +16,7 @@ export const primaryMenuItems = {
     ],
   },
   news: {
+    label: "NOVITÀ",
     name: "Novità",
     regExp: /^Novità$/i,
     data_element: "news",
@@ -22,6 +24,7 @@ export const primaryMenuItems = {
     dictionary: ["avviso", "comunicato stampa", "news"],
   },
   services: {
+    label: "SERVIZI",
     name: "Servizi",
     regExp: /^Servizi$/i,
     data_element: "all-services",
@@ -45,6 +48,7 @@ export const primaryMenuItems = {
     ],
   },
   live: {
+    label: "VIVERE IL COMUNE",
     name: "Vivere [nome del Comune]",
     regExp: /^Vivere /i,
     data_element: "live",

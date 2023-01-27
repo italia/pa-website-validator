@@ -58,11 +58,6 @@ class LoadAudit extends Audit {
         itemType: "text",
         text: "Voci di menù obbligatorie mancanti",
       },
-      {
-        key: "error_voices",
-        itemType: "text",
-        text: "Voci aggiuntive errate trovate",
-      },
     ];
 
     const items = [
@@ -79,9 +74,9 @@ class LoadAudit extends Audit {
     let totalNumberOfTitleFound = 0;
     const itemsPage: itemPage[] = [];
 
-    for (const [key, value] of Object.entries(menuItems)) {
+    for (const [, value] of Object.entries(menuItems)) {
       const item: itemPage = {
-        key: key,
+        key: value.label,
         pagesInVocabulary: [],
         pagesNotInVocabulary: [],
       };
@@ -152,13 +147,13 @@ class LoadAudit extends Audit {
       if (itemPage.pagesInVocabulary.length > 0) {
         correctTitleFound += itemPage.key + ": ";
         correctTitleFound += itemPage.pagesInVocabulary.join(", ");
-        correctTitleFound += " ";
+        correctTitleFound += "; ";
       }
 
       if (itemPage.pagesNotInVocabulary.length > 0) {
         wrongTitleFound += itemPage.key + ": ";
         wrongTitleFound += itemPage.pagesNotInVocabulary.join(", ");
-        correctTitleFound += " ";
+        correctTitleFound += "; ";
       }
     }
 
@@ -183,6 +178,14 @@ class LoadAudit extends Audit {
       presentVoicesPercentage.toString() + "%";
     items[0].missing_voices = wrongTitleFound;
     items[0].error_voices = errorVoices.join(", ");
+
+    if (errorVoices.length > 0) {
+      headings.push({
+        key: "error_voices",
+        itemType: "text",
+        text: "Voci aggiuntive errate trovate",
+      });
+    }
 
     return {
       score: score,

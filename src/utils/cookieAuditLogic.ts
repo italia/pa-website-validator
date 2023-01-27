@@ -2,12 +2,10 @@
 
 import { Page, Protocol } from "puppeteer";
 import crawlerTypes from "../types/crawler-types";
-import links = crawlerTypes.links;
 import cookie = crawlerTypes.cookie;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import puppeteer from "puppeteer";
-import { allowedNames } from "../storage/common/allowedCookieBtnNames";
 
 const run = async (
   url: string
@@ -25,9 +23,6 @@ const run = async (
     await page.goto(url, {
       waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
     });
-    const links = await getLinksFromHTMLPage(page);
-
-    await clickOnAcceptCookiesButtonIfExists(page, links);
 
     cookies = await page.cookies();
     await browser.close();
@@ -50,68 +45,6 @@ const run = async (
     items: items,
   };
 };
-
-async function getLinksFromHTMLPage(page: Page): Promise<links[]> {
-  return await Promise.all(
-    (
-      await page.$$("a,button")
-    ).map(async (a) => {
-      const className = (
-        (await (await a.getProperty("className")).jsonValue()) as string
-      )
-        .toString()
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
-        .replaceAll(" ", ".")
-        .trim();
-      const text: string = await (await a.getProperty("innerText")).jsonValue();
-      return {
-        text: text,
-        className: "." + className,
-      };
-    })
-  );
-}
-
-async function clickOnAcceptCookiesButtonIfExists(page: Page, links: links[]) {
-  for (const link of links) {
-    if (
-      containsCookieWord(link.text) ||
-      link.className === ".ginger_btn.ginger-accept.ginger_btn_accept_all"
-    ) {
-      try {
-        const element = await page.$(link.className);
-        if (!element) {
-          throw new Error("null element");
-        }
-        await element.click();
-        await sleep(750);
-        await page.reload({ waitUntil: ["networkidle0", "domcontentloaded"] });
-        break;
-      } catch (e) {
-        continue;
-      }
-    }
-  }
-}
-
-function containsCookieWord(text: string): boolean {
-  const splittedText = text.split(" ");
-
-  for (const word of allowedNames) {
-    for (const item of splittedText) {
-      if (item.toLowerCase().trim() == word) {
-        return true;
-      }
-    }
-  }
-
-  return false;
-}
-
-async function sleep(time: number) {
-  return new Promise((resolve) => setTimeout(resolve, time));
-}
 
 async function checkCookieDomain(
   url: string,

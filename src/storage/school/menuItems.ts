@@ -2,6 +2,7 @@ export const primaryMenuItems = ["Scuola", "Servizi", "Novità", "Didattica"];
 
 export const menuItems = {
   school: {
+    label: "SCUOLA",
     data_element: "school-submenu",
     dictionary: [
       "Presentazione",
@@ -14,6 +15,7 @@ export const menuItems = {
     ],
   },
   services: {
+    label: "SERVIZI",
     data_element: "services-submenu",
     dictionary: [
       "Personale scolastico",
@@ -23,6 +25,7 @@ export const menuItems = {
     ],
   },
   news: {
+    label: "NOVITÀ",
     data_element: "news-submenu",
     dictionary: [
       "Le Notizie",
@@ -32,6 +35,7 @@ export const menuItems = {
     ],
   },
   teaching: {
+    label: "DIDATTICA",
     data_element: "teaching-submenu",
     dictionary: [
       "Offerta formativa",

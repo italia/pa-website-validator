@@ -128,7 +128,7 @@ class LoadAudit extends Audit {
 
     results.push({});
 
-    if (correctItems.length > 0) {
+    if (wrongItems.length > 0) {
       results.push({
         result: auditData.subItem.greenResult,
         title_cookie_domain: "Dominio del cookie",
@@ -136,7 +136,7 @@ class LoadAudit extends Audit {
         title_cookie_value: "Valore del cookie",
       });
 
-      for (const item of correctItems) {
+      for (const item of wrongItems) {
         results.push({
           subItems: {
             type: "subitems",
@@ -148,7 +148,7 @@ class LoadAudit extends Audit {
       results.push({});
     }
 
-    if (wrongItems.length > 0) {
+    if (correctItems.length > 0) {
       results.push({
         result: auditData.subItem.greenResult,
         title_cookie_domain: "Dominio del cookie",
@@ -156,7 +156,7 @@ class LoadAudit extends Audit {
         title_cookie_value: "Valore del cookie",
       });
 
-      for (const item of wrongItems) {
+      for (const item of correctItems) {
         results.push({
           subItems: {
             type: "subitems",

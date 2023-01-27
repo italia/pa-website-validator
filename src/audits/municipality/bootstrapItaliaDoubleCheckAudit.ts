@@ -196,6 +196,24 @@ class LoadAudit extends Audit {
 
     results.push({});
 
+    if (wrongItems.length > 0) {
+      results.push({
+        result: auditData.subItem.redResult,
+        title_row_result_0: "Nome libreria in uso",
+        title_row_result_1: "Versione libreria in uso",
+        title_row_result_2: "Classi CSS non trovate",
+      });
+
+      for (const item of wrongItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+    }
+
     if (correctItems.length > 0) {
       results.push({
         result: auditData.subItem.greenResult,
@@ -214,24 +232,6 @@ class LoadAudit extends Audit {
       }
 
       results.push({});
-    }
-
-    if (wrongItems.length > 0) {
-      results.push({
-        result: auditData.subItem.redResult,
-        title_row_result_0: "Nome libreria in uso",
-        title_row_result_1: "Versione libreria in uso",
-        title_row_result_2: "Classi CSS non trovate",
-      });
-
-      for (const item of wrongItems) {
-        results.push({
-          subItems: {
-            type: "subitems",
-            items: [item],
-          },
-        });
-      }
     }
 
     return {

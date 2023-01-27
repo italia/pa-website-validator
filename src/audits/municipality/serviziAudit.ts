@@ -243,15 +243,15 @@ class LoadAudit extends Audit {
 
     results.push({});
 
-    if (correctItems.length > 0) {
+    if (wrongItems.length > 0) {
       results.push({
-        result: auditData.subItem.greenResult,
+        result: auditData.subItem.redResult,
         title_missing_elements: "Voci obbligatorie mancanti",
         title_wrong_order_elements:
           "Voci obbligatorie che non rispettano l'ordine corretto",
       });
 
-      for (const item of correctItems) {
+      for (const item of wrongItems) {
         results.push({
           subItems: {
             type: "subitems",
@@ -283,15 +283,15 @@ class LoadAudit extends Audit {
       results.push({});
     }
 
-    if (wrongItems.length > 0) {
+    if (correctItems.length > 0) {
       results.push({
-        result: auditData.subItem.redResult,
+        result: auditData.subItem.greenResult,
         title_missing_elements: "Voci obbligatorie mancanti",
         title_wrong_order_elements:
           "Voci obbligatorie che non rispettano l'ordine corretto",
       });
 
-      for (const item of wrongItems) {
+      for (const item of correctItems) {
         results.push({
           subItems: {
             type: "subitems",
