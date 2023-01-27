@@ -33,7 +33,6 @@ class LoadAudit extends Audit {
       id: auditId,
       title: auditData.title,
       failureTitle: auditData.failureTitle,
-      toleranceTitle: "TEST YELLOW TITLE",
       description: auditData.description,
       scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       requiredArtifacts: ["origin"],
