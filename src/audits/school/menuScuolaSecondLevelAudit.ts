@@ -18,8 +18,8 @@ const auditData = auditDictionary[auditId];
 
 interface itemPage {
   key: string;
-  pagesInVocabulary: string[],
-  pagesNotInVocabulary: string[]
+  pagesInVocabulary: string[];
+  pagesNotInVocabulary: string[];
 }
 
 class LoadAudit extends Audit {
@@ -83,7 +83,7 @@ class LoadAudit extends Audit {
       const item: itemPage = {
         key: key,
         pagesInVocabulary: [],
-        pagesNotInVocabulary: []
+        pagesNotInVocabulary: [],
       };
 
       const secondaryMenuItem = value;
@@ -111,7 +111,7 @@ class LoadAudit extends Audit {
       }
 
       item.pagesNotInVocabulary = secondaryMenuItems.filter(
-          (x) => !item.pagesInVocabulary.includes(x)
+        (x) => !item.pagesInVocabulary.includes(x)
       );
 
       itemsPage.push(item);
@@ -146,26 +146,25 @@ class LoadAudit extends Audit {
     let correctTitleFound = "";
     let wrongTitleFound = "";
 
-    for(const itemPage of itemsPage){
+    for (const itemPage of itemsPage) {
       pagesInVocabulary += itemPage.pagesInVocabulary.length;
 
-      if(itemPage.pagesInVocabulary.length > 0){
-        correctTitleFound += itemPage.key + ': ';
-        correctTitleFound += itemPage.pagesInVocabulary.join(', ');
-        correctTitleFound += ' ';
+      if (itemPage.pagesInVocabulary.length > 0) {
+        correctTitleFound += itemPage.key + ": ";
+        correctTitleFound += itemPage.pagesInVocabulary.join(", ");
+        correctTitleFound += " ";
       }
 
-      if(itemPage.pagesNotInVocabulary.length > 0) {
-        wrongTitleFound += itemPage.key + ': ';
-        wrongTitleFound += itemPage.pagesNotInVocabulary.join(', ');
-        correctTitleFound += ' ';
+      if (itemPage.pagesNotInVocabulary.length > 0) {
+        wrongTitleFound += itemPage.key + ": ";
+        wrongTitleFound += itemPage.pagesNotInVocabulary.join(", ");
+        correctTitleFound += " ";
       }
     }
 
     const presentVoicesPercentage: number = parseInt(
       (
-        (pagesInVocabulary /
-          (totalNumberOfTitleFound + errorVoices.length)) *
+        (pagesInVocabulary / (totalNumberOfTitleFound + errorVoices.length)) *
         100
       ).toFixed(0)
     );
