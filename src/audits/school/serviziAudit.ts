@@ -77,6 +77,7 @@ class LoadAudit extends Audit {
     ];
 
     const mandatoryVoices = contentTypeItems.Indice;
+    const mandatoryVoicesDataElements = contentTypeItems.IndiceDataElements;
     const mandatoryHeaderVoices = contentTypeItems.Header;
     const mandatoryBodyVoices = contentTypeItems.Body;
     const mandatoryPlaceInfo = contentTypeItems.Luogo;
@@ -120,7 +121,30 @@ class LoadAudit extends Audit {
 
       const $: CheerioAPI = await loadPageData(randomService);
 
-      const indexElements = await getServicesFromIndex($, mandatoryVoices);
+      let indexElements = await getServicesFromIndex($, mandatoryVoices);
+
+      const indexElementsWithContent: string[] = [];
+
+      for(const mandatoryVoiceDataElement of mandatoryVoicesDataElements){
+        const dataElement = `[data-element="${mandatoryVoiceDataElement.data_element}"]`;
+        const content = await getPageElementDataAttribute($, dataElement, 'p');
+        if(content && content.length > 0 && content[0].length > 3){
+          indexElementsWithContent.push(mandatoryVoiceDataElement.key);
+        }
+      }
+
+      const dataElementDeadLines = $("[data-element=service-deadlines]");
+      if(dataElementDeadLines.length > 0){
+        indexElementsWithContent.push("Tempi e scadenze");
+      }
+
+      const dataElementContacts = $("[data-element=service-contacts]");
+      if(dataElementContacts.length > 0){
+        indexElementsWithContent.push("Contatti");
+      }
+
+      indexElements = indexElements.filter(value => indexElementsWithContent.includes(value));
+
       const mandatoryMenuItems = mandatoryVoices.map(toMenuItem);
       const orderResult = checkOrder(mandatoryMenuItems, indexElements);
 
