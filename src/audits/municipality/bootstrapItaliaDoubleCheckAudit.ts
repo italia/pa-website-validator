@@ -24,8 +24,6 @@ const accuracy = process.env["accuracy"] ?? "suggested";
 // @ts-ignore
 const auditVariables = auditScanVariables[accuracy][auditId];
 
-const libraryName = "Bootstrap italia";
-
 class LoadAudit extends Audit {
   static get meta() {
     return {
@@ -103,7 +101,7 @@ class LoadAudit extends Audit {
       let singleResult = 0;
       const item = {
         inspected_page: pageToBeAnalyzed,
-        row_result_0: "",
+        row_result_0: "No",
         row_result_1: "",
         row_result_2: "",
       };
@@ -136,7 +134,7 @@ class LoadAudit extends Audit {
           bootstrapItaliaVariableVersion
         ) {
           item.row_result_1 = bootstrapItaliaVariableVersion;
-          item.row_result_0 = libraryName;
+          item.row_result_0 = "Sì";
 
           if (semver.gte(bootstrapItaliaVariableVersion, "2.0.0")) {
             singleResult = 1;
@@ -146,7 +144,7 @@ class LoadAudit extends Audit {
           bootstrapItaliaSelectorVariableVersion
         ) {
           item.row_result_1 = bootstrapItaliaSelectorVariableVersion;
-          item.row_result_0 = libraryName;
+          item.row_result_0 = "Sì";
 
           if (semver.gte(bootstrapItaliaSelectorVariableVersion, "2.0.0")) {
             singleResult = 1;

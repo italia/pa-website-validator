@@ -618,6 +618,12 @@ const getRandomNString = async (array: string[], numberOfElements: number) => {
 const cmsThemeRx =
   /\/\*!\s*Theme Name:.*\s+Author:.*\s+Description:\s+Design (Comuni|Scuole) Italia .*(?<name>WordPress|Drupal).*\s+Version:\s+(?<version>.*)\s+License:.*\s+Text Domain: design_(comuni|scuole)_italia\s*\*\//;
 
+const getAllPageHTML = async (url: string): Promise<string> => {
+  const $: CheerioAPI = await loadPageData(url);
+
+  return $("html").text() ?? "";
+};
+
 export {
   toMenuItem,
   checkOrder,
@@ -640,4 +646,5 @@ export {
   urlExists,
   areAllElementsInVocabulary,
   cmsThemeRx,
+  getAllPageHTML,
 };

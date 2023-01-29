@@ -5,7 +5,7 @@ import { CheerioAPI } from "cheerio";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import { loadPageData, urlExists } from "../../utils/utils";
+import { getAllPageHTML, loadPageData, urlExists } from "../../utils/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
@@ -49,13 +49,18 @@ class LoadAudit extends Audit {
       },
       {
         key: "link_destination",
-        itemType: "text",
+        itemType: "url",
         text: "Pagina di destinazione del link",
       },
       {
         key: "existing_page",
         itemType: "text",
         text: "Pagina esistente",
+      },
+      {
+        key: "page_contains_correct_url",
+        itemType: "text",
+        text: "La pagina contiene l'url del sito di origine",
       },
     ];
 
@@ -65,6 +70,7 @@ class LoadAudit extends Audit {
         link_name: "",
         link_destination: "",
         existing_page: "No",
+        page_contains_correct_url: "No",
       },
     ];
 
@@ -95,6 +101,15 @@ class LoadAudit extends Audit {
         };
       }
 
+      const privacyPageHTML: string = await getAllPageHTML(elementObj.href);
+      if (!privacyPageHTML.includes(url)) {
+        return {
+          score: 0,
+          details: Audit.makeTableDetails(headings, items),
+        };
+      }
+
+      items[0].page_contains_correct_url = "Sì";
       items[0].result = greenResult;
       score = 1;
     }

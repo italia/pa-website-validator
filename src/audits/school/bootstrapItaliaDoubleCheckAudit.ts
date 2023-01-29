@@ -20,8 +20,6 @@ import puppeteer from "puppeteer";
 const auditId = "school-ux-ui-consistency-bootstrap-italia-double-check";
 const auditData = auditDictionary[auditId];
 
-const libraryName = "Bootstrap italia";
-
 const accuracy = process.env["accuracy"] ?? "suggested";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -104,7 +102,7 @@ class LoadAudit extends Audit {
       let singleResult = 0;
       const item = {
         inspected_page: pageToBeAnalyzed,
-        row_result_0: "",
+        row_result_0: "No",
         row_result_1: "",
         row_result_2: "",
       };
@@ -137,7 +135,7 @@ class LoadAudit extends Audit {
           bootstrapItaliaVariableVersion
         ) {
           item.row_result_1 = bootstrapItaliaVariableVersion;
-          item.row_result_0 = libraryName;
+          item.row_result_0 = "Sì";
 
           if (semver.gte(bootstrapItaliaVariableVersion, "1.6.0")) {
             singleResult = 1;
@@ -147,7 +145,7 @@ class LoadAudit extends Audit {
           bootstrapItaliaSelectorVariableVersion
         ) {
           item.row_result_1 = bootstrapItaliaSelectorVariableVersion;
-          item.row_result_0 = libraryName;
+          item.row_result_0 = "Sì";
 
           if (semver.gte(bootstrapItaliaSelectorVariableVersion, "1.6.0")) {
             singleResult = 1;
@@ -200,9 +198,9 @@ class LoadAudit extends Audit {
     if (wrongItems.length > 0) {
       results.push({
         result: auditData.subItem.redResult,
-        title_row_result_0: "Nome libreria in uso",
-        title_row_result_1: "Versione libreria in uso",
-        title_row_result_2: "Classi CSS non trovate",
+        title_row_result_0: "La libreria Bootstrap Italia è presente",
+        title_row_result_1: "Versione in uso",
+        title_row_result_2: "Classi ricercate mancanti",
       });
 
       for (const item of wrongItems) {
@@ -218,9 +216,9 @@ class LoadAudit extends Audit {
     if (correctItems.length > 0) {
       results.push({
         result: auditData.subItem.greenResult,
-        title_row_result_0: "Nome libreria in uso",
-        title_row_result_1: "Versione libreria in uso",
-        title_row_result_2: "Classi CSS non trovate",
+        title_row_result_0: "La libreria Bootstrap Italia è presente",
+        title_row_result_1: "Versione in uso",
+        title_row_result_2: "Classi ricercate mancanti",
       });
 
       for (const item of correctItems) {

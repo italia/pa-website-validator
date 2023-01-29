@@ -51,7 +51,7 @@ class LoadAudit extends lighthouse.Audit {
       {
         key: "correct_title_percentage",
         itemType: "text",
-        text: "% dei titoli corretti identificati",
+        text: "% di titoli corretti tra quelli usati",
       },
       {
         key: "correct_title_found",
@@ -61,7 +61,7 @@ class LoadAudit extends lighthouse.Audit {
       {
         key: "wrong_title_found",
         itemType: "text",
-        text: "Titoli errati identificati",
+        text: "Titoli non usati",
       },
     ];
 
@@ -214,7 +214,7 @@ class LoadAudit extends lighthouse.Audit {
       headings.push({
         key: "error_voices",
         itemType: "text",
-        text: "Voci aggiuntive errate trovate",
+        text: "Titoli aggiuntivi trovati",
       });
     }
 
