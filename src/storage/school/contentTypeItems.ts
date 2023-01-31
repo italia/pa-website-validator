@@ -1,51 +1,70 @@
-export const contentTypeItems = {
-  Indice: [
-    "Cos'è",
-    "Come si accede al servizio",
-    "Cosa serve",
-    "Tempi e scadenze",
-    "Contatti",
-    "Ulteriori informazioni",
+export const contentTypeItemsIndex = [
+  "Cos'è",
+  "Come si accede al servizio",
+  "Cosa serve",
+  "Tempi e scadenze",
+  "Contatti",
+  "Ulteriori informazioni",
+];
+export const contentTypeItemsIndexDataElements = {
+  paragraph: [
+    {
+      key: contentTypeItemsIndex[0],
+      data_element: "service-what-is",
+    },
+    {
+      key: contentTypeItemsIndex[1],
+      data_element: "service-generic-access",
+    },
+    {
+      key: contentTypeItemsIndex[2],
+      data_element: "service-needed",
+    },
+    {
+      key: contentTypeItemsIndex[3],
+      data_element: "service-calendar-text",
+    },
+    {
+      key: contentTypeItemsIndex[5],
+      data_element: "service-more-info",
+    },
   ],
-  IndiceDataElements: {
-    paragraph: [
-      {
-        key: "Cos'è",
-        data_element: "service-what-is",
-      },
-      {
-        key: "Come si accede al servizio",
-        data_element: "service-access",
-      },
-      {
-        key: "Cosa serve",
-        data_element: "service-needed",
-      },
-      {
-        key: "Ulteriori informazioni",
-        data_element: "service-more-info",
-      },
-    ],
-    exist: [
-      {
-        key: "Tempi e scadenze",
-        data_element: "service-deadlines",
-      },
-      {
-        key: "Contatti",
-        data_element: "service-contacts",
-      },
-    ],
-  },
-  Header: [
-    "Titolo",
-    "Descrizione",
-    "Tipologia servizio",
-    "Tassonomie argomenti",
+  exist: [
+    {
+      key: contentTypeItemsIndex[1],
+      data_element: "service-generic-access",
+    },
+    {
+      key: contentTypeItemsIndex[1],
+      data_element: "service-online-access",
+    },
+    {
+      key: contentTypeItemsIndex[1],
+      data_element: "service-booking-access",
+    },
+    {
+      key: contentTypeItemsIndex[3],
+      data_element: "service-calendar-list",
+    },
   ],
-  Body: ["A cosa serve", "Struttura responsabile del servizio", "Metadati"],
-  Luogo: ["indirizzo", "orari", "gps", "email", "pec", "telefono"],
-
-  Metadati: ["Pubblicato", "Revisione"],
-  Breadcrumb: ["Famiglie e studenti", "Personale scolastico"],
 };
+export const contentTypeItemsHeaders = [
+  "Titolo",
+  "Descrizione",
+  "Tipologia servizio",
+  "Tassonomie argomenti",
+];
+export const contentTypeItemsBody = [
+  "A cosa serve",
+  "Struttura responsabile del servizio",
+  "Metadati",
+];
+export const contentTypeItemsLocation = [
+  "indirizzo",
+  "orari",
+  "gps",
+  "email",
+  "pec",
+  "telefono",
+];
+export const contentTypeItemsMetadata = ["Pubblicato", "Revisione"];

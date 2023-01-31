@@ -52,8 +52,8 @@ export const primaryMenuItems = {
     name: "Vivere [nome del Comune]",
     regExp: /^Vivere /i,
     data_element: "live",
-    secondary_item_data_element: "live-category-link",
-    dictionary: [""],
+    secondary_item_data_element: "live-button",
+    dictionary: ["cultura e tempo libero", "aree amministrative"],
   },
 };
 

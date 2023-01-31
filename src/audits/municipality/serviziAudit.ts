@@ -5,6 +5,7 @@
 import lighthouse from "lighthouse";
 import { CheerioAPI } from "cheerio";
 import {
+  checkBreadcrumb,
   checkOrder,
   getPageElementDataAttribute,
   getRandomMunicipalityServicesUrl,
@@ -12,10 +13,14 @@ import {
   missingMenuItems,
   toMenuItem,
 } from "../../utils/utils";
-import { contentTypeItems } from "../../storage/municipality/contentTypeItems";
+import {
+  contentTypeItemsBody,
+  contentTypeItemsHeaders,
+  contentTypeItemsIndex,
+  contentTypeItemsIndexDataElement,
+} from "../../storage/municipality/contentTypeItems";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
-import { primaryMenuItems } from "../../storage/municipality/menuItems";
 
 const Audit = lighthouse.Audit;
 
@@ -71,10 +76,10 @@ class LoadAudit extends Audit {
       },
     ];
 
-    const mandatoryIndexVoices = contentTypeItems.Indice;
-    const mandatoryVoicesDataElements = contentTypeItems.IndiceDataElements;
-    const mandatoryHeaderVoices = contentTypeItems.Header;
-    const mandatoryBodyVoices = contentTypeItems.Body;
+    const mandatoryIndexVoices = contentTypeItemsIndex;
+    const mandatoryVoicesDataElements = contentTypeItemsIndexDataElement;
+    const mandatoryHeaderVoices = contentTypeItemsHeaders;
+    const mandatoryBodyVoices = contentTypeItemsBody;
 
     const randomServices: string[] = await getRandomMunicipalityServicesUrl(
       url,
@@ -119,7 +124,7 @@ class LoadAudit extends Audit {
       for (const mandatoryVoiceDataElement of mandatoryVoicesDataElements.paragraph) {
         const dataElement = `[data-element="${mandatoryVoiceDataElement.data_element}"]`;
         const content = await getPageElementDataAttribute($, dataElement, "p");
-        if (content && content.length > 0 && content[0].length > 3) {
+        if (content && content.length > 0 && content[0].length >= 3) {
           indexElementsWithContent.push(mandatoryVoiceDataElement.key);
         }
       }
@@ -154,9 +159,9 @@ class LoadAudit extends Audit {
         missingMandatoryItems.push(mandatoryHeaderVoices[1]);
       }
 
-      const status =
-        $('[data-element="service-status"]').text().trim().toLowerCase() ?? "";
-      if (!status || !status.includes("attivo")) {
+      const status = $('[data-element="service-status"]');
+
+      if (status.length <= 0) {
         missingMandatoryItems.push(mandatoryHeaderVoices[2]);
       }
 
@@ -168,25 +173,16 @@ class LoadAudit extends Audit {
         missingMandatoryItems.push(mandatoryHeaderVoices[3]);
       }
 
-      const breadcrumbElements = await getPageElementDataAttribute(
+      let breadcrumbElements = await getPageElementDataAttribute(
         $,
         '[data-element="breadcrumb"]',
         "li"
       );
+      breadcrumbElements = breadcrumbElements.map((x) =>
+        x.trim().toLowerCase().replaceAll("/", "")
+      );
 
-      let breadcrumbArgumentInVocabulary = false;
-      for (const breadcrumbElement of breadcrumbElements) {
-        if (
-          primaryMenuItems.services.dictionary.includes(
-            breadcrumbElement.trim().toLowerCase().replaceAll("/", "")
-          )
-        ) {
-          breadcrumbArgumentInVocabulary = true;
-          break;
-        }
-      }
-
-      if (!breadcrumbArgumentInVocabulary) {
+      if (!checkBreadcrumb(breadcrumbElements)) {
         missingMandatoryItems.push(mandatoryHeaderVoices[4]);
       }
 

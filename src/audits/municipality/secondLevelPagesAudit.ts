@@ -80,7 +80,7 @@ class LoadAudit extends lighthouse.Audit {
     let totalNumberOfTitleFound = 0;
     const itemsPage: itemPage[] = [];
 
-    for (const [, primaryMenuItem] of Object.entries(primaryMenuItems)) {
+    for (const [key, primaryMenuItem] of Object.entries(primaryMenuItems)) {
       const item: itemPage = {
         key: primaryMenuItem.label,
         pagesInVocabulary: [],
@@ -105,24 +105,51 @@ class LoadAudit extends lighthouse.Audit {
         secondLevelPageUrl = await buildUrl(url, secondLevelPageHref[0]);
       }
 
-      if (primaryMenuItem.dictionary.length > 0) {
-        $ = await loadPageData(secondLevelPageUrl);
-        const secondaryMenuDataElement = `[data-element="${primaryMenuItem.secondary_item_data_element}"]`;
-        const secondLevelPagesNames = await getPageElementDataAttribute(
+      $ = await loadPageData(secondLevelPageUrl);
+      const secondaryMenuDataElement = `[data-element="${primaryMenuItem.secondary_item_data_element}"]`;
+      let secondLevelPagesNames = [];
+
+      if (key !== "live" && primaryMenuItem.dictionary.length > 0) {
+        secondLevelPagesNames = await getPageElementDataAttribute(
           $,
           secondaryMenuDataElement
         );
+      } else {
+        const buttons = $(secondaryMenuDataElement);
+        for (const button of buttons) {
+          const elementObj = $(button).attr();
+          if (
+            elementObj !== null &&
+            elementObj !== undefined &&
+            "onclick" in elementObj &&
+            elementObj.onclick.includes("location.href")
+          ) {
+            const onClick: string = elementObj.onclick;
+            let secondPageLink = onClick.substring(
+              onClick.indexOf("'") + 1,
+              onClick.lastIndexOf("'")
+            );
+            if (!secondPageLink.includes(url)) {
+              secondPageLink = await buildUrl(url, secondPageLink);
+            }
 
-        for (const pageTitle of secondLevelPagesNames) {
-          if (primaryMenuItem.dictionary.includes(pageTitle.toLowerCase())) {
-            item.pagesInVocabulary.push(pageTitle.toLowerCase());
-          } else {
-            item.pagesNotInVocabulary.push(pageTitle.toLowerCase());
+            $ = await loadPageData(secondPageLink);
+            secondLevelPagesNames.push(
+              $('[data-element="page-name"]').text().trim() ?? ""
+            );
           }
         }
-
-        totalNumberOfTitleFound += secondLevelPagesNames.length;
       }
+
+      for (const pageTitle of secondLevelPagesNames) {
+        if (primaryMenuItem.dictionary.includes(pageTitle.toLowerCase())) {
+          item.pagesInVocabulary.push(pageTitle.toLowerCase());
+        } else {
+          item.pagesNotInVocabulary.push(pageTitle.toLowerCase());
+        }
+      }
+
+      totalNumberOfTitleFound += secondLevelPagesNames.length;
 
       itemsPage.push(item);
     }
@@ -183,7 +210,7 @@ class LoadAudit extends lighthouse.Audit {
       if (itemPage.pagesNotInVocabulary.length > 0) {
         wrongTitleFound += itemPage.key + ": ";
         wrongTitleFound += itemPage.pagesNotInVocabulary.join(", ");
-        correctTitleFound += "; ";
+        wrongTitleFound += "; ";
       }
     }
 

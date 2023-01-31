@@ -153,7 +153,7 @@ class LoadAudit extends Audit {
       if (itemPage.pagesNotInVocabulary.length > 0) {
         wrongTitleFound += itemPage.key + ": ";
         wrongTitleFound += itemPage.pagesNotInVocabulary.join(", ");
-        correctTitleFound += "; ";
+        wrongTitleFound += "; ";
       }
     }
 

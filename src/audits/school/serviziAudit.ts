@@ -4,6 +4,7 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import {
+  checkBreadcrumb,
   checkOrder,
   getElementHrefValuesDataAttribute,
   getPageElementDataAttribute,
@@ -12,7 +13,14 @@ import {
   missingMenuItems,
   toMenuItem,
 } from "../../utils/utils";
-import { contentTypeItems } from "../../storage/school/contentTypeItems";
+import {
+  contentTypeItemsBody,
+  contentTypeItemsHeaders,
+  contentTypeItemsIndex,
+  contentTypeItemsIndexDataElements,
+  contentTypeItemsLocation,
+  contentTypeItemsMetadata,
+} from "../../storage/school/contentTypeItems";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
 import { auditScanVariables } from "../../storage/school/auditScanVariables";
@@ -76,14 +84,13 @@ class LoadAudit extends Audit {
       },
     ];
 
-    const mandatoryVoices = contentTypeItems.Indice;
-    const mandatoryVoicesDataElements = contentTypeItems.IndiceDataElements;
-    const mandatoryHeaderVoices = contentTypeItems.Header;
-    const mandatoryBodyVoices = contentTypeItems.Body;
-    const mandatoryPlaceInfo = contentTypeItems.Luogo;
+    const mandatoryVoices = contentTypeItemsIndex;
+    const mandatoryVoicesDataElements = contentTypeItemsIndexDataElements;
+    const mandatoryHeaderVoices = contentTypeItemsHeaders;
+    const mandatoryBodyVoices = contentTypeItemsBody;
+    const mandatoryPlaceInfo = contentTypeItemsLocation;
 
-    const mandatoryMetadata = contentTypeItems.Metadati;
-    const breadcrumbMandatoryElements = contentTypeItems.Breadcrumb;
+    const mandatoryMetadata = contentTypeItemsMetadata;
 
     const randomServices: string[] = await getRandomSchoolServicesUrl(
       url,
@@ -123,12 +130,13 @@ class LoadAudit extends Audit {
 
       let indexElements = await getServicesFromIndex($, mandatoryVoices);
 
-      const indexElementsWithContent: string[] = [];
+      //For Contatti we don't check its content
+      const indexElementsWithContent: string[] = ["Contatti"];
 
       for (const mandatoryVoiceDataElement of mandatoryVoicesDataElements.paragraph) {
         const dataElement = `[data-element="${mandatoryVoiceDataElement.data_element}"]`;
         const content = await getPageElementDataAttribute($, dataElement, "p");
-        if (content && content.length > 0 && content[0].length > 3) {
+        if (content && content.length > 0 && content[0].length >= 3) {
           indexElementsWithContent.push(mandatoryVoiceDataElement.key);
         }
       }
@@ -164,16 +172,17 @@ class LoadAudit extends Audit {
         missingMandatoryItems.push(mandatoryHeaderVoices[1]);
       }
 
-      const breadcrumbElements = await getPageElementDataAttribute(
+      let breadcrumbElements = await getPageElementDataAttribute(
         $,
         '[data-element="breadcrumb"]',
         "li"
       );
-      if (
-        !breadcrumbElements.includes(breadcrumbMandatoryElements[0]) &&
-        !breadcrumbElements.includes(breadcrumbMandatoryElements[1])
-      ) {
-        missingMandatoryItems.push(mandatoryHeaderVoices[2]);
+      breadcrumbElements = breadcrumbElements.map((x) =>
+        x.trim().toLowerCase().replaceAll("/", "")
+      );
+
+      if (!checkBreadcrumb(breadcrumbElements)) {
+        missingMandatoryItems.push(mandatoryHeaderVoices[4]);
       }
 
       const argumentsTag = await getPageElementDataAttribute(

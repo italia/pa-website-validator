@@ -321,7 +321,8 @@ const checkOrder = (
   let numberOfElementsNotInSequence = 0;
   const elementsNotInSequence = [];
 
-  for (let i = 0; i < newFoundElements.length; i++) {
+  //The first element is always in the right order
+  for (let i = 1; i < newFoundElements.length; i++) {
     const indexInMandatory = newMandatoryElements.findIndex((e) =>
       e.regExp.test(newFoundElements[i])
     );
@@ -615,6 +616,16 @@ const getRandomNString = async (array: string[], numberOfElements: number) => {
   return array;
 };
 
+const checkBreadcrumb = (array: string[]) => {
+  if (array.length === 0) return false;
+
+  const indexService = array.indexOf("servizi");
+
+  if (indexService < 0 || indexService + 1 >= array.length) return false;
+
+  return array[indexService + 1].length >= 3;
+};
+
 const cmsThemeRx =
   /\/\*!\s*Theme Name:.*\s+Author:.*\s+Description:\s+Design (Comuni|Scuole) Italia .*(?<name>WordPress|Drupal).*\s+Version:\s+(?<version>.*)\s+License:.*\s+Text Domain: design_(comuni|scuole)_italia\s*\*\//;
 
@@ -645,6 +656,7 @@ export {
   buildUrl,
   urlExists,
   areAllElementsInVocabulary,
+  checkBreadcrumb,
   cmsThemeRx,
   getAllPageHTML,
 };

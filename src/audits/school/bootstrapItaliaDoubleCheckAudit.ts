@@ -52,22 +52,22 @@ class LoadAudit extends Audit {
         subItemsHeading: { key: "inspected_page", itemType: "url" },
       },
       {
-        key: "title_row_result_0",
+        key: "title_library_name",
         itemType: "text",
         text: "",
-        subItemsHeading: { key: "row_result_0", itemType: "text" },
+        subItemsHeading: { key: "library_name", itemType: "text" },
       },
       {
-        key: "title_row_result_1",
+        key: "title_library_version",
         itemType: "text",
         text: "",
-        subItemsHeading: { key: "row_result_1", itemType: "text" },
+        subItemsHeading: { key: "library_version", itemType: "text" },
       },
       {
-        key: "title_row_result_2",
+        key: "title_classes_found",
         itemType: "text",
         text: "",
-        subItemsHeading: { key: "row_result_2", itemType: "text" },
+        subItemsHeading: { key: "classes_found", itemType: "text" },
       },
     ];
 
@@ -102,23 +102,29 @@ class LoadAudit extends Audit {
       let singleResult = 0;
       const item = {
         inspected_page: pageToBeAnalyzed,
-        row_result_0: "No",
-        row_result_1: "",
-        row_result_2: "",
+        library_name: "No",
+        library_version: "",
+        classes_found: "",
       };
 
       try {
         const page = await browser.newPage();
         await page.goto(pageToBeAnalyzed);
 
-        const bootstrapItaliaVariableVersion = await page.evaluate(
+        let bootstrapItaliaVariableVersion = await page.evaluate(
           async function () {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             //@ts-ignore
             return window.BOOTSTRAP_ITALIA_VERSION || null;
           }
         );
-        const bootstrapItaliaSelectorVariableVersion = await page.evaluate(
+
+        if (bootstrapItaliaVariableVersion !== null)
+          bootstrapItaliaVariableVersion = bootstrapItaliaVariableVersion
+            .trim()
+            .replaceAll('"', "");
+
+        let bootstrapItaliaSelectorVariableVersion = await page.evaluate(
           async function () {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             //@ts-ignore
@@ -130,12 +136,16 @@ class LoadAudit extends Audit {
           }
         );
 
+        if (bootstrapItaliaSelectorVariableVersion !== null)
+          bootstrapItaliaSelectorVariableVersion =
+            bootstrapItaliaSelectorVariableVersion.trim().replaceAll('"', "");
+
         if (
           bootstrapItaliaVariableVersion !== null &&
           bootstrapItaliaVariableVersion
         ) {
-          item.row_result_1 = bootstrapItaliaVariableVersion;
-          item.row_result_0 = "Sì";
+          item.library_version = bootstrapItaliaVariableVersion;
+          item.library_name = "Sì";
 
           if (semver.gte(bootstrapItaliaVariableVersion, "1.6.0")) {
             singleResult = 1;
@@ -144,8 +154,8 @@ class LoadAudit extends Audit {
           bootstrapItaliaSelectorVariableVersion !== null &&
           bootstrapItaliaSelectorVariableVersion
         ) {
-          item.row_result_1 = bootstrapItaliaSelectorVariableVersion;
-          item.row_result_0 = "Sì";
+          item.library_version = bootstrapItaliaSelectorVariableVersion;
+          item.library_name = "Sì";
 
           if (semver.gte(bootstrapItaliaSelectorVariableVersion, "1.6.0")) {
             singleResult = 1;
@@ -160,13 +170,10 @@ class LoadAudit extends Audit {
         cssClasses
       );
 
-      const missingClasses = cssClasses.filter(
-        (x) => !foundClasses.includes(x)
-      );
-
-      if (missingClasses.length > 0) {
+      if (foundClasses.length === 0) {
         singleResult = 0;
-        item.row_result_2 = missingClasses.join(", ");
+      } else {
+        item.classes_found = foundClasses.join(", ");
       }
 
       if (singleResult === 1) {
@@ -198,9 +205,9 @@ class LoadAudit extends Audit {
     if (wrongItems.length > 0) {
       results.push({
         result: auditData.subItem.redResult,
-        title_row_result_0: "La libreria Bootstrap Italia è presente",
-        title_row_result_1: "Versione in uso",
-        title_row_result_2: "Classi ricercate mancanti",
+        title_library_name: "La libreria Bootstrap Italia è presente",
+        title_library_version: "Versione in uso",
+        title_classes_found: "Classi CSS trovate",
       });
 
       for (const item of wrongItems) {
@@ -216,9 +223,9 @@ class LoadAudit extends Audit {
     if (correctItems.length > 0) {
       results.push({
         result: auditData.subItem.greenResult,
-        title_row_result_0: "La libreria Bootstrap Italia è presente",
-        title_row_result_1: "Versione in uso",
-        title_row_result_2: "Classi ricercate mancanti",
+        title_library_name: "La libreria Bootstrap Italia è presente",
+        title_library_version: "Versione in uso",
+        title_classes_found: "Classi ricercate mancanti",
       });
 
       for (const item of correctItems) {
