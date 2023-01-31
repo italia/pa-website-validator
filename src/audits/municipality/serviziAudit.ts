@@ -242,9 +242,9 @@ class LoadAudit extends Audit {
     if (wrongItems.length > 0) {
       results.push({
         result: auditData.subItem.redResult,
-        title_missing_elements: "Voci obbligatorie mancanti",
+        title_missing_elements: "Voci mancanti o senza contenuto",
         title_wrong_order_elements:
-          "Voci obbligatorie che non rispettano l'ordine corretto",
+          "Voci che non rispettano l'ordine richiesto",
       });
 
       for (const item of wrongItems) {
@@ -262,9 +262,9 @@ class LoadAudit extends Audit {
     if (toleranceItems.length > 0) {
       results.push({
         result: auditData.subItem.yellowResult,
-        title_missing_elements: "Voci obbligatorie mancanti",
+        title_missing_elements: "Voci mancanti o senza contenuto",
         title_wrong_order_elements:
-          "Voci obbligatorie che non rispettano l'ordine corretto",
+          "Voci che non rispettano l'ordine richiesto",
       });
 
       for (const item of toleranceItems) {
@@ -282,9 +282,9 @@ class LoadAudit extends Audit {
     if (correctItems.length > 0) {
       results.push({
         result: auditData.subItem.greenResult,
-        title_missing_elements: "Voci obbligatorie mancanti",
+        title_missing_elements: "Voci mancanti o senza contenuto",
         title_wrong_order_elements:
-          "Voci obbligatorie che non rispettano l'ordine corretto",
+          "Voci che non rispettano l'ordine richiesto",
       });
 
       for (const item of correctItems) {
