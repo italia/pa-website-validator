@@ -92,7 +92,7 @@ class LoadAudit extends Audit {
       )),
     ];
 
-    const cssClasses = ["nav-link", 'pippo'];
+    const cssClasses = ["nav-link"];
 
     const browser = await puppeteer.launch({
       args: ["--no-sandbox"],
