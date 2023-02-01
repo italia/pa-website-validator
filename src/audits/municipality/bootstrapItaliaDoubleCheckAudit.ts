@@ -205,7 +205,7 @@ class LoadAudit extends Audit {
       results.push({
         result: auditData.subItem.redResult,
         title_library_name: "La libreria Bootstrap Italia è presente",
-        title_library_version: "Versione libreria in uso",
+        title_library_version: "Versione in uso",
         title_classes_found: "Classi CSS trovate",
       });
 
@@ -223,7 +223,7 @@ class LoadAudit extends Audit {
       results.push({
         result: auditData.subItem.greenResult,
         title_library_name: "La libreria Bootstrap Italia è presente",
-        title_library_version: "Versione libreria in uso",
+        title_library_version: "Versione in uso",
         title_classes_found: "Classi CSS trovate",
       });
 

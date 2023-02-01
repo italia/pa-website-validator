@@ -60,10 +60,10 @@ export const auditDictionary = {
       "In almeno una delle pagine analizzate la libreria Bootstrap Italia non è presente, o non è in uso o ne viene utilizzata una versione datata.",
     subItem: {
       greenResult:
-        "Pagine che utilizzano la libreria Bootstrap Italia in una versione idonea e utilizzano le classi CSS verificate: ",
+        "Pagine che utilizzano la libreria Bootstrap Italia in una versione idonea e utilizzano almeno una delle classi CSS indicate: ",
       yellowResult: "",
       redResult:
-        "Pagine che non utilizzano la libreria Bootstrap Italia in una versione idonea o non utilizzano le classi CSS verificate: ",
+        "Pagine che non utilizzano la libreria Bootstrap Italia in una versione idonea o non utilizzano nessuna delle classi CSS indicate: ",
     },
     nonExecuted: "",
     title:
@@ -71,7 +71,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito comunale deve utilizzare la libreria Bootstrap Italia.",
     description:
-      "CONDIZIONI DI SUCCESSO: la libreria Bootstrap Italia è presente e in uno in una versione uguale o superiore alla 2.0; MODALITÀ DI VERIFICA: in ogni pagina analizzata viene verificata la presenza della libreria Bootstrap Italia e la versione in uso, individuando la proprietà CSS --bootstrap-italia-version all’interno del selettore :root o la variabile globale window.BOOTSTRAP_ITALIA_VERSION. Inoltre devono essere presenti almeno le classi [nav-link]; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/).",
+      "CONDIZIONI DI SUCCESSO: la libreria Bootstrap Italia è presente e in uno in una versione uguale o superiore alla 2.0; MODALITÀ DI VERIFICA: in ogni pagina analizzata viene verificata la presenza della libreria Bootstrap Italia e la versione in uso, individuando la proprietà CSS --bootstrap-italia-version all’interno del selettore :root o la variabile globale window.BOOTSTRAP_ITALIA_VERSION. Inoltre devono essere presenti almeno le classi XXXXXXXXXXXXXXXXXXXXXXXXX; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/).",
   },
   "municipality-contacts-assistency": {
     greenResult: 'La voce "Contatti" è presente.',
@@ -405,18 +405,18 @@ export const auditDictionary = {
       "In almeno una delle pagine analizzate la libreria Bootstrap Italia non è presente, o non è in uso o ne viene utilizzata una versione datata.",
     subItem: {
       greenResult:
-        "Pagine che utilizzano la libreria Bootstrap Italia in una versione idonea e utilizzano le classi CSS verificate: ",
+        "Pagine che utilizzano la libreria Bootstrap Italia in una versione idonea e utilizzano almeno una delle classi CSS indicate: ",
       yellowResult: "",
       redResult:
-        "Pagine che non utilizzano la libreria Bootstrap Italia in una versione idonea o non utilizzano le classi CSS verificate: ",
+        "Pagine che non utilizzano la libreria Bootstrap Italia in una versione idonea o non utilizzano nessuna delle classi CSS indicate: ",
     },
     nonExecuted: "",
     title:
-      "C.SI.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito comunale deve utilizzare la libreria Bootstrap Italia.",
+      "C.SC.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito della scuola deve utilizzare la libreria Bootstrap Italia in una versione più recente di 1.6.",
     failureTitle:
-      "C.SI.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito comunale deve utilizzare la libreria Bootstrap Italia.",
+      "C.SC.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito della scuola deve utilizzare la libreria Bootstrap Italia in una versione più recente di 1.6.",
     description:
-      "CONDIZIONI DI SUCCESSO: la libreria Bootstrap Italia è presente e in uno in una versione uguale o superiore alla 1.6; MODALITÀ DI VERIFICA: in ogni pagina analizzata viene verificata la presenza della libreria Bootstrap Italia e la versione in uso, individuando la proprietà CSS --bootstrap-italia-version all’interno del selettore :root o la variabile globale window.BOOTSTRAP_ITALIA_VERSION. Inoltre devono essere presenti almeno le classi [nav-link]; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs).",
+      "CONDIZIONI DI SUCCESSO: la libreria Bootstrap Italia è presente e in uno in una versione uguale o superiore alla 1.6; MODALITÀ DI VERIFICA: in ogni pagina analizzata viene verificata la presenza della libreria Bootstrap Italia e la versione in uso, individuando la proprietà CSS --bootstrap-italia-version all’interno del selettore :root o la variabile globale window.BOOTSTRAP_ITALIA_VERSION. Inoltre deve essere presente almeno una tra le seguenti classi di Bootstrap Italia: XXXXXXXXXXXXXXXXXXXXXXXXX; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs).",
   },
   "school-controlled-vocabularies": {
     greenResult:
