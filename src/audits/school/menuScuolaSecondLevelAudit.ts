@@ -74,14 +74,12 @@ class LoadAudit extends Audit {
     let totalNumberOfTitleFound = 0;
     const itemsPage: itemPage[] = [];
 
-    for (const [, value] of Object.entries(menuItems)) {
+    for (const [, secondaryMenuItem] of Object.entries(menuItems)) {
       const item: itemPage = {
-        key: value.label,
+        key: secondaryMenuItem.label,
         pagesInVocabulary: [],
         pagesNotInVocabulary: [],
       };
-
-      const secondaryMenuItem = value;
 
       const secondaryMenuItems: string[] = [];
       for (const element of secondaryMenuItem.dictionary) {

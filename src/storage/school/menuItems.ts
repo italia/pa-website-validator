@@ -20,8 +20,7 @@ export const menuItems = {
     dictionary: [
       "Personale scolastico",
       "Famiglie e studenti",
-      "Percorsi di studio",
-      "Tutti i servizi",
+      "Percorsi di studio"
     ],
   },
   news: {
