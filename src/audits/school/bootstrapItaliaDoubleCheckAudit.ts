@@ -92,7 +92,7 @@ class LoadAudit extends Audit {
       )),
     ];
 
-    const cssClasses = ["nav-link"];
+    const cssClasses = ["nav-link", 'pippo'];
 
     const browser = await puppeteer.launch({
       args: ["--no-sandbox"],
@@ -225,7 +225,7 @@ class LoadAudit extends Audit {
         result: auditData.subItem.greenResult,
         title_library_name: "La libreria Bootstrap Italia è presente",
         title_library_version: "Versione in uso",
-        title_classes_found: "Classi ricercate mancanti",
+        title_classes_found: "Classi CSS trovate",
       });
 
       for (const item of correctItems) {
