@@ -130,6 +130,9 @@ class LoadAudit extends Audit {
 
       let indexElements = await getServicesFromIndex($, mandatoryVoices);
 
+      const mandatoryMenuItems = mandatoryVoices.map(toMenuItem);
+      const orderResult = checkOrder(mandatoryMenuItems, indexElements);
+
       //For Contatti we don't check its content
       const indexElementsWithContent: string[] = ["Contatti"];
 
@@ -152,9 +155,6 @@ class LoadAudit extends Audit {
       indexElements = indexElements.filter((value) =>
         indexElementsWithContent.includes(value)
       );
-
-      const mandatoryMenuItems = mandatoryVoices.map(toMenuItem);
-      const orderResult = checkOrder(mandatoryMenuItems, indexElements);
 
       let missingMandatoryItems = missingMenuItems(
         indexElements,

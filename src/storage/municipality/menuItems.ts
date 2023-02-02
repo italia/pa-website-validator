@@ -21,7 +21,7 @@ export const primaryMenuItems = {
     regExp: /^Novità$/i,
     data_element: "news",
     secondary_item_data_element: "news-category-link",
-    dictionary: ["avviso", "comunicato stampa", "news"],
+    dictionary: ["avvisi", "comunicati", "notizie"],
   },
   services: {
     label: "SERVIZI",
@@ -53,7 +53,7 @@ export const primaryMenuItems = {
     regExp: /^Vivere /i,
     data_element: "live",
     secondary_item_data_element: "live-button",
-    dictionary: ["cultura e tempo libero", "aree amministrative"],
+    dictionary: ["luoghi", "eventi"],
   },
 };
 

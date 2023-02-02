@@ -119,6 +119,9 @@ class LoadAudit extends Audit {
 
       let indexElements = await getServicesFromIndex($, mandatoryIndexVoices);
 
+      const mandatoryMenuItems = mandatoryIndexVoices.map(toMenuItem);
+      const orderResult = checkOrder(mandatoryMenuItems, indexElements);
+
       const indexElementsWithContent: string[] = [];
 
       for (const mandatoryVoiceDataElement of mandatoryVoicesDataElements.paragraph) {
@@ -141,8 +144,6 @@ class LoadAudit extends Audit {
         indexElementsWithContent.includes(value)
       );
 
-      const mandatoryMenuItems = mandatoryIndexVoices.map(toMenuItem);
-      const orderResult = checkOrder(mandatoryMenuItems, indexElements);
       const missingMandatoryItems = missingMenuItems(
         indexElements,
         mandatoryMenuItems
