@@ -30,7 +30,7 @@ export const auditDictionary = {
       "Il link è nel footer, invia alla pagina corretta e contiene l'URL corretto.",
     yellowResult: "",
     redResult:
-      "Il link non è nel footer o non invia alla pagina corretta o la pagina non esiste o la pagina non contiene l'URL corretto.",
+      "Il link non è nel footer o non invia alla pagina corretta o la pagina non esiste.",
     nonExecuted: "",
     title:
       "C.SI.3.2 - DICHIARAZIONE DI ACCESSIBILITÀ - Il sito comunale deve esporre la dichiarazione di accessibilità in conformità al modello e alle linee guida rese disponibili da AgID in ottemperanza alla normativa vigente in materia di accessibilità e con livelli di accessibilità contemplati nelle specifiche tecniche WCAG 2.1.",
