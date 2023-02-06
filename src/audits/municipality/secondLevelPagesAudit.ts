@@ -61,7 +61,7 @@ class LoadAudit extends lighthouse.Audit {
       {
         key: "wrong_title_found",
         itemType: "text",
-        text: "Titoli non usati",
+        text: "Titoli aggiuntivi trovati",
       },
     ];
 
@@ -71,7 +71,6 @@ class LoadAudit extends lighthouse.Audit {
         correct_title_percentage: "",
         correct_title_found: "",
         wrong_title_found: "",
-        error_voices: "",
       },
     ];
 
@@ -143,9 +142,9 @@ class LoadAudit extends lighthouse.Audit {
 
       for (const pageTitle of secondLevelPagesNames) {
         if (primaryMenuItem.dictionary.includes(pageTitle.toLowerCase())) {
-          item.pagesInVocabulary.push(pageTitle.toLowerCase());
+          item.pagesInVocabulary.push(pageTitle);
         } else {
-          item.pagesNotInVocabulary.push(pageTitle.toLowerCase());
+          item.pagesNotInVocabulary.push(pageTitle);
         }
       }
 
@@ -212,6 +211,12 @@ class LoadAudit extends lighthouse.Audit {
         wrongTitleFound += itemPage.pagesNotInVocabulary.join(", ");
         wrongTitleFound += "; ";
       }
+
+      if (errorVoices.length > 0) {
+        wrongTitleFound += "Voci menu custom: ";
+        wrongTitleFound += errorVoices.join(", ");
+        wrongTitleFound += "; ";
+      }
     }
 
     const pagesFoundInVocabularyPercentage = parseInt(
@@ -235,15 +240,6 @@ class LoadAudit extends lighthouse.Audit {
     items[0].correct_title_percentage = pagesFoundInVocabularyPercentage + "%";
     items[0].correct_title_found = correctTitleFound;
     items[0].wrong_title_found = wrongTitleFound;
-    items[0].error_voices = errorVoices.join(", ");
-
-    if (errorVoices.length > 0) {
-      headings.push({
-        key: "error_voices",
-        itemType: "text",
-        text: "Titoli aggiuntivi trovati",
-      });
-    }
 
     return {
       score: score,

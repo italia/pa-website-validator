@@ -21,7 +21,11 @@ export const primaryMenuItems = {
     regExp: /^Novità$/i,
     data_element: "news",
     secondary_item_data_element: "news-category-link",
-    dictionary: ["avvisi", "comunicati", "notizie"],
+    dictionary: [
+        "avvisi",
+      "comunicati",
+      "notizie"
+    ],
   },
   services: {
     label: "SERVIZI",

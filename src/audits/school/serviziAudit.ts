@@ -57,6 +57,10 @@ class LoadAudit extends Audit {
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
 
+    const titleSubHeadings = [
+      "Voci mancanti o senza contenuto",
+      "Voci che non rispettano l'ordine richiesto",
+    ];
     const headings = [
       {
         key: "result",
@@ -271,9 +275,8 @@ class LoadAudit extends Audit {
     if (wrongItems.length > 0) {
       results.push({
         result: auditData.subItem.redResult,
-        title_missing_elements: "Voci mancanti o senza contenuto",
-        title_wrong_order_elements:
-          "Voci che non rispettano l'ordine richiesto",
+        title_missing_elements: titleSubHeadings[0],
+        title_wrong_order_elements: titleSubHeadings[1],
       });
 
       for (const item of wrongItems) {
@@ -291,9 +294,8 @@ class LoadAudit extends Audit {
     if (toleranceItems.length > 0) {
       results.push({
         result: auditData.subItem.yellowResult,
-        title_missing_elements: "Voci mancanti o senza contenuto",
-        title_wrong_order_elements:
-          "Voci che non rispettano l'ordine richiesto",
+        title_missing_elements: titleSubHeadings[0],
+        title_wrong_order_elements: titleSubHeadings[1],
       });
 
       for (const item of toleranceItems) {
@@ -311,9 +313,8 @@ class LoadAudit extends Audit {
     if (correctItems.length > 0) {
       results.push({
         result: auditData.subItem.greenResult,
-        title_missing_elements: "Voci mancanti o senza contenuto",
-        title_wrong_order_elements:
-          "Voci che non rispettano l'ordine richiesto",
+        title_missing_elements: titleSubHeadings[0],
+        title_wrong_order_elements: titleSubHeadings[1],
       });
 
       for (const item of correctItems) {

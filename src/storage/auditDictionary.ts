@@ -71,7 +71,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito comunale deve utilizzare la libreria Bootstrap Italia.",
     description:
-      "CONDIZIONI DI SUCCESSO: la libreria Bootstrap Italia è presente e in uno in una versione uguale o superiore alla 2.0; MODALITÀ DI VERIFICA: in ogni pagina analizzata viene verificata la presenza della libreria Bootstrap Italia e la versione in uso, individuando la proprietà CSS --bootstrap-italia-version all’interno del selettore :root o la variabile globale window.BOOTSTRAP_ITALIA_VERSION. Inoltre devono essere presenti almeno le classi XXXXXXXXXXXXXXXXXXXXXXXXX; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/).",
+      "CONDIZIONI DI SUCCESSO: la libreria Bootstrap Italia è presente e in uso in una versione uguale o superiore alla 2.0; MODALITÀ DI VERIFICA: in ogni pagina analizzata viene verificata la presenza della libreria Bootstrap Italia e la versione in uso, individuando la proprietà CSS --bootstrap-italia-version all’interno del selettore :root o la variabile globale window.BOOTSTRAP_ITALIA_VERSION. Inoltre deve utilizzare almeno una tra le classi CSS di Bootstrap Italia indicate nella Documentazione dell'App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/).",
   },
   "municipality-contacts-assistency": {
     greenResult: 'La voce "Contatti" è presente.',
@@ -109,9 +109,9 @@ export const auditDictionary = {
     redResult:
       "In almeno una delle pagine analizzate sono stati rilevati cookie non idonei.",
     subItem: {
-      greenResult: "Pagine in cui sono stati rilevati solo cookie idonei: ",
+      greenResult: "Pagine in cui sono stati rilevati solo cookie idonei.",
       yellowResult: "",
-      redResult: "Pagine in cui sono stati rilevati cookie non idonei: ",
+      redResult: "Pagine in cui sono stati rilevati cookie non idonei.",
     },
     nonExecuted: "",
     title:
@@ -416,7 +416,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SC.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito della scuola deve utilizzare la libreria Bootstrap Italia in una versione più recente di 1.6.",
     description:
-      "CONDIZIONI DI SUCCESSO: la libreria Bootstrap Italia è presente e in uno in una versione uguale o superiore alla 1.6; MODALITÀ DI VERIFICA: in ogni pagina analizzata viene verificata la presenza della libreria Bootstrap Italia e la versione in uso, individuando la proprietà CSS --bootstrap-italia-version all’interno del selettore :root o la variabile globale window.BOOTSTRAP_ITALIA_VERSION. Inoltre deve essere presente almeno una tra le seguenti classi di Bootstrap Italia: XXXXXXXXXXXXXXXXXXXXXXXXX; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs).",
+      "CONDIZIONI DI SUCCESSO: la libreria Bootstrap Italia è presente e in uso in una versione uguale o superiore alla 1.6; MODALITÀ DI VERIFICA: in ogni pagina analizzata viene verificata la presenza della libreria Bootstrap Italia e la versione in uso, individuando la proprietà CSS --bootstrap-italia-version all’interno del selettore :root o la variabile globale window.BOOTSTRAP_ITALIA_VERSION. Inoltre deve utilizzare almeno una tra le classi CSS di Bootstrap Italia indicate nella Documentazione dell'App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs).",
   },
   "school-controlled-vocabularies": {
     greenResult:
@@ -443,7 +443,7 @@ export const auditDictionary = {
     subItem: {
       greenResult: "Pagine in cui sono stati rilevati solo cookie idonei: ",
       yellowResult: "",
-      redResult: "Pagine in cui sono stati rilevati cookie non idonei: ",
+      redResult: "Pagine in cui sono stati rilevati cookie non idonei.",
     },
     nonExecuted: "",
     title:
@@ -529,11 +529,11 @@ export const auditDictionary = {
       "In almeno una delle pagine analizzate più di 2 voci obbligatorie o i relativi contenuti non sono presenti o più di 1 voce non è nell'ordine corretto.",
     subItem: {
       greenResult:
-        "Pagine nelle quali tutte le voci obbligatorie e i relativi contenuti sono presenti e, dove richiesto, sono nell'ordine corretto: ",
+        "Pagine nelle quali tutte le voci obbligatorie e i relativi contenuti sono presenti e, dove richiesto, sono nell'ordine corretto.",
       yellowResult:
-        "Pagine nelle quali fino a 2 voci obbligatorie o i relativi contenuti non sono presenti o 1 voce non è nell'ordine corretto: ",
+        "Pagine nelle quali fino a 2 voci obbligatorie o i relativi contenuti non sono presenti o 1 voce non è nell'ordine corretto.",
       redResult:
-        "Pagine nelle quali più di 2 voci obbligatorie o i relativi contenuti non sono presenti o più di 1 voce non è nell'ordine corretto: ",
+        "Pagine nelle quali più di 2 voci obbligatorie o i relativi contenuti non sono presenti o più di 1 voce non è nell'ordine corretto.",
     },
     nonExecuted:
       "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",

@@ -15,6 +15,7 @@ import {
   getRandomSchoolServicesUrl,
 } from "../../utils/utils";
 import { auditScanVariables } from "../../storage/school/auditScanVariables";
+import { cssClasses } from "../../storage/school/cssClasses";
 import puppeteer from "puppeteer";
 
 const auditId = "school-ux-ui-consistency-bootstrap-italia-double-check";
@@ -43,6 +44,14 @@ class LoadAudit extends Audit {
     }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
+
+    const titleSubHeadings = [
+      "La libreria Bootstrap Italia è presente",
+      "Versione in uso",
+      "Classi CSS trovate",
+    ];
+
+    const subResults = ["Nessuna", "Almeno una"];
 
     const headings = [
       {
@@ -91,8 +100,6 @@ class LoadAudit extends Audit {
         auditVariables.numberOfServicesToBeScanned
       )),
     ];
-
-    const cssClasses = ["nav-link"];
 
     const browser = await puppeteer.launch({
       args: ["--no-sandbox"],
@@ -172,8 +179,9 @@ class LoadAudit extends Audit {
 
       if (foundClasses.length === 0) {
         singleResult = 0;
+        item.classes_found = subResults[0];
       } else {
-        item.classes_found = foundClasses.join(", ");
+        item.classes_found = subResults[1];
       }
 
       if (singleResult === 1) {
@@ -205,9 +213,9 @@ class LoadAudit extends Audit {
     if (wrongItems.length > 0) {
       results.push({
         result: auditData.subItem.redResult,
-        title_library_name: "La libreria Bootstrap Italia è presente",
-        title_library_version: "Versione in uso",
-        title_classes_found: "Classi CSS trovate",
+        title_library_name: titleSubHeadings[0],
+        title_library_version: titleSubHeadings[1],
+        title_classes_found: titleSubHeadings[2],
       });
 
       for (const item of wrongItems) {
@@ -223,9 +231,9 @@ class LoadAudit extends Audit {
     if (correctItems.length > 0) {
       results.push({
         result: auditData.subItem.greenResult,
-        title_library_name: "La libreria Bootstrap Italia è presente",
-        title_library_version: "Versione in uso",
-        title_classes_found: "Classi CSS trovate",
+        title_library_name: titleSubHeadings[0],
+        title_library_version: titleSubHeadings[1],
+        title_classes_found: titleSubHeadings[2],
       });
 
       for (const item of correctItems) {

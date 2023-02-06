@@ -40,6 +40,11 @@ class LoadAudit extends Audit {
     artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
+    const titleSubHeadings = [
+      "Dominio del cookie",
+      "Nome del cookie",
+      "Valore del cookie",
+    ];
     const headings = [
       {
         key: "result",
@@ -125,9 +130,9 @@ class LoadAudit extends Audit {
     if (wrongItems.length > 0) {
       results.push({
         result: auditData.subItem.greenResult,
-        title_cookie_domain: "Dominio del cookie",
-        title_cookie_name: "Nome del cookie",
-        title_cookie_value: "Valore del cookie",
+        title_cookie_domain: titleSubHeadings[0],
+        title_cookie_name: titleSubHeadings[1],
+        title_cookie_value: titleSubHeadings[2],
       });
 
       for (const item of wrongItems) {
@@ -145,9 +150,9 @@ class LoadAudit extends Audit {
     if (correctItems.length > 0) {
       results.push({
         result: auditData.subItem.greenResult,
-        title_cookie_domain: "Dominio del cookie",
-        title_cookie_name: "Nome del cookie",
-        title_cookie_value: "Valore del cookie",
+        title_cookie_domain: titleSubHeadings[0],
+        title_cookie_name: titleSubHeadings[1],
+        title_cookie_value: titleSubHeadings[2],
       });
 
       for (const item of correctItems) {

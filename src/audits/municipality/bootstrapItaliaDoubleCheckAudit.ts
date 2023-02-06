@@ -6,13 +6,16 @@ import lighthouse from "lighthouse";
 import semver from "semver";
 import { auditDictionary } from "../../storage/auditDictionary";
 import {
-  checkCSSClassesOnPage,
+  buildUrl,
+  checkCSSClassesOnPage, getHREFValuesDataAttribute,
   getRandomMunicipalityFirstLevelPagesUrl,
   getRandomMunicipalitySecondLevelPagesUrl,
-  getRandomMunicipalityServicesUrl,
+  getRandomMunicipalityServicesUrl, loadPageData,
 } from "../../utils/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
+import { cssClasses } from "../../storage/municipality/cssClasses";
 import puppeteer from "puppeteer";
+import {CheerioAPI} from "cheerio";
 
 const Audit = lighthouse.Audit;
 
@@ -42,6 +45,14 @@ class LoadAudit extends Audit {
     }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
+
+    const titleSubHeadings = [
+      "La libreria Bootstrap Italia è presente",
+      "Versione in uso",
+      "Classi CSS trovate",
+    ];
+
+    const subResults = ["Nessuna", "Almeno una"];
 
     const headings = [
       {
@@ -91,7 +102,19 @@ class LoadAudit extends Audit {
       )),
     ];
 
-    const cssClasses = ["nav-link"];
+    const $: CheerioAPI = await loadPageData(url);
+    const personalAreaLogin = await getHREFValuesDataAttribute(
+        $,
+        '[data-element="personal-area-login"]'
+    );
+    if (personalAreaLogin.length === 1) {
+      let personalAreaLoginUrl = personalAreaLogin[0];
+      if (!personalAreaLoginUrl.includes(url)) {
+        personalAreaLoginUrl = await buildUrl(url, personalAreaLoginUrl);
+      }
+      pagesToBeAnalyzed.push(personalAreaLoginUrl);
+    }
+    //TODO: test
 
     const browser = await puppeteer.launch({
       args: ["--no-sandbox"],
@@ -171,8 +194,9 @@ class LoadAudit extends Audit {
 
       if (foundClasses.length === 0) {
         singleResult = 0;
+        item.classes_found = subResults[0];
       } else {
-        item.classes_found = foundClasses.join(", ");
+        item.classes_found = subResults[1];
       }
 
       if (singleResult === 1) {
@@ -204,9 +228,9 @@ class LoadAudit extends Audit {
     if (wrongItems.length > 0) {
       results.push({
         result: auditData.subItem.redResult,
-        title_library_name: "La libreria Bootstrap Italia è presente",
-        title_library_version: "Versione in uso",
-        title_classes_found: "Classi CSS trovate",
+        title_library_name: titleSubHeadings[0],
+        title_library_version: titleSubHeadings[1],
+        title_classes_found: titleSubHeadings[2],
       });
 
       for (const item of wrongItems) {
@@ -222,9 +246,9 @@ class LoadAudit extends Audit {
     if (correctItems.length > 0) {
       results.push({
         result: auditData.subItem.greenResult,
-        title_library_name: "La libreria Bootstrap Italia è presente",
-        title_library_version: "Versione in uso",
-        title_classes_found: "Classi CSS trovate",
+        title_library_name: titleSubHeadings[0],
+        title_library_version: titleSubHeadings[1],
+        title_classes_found: titleSubHeadings[2],
       });
 
       for (const item of correctItems) {

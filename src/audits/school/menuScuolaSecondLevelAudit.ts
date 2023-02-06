@@ -54,9 +54,9 @@ class LoadAudit extends Audit {
         text: "Voci corrette identificate",
       },
       {
-        key: "missing_voices",
+        key: "wrong_voices",
         itemType: "text",
-        text: "Voci non usate",
+        text: "Voci aggiuntive trovate",
       },
     ];
 
@@ -65,9 +65,7 @@ class LoadAudit extends Audit {
         result: auditData.redResult,
         correct_voices_percentage: "",
         correct_voices: "",
-        wrong_voices_order: "",
-        missing_voices: "",
-        error_voices: "",
+        wrong_voices: "",
       },
     ];
 
@@ -81,11 +79,6 @@ class LoadAudit extends Audit {
         pagesNotInVocabulary: [],
       };
 
-      const secondaryMenuItems: string[] = [];
-      for (const element of secondaryMenuItem.dictionary) {
-        secondaryMenuItems.push(element.toLowerCase());
-      }
-
       const $: CheerioAPI = await loadPageData(url);
       const headerUlTest = await getPageElementDataAttribute(
         $,
@@ -96,16 +89,14 @@ class LoadAudit extends Audit {
       if (headerUlTest[0] === "Panoramica") headerUlTest.shift();
 
       for (const element of headerUlTest) {
-        if (secondaryMenuItems.includes(element.toLowerCase())) {
-          item.pagesInVocabulary.push(element.toLowerCase());
+        if (secondaryMenuItem.dictionary.includes(element.toLowerCase())) {
+          item.pagesInVocabulary.push(element);
+        } else {
+          item.pagesNotInVocabulary.push(element);
         }
 
         totalNumberOfTitleFound++;
       }
-
-      item.pagesNotInVocabulary = secondaryMenuItems.filter(
-        (x) => !item.pagesInVocabulary.includes(x)
-      );
 
       itemsPage.push(item);
     }
@@ -153,6 +144,12 @@ class LoadAudit extends Audit {
         wrongTitleFound += itemPage.pagesNotInVocabulary.join(", ");
         wrongTitleFound += "; ";
       }
+
+      if (errorVoices.length > 0) {
+        wrongTitleFound += "Voci menu custom: ";
+        wrongTitleFound += errorVoices.join(", ");
+        wrongTitleFound += "; ";
+      }
     }
 
     const presentVoicesPercentage: number = parseInt(
@@ -174,16 +171,7 @@ class LoadAudit extends Audit {
     items[0].correct_voices = correctTitleFound;
     items[0].correct_voices_percentage =
       presentVoicesPercentage.toString() + "%";
-    items[0].missing_voices = wrongTitleFound;
-    items[0].error_voices = errorVoices.join(", ");
-
-    if (errorVoices.length > 0) {
-      headings.push({
-        key: "error_voices",
-        itemType: "text",
-        text: "Voci aggiuntive trovate",
-      });
-    }
+    items[0].wrong_voices = wrongTitleFound;
 
     return {
       score: score,
