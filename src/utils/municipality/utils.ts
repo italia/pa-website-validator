@@ -9,71 +9,6 @@ import {
   loadPageData,
 } from "../utils";
 
-const getRandomMunicipalityThirdLevelPagesUrl = async (
-  url: string,
-  linkDataElement: string,
-  numberOfServices = 1
-) => {
-  let $ = await loadPageData(url);
-
-  const servicesPageHref = await getHREFValuesDataAttribute(
-    $,
-    '[data-element="all-services"]'
-  );
-  if (servicesPageHref.length <= 0) {
-    return [];
-  }
-
-  let allServicesUrl = servicesPageHref[0];
-  if (!allServicesUrl.includes(url)) {
-    allServicesUrl = await buildUrl(url, allServicesUrl);
-  }
-
-  const browser = await puppeteer.launch({
-    args: ["--no-sandbox"],
-  });
-  try {
-    const page: Page = await browser.newPage();
-    await page.goto(allServicesUrl, {
-      waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
-    });
-
-    let clickButton = true;
-    while (clickButton) {
-      try {
-        const element = await page.$('[data-element="load-other-cards"]');
-        if (!element) {
-          clickButton = false;
-          continue;
-        }
-        const xhrCatcher = page.waitForResponse(
-          (r) => r.request().method() != "OPTIONS"
-        );
-        await element.click({ delay: 500 });
-        await xhrCatcher;
-        break;
-      } catch (e) {
-        continue;
-      }
-    }
-    const data = await page.content();
-    $ = cheerio.load(data);
-    await browser.close();
-  } catch (e) {
-    await browser.close();
-  }
-
-  const servicesUrls = await getHREFValuesDataAttribute($, linkDataElement);
-
-  for (let i = 0; i < servicesUrls.length; i++) {
-    if (!servicesUrls[i].includes(url)) {
-      servicesUrls[i] = await buildUrl(url, servicesUrls[i]);
-    }
-  }
-
-  return getRandomNString(servicesUrls, numberOfServices);
-};
-
 const getRandomMunicipalityFirstLevelPagesUrl = async (
   url: string,
   numberOfPages = 1
@@ -125,7 +60,7 @@ const getRandomMunicipalitySecondLevelPagesUrl = async (
           primaryLevelPageUrl = await buildUrl(url, primaryLevelPageUrl);
         }
         const $2 = await loadPageData(primaryLevelPageUrl);
-        const dataElementSecondaryItem = `[data-element="${primaryMenuItem.secondary_item_data_element}"]`;
+        const dataElementSecondaryItem = `[data-element="${primaryMenuItem.secondary_item_data_element[0]}"]`;
         pagesUrls = [
           ...pagesUrls,
           ...new Set(
@@ -145,8 +80,84 @@ const getRandomMunicipalitySecondLevelPagesUrl = async (
   return getRandomNString(pagesUrls, numberOfPages);
 };
 
+const getRandomMunicipalityThirdLevelPagesUrl = async (
+  url: string,
+  pageUrl: string,
+  linkDataElement: string,
+  numberOfPages = 1
+) => {
+  if (pageUrl.length === 0) {
+    return [];
+  }
+  let $ = await loadPageData(url);
+
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox"],
+  });
+  try {
+    const page: Page = await browser.newPage();
+    await page.goto(pageUrl, {
+      waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
+    });
+
+    let clickButton = true;
+    while (clickButton) {
+      try {
+        const element = await page.$('[data-element="load-other-cards"]');
+        if (!element) {
+          clickButton = false;
+          continue;
+        }
+        const xhrCatcher = page.waitForResponse(
+          (r) => r.request().method() != "OPTIONS"
+        );
+        await element.click({ delay: 500 });
+        await xhrCatcher;
+        break;
+      } catch (e) {
+        continue;
+      }
+    }
+    const data = await page.content();
+    $ = cheerio.load(data);
+    await browser.close();
+  } catch (e) {
+    await browser.close();
+  }
+
+  const pagesUrls = await getHREFValuesDataAttribute($, linkDataElement);
+
+  for (let i = 0; i < pagesUrls.length; i++) {
+    if (!pagesUrls[i].includes(url)) {
+      pagesUrls[i] = await buildUrl(url, pagesUrls[i]);
+    }
+  }
+
+  return getRandomNString(pagesUrls, numberOfPages);
+};
+
+const getServicePageUrl = async (url: string) => {
+  const $ = await loadPageData(url);
+
+  const servicesPageHref = await getHREFValuesDataAttribute(
+    $,
+    '[data-element="all-services"]'
+  );
+  if (servicesPageHref.length <= 0) {
+    return "";
+  }
+
+  let allServicesUrl = servicesPageHref[0];
+  if (!allServicesUrl.includes(url)) {
+    allServicesUrl = await buildUrl(url, allServicesUrl);
+  }
+
+  return allServicesUrl;
+};
+
 export {
   getRandomMunicipalityFirstLevelPagesUrl,
   getRandomMunicipalitySecondLevelPagesUrl,
   getRandomMunicipalityThirdLevelPagesUrl,
+  getServicePageUrl,
 };

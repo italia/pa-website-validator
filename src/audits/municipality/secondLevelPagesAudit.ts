@@ -5,6 +5,7 @@
 import lighthouse from "lighthouse";
 import {
   buildUrl,
+  getButtonUrl,
   getHREFValuesDataAttribute,
   getPageElementDataAttribute,
   loadPageData,
@@ -105,7 +106,7 @@ class LoadAudit extends lighthouse.Audit {
       }
 
       $ = await loadPageData(secondLevelPageUrl);
-      const secondaryMenuDataElement = `[data-element="${primaryMenuItem.secondary_item_data_element}"]`;
+      const secondaryMenuDataElement = `[data-element="${primaryMenuItem.secondary_item_data_element[0]}"]`;
       let secondLevelPagesNames = [];
 
       if (key !== "live" && primaryMenuItem.dictionary.length > 0) {
@@ -114,27 +115,14 @@ class LoadAudit extends lighthouse.Audit {
           secondaryMenuDataElement
         );
       } else {
-        const buttons = $(secondaryMenuDataElement);
-        for (const button of buttons) {
-          const elementObj = $(button).attr();
-          if (
-            elementObj !== null &&
-            elementObj !== undefined &&
-            "onclick" in elementObj &&
-            elementObj.onclick.includes("location.href")
-          ) {
-            const onClick: string = elementObj.onclick;
-            let secondPageLink = onClick.substring(
-              onClick.indexOf("'") + 1,
-              onClick.lastIndexOf("'")
-            );
-            if (!secondPageLink.includes(url)) {
-              secondPageLink = await buildUrl(url, secondPageLink);
-            }
+        for (const dataElement of primaryMenuItem.secondary_item_data_element) {
+          const buttonDataElement = `[data-element="${dataElement}"]`;
+          const pageLinkUrl = await getButtonUrl($, url, buttonDataElement);
 
-            $ = await loadPageData(secondPageLink);
+          if (pageLinkUrl.length > 0) {
+            const $2 = await loadPageData(pageLinkUrl);
             secondLevelPagesNames.push(
-              $('[data-element="page-name"]').text().trim() ?? ""
+              $2('[data-element="page-name"]').text().trim() ?? ""
             );
           }
         }

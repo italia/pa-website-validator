@@ -346,6 +346,31 @@ const getAllPageHTML = async (url: string): Promise<string> => {
   return $("html").text() ?? "";
 };
 
+const getButtonUrl = async (
+  $: CheerioAPI,
+  url: string,
+  dataElement: string
+) => {
+  const button = $(dataElement).attr();
+  if (
+    button !== null &&
+    button !== undefined &&
+    "onclick" in button &&
+    button.onclick.includes("location.href")
+  ) {
+    const onClick: string = button.onclick;
+    let secondPageLink = onClick.substring(
+      onClick.indexOf("'") + 1,
+      onClick.lastIndexOf("'")
+    );
+    if (!secondPageLink.includes(url)) {
+      secondPageLink = await buildUrl(url, secondPageLink);
+    }
+    return secondPageLink;
+  }
+  return "";
+};
+
 export {
   toMenuItem,
   checkOrder,
@@ -356,6 +381,7 @@ export {
   getPageElementDataAttribute,
   getHREFValuesDataAttribute,
   getElementHrefValuesDataAttribute,
+  getButtonUrl,
   isInternalUrl,
   isHttpsUrl,
   buildUrl,

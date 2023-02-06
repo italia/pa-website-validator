@@ -4,7 +4,7 @@ export const primaryMenuItems = {
     name: "Amministrazione",
     regExp: /^Amministrazione$/i,
     data_element: "management",
-    secondary_item_data_element: "management-category-link",
+    secondary_item_data_element: ["management-category-link"],
     dictionary: [
       "aree amministrative",
       "documenti e dati",
@@ -20,7 +20,7 @@ export const primaryMenuItems = {
     name: "Novità",
     regExp: /^Novità$/i,
     data_element: "news",
-    secondary_item_data_element: "news-category-link",
+    secondary_item_data_element: ["news-category-link"],
     dictionary: ["avvisi", "comunicati", "notizie"],
   },
   services: {
@@ -28,7 +28,7 @@ export const primaryMenuItems = {
     name: "Servizi",
     regExp: /^Servizi$/i,
     data_element: "all-services",
-    secondary_item_data_element: "service-category-link",
+    secondary_item_data_element: ["service-category-link"],
     dictionary: [
       "educazione e formazione",
       "salute, benessere e assistenza",
@@ -52,7 +52,10 @@ export const primaryMenuItems = {
     name: "Vivere [nome del Comune]",
     regExp: /^Vivere /i,
     data_element: "live",
-    secondary_item_data_element: "live-button",
+    secondary_item_data_element: [
+      "live-button-locations",
+      "live-button-events",
+    ],
     dictionary: ["luoghi", "eventi"],
   },
 };

@@ -11,8 +11,10 @@ import {
   getRandomMunicipalityFirstLevelPagesUrl,
   getRandomMunicipalitySecondLevelPagesUrl,
   getRandomMunicipalityThirdLevelPagesUrl,
+  getServicePageUrl,
 } from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
+import { getButtonUrl, loadPageData } from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -84,11 +86,17 @@ class LoadAudit extends Audit {
       )),
       ...(await getRandomMunicipalityThirdLevelPagesUrl(
         url,
+        await getServicePageUrl(url),
         '[data-element="service-link"]',
         auditVariables.numberOfServicesToBeScanned
       )),
       ...(await getRandomMunicipalityThirdLevelPagesUrl(
         url,
+        await getButtonUrl(
+          await loadPageData(url),
+          url,
+          `[data-element="live-button-events"]`
+        ),
         '[data-element="event-link"]',
         auditVariables.numberOfEventsToBeScanned
       )),

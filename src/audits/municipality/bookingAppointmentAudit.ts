@@ -3,7 +3,10 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { loadPageData } from "../../utils/utils";
-import { getRandomMunicipalityThirdLevelPagesUrl } from "../../utils/municipality/utils";
+import {
+  getRandomMunicipalityThirdLevelPagesUrl,
+  getServicePageUrl,
+} from "../../utils/municipality/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
@@ -48,6 +51,7 @@ class LoadAudit extends Audit {
     const randomServices: string[] =
       await getRandomMunicipalityThirdLevelPagesUrl(
         url,
+        await getServicePageUrl(url),
         '[data-element="service-link"]'
       );
 

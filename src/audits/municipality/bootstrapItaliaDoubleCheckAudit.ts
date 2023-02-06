@@ -15,6 +15,7 @@ import {
   getRandomMunicipalityFirstLevelPagesUrl,
   getRandomMunicipalitySecondLevelPagesUrl,
   getRandomMunicipalityThirdLevelPagesUrl,
+  getServicePageUrl,
 } from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import { cssClasses } from "../../storage/municipality/cssClasses";
@@ -102,6 +103,7 @@ class LoadAudit extends Audit {
       )),
       ...(await getRandomMunicipalityThirdLevelPagesUrl(
         url,
+        await getServicePageUrl(url),
         '[data-element="service-link"]',
         auditVariables.numberOfServicesToBeScanned
       )),
