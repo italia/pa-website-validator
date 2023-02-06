@@ -3,7 +3,7 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { allowedFonts } from "../../storage/municipality/allowedFonts";
-import { getRandomMunicipalityThirdLevelPagesUrl } from "../../utils/utils";
+import { getRandomMunicipalityThirdLevelPagesUrl } from "../../utils/municipality/utils";
 import puppeteer from "puppeteer";
 import { auditDictionary } from "../../storage/auditDictionary";
 

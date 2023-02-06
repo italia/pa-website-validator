@@ -2,11 +2,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import {
-  getPageElementDataAttribute,
-  getRandomMunicipalityThirdLevelPagesUrl,
-  loadPageData,
-} from "../../utils/utils";
+import { getPageElementDataAttribute, loadPageData } from "../../utils/utils";
+import { getRandomMunicipalityThirdLevelPagesUrl } from "../../utils/municipality/utils";
 import { CheerioAPI } from "cheerio";
 import { auditDictionary } from "../../storage/auditDictionary";
 

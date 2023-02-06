@@ -8,12 +8,12 @@ import { auditDictionary } from "../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
 
+import { checkCSSClassesOnPage } from "../../utils/utils";
 import {
-  checkCSSClassesOnPage,
   getRandomSchoolFirstLevelPagesUrl,
   getRandomSchoolSecondLevelPagesUrl,
   getRandomSchoolServicesUrl,
-} from "../../utils/utils";
+} from "../../utils/school/utils";
 import { auditScanVariables } from "../../storage/school/auditScanVariables";
 import { cssClasses } from "../../storage/school/cssClasses";
 import puppeteer from "puppeteer";

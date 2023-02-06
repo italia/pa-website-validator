@@ -11,7 +11,7 @@ import {
   getRandomMunicipalityFirstLevelPagesUrl,
   getRandomMunicipalitySecondLevelPagesUrl,
   getRandomMunicipalityThirdLevelPagesUrl,
-} from "../../utils/utils";
+} from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 
 const Audit = lighthouse.Audit;

@@ -8,7 +8,7 @@ import {
   getRandomSchoolSecondLevelPagesUrl,
   getRandomSchoolServicesUrl,
   getRandomSchoolLocationsUrl,
-} from "../../utils/utils";
+} from "../../utils/school/utils";
 import crawlerTypes from "../../types/crawler-types";
 import cookie = crawlerTypes.cookie;
 import { auditDictionary } from "../../storage/auditDictionary";

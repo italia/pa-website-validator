@@ -2,14 +2,12 @@
 import crawlerTypes from "../types/crawler-types";
 import orderType = crawlerTypes.orderResult;
 import * as cheerio from "cheerio";
-import puppeteer, { Page } from "puppeteer";
+import puppeteer from "puppeteer";
 import { CheerioAPI } from "cheerio";
 import axios from "axios";
 import vocabularyResult = crawlerTypes.vocabularyResult;
 import NodeCache from "node-cache";
 import { MenuItem } from "../types/menuItem";
-import { menuItems } from "../storage/school/menuItems";
-import { primaryMenuItems } from "../storage/municipality/menuItems";
 
 const loadPageCache = new NodeCache();
 
@@ -126,66 +124,6 @@ const getHREFValuesDataAttribute = async (
   return serviceUrls;
 };
 
-const getRandomSchoolServicesUrl = async (
-  url: string,
-  numberOfServices = 1
-): Promise<string[]> => {
-  let $ = await loadPageData(url);
-
-  let serviceTypeUrls = await getHREFValuesDataAttribute(
-    $,
-    '[data-element="service-type"]'
-  );
-  if (serviceTypeUrls.length <= 0) {
-    return [];
-  }
-
-  serviceTypeUrls = [...new Set(serviceTypeUrls)];
-
-  let servicesUrls: string[] = [];
-  for (let serviceTypeUrl of serviceTypeUrls) {
-    if (!serviceTypeUrl.includes(url)) {
-      serviceTypeUrl = await buildUrl(url, serviceTypeUrl);
-    }
-
-    $ = await loadPageData(serviceTypeUrl);
-    servicesUrls = [
-      ...servicesUrls,
-      ...(await getHREFValuesDataAttribute($, '[data-element="service-link"]')),
-    ];
-
-    const pagerPagesUrls = [
-      ...new Set(
-        await getHREFValuesDataAttribute($, '[data-element="pager-link"]')
-      ),
-    ];
-    for (let pagerPageUrl of pagerPagesUrls) {
-      if (!pagerPageUrl.includes(url)) {
-        pagerPageUrl = await buildUrl(url, pagerPageUrl);
-      }
-
-      if (pagerPageUrl !== serviceTypeUrl) {
-        $ = await loadPageData(pagerPageUrl);
-        servicesUrls = [
-          ...servicesUrls,
-          ...(await getHREFValuesDataAttribute(
-            $,
-            '[data-element="service-link"]'
-          )),
-        ];
-      }
-    }
-  }
-
-  for (let i = 0; i < servicesUrls.length; i++) {
-    if (!servicesUrls[i].includes(url)) {
-      servicesUrls[i] = await buildUrl(url, servicesUrls[i]);
-    }
-  }
-
-  return getRandomNString(servicesUrls, numberOfServices);
-};
-
 const checkCSSClassesOnPage = async (url: string, cssClasses: string[]) => {
   const $ = await loadPageData(url);
   const foundClasses: string[] = [];
@@ -198,95 +136,6 @@ const checkCSSClassesOnPage = async (url: string, cssClasses: string[]) => {
   }
 
   return foundClasses;
-};
-
-const getRandomSchoolFirstLevelPagesUrl = async (
-  url: string,
-  numberOfPages = 1
-): Promise<string[]> => {
-  const $ = await loadPageData(url);
-
-  const pagesUrls = [
-    ...new Set(
-      await getHREFValuesDataAttribute($, '[data-element="overview"]')
-    ),
-  ];
-
-  for (let i = 0; i < pagesUrls.length; i++) {
-    if (!pagesUrls[i].includes(url)) {
-      pagesUrls[i] = await buildUrl(url, pagesUrls[i]);
-    }
-  }
-
-  return getRandomNString(pagesUrls, numberOfPages);
-};
-
-const getRandomSchoolSecondLevelPagesUrl = async (
-  url: string,
-  numberOfPages = 1
-): Promise<string[]> => {
-  const pagesUrls = [];
-  const $ = await loadPageData(url);
-
-  for (const [, value] of Object.entries(menuItems)) {
-    const dataElement = `[data-element="${value.data_element}"]`;
-
-    let elements = $(dataElement);
-    if (Object.keys(elements).length > 0) {
-      elements = elements.find("li > a");
-      for (const element of elements) {
-        let secondLevelPageUrl = $(element).attr()?.href;
-        if (
-          secondLevelPageUrl &&
-          secondLevelPageUrl !== "#" &&
-          secondLevelPageUrl !== ""
-        ) {
-          if (!secondLevelPageUrl.includes(url)) {
-            secondLevelPageUrl = await buildUrl(url, secondLevelPageUrl);
-          }
-          pagesUrls.push(secondLevelPageUrl);
-        }
-      }
-    }
-  }
-  return getRandomNString(pagesUrls, numberOfPages);
-};
-
-const getRandomSchoolLocationsUrl = async (
-  url: string,
-  numberOfPages = 1
-): Promise<string[]> => {
-  let $ = await loadPageData(url);
-
-  const dataElement = '[data-element="school-locations"]';
-
-  let locationsElementsUrls = await getHREFValuesDataAttribute($, dataElement);
-  locationsElementsUrls = [...new Set(locationsElementsUrls)];
-  if (locationsElementsUrls.length !== 1) {
-    return [];
-  }
-
-  let locationUrl = locationsElementsUrls[0];
-
-  if (!locationUrl.includes(url)) {
-    locationUrl = await buildUrl(url, locationUrl);
-  }
-
-  $ = await loadPageData(locationUrl);
-
-  const pagesUrls = await getHREFValuesDataAttribute(
-    $,
-    '[data-element="location-link"]'
-  );
-
-  for (let i = 0; i < pagesUrls.length; i++) {
-    const pageUrl = pagesUrls[i];
-    if (!pageUrl.includes(url)) {
-      pagesUrls[i] = await buildUrl(url, pageUrl);
-    }
-  }
-
-  return getRandomNString(pagesUrls, numberOfPages);
 };
 
 const buildUrl = async (url: string, path: string): Promise<string> => {
@@ -429,142 +278,6 @@ const urlExists = async (
   }
 };
 
-const getRandomMunicipalityThirdLevelPagesUrl = async (
-  url: string,
-  linkDataElement: string,
-  numberOfServices = 1
-) => {
-  let $ = await loadPageData(url);
-
-  const servicesPageHref = await getHREFValuesDataAttribute(
-    $,
-    '[data-element="all-services"]'
-  );
-  if (servicesPageHref.length <= 0) {
-    return [];
-  }
-
-  let allServicesUrl = servicesPageHref[0];
-  if (!allServicesUrl.includes(url)) {
-    allServicesUrl = await buildUrl(url, allServicesUrl);
-  }
-
-  const browser = await puppeteer.launch({
-    args: ["--no-sandbox"],
-  });
-  try {
-    const page: Page = await browser.newPage();
-    await page.goto(allServicesUrl, {
-      waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
-    });
-
-    let clickButton = true;
-    while (clickButton) {
-      try {
-        const element = await page.$('[data-element="load-other-cards"]');
-        if (!element) {
-          clickButton = false;
-          continue;
-        }
-        const xhrCatcher = page.waitForResponse(
-          (r) => r.request().method() != "OPTIONS"
-        );
-        await element.click({ delay: 500 });
-        await xhrCatcher;
-        break;
-      } catch (e) {
-        continue;
-      }
-    }
-    const data = await page.content();
-    $ = cheerio.load(data);
-    await browser.close();
-  } catch (e) {
-    await browser.close();
-  }
-
-  const servicesUrls = await getHREFValuesDataAttribute($, linkDataElement);
-
-  for (let i = 0; i < servicesUrls.length; i++) {
-    if (!servicesUrls[i].includes(url)) {
-      servicesUrls[i] = await buildUrl(url, servicesUrls[i]);
-    }
-  }
-
-  return getRandomNString(servicesUrls, numberOfServices);
-};
-
-const getRandomMunicipalityFirstLevelPagesUrl = async (
-  url: string,
-  numberOfPages = 1
-): Promise<string[]> => {
-  const $ = await loadPageData(url);
-  const pagesUrls: string[] = [];
-
-  for (const [, primaryMenuItem] of Object.entries(primaryMenuItems)) {
-    const dataElement = `[data-element="${primaryMenuItem.data_element}"]`;
-
-    const element = $(dataElement);
-    if (element) {
-      let primaryLevelPageUrl = $(element).attr()?.href;
-      if (
-        primaryLevelPageUrl &&
-        primaryLevelPageUrl !== "#" &&
-        primaryLevelPageUrl !== ""
-      ) {
-        if (!primaryLevelPageUrl.includes(url)) {
-          primaryLevelPageUrl = await buildUrl(url, primaryLevelPageUrl);
-        }
-        pagesUrls.push(primaryLevelPageUrl);
-      }
-    }
-  }
-
-  return getRandomNString(pagesUrls, numberOfPages);
-};
-
-const getRandomMunicipalitySecondLevelPagesUrl = async (
-  url: string,
-  numberOfPages = 1
-): Promise<string[]> => {
-  const $ = await loadPageData(url);
-  let pagesUrls: string[] = [];
-
-  for (const [, primaryMenuItem] of Object.entries(primaryMenuItems)) {
-    const dataElement = `[data-element="${primaryMenuItem.data_element}"]`;
-
-    const element = $(dataElement);
-    if (element) {
-      let primaryLevelPageUrl = $(element).attr()?.href;
-      if (
-        primaryLevelPageUrl &&
-        primaryLevelPageUrl !== "#" &&
-        primaryLevelPageUrl !== ""
-      ) {
-        if (!primaryLevelPageUrl.includes(url)) {
-          primaryLevelPageUrl = await buildUrl(url, primaryLevelPageUrl);
-        }
-        const $2 = await loadPageData(primaryLevelPageUrl);
-        const dataElementSecondaryItem = `[data-element="${primaryMenuItem.secondary_item_data_element}"]`;
-        pagesUrls = [
-          ...pagesUrls,
-          ...new Set(
-            await getHREFValuesDataAttribute($2, dataElementSecondaryItem)
-          ),
-        ];
-      }
-    }
-  }
-
-  for (let i = 0; i < pagesUrls.length; i++) {
-    if (!pagesUrls[i].includes(url)) {
-      pagesUrls[i] = await buildUrl(url, pagesUrls[i]);
-    }
-  }
-
-  return getRandomNString(pagesUrls, numberOfPages);
-};
-
 const areAllElementsInVocabulary = async (
   pageArguments: string[],
   vocabularyElements: string[]
@@ -639,13 +352,7 @@ export {
   missingMenuItems,
   loadPageData,
   checkCSSClassesOnPage,
-  getRandomSchoolServicesUrl,
-  getRandomSchoolFirstLevelPagesUrl,
-  getRandomSchoolSecondLevelPagesUrl,
-  getRandomSchoolLocationsUrl,
-  getRandomMunicipalityFirstLevelPagesUrl,
-  getRandomMunicipalitySecondLevelPagesUrl,
-  getRandomMunicipalityThirdLevelPagesUrl,
+  getRandomNString,
   getPageElementDataAttribute,
   getHREFValuesDataAttribute,
   getElementHrefValuesDataAttribute,

@@ -8,11 +8,11 @@ import {
   checkBreadcrumb,
   checkOrder,
   getPageElementDataAttribute,
-  getRandomMunicipalityThirdLevelPagesUrl,
   loadPageData,
   missingMenuItems,
   toMenuItem,
 } from "../../utils/utils";
+import { getRandomMunicipalityThirdLevelPagesUrl } from "../../utils/municipality/utils";
 import {
   contentTypeItemsBody,
   contentTypeItemsHeaders,

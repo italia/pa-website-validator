@@ -2,10 +2,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import {
-  getRandomMunicipalityThirdLevelPagesUrl,
-  loadPageData,
-} from "../../utils/utils";
+import { loadPageData } from "../../utils/utils";
+import { getRandomMunicipalityThirdLevelPagesUrl } from "../../utils/municipality/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;

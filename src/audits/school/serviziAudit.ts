@@ -8,11 +8,11 @@ import {
   checkOrder,
   getElementHrefValuesDataAttribute,
   getPageElementDataAttribute,
-  getRandomSchoolServicesUrl,
   loadPageData,
   missingMenuItems,
   toMenuItem,
 } from "../../utils/utils";
+import { getRandomSchoolServicesUrl } from "../../utils/school/utils";
 import {
   contentTypeItemsBody,
   contentTypeItemsHeaders,

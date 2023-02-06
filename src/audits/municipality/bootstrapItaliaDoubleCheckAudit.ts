@@ -9,11 +9,13 @@ import {
   buildUrl,
   checkCSSClassesOnPage,
   getHREFValuesDataAttribute,
+  loadPageData,
+} from "../../utils/utils";
+import {
   getRandomMunicipalityFirstLevelPagesUrl,
   getRandomMunicipalitySecondLevelPagesUrl,
   getRandomMunicipalityThirdLevelPagesUrl,
-  loadPageData,
-} from "../../utils/utils";
+} from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import { cssClasses } from "../../storage/municipality/cssClasses";
 import puppeteer from "puppeteer";
