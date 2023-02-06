@@ -7,15 +7,17 @@ import semver from "semver";
 import { auditDictionary } from "../../storage/auditDictionary";
 import {
   buildUrl,
-  checkCSSClassesOnPage, getHREFValuesDataAttribute,
+  checkCSSClassesOnPage,
+  getHREFValuesDataAttribute,
   getRandomMunicipalityFirstLevelPagesUrl,
   getRandomMunicipalitySecondLevelPagesUrl,
-  getRandomMunicipalityServicesUrl, loadPageData,
+  getRandomMunicipalityThirdLevelPagesUrl,
+  loadPageData,
 } from "../../utils/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import { cssClasses } from "../../storage/municipality/cssClasses";
 import puppeteer from "puppeteer";
-import {CheerioAPI} from "cheerio";
+import { CheerioAPI } from "cheerio";
 
 const Audit = lighthouse.Audit;
 
@@ -96,16 +98,17 @@ class LoadAudit extends Audit {
         url,
         auditVariables.numberOfSecondLevelPageToBeScanned
       )),
-      ...(await getRandomMunicipalityServicesUrl(
+      ...(await getRandomMunicipalityThirdLevelPagesUrl(
         url,
+          '[data-element="service-link"]',
         auditVariables.numberOfServicesToBeScanned
       )),
     ];
 
     const $: CheerioAPI = await loadPageData(url);
     const personalAreaLogin = await getHREFValuesDataAttribute(
-        $,
-        '[data-element="personal-area-login"]'
+      $,
+      '[data-element="personal-area-login"]'
     );
     if (personalAreaLogin.length === 1) {
       let personalAreaLoginUrl = personalAreaLogin[0];
@@ -114,7 +117,6 @@ class LoadAudit extends Audit {
       }
       pagesToBeAnalyzed.push(personalAreaLoginUrl);
     }
-    //TODO: test
 
     const browser = await puppeteer.launch({
       args: ["--no-sandbox"],

@@ -3,7 +3,7 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { allowedFonts } from "../../storage/municipality/allowedFonts";
-import { getRandomMunicipalityServicesUrl } from "../../utils/utils";
+import { getRandomMunicipalityThirdLevelPagesUrl } from "../../utils/utils";
 import puppeteer from "puppeteer";
 import { auditDictionary } from "../../storage/auditDictionary";
 
@@ -49,8 +49,9 @@ class LoadAudit extends Audit {
   ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
 
-    const randomServices: string[] = await getRandomMunicipalityServicesUrl(
-      url
+    const randomServices: string[] = await getRandomMunicipalityThirdLevelPagesUrl(
+      url,
+        '[data-element="service-link"]'
     );
 
     if (randomServices.length === 0) {

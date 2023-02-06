@@ -8,7 +8,7 @@ import {
   checkBreadcrumb,
   checkOrder,
   getPageElementDataAttribute,
-  getRandomMunicipalityServicesUrl,
+  getRandomMunicipalityThirdLevelPagesUrl,
   loadPageData,
   missingMenuItems,
   toMenuItem,
@@ -85,8 +85,9 @@ class LoadAudit extends Audit {
     const mandatoryHeaderVoices = contentTypeItemsHeaders;
     const mandatoryBodyVoices = contentTypeItemsBody;
 
-    const randomServices: string[] = await getRandomMunicipalityServicesUrl(
+    const randomServices: string[] = await getRandomMunicipalityThirdLevelPagesUrl(
       url,
+        '[data-element="service-link"]',
       auditVariables.numberOfServicesToBeScanned
     );
 

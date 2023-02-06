@@ -429,8 +429,9 @@ const urlExists = async (
   }
 };
 
-const getRandomMunicipalityServicesUrl = async (
+const getRandomMunicipalityThirdLevelPagesUrl = async (
   url: string,
+  linkDataElement: string,
   numberOfServices = 1
 ) => {
   let $ = await loadPageData(url);
@@ -460,7 +461,7 @@ const getRandomMunicipalityServicesUrl = async (
     let clickButton = true;
     while (clickButton) {
       try {
-        const element = await page.$('[data-element="load-other-services"]');
+        const element = await page.$('[data-element="load-other-cards"]');
         if (!element) {
           clickButton = false;
           continue;
@@ -483,8 +484,7 @@ const getRandomMunicipalityServicesUrl = async (
   }
 
   const servicesUrls = await getHREFValuesDataAttribute(
-    $,
-    '[data-element="service-link"]'
+    $, linkDataElement
   );
 
   for (let i = 0; i < servicesUrls.length; i++) {
@@ -647,7 +647,7 @@ export {
   getRandomSchoolLocationsUrl,
   getRandomMunicipalityFirstLevelPagesUrl,
   getRandomMunicipalitySecondLevelPagesUrl,
-  getRandomMunicipalityServicesUrl,
+  getRandomMunicipalityThirdLevelPagesUrl,
   getPageElementDataAttribute,
   getHREFValuesDataAttribute,
   getElementHrefValuesDataAttribute,

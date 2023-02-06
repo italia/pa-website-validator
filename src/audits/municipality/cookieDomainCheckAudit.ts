@@ -10,7 +10,7 @@ import cookie = crawlerTypes.cookie;
 import {
   getRandomMunicipalityFirstLevelPagesUrl,
   getRandomMunicipalitySecondLevelPagesUrl,
-  getRandomMunicipalityServicesUrl,
+  getRandomMunicipalityThirdLevelPagesUrl,
 } from "../../utils/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 
@@ -82,9 +82,15 @@ class LoadAudit extends Audit {
         url,
         auditVariables.numberOfSecondLevelPageToBeScanned
       )),
-      ...(await getRandomMunicipalityServicesUrl(
+      ...(await getRandomMunicipalityThirdLevelPagesUrl(
         url,
+          '[data-element="service-link"]',
         auditVariables.numberOfServicesToBeScanned
+      )),
+      ...(await getRandomMunicipalityThirdLevelPagesUrl(
+          url,
+          '[data-element="event-link"]',
+          auditVariables.numberOfEventsToBeScanned
       )),
     ];
 
