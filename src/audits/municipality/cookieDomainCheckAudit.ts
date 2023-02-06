@@ -8,9 +8,9 @@ import { run as cookieAudit } from "../../utils/cookieAuditLogic";
 import crawlerTypes from "../../types/crawler-types";
 import cookie = crawlerTypes.cookie;
 import {
-  getRandomMunicipalityFirstLevelPagesUrl,
-  getRandomMunicipalitySecondLevelPagesUrl,
-  getRandomMunicipalityThirdLevelPagesUrl,
+  getRandomFirstLevelPagesUrl,
+  getRandomSecondLevelPagesUrl,
+  getRandomThirdLevelPagesUrl,
   getServicePageUrl,
 } from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
@@ -76,21 +76,21 @@ class LoadAudit extends Audit {
 
     const pagesToBeAnalyzed = [
       url,
-      ...(await getRandomMunicipalityFirstLevelPagesUrl(
+      ...(await getRandomFirstLevelPagesUrl(
         url,
         auditVariables.numberOfFirstLevelPageToBeScanned
       )),
-      ...(await getRandomMunicipalitySecondLevelPagesUrl(
+      ...(await getRandomSecondLevelPagesUrl(
         url,
         auditVariables.numberOfSecondLevelPageToBeScanned
       )),
-      ...(await getRandomMunicipalityThirdLevelPagesUrl(
+      ...(await getRandomThirdLevelPagesUrl(
         url,
         await getServicePageUrl(url),
         '[data-element="service-link"]',
         auditVariables.numberOfServicesToBeScanned
       )),
-      ...(await getRandomMunicipalityThirdLevelPagesUrl(
+      ...(await getRandomThirdLevelPagesUrl(
         url,
         await getButtonUrl(
           await loadPageData(url),

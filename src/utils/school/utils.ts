@@ -7,67 +7,7 @@ import {
   loadPageData,
 } from "../utils";
 
-const getRandomSchoolServicesUrl = async (
-  url: string,
-  numberOfServices = 1
-): Promise<string[]> => {
-  let $ = await loadPageData(url);
-
-  let serviceTypeUrls = await getHREFValuesDataAttribute(
-    $,
-    '[data-element="service-type"]'
-  );
-  if (serviceTypeUrls.length <= 0) {
-    return [];
-  }
-
-  serviceTypeUrls = [...new Set(serviceTypeUrls)];
-
-  let servicesUrls: string[] = [];
-  for (let serviceTypeUrl of serviceTypeUrls) {
-    if (!serviceTypeUrl.includes(url)) {
-      serviceTypeUrl = await buildUrl(url, serviceTypeUrl);
-    }
-
-    $ = await loadPageData(serviceTypeUrl);
-    servicesUrls = [
-      ...servicesUrls,
-      ...(await getHREFValuesDataAttribute($, '[data-element="service-link"]')),
-    ];
-
-    const pagerPagesUrls = [
-      ...new Set(
-        await getHREFValuesDataAttribute($, '[data-element="pager-link"]')
-      ),
-    ];
-    for (let pagerPageUrl of pagerPagesUrls) {
-      if (!pagerPageUrl.includes(url)) {
-        pagerPageUrl = await buildUrl(url, pagerPageUrl);
-      }
-
-      if (pagerPageUrl !== serviceTypeUrl) {
-        $ = await loadPageData(pagerPageUrl);
-        servicesUrls = [
-          ...servicesUrls,
-          ...(await getHREFValuesDataAttribute(
-            $,
-            '[data-element="service-link"]'
-          )),
-        ];
-      }
-    }
-  }
-
-  for (let i = 0; i < servicesUrls.length; i++) {
-    if (!servicesUrls[i].includes(url)) {
-      servicesUrls[i] = await buildUrl(url, servicesUrls[i]);
-    }
-  }
-
-  return getRandomNString(servicesUrls, numberOfServices);
-};
-
-const getRandomSchoolFirstLevelPagesUrl = async (
+const getRandomFirstLevelPagesUrl = async (
   url: string,
   numberOfPages = 1
 ): Promise<string[]> => {
@@ -88,7 +28,7 @@ const getRandomSchoolFirstLevelPagesUrl = async (
   return getRandomNString(pagesUrls, numberOfPages);
 };
 
-const getRandomSchoolSecondLevelPagesUrl = async (
+const getRandomSecondLevelPagesUrl = async (
   url: string,
   numberOfPages = 1
 ): Promise<string[]> => {
@@ -119,7 +59,67 @@ const getRandomSchoolSecondLevelPagesUrl = async (
   return getRandomNString(pagesUrls, numberOfPages);
 };
 
-const getRandomSchoolLocationsUrl = async (
+const getRandomServicesUrl = async (
+    url: string,
+    numberOfServices = 1
+): Promise<string[]> => {
+  let $ = await loadPageData(url);
+
+  let serviceTypeUrls = await getHREFValuesDataAttribute(
+      $,
+      '[data-element="service-type"]'
+  );
+  if (serviceTypeUrls.length <= 0) {
+    return [];
+  }
+
+  serviceTypeUrls = [...new Set(serviceTypeUrls)];
+
+  let servicesUrls: string[] = [];
+  for (let serviceTypeUrl of serviceTypeUrls) {
+    if (!serviceTypeUrl.includes(url)) {
+      serviceTypeUrl = await buildUrl(url, serviceTypeUrl);
+    }
+
+    $ = await loadPageData(serviceTypeUrl);
+    servicesUrls = [
+      ...servicesUrls,
+      ...(await getHREFValuesDataAttribute($, '[data-element="service-link"]')),
+    ];
+
+    const pagerPagesUrls = [
+      ...new Set(
+          await getHREFValuesDataAttribute($, '[data-element="pager-link"]')
+      ),
+    ];
+    for (let pagerPageUrl of pagerPagesUrls) {
+      if (!pagerPageUrl.includes(url)) {
+        pagerPageUrl = await buildUrl(url, pagerPageUrl);
+      }
+
+      if (pagerPageUrl !== serviceTypeUrl) {
+        $ = await loadPageData(pagerPageUrl);
+        servicesUrls = [
+          ...servicesUrls,
+          ...(await getHREFValuesDataAttribute(
+              $,
+              '[data-element="service-link"]'
+          )),
+        ];
+      }
+    }
+  }
+
+  for (let i = 0; i < servicesUrls.length; i++) {
+    if (!servicesUrls[i].includes(url)) {
+      servicesUrls[i] = await buildUrl(url, servicesUrls[i]);
+    }
+  }
+
+  return getRandomNString(servicesUrls, numberOfServices);
+};
+
+const getRandomLocationsUrl = async (
   url: string,
   numberOfPages = 1
 ): Promise<string[]> => {
@@ -157,8 +157,8 @@ const getRandomSchoolLocationsUrl = async (
 };
 
 export {
-  getRandomSchoolServicesUrl,
-  getRandomSchoolFirstLevelPagesUrl,
-  getRandomSchoolSecondLevelPagesUrl,
-  getRandomSchoolLocationsUrl,
+  getRandomServicesUrl,
+  getRandomFirstLevelPagesUrl,
+  getRandomSecondLevelPagesUrl,
+  getRandomLocationsUrl,
 };

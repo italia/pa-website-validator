@@ -10,9 +10,9 @@ const Audit = lighthouse.Audit;
 
 import { checkCSSClassesOnPage } from "../../utils/utils";
 import {
-  getRandomSchoolFirstLevelPagesUrl,
-  getRandomSchoolSecondLevelPagesUrl,
-  getRandomSchoolServicesUrl,
+  getRandomFirstLevelPagesUrl,
+  getRandomSecondLevelPagesUrl,
+  getRandomServicesUrl,
 } from "../../utils/school/utils";
 import { auditScanVariables } from "../../storage/school/auditScanVariables";
 import { cssClasses } from "../../storage/school/cssClasses";
@@ -87,15 +87,15 @@ class LoadAudit extends Audit {
 
     const pagesToBeAnalyzed = [
       url,
-      ...(await getRandomSchoolFirstLevelPagesUrl(
+      ...(await getRandomFirstLevelPagesUrl(
         url,
         auditVariables.numberOfFirstLevelPageToBeScanned
       )),
-      ...(await getRandomSchoolSecondLevelPagesUrl(
+      ...(await getRandomSecondLevelPagesUrl(
         url,
         auditVariables.numberOfSecondLevelPageToBeScanned
       )),
-      ...(await getRandomSchoolServicesUrl(
+      ...(await getRandomServicesUrl(
         url,
         auditVariables.numberOfServicesToBeScanned
       )),

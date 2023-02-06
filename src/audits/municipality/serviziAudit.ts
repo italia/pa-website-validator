@@ -13,7 +13,7 @@ import {
   toMenuItem,
 } from "../../utils/utils";
 import {
-  getRandomMunicipalityThirdLevelPagesUrl,
+  getRandomThirdLevelPagesUrl,
   getServicePageUrl,
 } from "../../utils/municipality/utils";
 import {
@@ -89,7 +89,7 @@ class LoadAudit extends Audit {
     const mandatoryBodyVoices = contentTypeItemsBody;
 
     const randomServices: string[] =
-      await getRandomMunicipalityThirdLevelPagesUrl(
+      await getRandomThirdLevelPagesUrl(
         url,
         await getServicePageUrl(url),
         '[data-element="service-link"]',

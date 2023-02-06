@@ -4,7 +4,7 @@
 import lighthouse from "lighthouse";
 import { getPageElementDataAttribute, loadPageData } from "../../utils/utils";
 import {
-  getRandomMunicipalityThirdLevelPagesUrl,
+  getRandomThirdLevelPagesUrl,
   getServicePageUrl,
 } from "../../utils/municipality/utils";
 import { CheerioAPI } from "cheerio";
@@ -60,7 +60,7 @@ class LoadAudit extends Audit {
     ];
 
     const randomServices: string[] =
-      await getRandomMunicipalityThirdLevelPagesUrl(
+      await getRandomThirdLevelPagesUrl(
         url,
         await getServicePageUrl(url),
         '[data-element="service-link"]'

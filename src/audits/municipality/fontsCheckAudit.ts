@@ -4,7 +4,7 @@
 import lighthouse from "lighthouse";
 import { allowedFonts } from "../../storage/municipality/allowedFonts";
 import {
-  getRandomMunicipalityThirdLevelPagesUrl,
+  getRandomThirdLevelPagesUrl,
   getServicePageUrl,
 } from "../../utils/municipality/utils";
 import puppeteer from "puppeteer";
@@ -53,7 +53,7 @@ class LoadAudit extends Audit {
     const url = artifacts.origin;
 
     const randomServices: string[] =
-      await getRandomMunicipalityThirdLevelPagesUrl(
+      await getRandomThirdLevelPagesUrl(
         url,
         await getServicePageUrl(url),
         '[data-element="service-link"]'

@@ -12,7 +12,7 @@ import {
   missingMenuItems,
   toMenuItem,
 } from "../../utils/utils";
-import { getRandomSchoolServicesUrl } from "../../utils/school/utils";
+import { getRandomServicesUrl } from "../../utils/school/utils";
 import {
   contentTypeItemsBody,
   contentTypeItemsHeaders,
@@ -96,7 +96,7 @@ class LoadAudit extends Audit {
 
     const mandatoryMetadata = contentTypeItemsMetadata;
 
-    const randomServices: string[] = await getRandomSchoolServicesUrl(
+    const randomServices: string[] = await getRandomServicesUrl(
       url,
       auditVariables.numberOfServicesToBeScanned
     );

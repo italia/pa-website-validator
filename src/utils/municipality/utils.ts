@@ -9,7 +9,7 @@ import {
   loadPageData,
 } from "../utils";
 
-const getRandomMunicipalityFirstLevelPagesUrl = async (
+const getRandomFirstLevelPagesUrl = async (
   url: string,
   numberOfPages = 1
 ): Promise<string[]> => {
@@ -38,7 +38,7 @@ const getRandomMunicipalityFirstLevelPagesUrl = async (
   return getRandomNString(pagesUrls, numberOfPages);
 };
 
-const getRandomMunicipalitySecondLevelPagesUrl = async (
+const getRandomSecondLevelPagesUrl = async (
   url: string,
   numberOfPages = 1
 ): Promise<string[]> => {
@@ -80,7 +80,7 @@ const getRandomMunicipalitySecondLevelPagesUrl = async (
   return getRandomNString(pagesUrls, numberOfPages);
 };
 
-const getRandomMunicipalityThirdLevelPagesUrl = async (
+const getRandomThirdLevelPagesUrl = async (
   url: string,
   pageUrl: string,
   linkDataElement: string,
@@ -156,8 +156,8 @@ const getServicePageUrl = async (url: string) => {
 };
 
 export {
-  getRandomMunicipalityFirstLevelPagesUrl,
-  getRandomMunicipalitySecondLevelPagesUrl,
-  getRandomMunicipalityThirdLevelPagesUrl,
+  getRandomFirstLevelPagesUrl,
+  getRandomSecondLevelPagesUrl,
+  getRandomThirdLevelPagesUrl,
   getServicePageUrl,
 };

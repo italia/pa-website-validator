@@ -4,10 +4,10 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import {
-  getRandomSchoolFirstLevelPagesUrl,
-  getRandomSchoolSecondLevelPagesUrl,
-  getRandomSchoolServicesUrl,
-  getRandomSchoolLocationsUrl,
+  getRandomFirstLevelPagesUrl,
+  getRandomSecondLevelPagesUrl,
+  getRandomServicesUrl,
+  getRandomLocationsUrl,
 } from "../../utils/school/utils";
 import crawlerTypes from "../../types/crawler-types";
 import cookie = crawlerTypes.cookie;
@@ -73,19 +73,19 @@ class LoadAudit extends Audit {
 
     const pagesToBeAnalyzed = [
       url,
-      ...(await getRandomSchoolFirstLevelPagesUrl(
+      ...(await getRandomFirstLevelPagesUrl(
         url,
         auditVariables.numberOfFirstLevelPageToBeScanned
       )),
-      ...(await getRandomSchoolSecondLevelPagesUrl(
+      ...(await getRandomSecondLevelPagesUrl(
         url,
         auditVariables.numberOfSecondLevelPageToBeScanned
       )),
-      ...(await getRandomSchoolServicesUrl(
+      ...(await getRandomServicesUrl(
         url,
         auditVariables.numberOfServicesToBeScanned
       )),
-      ...(await getRandomSchoolLocationsUrl(
+      ...(await getRandomLocationsUrl(
         url,
         auditVariables.numberOfLocationsToBeScanned
       )),
