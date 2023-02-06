@@ -100,7 +100,7 @@ class LoadAudit extends Audit {
       )),
       ...(await getRandomMunicipalityThirdLevelPagesUrl(
         url,
-          '[data-element="service-link"]',
+        '[data-element="service-link"]',
         auditVariables.numberOfServicesToBeScanned
       )),
     ];

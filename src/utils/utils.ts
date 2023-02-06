@@ -483,9 +483,7 @@ const getRandomMunicipalityThirdLevelPagesUrl = async (
     await browser.close();
   }
 
-  const servicesUrls = await getHREFValuesDataAttribute(
-    $, linkDataElement
-  );
+  const servicesUrls = await getHREFValuesDataAttribute($, linkDataElement);
 
   for (let i = 0; i < servicesUrls.length; i++) {
     if (!servicesUrls[i].includes(url)) {
