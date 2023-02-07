@@ -2,21 +2,29 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import { loadPageData } from "../../utils/utils";
+import {
+  buildUrl,
+  checkBreadcrumb,
+  getHREFValuesDataAttribute,
+  getPageElementDataAttribute,
+  loadPageData,
+} from "../../utils/utils";
 import {
   getRandomThirdLevelPagesUrl,
   getServicePageUrl,
 } from "../../utils/municipality/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
+import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 
 const Audit = lighthouse.Audit;
 
 const auditId = "municipality-booking-appointment-check";
 const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult;
-const redResult = auditData.redResult;
-const notExecuted = auditData.nonExecuted;
+const accuracy = process.env["accuracy"] ?? "suggested";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const auditVariables = auditScanVariables[accuracy][auditId];
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -34,24 +42,94 @@ class LoadAudit extends Audit {
     artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
-    let score = 0;
 
     const headings = [
-      { key: "result", itemType: "text", text: "Risultato" },
-      { key: "inspected_page", itemType: "text", text: "Pagina ispezionata" },
-    ];
-
-    const item = [
       {
-        result: redResult,
-        inspected_page: "",
+        key: "result",
+        itemType: "text",
+        text: "Risultato",
+        subItemsHeading: { key: "inspected_page", itemType: "url" },
+      },
+      {
+        key: "title_in_page_url",
+        itemType: "text",
+        text: "",
+        subItemsHeading: {
+          key: "in_page_url",
+          itemType: "text",
+        },
       },
     ];
+
+    let $ = await loadPageData(url);
+
+    const servicesPage = await getHREFValuesDataAttribute(
+      $,
+      '[data-element="all-services"]'
+    );
+
+    if (servicesPage.length === 0) {
+      return {
+        score: 0,
+        details: Audit.makeTableDetails(
+          [{ key: "result", itemType: "text", text: "Risultato" }],
+          [
+            {
+              result: auditData.nonExecuted,
+            },
+          ]
+        ),
+      };
+    }
+
+    let servicePageUrl = servicesPage[0];
+
+    if (!servicePageUrl.includes(url)) {
+      servicePageUrl = await buildUrl(url, servicePageUrl);
+    }
+
+    $ = await loadPageData(servicePageUrl);
+    const bookingAppointmentPage = await getHREFValuesDataAttribute(
+      $,
+      '[data-element="appointment-booking"]'
+    );
+
+    if (bookingAppointmentPage.length === 0) {
+      return {
+        score: 0,
+        details: Audit.makeTableDetails(
+          [{ key: "result", itemType: "text", text: "Risultato" }],
+          [
+            {
+              result: auditData.nonExecuted,
+            },
+          ]
+        ),
+      };
+    }
+
+    const bookingAppointmentUrl = bookingAppointmentPage[0];
+
+    let score = 1;
+    $ = await loadPageData(bookingAppointmentUrl);
+    let breadcrumbElements = await getPageElementDataAttribute(
+      $,
+      '[data-element="breadcrumb"]',
+      "li"
+    );
+    breadcrumbElements = breadcrumbElements.map((x) =>
+      x.trim().toLowerCase().replaceAll("/", "")
+    );
+
+    if (!checkBreadcrumb(breadcrumbElements)) {
+      score = 0;
+    }
 
     const randomServices: string[] = await getRandomThirdLevelPagesUrl(
       url,
       await getServicePageUrl(url),
-      '[data-element="service-link"]'
+      '[data-element="service-link"]',
+      auditVariables.numberOfServicesToBeScanned
     );
 
     if (randomServices.length === 0) {
@@ -61,36 +139,102 @@ class LoadAudit extends Audit {
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: notExecuted,
+              result: auditData.nonExecuted,
             },
           ]
         ),
       };
     }
 
-    const randomServiceToBeScanned: string = randomServices[0];
+    const correctItems = [];
+    const wrongItems = [];
 
-    item[0].inspected_page = randomServiceToBeScanned;
+    for (const randomService of randomServices) {
+      const item = {
+        inspected_page: randomService,
+        in_page_url: "No",
+      };
 
-    const $ = await loadPageData(randomServiceToBeScanned);
-    const bookingAppointmentElement = $('[data-element="appointment-booking"]');
-    const elementObj = $(bookingAppointmentElement).attr();
-    const elementName = bookingAppointmentElement.text().trim().trim() ?? "";
+      $ = await loadPageData(randomService);
+      const bookingAppointmentPage = await getHREFValuesDataAttribute(
+        $,
+        '[data-element="appointment-booking"]'
+      );
 
-    if (
-      elementObj &&
-      "href" in elementObj &&
-      elementObj.href !== "#" &&
-      elementObj.href !== "" &&
-      elementName
-    ) {
-      score = 1;
-      item[0].result = greenResult;
+      if (
+        bookingAppointmentPage.length === 0 ||
+        bookingAppointmentPage[0] !== bookingAppointmentUrl
+      ) {
+        if (score > 0) {
+          score = 0;
+        }
+        wrongItems.push(item);
+        continue;
+      }
+
+      const inPageButton = $('[data-element="appointment-booking"]');
+      if (inPageButton.length > 0) {
+        item.in_page_url = "Sì";
+      }
+
+      correctItems.push(item);
+    }
+
+    const results = [];
+    switch (score) {
+      case 1:
+        results.push({
+          result: auditData.greenResult,
+        });
+        break;
+      case 0:
+        results.push({
+          result: auditData.redResult,
+        });
+        break;
+    }
+
+    results.push({});
+
+    if (wrongItems.length > 0) {
+      results.push({
+        result: auditData.subItem.redResult,
+        title_in_page_url: "Bottone di prenotazione in pagina?",
+      });
+
+      for (const item of wrongItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
+    }
+
+    if (correctItems.length > 0) {
+      results.push({
+        result: auditData.subItem.greenResult,
+        title_in_page_url: "Bottone di prenotazione in pagina?",
+      });
+
+      for (const item of correctItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
     }
 
     return {
       score: score,
-      details: Audit.makeTableDetails(headings, item),
+      details: Audit.makeTableDetails(headings, results),
     };
   }
 }
