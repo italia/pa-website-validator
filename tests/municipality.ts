@@ -190,9 +190,9 @@ describe.each<[...ExpectedLocalEntry, number]>(
     ["Security", "municipality-informative-security"],
     ["IP location", "common-informative-ip-location"],
     ["Reuse", "municipality-informative-reuse"],
-    ["License", "municipality-informative-license-and-attribution"],
+    ["License", "municipality-license-and-attribution"],
     ["Cloud", "municipality-informative-cloud-infrastructure"],
-    ["UX evaluation", "municipality-informative-user-experience-evaluation"],
+    ["UX evaluation", "municipality-user-experience-evaluation"],
   ])("%s", (_, audit) => {
     expect(report.audits[audit].score).toBe(null);
   });
@@ -227,9 +227,9 @@ describe.each(expectedOnline)("Online: %s", (url, expectedResults) => {
 
   test.each([
     ["Reuse", "municipality-informative-reuse"],
-    ["License", "municipality-informative-license-and-attribution"],
+    ["License", "municipality-license-and-attribution"],
     ["Cloud", "municipality-informative-cloud-infrastructure"],
-    ["UX evaluation", "municipality-informative-user-experience-evaluation"],
+    ["UX evaluation", "municipality-user-experience-evaluation"],
   ])("%s", (_, audit) => {
     expect(report.audits[audit].score).toBe(null);
   });

@@ -75,7 +75,7 @@ const modelComplianceInformationAudits = [
     group: "function",
   },
   {
-    id: "municipality-informative-user-experience-evaluation",
+    id: "municipality-user-experience-evaluation",
     weight: 88,
     group: "function",
   },
@@ -95,7 +95,7 @@ const modelComplianceInformationAudits = [
     group: "legislation",
   },
   {
-    id: "municipality-informative-license-and-attribution",
+    id: "municipality-license-and-attribution",
     weight: 84,
     group: "legislation",
   },
@@ -174,11 +174,11 @@ export default {
     municipalityAuditsFolder + "/serviziAudit.js",
     municipalityAuditsFolder + "/themeVersionCheckAudit.js",
     municipalityAuditsFolder + "/metatagAudit.js",
+    municipalityAuditsFolder + "/licenseAndAttributionAudit.js",
+    municipalityAuditsFolder + "/userExperienceEvaluation.js",
 
     municipalityInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
-    municipalityInformativeAuditsFolder + "/licenseAndAttributionAudit.js",
     municipalityInformativeAuditsFolder + "/reuseAudit.js",
-    municipalityInformativeAuditsFolder + "/userExperienceEvaluation.js",
 
     commonAuditsFolder + "/ipLocationAudit.js",
   ],

@@ -73,7 +73,7 @@ const customReccomendationsAudits = [
   },
   { id: "school-informative-reuse", weight: 89, group: "legislation" },
   {
-    id: "school-informative-license-and-attribution",
+    id: "school-license-and-attribution",
     weight: 88,
     group: "legislation",
   },
@@ -121,9 +121,9 @@ export default {
     schoolAuditsFolder + "/menuScuolaSecondLevelAudit.js",
     schoolAuditsFolder + "/serviziAudit.js",
     schoolAuditsFolder + "/controlledVocabulariesAudit.js",
+    schoolAuditsFolder + "/licenseAndAttributionAudit.js",
 
     schoolInformativeAuditsFolder + "/reuseAudit.js",
-    schoolInformativeAuditsFolder + "/licenseAndAttributionAudit.js",
     schoolInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
 
     schoolAuditsFolder + "/cookieDomainCheckAudit.js",

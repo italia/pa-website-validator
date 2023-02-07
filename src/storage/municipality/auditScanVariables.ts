@@ -9,7 +9,7 @@ export const auditScanVariables = {
       numberOfFirstLevelPageToBeScanned: 1,
       numberOfSecondLevelPageToBeScanned: 1,
     },
-    "municipality-informative-user-experience-evaluation": {
+    "municipality-user-experience-evaluation": {
       numberOfServicesToBeScanned: 1,
     },
     "municipality-legislation-cookie-domain-check": {
@@ -38,7 +38,7 @@ export const auditScanVariables = {
       numberOfFirstLevelPageToBeScanned: 3,
       numberOfSecondLevelPageToBeScanned: 3,
     },
-    "municipality-informative-user-experience-evaluation": {
+    "municipality-user-experience-evaluation": {
       numberOfServicesToBeScanned: 3,
     },
     "municipality-legislation-cookie-domain-check": {
@@ -67,7 +67,7 @@ export const auditScanVariables = {
       numberOfFirstLevelPageToBeScanned: 10,
       numberOfSecondLevelPageToBeScanned: 10,
     },
-    "municipality-informative-user-experience-evaluation": {
+    "municipality-user-experience-evaluation": {
       numberOfServicesToBeScanned: 10,
     },
     "municipality-legislation-cookie-domain-check": {
@@ -96,7 +96,7 @@ export const auditScanVariables = {
       numberOfFirstLevelPageToBeScanned: -1,
       numberOfSecondLevelPageToBeScanned: -1,
     },
-    "municipality-informative-user-experience-evaluation": {
+    "municipality-user-experience-evaluation": {
       numberOfServicesToBeScanned: -1,
     },
     "municipality-legislation-cookie-domain-check": {

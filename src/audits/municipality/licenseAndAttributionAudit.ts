@@ -3,13 +3,13 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import { auditDictionary } from "../../../storage/auditDictionary";
+import { auditDictionary } from "../../storage/auditDictionary";
 import {CheerioAPI} from "cheerio";
-import {getAllPageHTML, loadPageData, urlExists} from "../../../utils/utils";
+import {getAllPageHTML, loadPageData, urlExists} from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
-const auditId = "municipality-informative-license-and-attribution";
+const auditId = "municipality-license-and-attribution";
 const auditData = auditDictionary[auditId];
 
 class LoadAudit extends Audit {

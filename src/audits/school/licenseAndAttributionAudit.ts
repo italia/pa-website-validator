@@ -3,11 +3,11 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import { auditDictionary } from "../../../storage/auditDictionary";
+import { auditDictionary } from "../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
 
-const auditId = "school-informative-license-and-attribution";
+const auditId = "school-license-and-attribution";
 const auditData = auditDictionary[auditId];
 
 class LoadAudit extends Audit {

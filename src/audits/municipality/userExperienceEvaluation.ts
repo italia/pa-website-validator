@@ -3,18 +3,18 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import { auditDictionary } from "../../../storage/auditDictionary";
-import { auditScanVariables } from "../../../storage/municipality/auditScanVariables";
-import { checkFeedbackComponent } from "../../../utils/utils";
+import { auditDictionary } from "../../storage/auditDictionary";
+import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
+import { checkFeedbackComponent } from "../../utils/utils";
 
 import {
   getRandomThirdLevelPagesUrl,
   getServicePageUrl,
-} from "../../../utils/municipality/utils";
+} from "../../utils/municipality/utils";
 
 const Audit = lighthouse.Audit;
 
-const auditId = "municipality-informative-user-experience-evaluation";
+const auditId = "municipality-user-experience-evaluation";
 const auditData = auditDictionary[auditId];
 
 const accuracy = process.env["accuracy"] ?? "suggested";
