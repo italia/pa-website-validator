@@ -21,6 +21,9 @@ export const auditScanVariables = {
     "municipality-servizi-structure-match-model": {
       numberOfServicesToBeScanned: 1,
     },
+    "municipality-metatag": {
+      numberOfServicesToBeScanned: 1,
+    },
   },
   suggested: {
     "municipality-ux-ui-consistency-bootstrap-italia-double-check": {
@@ -42,6 +45,9 @@ export const auditScanVariables = {
       numberOfEventsToBeScanned: 3,
     },
     "municipality-servizi-structure-match-model": {
+      numberOfServicesToBeScanned: 3,
+    },
+    "municipality-metatag": {
       numberOfServicesToBeScanned: 3,
     },
   },
@@ -67,6 +73,9 @@ export const auditScanVariables = {
     "municipality-servizi-structure-match-model": {
       numberOfServicesToBeScanned: 10,
     },
+    "municipality-metatag": {
+      numberOfServicesToBeScanned: 10,
+    },
   },
   all: {
     "municipality-ux-ui-consistency-bootstrap-italia-double-check": {
@@ -88,6 +97,9 @@ export const auditScanVariables = {
       numberOfEventsToBeScanned: -1,
     },
     "municipality-servizi-structure-match-model": {
+      numberOfServicesToBeScanned: -1,
+    },
+    "municipality-metatag": {
       numberOfServicesToBeScanned: -1,
     },
   },

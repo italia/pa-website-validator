@@ -215,10 +215,17 @@ export const auditDictionary = {
       "CONDIZIONI DI SUCCESSO: le voci del menù di primo livello del sito sono esattamente quelle indicate nel documento di architettura dell'informazione e sono nell'ordine indicato (ovvero “Amministrazione”, “Novità”, “Servizi”, “Vivere il Comune” oppure “Vivere [nome del Comune]”); MODALITÀ DI VERIFICA: ricercando uno specifico attributo “data-element” come spiegato nella Documentazione delle App di valutazione, vengono identificate le voci presenti nel menù del sito e il loro ordine, confrontandole con quanto indicato nel documento di architettura dell'informazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
   },
   "municipality-metatag": {
-    greenResult: "Tutti i metatag richiesti sono presenti e corretti.",
-    yellowResult:
-      "Almeno il 50% dei metatag richiesti sono presenti e corretti.",
-    redResult: "Meno del 50% dei metatag richiesti sono presenti e corretti.",
+    greenResult: "Risultato totale verde",
+    yellowResult: "Risultato totale giallo",
+    redResult: "Risultato totale rosso",
+    subItem: {
+      greenResult:
+        "Pagine per cui tutti i metatag richiesti sono presenti e corretti.",
+      yellowResult:
+        "Pagine per cui almeno il 50% dei metatag richiesti sono presenti e corretti.",
+      redResult:
+        "Pagine per cui almeno il 50% dei metatag richiesti sono presenti e corretti.",
+    },
     nonExecuted:
       "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
     title:
