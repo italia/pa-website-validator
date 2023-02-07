@@ -3,21 +3,23 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import {
-  buildUrl,
-  getHREFValuesDataAttribute,
-  loadPageData,
-} from "../../utils/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
+import { checkFeedbackComponent } from "../../utils/utils";
+import {
+  getRandomFirstLevelPagesUrl,
+  getRandomSecondLevelPagesUrl,
+} from "../../utils/municipality/utils";
+import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 
 const Audit = lighthouse.Audit;
 
 const auditId = "municipality-feedback-element";
 const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult;
-const redResult = auditData.redResult;
-const notExecuted = auditData.nonExecuted;
+const accuracy = process.env["accuracy"] ?? "suggested";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const auditVariables = auditScanVariables[accuracy][auditId];
 
 class LoadAudit extends lighthouse.Audit {
   static get meta() {
@@ -36,154 +38,109 @@ class LoadAudit extends lighthouse.Audit {
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
 
-    let score = 0;
-    let pagesWithComponent = "";
-    let pagesWithoutComponent = "";
-
     const headings = [
-      { key: "result", itemType: "text", text: "Risultato" },
       {
-        key: "page_with_component",
+        key: "result",
         itemType: "text",
-        text: "Pagine dove è stato rilevato il componente",
+        text: "Risultato totale",
+        subItemsHeading: { key: "inspected_page", itemType: "url" },
       },
       {
-        key: "page_without_component",
+        key: "title_errors_found",
         itemType: "text",
-        text: "Pagine dove non è stato rilevato il componente",
+        text: "",
+        subItemsHeading: { key: "errors_found", itemType: "text" },
       },
     ];
 
-    const items = [
-      {
-        result: redResult,
-        page_with_component: pagesWithComponent,
-        page_without_component: pagesWithoutComponent,
-      },
-    ];
+    const correctItems = [];
+    const wrongItems = [];
 
-    let $ = await loadPageData(url);
+    let score = 1;
 
-    const administrationPage = await getHREFValuesDataAttribute(
-      $,
-      '[data-element="management"]'
-    );
-    const servicesPage = await getHREFValuesDataAttribute(
-      $,
-      '[data-element="all-services"]'
-    );
-    const newsPage = await getHREFValuesDataAttribute(
-      $,
-      '[data-element="news"]'
-    );
-    const lifePage = await getHREFValuesDataAttribute(
-      $,
-      '[data-element="live"]'
-    );
-
-    const firstLevelPages = [
-      ...administrationPage,
-      ...servicesPage,
-      ...lifePage,
-      ...newsPage,
-    ];
-
-    if (firstLevelPages.length <= 0) {
-      items[0].result = notExecuted;
-      return {
-        score: 0,
-        details: Audit.makeTableDetails(headings, items),
-      };
-    }
-
-    let randomFirstLevelPage =
-      firstLevelPages[Math.floor(Math.random() * firstLevelPages.length)];
-    if (!randomFirstLevelPage.includes(url)) {
-      randomFirstLevelPage = await buildUrl(url, randomFirstLevelPage);
-    }
-
-    $ = await loadPageData(randomFirstLevelPage);
-    let feedbackElement = $('[data-element="feedback"]');
-    let firstLevelFeedbackElement = true;
-    if (
-      !feedbackElement ||
-      feedbackElement.length === 0 ||
-      feedbackElement.text().trim() === ""
-    ) {
-      firstLevelFeedbackElement = false;
-    }
-
-    if (servicesPage.length <= 0) {
-      items[0].result = notExecuted;
-      return {
-        score: 0,
-        details: Audit.makeTableDetails(headings, items),
-      };
-    }
-
-    let secondLevelPageUrl = servicesPage[0];
-    if (!secondLevelPageUrl.includes(url)) {
-      secondLevelPageUrl = await buildUrl(url, servicesPage[0]);
-    }
-
-    $ = await loadPageData(secondLevelPageUrl);
-    const servicesSecondLevelPages = await getHREFValuesDataAttribute(
-      $,
-      '[data-element="service-category-link"]'
-    );
-
-    if (servicesSecondLevelPages.length <= 0) {
-      items[0].result = notExecuted;
-      return {
-        score: 0,
-        details: Audit.makeTableDetails(headings, items),
-      };
-    }
-
-    let randomSecondLevelServicePage =
-      servicesSecondLevelPages[
-        Math.floor(Math.random() * servicesSecondLevelPages.length)
-      ];
-    if (!randomSecondLevelServicePage.includes(url)) {
-      randomSecondLevelServicePage = await buildUrl(
+    const pagesToBeAnalyzed = [
+      url,
+      ...(await getRandomFirstLevelPagesUrl(
         url,
-        randomSecondLevelServicePage
+        auditVariables.numberOfFirstLevelPageToBeScanned
+      )),
+      ...(await getRandomSecondLevelPagesUrl(
+        url,
+        auditVariables.numberOfSecondLevelPageToBeScanned
+      )),
+    ];
+
+    for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
+      const item = {
+        inspected_page: pageToBeAnalyzed,
+        errors_found: "",
+      };
+      const feedbackComponentErrorsFound = await checkFeedbackComponent(
+        pageToBeAnalyzed
       );
+
+      if (feedbackComponentErrorsFound.length !== 0) {
+        score = 0;
+        item.errors_found = feedbackComponentErrorsFound.join("; ");
+        wrongItems.push(item);
+        continue;
+      }
+      correctItems.push(item);
     }
 
-    $ = await loadPageData(randomSecondLevelServicePage);
-    feedbackElement = $('[data-element="feedback"]');
-    let secondLevelFeedbackElement = true;
-    if (
-      !feedbackElement ||
-      feedbackElement.length === 0 ||
-      feedbackElement.text().trim() === ""
-    ) {
-      secondLevelFeedbackElement = false;
+    const results = [];
+    switch (score) {
+      case 1:
+        results.push({
+          result: auditData.greenResult,
+        });
+        break;
+      case 0:
+        results.push({
+          result: auditData.redResult,
+        });
+        break;
     }
 
-    if (firstLevelFeedbackElement && secondLevelFeedbackElement) {
-      pagesWithComponent =
-        randomFirstLevelPage + " e " + randomSecondLevelServicePage;
-      items[0].result = greenResult;
-      score = 1;
-    } else if (firstLevelFeedbackElement && !secondLevelFeedbackElement) {
-      pagesWithComponent = randomFirstLevelPage;
-      pagesWithoutComponent = randomSecondLevelServicePage;
-    } else if (!firstLevelFeedbackElement && secondLevelFeedbackElement) {
-      pagesWithComponent = randomSecondLevelServicePage;
-      pagesWithoutComponent = randomFirstLevelPage;
-    } else {
-      pagesWithoutComponent =
-        randomFirstLevelPage + " e " + randomSecondLevelServicePage;
+    results.push({});
+
+    if (wrongItems.length > 0) {
+      results.push({
+        result: auditData.subItem.redResult,
+        title_errors_found: "Errori trovati nel componente",
+      });
+
+      for (const item of wrongItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
     }
 
-    items[0].page_with_component = pagesWithComponent;
-    items[0].page_without_component = pagesWithoutComponent;
+    if (correctItems.length > 0) {
+      results.push({
+        result: auditData.subItem.greenResult,
+        title_errors_found: "Errori trovati nel componente",
+      });
+
+      for (const item of correctItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
+    }
 
     return {
       score: score,
-      details: Audit.makeTableDetails(headings, items),
+      details: Audit.makeTableDetails(headings, results),
     };
   }
 }

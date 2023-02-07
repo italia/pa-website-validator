@@ -60,14 +60,14 @@ const getRandomSecondLevelPagesUrl = async (
 };
 
 const getRandomServicesUrl = async (
-    url: string,
-    numberOfServices = 1
+  url: string,
+  numberOfServices = 1
 ): Promise<string[]> => {
   let $ = await loadPageData(url);
 
   let serviceTypeUrls = await getHREFValuesDataAttribute(
-      $,
-      '[data-element="service-type"]'
+    $,
+    '[data-element="service-type"]'
   );
   if (serviceTypeUrls.length <= 0) {
     return [];
@@ -89,7 +89,7 @@ const getRandomServicesUrl = async (
 
     const pagerPagesUrls = [
       ...new Set(
-          await getHREFValuesDataAttribute($, '[data-element="pager-link"]')
+        await getHREFValuesDataAttribute($, '[data-element="pager-link"]')
       ),
     ];
     for (let pagerPageUrl of pagerPagesUrls) {
@@ -102,8 +102,8 @@ const getRandomServicesUrl = async (
         servicesUrls = [
           ...servicesUrls,
           ...(await getHREFValuesDataAttribute(
-              $,
-              '[data-element="service-link"]'
+            $,
+            '[data-element="service-link"]'
           )),
         ];
       }

@@ -153,6 +153,13 @@ export const auditDictionary = {
     yellowResult: "",
     redResult:
       "Il componente non è presente in una o più delle pagine valutate.",
+    subItem: {
+      greenResult:
+        "Pagine in cui sono stati rilevati componenti di valutazione corretti.",
+      yellowResult: "",
+      redResult:
+        "Pagine in cui sono stati rilevati componenti di valutazione con errori.",
+    },
     nonExecuted:
       "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
     title:
@@ -372,9 +379,17 @@ export const auditDictionary = {
       "CONDIZIONI DI SUCCESSO: il sito utilizza un certificato https valido e non obsoleto secondo le raccomandazioni AgID; MODALITÀ DI VERIFICA: viene verificato che il certificato https del sito sia valido e attivo; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Agid Raccomandazioni in merito allo standard Transport Layer Security (TLS)](https://cert-agid.gov.it/wp-content/uploads/2020/11/AgID-RACCSECTLS-01.pdf).",
   },
   "municipality-informative-user-experience-evaluation": {
-    greenResult: "",
+    greenResult: "Il componente è presente in tutte le pagine valutate.",
     yellowResult: "",
-    redResult: "",
+    redResult:
+      "Il componente non è presente in una o più delle pagine valutate.",
+    subItem: {
+      greenResult:
+        "Pagine in cui sono stati rilevati componenti di valutazione corretti.",
+      yellowResult: "",
+      redResult:
+        "Pagine in cui sono stati rilevati componenti di valutazione con errori.",
+    },
     nonExecuted: "",
     title:
       "C.SI.2.6 - VALUTAZIONE DELL’ESPERIENZA D’USO, CHIAREZZA INFORMATIVA DELLA SCHEDA DI SERVIZIO - Il sito comunale deve permettere la valutazione della chiarezza informativa per ogni scheda di servizio secondo le modalità indicate nella documentazione del modello di sito comunale.",

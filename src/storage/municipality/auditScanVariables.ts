@@ -5,6 +5,13 @@ export const auditScanVariables = {
       numberOfSecondLevelPageToBeScanned: 1,
       numberOfServicesToBeScanned: 1,
     },
+    "municipality-feedback-element": {
+      numberOfFirstLevelPageToBeScanned: 1,
+      numberOfSecondLevelPageToBeScanned: 1,
+    },
+    "municipality-informative-user-experience-evaluation": {
+      numberOfServicesToBeScanned: 1,
+    },
     "municipality-legislation-cookie-domain-check": {
       numberOfFirstLevelPageToBeScanned: 1,
       numberOfSecondLevelPageToBeScanned: 1,
@@ -19,6 +26,13 @@ export const auditScanVariables = {
     "municipality-ux-ui-consistency-bootstrap-italia-double-check": {
       numberOfFirstLevelPageToBeScanned: 3,
       numberOfSecondLevelPageToBeScanned: 3,
+      numberOfServicesToBeScanned: 3,
+    },
+    "municipality-feedback-element": {
+      numberOfFirstLevelPageToBeScanned: 3,
+      numberOfSecondLevelPageToBeScanned: 3,
+    },
+    "municipality-informative-user-experience-evaluation": {
       numberOfServicesToBeScanned: 3,
     },
     "municipality-legislation-cookie-domain-check": {
@@ -37,6 +51,13 @@ export const auditScanVariables = {
       numberOfSecondLevelPageToBeScanned: 10,
       numberOfServicesToBeScanned: 10,
     },
+    "municipality-feedback-element": {
+      numberOfFirstLevelPageToBeScanned: 10,
+      numberOfSecondLevelPageToBeScanned: 10,
+    },
+    "municipality-informative-user-experience-evaluation": {
+      numberOfServicesToBeScanned: 10,
+    },
     "municipality-legislation-cookie-domain-check": {
       numberOfFirstLevelPageToBeScanned: 10,
       numberOfSecondLevelPageToBeScanned: 10,
@@ -51,6 +72,13 @@ export const auditScanVariables = {
     "municipality-ux-ui-consistency-bootstrap-italia-double-check": {
       numberOfFirstLevelPageToBeScanned: -1,
       numberOfSecondLevelPageToBeScanned: -1,
+      numberOfServicesToBeScanned: -1,
+    },
+    "municipality-feedback-element": {
+      numberOfFirstLevelPageToBeScanned: -1,
+      numberOfSecondLevelPageToBeScanned: -1,
+    },
+    "municipality-informative-user-experience-evaluation": {
       numberOfServicesToBeScanned: -1,
     },
     "municipality-legislation-cookie-domain-check": {
