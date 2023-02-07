@@ -460,6 +460,7 @@ const checkFeedbackComponent = async (url: string) => {
         style.opacity !== "0"
       );
     }, element);
+
     const visible = await isVisibleHandle.jsonValue();
     const box = await element.boxModel();
     return !!(visible && box);
