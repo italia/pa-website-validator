@@ -10,7 +10,8 @@ export const feedbackComponentStructure = {
   },
   rate: {
     dataElement: "feedback-rate-",
-    number: 5,
+    positiveThreshold: 3,
+    numberOfComponents: 5,
     error: "Rating input non trovato o presente in un numero errato",
     errorAssociation:
       "Le domande di rating non sono associate al valore del rate",

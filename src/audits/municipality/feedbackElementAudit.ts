@@ -4,10 +4,10 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { auditDictionary } from "../../storage/auditDictionary";
-import { checkFeedbackComponent } from "../../utils/utils";
 import {
   getRandomFirstLevelPagesUrl,
   getRandomSecondLevelPagesUrl,
+  checkFeedbackComponent,
 } from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 

@@ -43,6 +43,7 @@ class LoadAudit extends Audit {
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
 
+    const titleSubHeadings = ["Bottone di prenotazione in pagina?"];
     const headings = [
       {
         key: "result",
@@ -199,7 +200,7 @@ class LoadAudit extends Audit {
     if (wrongItems.length > 0) {
       results.push({
         result: auditData.subItem.redResult,
-        title_in_page_url: "Bottone di prenotazione in pagina?",
+        title_in_page_url: titleSubHeadings[0],
       });
 
       for (const item of wrongItems) {
@@ -217,7 +218,7 @@ class LoadAudit extends Audit {
     if (correctItems.length > 0) {
       results.push({
         result: auditData.subItem.greenResult,
-        title_in_page_url: "Bottone di prenotazione in pagina?",
+        title_in_page_url: titleSubHeadings[0],
       });
 
       for (const item of correctItems) {

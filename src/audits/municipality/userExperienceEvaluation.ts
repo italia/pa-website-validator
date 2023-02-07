@@ -5,11 +5,10 @@
 import lighthouse from "lighthouse";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
-import { checkFeedbackComponent } from "../../utils/utils";
-
 import {
   getRandomThirdLevelPagesUrl,
   getServicePageUrl,
+  checkFeedbackComponent,
 } from "../../utils/municipality/utils";
 
 const Audit = lighthouse.Audit;

@@ -4,8 +4,8 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { auditDictionary } from "../../storage/auditDictionary";
-import {CheerioAPI} from "cheerio";
-import {getAllPageHTML, loadPageData, urlExists} from "../../utils/utils";
+import { CheerioAPI } from "cheerio";
+import { loadPageData, urlExists } from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -20,16 +20,14 @@ class LoadAudit extends Audit {
       failureTitle: auditData.failureTitle,
       description: auditData.description,
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
-      requiredArtifacts: [
-          "origin"
-      ],
+      requiredArtifacts: ["origin"],
     };
   }
 
   static async audit(
-      artifacts: LH.Artifacts & {
-        origin: string;
-      }
+    artifacts: LH.Artifacts & {
+      origin: string;
+    }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
     let score = 0;
@@ -74,12 +72,10 @@ class LoadAudit extends Audit {
 
     const dataElementLegalNotes = '[data-element=""]';
     let $: CheerioAPI = await loadPageData(url);
-    const legalNotesElements = $("footer").find(
-        dataElementLegalNotes
-    );
+    const legalNotesElements = $("footer").find(dataElementLegalNotes);
     const elementObj = $(legalNotesElements).attr();
 
-    if (elementObj && "href" in elementObj && elementObj['href'] !== '#') {
+    if (elementObj && "href" in elementObj && elementObj["href"] !== "#") {
       items[0].link_destination = elementObj.href;
 
       const checkUrl = await urlExists(url, elementObj.href);
@@ -96,7 +92,7 @@ class LoadAudit extends Audit {
       const sectionDataElement = '[data-element=""]';
       const sectionElement = $(sectionDataElement);
 
-      if(sectionElement.length>0){
+      if (sectionElement.length > 0) {
         //TODO: define where the title and the text is
       }
 
