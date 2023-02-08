@@ -30,9 +30,9 @@ export const auditScanVariables = {
   },
   suggested: {
     "municipality-ux-ui-consistency-bootstrap-italia-double-check": {
-      numberOfFirstLevelPageToBeScanned: 3,
-      numberOfSecondLevelPageToBeScanned: 3,
-      numberOfServicesToBeScanned: 3,
+      numberOfFirstLevelPageToBeScanned: 5,
+      numberOfSecondLevelPageToBeScanned: 5,
+      numberOfServicesToBeScanned: 5,
     },
     "municipality-feedback-element": {
       numberOfFirstLevelPageToBeScanned: 3,
@@ -42,13 +42,13 @@ export const auditScanVariables = {
       numberOfServicesToBeScanned: 3,
     },
     "municipality-legislation-cookie-domain-check": {
-      numberOfFirstLevelPageToBeScanned: 3,
-      numberOfSecondLevelPageToBeScanned: 3,
-      numberOfServicesToBeScanned: 3,
-      numberOfEventsToBeScanned: 3,
+      numberOfFirstLevelPageToBeScanned: 5,
+      numberOfSecondLevelPageToBeScanned: 5,
+      numberOfServicesToBeScanned: 5,
+      numberOfEventsToBeScanned: 5,
     },
     "municipality-servizi-structure-match-model": {
-      numberOfServicesToBeScanned: 3,
+      numberOfServicesToBeScanned: 5,
     },
     "municipality-booking-appointment-check": {
       numberOfServicesToBeScanned: 3,
@@ -57,7 +57,7 @@ export const auditScanVariables = {
       numberOfServicesToBeScanned: 3,
     },
   },
-  max: {
+  high: {
     "municipality-ux-ui-consistency-bootstrap-italia-double-check": {
       numberOfFirstLevelPageToBeScanned: 10,
       numberOfSecondLevelPageToBeScanned: 10,

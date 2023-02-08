@@ -49,7 +49,7 @@ const parser = yargs(hideBin(process.argv))
     type: "string",
     demandOption: true,
     default: "suggested",
-    choices: ["min", "suggested", "max", "all"],
+    choices: ["min", "suggested", "high", "all"],
   });
 
 try {
@@ -61,8 +61,6 @@ try {
     console.log("[INFO] Directory created at: " + args.destination);
   }
 
-  process.env["accuracy"] = args.accuracy;
-
   const result = await run(
     args.website,
     args.type,
@@ -71,7 +69,8 @@ try {
     true,
     args.destination,
     args.report,
-    "view" in args
+    "view" in args,
+    args.accuracy
   );
 
   console.log("[INFO] Status result:", result.status);

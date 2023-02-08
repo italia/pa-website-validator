@@ -17,21 +17,21 @@ export const auditScanVariables = {
   },
   suggested: {
     "school-ux-ui-consistency-bootstrap-italia-double-check": {
-      numberOfFirstLevelPageToBeScanned: 3,
-      numberOfSecondLevelPageToBeScanned: 3,
-      numberOfServicesToBeScanned: 3,
+      numberOfFirstLevelPageToBeScanned: 5,
+      numberOfSecondLevelPageToBeScanned: 5,
+      numberOfServicesToBeScanned: 5,
     },
     "school-legislation-cookie-domain-check": {
-      numberOfFirstLevelPageToBeScanned: 3,
-      numberOfSecondLevelPageToBeScanned: 3,
-      numberOfServicesToBeScanned: 3,
-      numberOfLocationsToBeScanned: 3,
+      numberOfFirstLevelPageToBeScanned: 5,
+      numberOfSecondLevelPageToBeScanned: 5,
+      numberOfServicesToBeScanned: 5,
+      numberOfLocationsToBeScanned: 5,
     },
     "school-servizi-structure-match-model": {
-      numberOfServicesToBeScanned: 3,
+      numberOfServicesToBeScanned: 5,
     },
   },
-  max: {
+  high: {
     "school-ux-ui-consistency-bootstrap-italia-double-check": {
       numberOfFirstLevelPageToBeScanned: 10,
       numberOfSecondLevelPageToBeScanned: 10,
