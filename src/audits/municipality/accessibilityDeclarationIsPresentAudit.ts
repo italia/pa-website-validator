@@ -77,11 +77,16 @@ class LoadAudit extends Audit {
     );
     const elementObj = $(accessibilityDeclarationElement).attr();
     items[0].link_name = accessibilityDeclarationElement.text().trim() ?? "";
+    items[0].link_destination = elementObj?.href ?? "";
 
-    if (elementObj && "href" in elementObj) {
-      items[0].link_destination = elementObj.href;
-
-      const checkUrl = await urlExists(url, elementObj.href);
+    if (
+      elementObj &&
+      "href" in elementObj &&
+      elementObj.href !== "#" &&
+      elementObj.href !== ""
+    ) {
+      const href = elementObj.href;
+      const checkUrl = await urlExists(url, href);
       if (!checkUrl.result) {
         return {
           score: 0,
@@ -91,14 +96,14 @@ class LoadAudit extends Audit {
 
       items[0].existing_page = "Sì";
 
-      if (!elementObj.href.includes("https://form.agid.gov.it/view/")) {
+      if (!href.includes("https://form.agid.gov.it/view/")) {
         return {
           score: 0,
           details: Audit.makeTableDetails(headings, items),
         };
       }
 
-      const privacyPageHTML: string = await getAllPageHTML(elementObj.href);
+      const privacyPageHTML: string = await getAllPageHTML(href);
       if (!privacyPageHTML.includes(url)) {
         return {
           score: 0,
