@@ -78,7 +78,7 @@ node dist --type <type> --destination <folder> --report <report_name> --website 
 Esempio:
 
 ```console
-node dist --type school --destination ~/pa-italia-crawler-reports --report myreport --website https://www.ismonnet.edu.it/ --scope online --view
+node dist --type school --destination ~/pa-italia-crawler-reports --report myreport --website https://www.ismonnet.edu.it/ --scope online --view --accuracy all
 ```
 
 **NB**: per i dispositivi basati su macOS con processore ARM occorre abilitare la variabile d’ambiente `PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM` per tutti i comandi descritti sopra, cioè:
@@ -115,21 +115,22 @@ pa-website-validator --type <type> --destination <folder> --report <report_name>
 Esempio:
 
 ```console
-pa-website-validator --type school --destination ~/pa-italia-crawler-reports --report myreport --website https://www.ismonnet.edu.it/ --scope online --view
+pa-website-validator --type school --destination ~/pa-italia-crawler-reports --report myreport --website https://www.ismonnet.edu.it/ --scope online --view --accuracy all
 ```
 
 ## Opzioni comando
 
-| Parametro Comando | Descrizione                         | Obbligatorio | Possibili valori        | Default  |
-| ----------------- | ----------------------------------- | ------------ | ----------------------- | -------- |
-| - -help           | Mostra la mappa comando             | ❌           |                         |
-| - -version        | Versione del pacchetto              | ❌           |                         |
-| - -type           | Tipologia di crawler da lanciare    | ✅           | "municipality" "school" |
-| - -destination    | Folder dove salvare la reportistica | ✅           |
-| - -report         | Nome da assegnare al report         | ✅           |                         |
-| - -website        | Url sito web da analizzare          | ✅           |                         |
-| - -scope          | Scope di esecuzione                 | ❌           | "local" "online"        | "online" |
-| - -view           | Visualizzazione istantanea report   | ❌           |
+| Parametro Comando | Descrizione                            | Obbligatorio | Possibili valori                  | Default     |
+| ----------------- | -------------------------------------- | ------------ | --------------------------------- | ----------- |
+| - -help           | Mostra la mappa comando                | ❌           |                                   |             |
+| - -version        | Versione del pacchetto                 | ❌           |                                   |             |
+| - -type           | Tipologia di crawler da lanciare       | ✅           | "municipality" "school"           |             |
+| - -destination    | Folder dove salvare la reportistica    | ✅           |                                   |             |
+| - -report         | Nome da assegnare al report            | ✅           |                                   |             |
+| - -website        | Url sito web da analizzare             | ✅           |                                   |             |
+| - -scope          | Scope di esecuzione                    | ❌           | "local" "online"                  | "online"    |
+| - -view           | Visualizzazione istantanea report      | ❌           |                                   |             |
+| - -accuracy       | Definisce la morbosità della scansione | ✅           | "min", "suggested", "high", "all" | "suggested" |
 
 Note:
 
@@ -140,7 +141,9 @@ Note:
   - `local` se il tool è lanciato su un sito web hostato in locale: esegue tutti gli audit che lavorano sulla struttura del sito ispezionato e mostra dei messaggi informativi per alcuni audit che non producono risultati se eseguiti in un ambiente locale.
   - `online` esegue tutti gli audit disponibili.
 
-- `--view` se passato al comandoalla fine dell'auditing lancia un'istanza di chrome che mostra automaticamente la reportistica generata.
+- `--view` se passato al comando alla fine dell'auditing lancia un'istanza di chrome che mostra automaticamente la reportistica generata.
+- `--accuracy` indica la precisione della scansione, definita come il numero di pagina analizzate:
+  - `all` la scansione è effettuata su tutte le pagine disponibili.
 
 [lighthouse]: https://www.npmjs.com/package/lighthouse
 [node.js]: http://nodejs.org

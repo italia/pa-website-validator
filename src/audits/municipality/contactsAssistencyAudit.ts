@@ -59,12 +59,11 @@ class LoadAudit extends Audit {
       },
     ];
 
-    const randomServices: string[] =
-      await getRandomThirdLevelPagesUrl(
-        url,
-        await getServicePageUrl(url),
-        '[data-element="service-link"]'
-      );
+    const randomServices: string[] = await getRandomThirdLevelPagesUrl(
+      url,
+      await getServicePageUrl(url),
+      '[data-element="service-link"]'
+    );
 
     if (randomServices.length === 0) {
       return {

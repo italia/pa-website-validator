@@ -88,13 +88,12 @@ class LoadAudit extends Audit {
     const mandatoryHeaderVoices = contentTypeItemsHeaders;
     const mandatoryBodyVoices = contentTypeItemsBody;
 
-    const randomServices: string[] =
-      await getRandomThirdLevelPagesUrl(
-        url,
-        await getServicePageUrl(url),
-        '[data-element="service-link"]',
-        auditVariables.numberOfServicesToBeScanned
-      );
+    const randomServices: string[] = await getRandomThirdLevelPagesUrl(
+      url,
+      await getServicePageUrl(url),
+      '[data-element="service-link"]',
+      auditVariables.numberOfServicesToBeScanned
+    );
 
     if (!randomServices) {
       return {
