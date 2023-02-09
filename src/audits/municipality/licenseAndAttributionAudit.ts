@@ -6,6 +6,7 @@ import lighthouse from "lighthouse";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
 import { loadPageData, urlExists } from "../../utils/utils";
+import { legalNotes } from "../../storage/common/legalNotes";
 
 const Audit = lighthouse.Audit;
 
@@ -56,7 +57,7 @@ class LoadAudit extends Audit {
       {
         key: "page_contains_correct_text",
         itemType: "text",
-        text: "La sezione indicata contiene il testo necessario",
+        text: "Il testo nel body è corretto",
       },
     ];
 
@@ -65,12 +66,12 @@ class LoadAudit extends Audit {
         result: auditData.redResult,
         link_destination: "",
         existing_page: "No",
-        page_section: "",
+        page_section: "No",
         page_contains_correct_text: "No",
       },
     ];
 
-    const dataElementLegalNotes = '[data-element=""]';
+    const dataElementLegalNotes = `[data-element="${legalNotes.dataElement}"]`;
     let $: CheerioAPI = await loadPageData(url);
     const legalNotesElements = $("footer").find(dataElementLegalNotes);
     const elementObj = $(legalNotesElements).attr();
@@ -89,11 +90,24 @@ class LoadAudit extends Audit {
       items[0].existing_page = "Sì";
 
       $ = await loadPageData(elementObj.href);
-      const sectionDataElement = '[data-element=""]';
+      const sectionDataElement = `[data-element="${legalNotes.section.dataElement}"]`;
       const sectionElement = $(sectionDataElement);
+      const sectionTitle = sectionElement?.text().trim().toLowerCase() ?? "";
+      if (
+        sectionElement.length > 0 &&
+        sectionTitle === legalNotes.section.title.toLowerCase()
+      ) {
+        items[0].page_section = "Sì";
+      }
 
-      if (sectionElement.length > 0) {
-        //TODO: define where the title and the text is
+      const bodyDataElement = `[data-element="${legalNotes.body.dataElement}"]`;
+      const bodyElements = $(bodyDataElement);
+      let textBody = "";
+      for (const bodyElement of bodyElements) {
+        textBody += $(bodyElement)?.text().trim().toLowerCase() ?? "";
+      }
+      if (textBody === legalNotes.body.text.toLowerCase()) {
+        items[0].page_section = "Sì";
       }
 
       items[0].page_contains_correct_text = "Sì";
@@ -107,5 +121,4 @@ class LoadAudit extends Audit {
     };
   }
 }
-
 module.exports = LoadAudit;
