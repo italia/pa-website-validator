@@ -64,7 +64,7 @@ class LoadAudit extends Audit {
       url,
       await getServicePageUrl(url),
       '[data-element="service-link"]',
-    auditVariables.numberOfServicesToBeScanned
+      auditVariables.numberOfServicesToBeScanned
     );
 
     if (randomServices.length === 0) {
