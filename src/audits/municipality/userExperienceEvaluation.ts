@@ -54,6 +54,7 @@ class LoadAudit extends Audit {
     ];
 
     const correctItems = [];
+    const toleranceItems = [];
     const wrongItems = [];
 
     let score = 1;
@@ -86,17 +87,28 @@ class LoadAudit extends Audit {
         inspected_page: pageToBeAnalyzed,
         errors_found: "",
       };
-      const feedbackComponentErrorsFound = await checkFeedbackComponent(
+      const feedbackComponentAnalysis = await checkFeedbackComponent(
         pageToBeAnalyzed
       );
 
-      if (feedbackComponentErrorsFound.length !== 0) {
-        score = 0;
-        item.errors_found = feedbackComponentErrorsFound.join("; ");
-        wrongItems.push(item);
-        continue;
+      if (score > feedbackComponentAnalysis.score) {
+        score = feedbackComponentAnalysis.score;
       }
-      correctItems.push(item);
+
+      if (feedbackComponentAnalysis.errors.length > 0) {
+        item.errors_found = feedbackComponentAnalysis.errors.join("; ");
+      }
+      switch (feedbackComponentAnalysis.score) {
+        case 0:
+          wrongItems.push(item);
+          break;
+        case 0.5:
+          toleranceItems.push(item);
+          break;
+        case 1:
+          correctItems.push(item);
+          break;
+      }
     }
 
     const results = [];
@@ -104,6 +116,11 @@ class LoadAudit extends Audit {
       case 1:
         results.push({
           result: auditData.greenResult,
+        });
+        break;
+      case 0.5:
+        results.push({
+          result: auditData.yellowResult,
         });
         break;
       case 0:
@@ -122,6 +139,22 @@ class LoadAudit extends Audit {
       });
 
       for (const item of wrongItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+    }
+
+    if (toleranceItems.length > 0) {
+      results.push({
+        result: auditData.subItem.yellowResult,
+        title_errors_found: "Errori trovati nel componente",
+      });
+
+      for (const item of toleranceItems) {
         results.push({
           subItems: {
             type: "subitems",
@@ -150,7 +183,7 @@ class LoadAudit extends Audit {
     }
 
     return {
-      score: score,
+      score: score > 0 ? 1 : 0,
       details: Audit.makeTableDetails(headings, results),
     };
   }

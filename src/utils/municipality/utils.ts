@@ -158,6 +158,7 @@ const getServicePageUrl = async (url: string) => {
 };
 
 const checkFeedbackComponent = async (url: string) => {
+  let score = 1;
   const errors: string[] = [];
 
   const $: CheerioAPI = await loadPageData(url);
@@ -166,23 +167,35 @@ const checkFeedbackComponent = async (url: string) => {
     `[data-element="${feedbackComponentStructure.component.dataElement}"]`
   );
   if (feedbackComponent.length !== 1) {
-    errors.push(feedbackComponentStructure.component.error);
-    return errors;
+    errors.push(feedbackComponentStructure.component.missingError);
+    score = 0;
+    return {
+      score: score,
+      errors: errors,
+    };
   }
 
   const feedbackTitleElement = $(feedbackComponent).find(
     `[data-element="${feedbackComponentStructure.title.dataElement}"]`
   );
+  if (feedbackTitleElement.length !== 1) {
+    if (score > 0.5) score = 0.5;
+    errors.push(feedbackComponentStructure.title.missingError);
+  }
+
   if (
-    feedbackTitleElement.length !== 1 ||
+    feedbackTitleElement.length === 1 &&
     feedbackTitleElement.text().trim().toLocaleLowerCase() !==
       feedbackComponentStructure.title.text.toLowerCase()
   ) {
+    if (score > 0) score = 0;
     errors.push(feedbackComponentStructure.title.error);
   }
 
-  let checkRateComponent = true;
-  let checkRateComponentAssociation = true;
+  let existsRateComponents = false; //true if there is at least one rating inputs
+  let checkRateComponent = true; //false if there are not the right amount of rating inputs
+  let existsRatingQAComponents = true; //false if there is not a rating component (positive or negative)
+  let checkRateComponentAssociation = true; //false if the association between rating input and rating components is incorrect
   const browser = await puppeteer.launch({
     args: ["--no-sandbox"],
   });
@@ -207,13 +220,18 @@ const checkFeedbackComponent = async (url: string) => {
       const feedbackRateElement = await page.$(
         `[data-element="${feedbackComponentStructure.rate.dataElement + i}"]`
       );
+      if (feedbackRateElement && !existsRateComponents) {
+        existsRateComponents = true;
+      }
+
       if (!feedbackRateElement) {
         checkRateComponent = false;
         continue;
       }
-      await feedbackRateElement.click({ delay: 200 });
+
+      await feedbackRateElement.click({ delay: 100 });
       if (!feedbackRatingPositiveElement || !feedbackRatingNegativeElement) {
-        checkRateComponentAssociation = false;
+        existsRatingQAComponents = false;
         break;
       }
 
@@ -238,11 +256,22 @@ const checkFeedbackComponent = async (url: string) => {
     await browser.close();
   }
 
-  if (!checkRateComponent) {
+  if (!existsRateComponents) {
+    if (score > 0.5) score = 0.5;
+    errors.push(feedbackComponentStructure.rate.missingError);
+  }
+
+  if (existsRateComponents && !checkRateComponent) {
+    if (score > 0) score = 0;
     errors.push(feedbackComponentStructure.rate.error);
   }
 
-  if (!checkRateComponentAssociation) {
+  if (!existsRatingQAComponents) {
+    if (score > 0.5) score = 0.5;
+  }
+
+  if (existsRatingQAComponents && !checkRateComponentAssociation) {
+    if (score > 0) score = 0;
     errors.push(feedbackComponentStructure.rate.errorAssociation);
   }
 
@@ -250,18 +279,27 @@ const checkFeedbackComponent = async (url: string) => {
     `[data-element="${feedbackComponentStructure.positive_rating.dataElement}"]`
   );
   if (feedbackRatingPositiveElement.length !== 1) {
-    errors.push(feedbackComponentStructure.positive_rating.error);
-  } else {
+    if (score > 0.5) score = 0.5;
+    errors.push(feedbackComponentStructure.positive_rating.missingError);
+  }
+  if (feedbackRatingPositiveElement.length === 1) {
     const feedbackRatingPositiveQuestionElement = $(
       feedbackRatingPositiveElement
     ).find(
       `[data-element="${feedbackComponentStructure.positive_rating.question.dataElement}"]`
     );
+    if (feedbackRatingPositiveQuestionElement.length === 0) {
+      if (score > 0.5) score = 0.5;
+      errors.push(
+        feedbackComponentStructure.positive_rating.question.missingError
+      );
+    }
     if (
-      feedbackRatingPositiveQuestionElement.length === 0 ||
+      feedbackRatingPositiveQuestionElement.length === 1 &&
       feedbackRatingPositiveQuestionElement.text().trim().toLowerCase() !==
         feedbackComponentStructure.positive_rating.question.text.toLowerCase()
     ) {
+      if (score > 0) score = 0;
       errors.push(feedbackComponentStructure.positive_rating.question.error);
     }
 
@@ -282,10 +320,17 @@ const checkFeedbackComponent = async (url: string) => {
       feedbackComponentStructure.positive_rating.answers.texts
     );
 
+    if (feedbackRatingPositiveAnswersElements.length === 0) {
+      if (score > 0.5) score = 0.5;
+      errors.push(
+        feedbackComponentStructure.positive_rating.answers.missingError
+      );
+    }
     if (
-      feedbackRatingPositiveAnswersElements.length === 0 ||
+      feedbackRatingPositiveAnswersElements.length > 0 &&
       !allCorrectAnswers.allArgumentsInVocabulary
     ) {
+      if (score > 0) score = 0;
       errors.push(feedbackComponentStructure.positive_rating.answers.error);
     }
   }
@@ -294,18 +339,27 @@ const checkFeedbackComponent = async (url: string) => {
     `[data-element="${feedbackComponentStructure.negative_rating.dataElement}"]`
   );
   if (feedbackRatingNegativeElement.length !== 1) {
-    errors.push(feedbackComponentStructure.negative_rating.error);
-  } else {
+    if (score > 0.5) score = 0.5;
+    errors.push(feedbackComponentStructure.negative_rating.missingError);
+  }
+  if (feedbackRatingNegativeElement.length === 1) {
     const feedbackRatingNegativeQuestionElement = $(
       feedbackRatingNegativeElement
     ).find(
       `[data-element="${feedbackComponentStructure.negative_rating.question.dataElement}"]`
     );
+    if (feedbackRatingNegativeQuestionElement.length === 0) {
+      if (score > 0.5) score = 0.5;
+      errors.push(
+        feedbackComponentStructure.negative_rating.question.missingError
+      );
+    }
     if (
-      feedbackRatingNegativeQuestionElement.length === 0 ||
+      feedbackRatingNegativeQuestionElement.length === 1 &&
       feedbackRatingNegativeQuestionElement.text().trim().toLowerCase() !==
         feedbackComponentStructure.negative_rating.question.text.toLowerCase()
     ) {
+      if (score > 0) score = 0;
       errors.push(feedbackComponentStructure.negative_rating.question.error);
     }
 
@@ -326,10 +380,17 @@ const checkFeedbackComponent = async (url: string) => {
       feedbackComponentStructure.negative_rating.answers.texts
     );
 
+    if (feedbackRatingNegativeAnswersElements.length === 0) {
+      if (score > 0.5) score = 0.5;
+      errors.push(
+        feedbackComponentStructure.negative_rating.answers.missingError
+      );
+    }
     if (
-      feedbackRatingNegativeAnswersElements.length === 0 ||
+      feedbackRatingNegativeAnswersElements.length > 0 &&
       !allCorrectAnswers.allArgumentsInVocabulary
     ) {
+      if (score > 0) score = 0;
       errors.push(feedbackComponentStructure.negative_rating.answers.error);
     }
   }
@@ -337,14 +398,15 @@ const checkFeedbackComponent = async (url: string) => {
   const feedbackInputText = $(feedbackComponent).find(
     `[data-element="${feedbackComponentStructure.input_text.dataElement}"]`
   );
-  if (
-    feedbackInputText.length !== 1 ||
-    feedbackInputText.attr("type") !== "text"
-  ) {
-    errors.push(feedbackComponentStructure.input_text.error);
+  if (feedbackInputText.length !== 1) {
+    if (score > 0.5) score = 0.5;
+    errors.push(feedbackComponentStructure.input_text.missingError);
   }
 
-  return errors;
+  return {
+    score: score,
+    errors: errors,
+  };
 };
 
 async function isLocatorReady(element: ElementHandle<Element>, page: Page) {

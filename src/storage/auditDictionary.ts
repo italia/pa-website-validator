@@ -155,13 +155,13 @@ export const auditDictionary = {
   },
   "municipality-feedback-element": {
     greenResult: "Il componente è presente in tutte le pagine valutate.",
-    yellowResult: "",
+    yellowResult: "Messaggio verde parziale risultato totale",
     redResult:
       "Il componente non è presente in una o più delle pagine valutate.",
     subItem: {
       greenResult:
         "Pagine in cui sono stati rilevati componenti di valutazione corretti.",
-      yellowResult: "",
+      yellowResult: "Messaggio verde parziale risultato totale",
       redResult:
         "Pagine in cui sono stati rilevati componenti di valutazione con errori.",
     },
