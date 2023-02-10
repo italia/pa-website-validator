@@ -43,13 +43,35 @@ class LoadAudit extends Audit {
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
 
-    const titleSubHeadings = ["Bottone di prenotazione in pagina?"];
+    const titleSubHeadings = [
+        "Il componente di prenotazione è presente",
+        "Breadcrumb corretta",
+        "Bottone di prenotazione in pagina"
+    ];
     const headings = [
       {
         key: "result",
         itemType: "text",
         text: "Risultato",
         subItemsHeading: { key: "inspected_page", itemType: "url" },
+      },
+      {
+        key: "title_component_exist",
+        itemType: "text",
+        text: "",
+        subItemsHeading: {
+          key: "component_exist",
+          itemType: "text",
+        },
+      },
+      {
+        key: "title_correct_breadcrumb",
+        itemType: "text",
+        text: "",
+        subItemsHeading: {
+          key: "correct_breadcrumb",
+          itemType: "text",
+        },
       },
       {
         key: "title_in_page_url",
@@ -84,7 +106,6 @@ class LoadAudit extends Audit {
     }
 
     let servicePageUrl = servicesPage[0];
-
     if (!servicePageUrl.includes(url)) {
       servicePageUrl = await buildUrl(url, servicePageUrl);
     }
@@ -109,6 +130,16 @@ class LoadAudit extends Audit {
       };
     }
 
+    const correctItems = [];
+    const wrongItems = [];
+
+    const item = {
+      inspected_page: servicePageUrl,
+      component_exist: 'Sì',
+      correct_breadcrumb: 'Sì',
+      in_page_url: 'No'
+    };
+
     const bookingAppointmentUrl = bookingAppointmentPage[0];
 
     let score = 1;
@@ -124,6 +155,11 @@ class LoadAudit extends Audit {
 
     if (!checkBreadcrumb(breadcrumbElements)) {
       score = 0;
+      item.correct_breadcrumb = 'No';
+      wrongItems.push(item);
+    }
+    else {
+      correctItems.push(item);
     }
 
     const randomServices: string[] = await getRandomThirdLevelPagesUrl(
@@ -147,13 +183,13 @@ class LoadAudit extends Audit {
       };
     }
 
-    const correctItems = [];
-    const wrongItems = [];
 
     for (const randomService of randomServices) {
       const item = {
         inspected_page: randomService,
-        in_page_url: "No",
+        component_exist: 'Sì',
+        correct_breadcrumb: score === 0 ? 'No' : 'Sì',
+        in_page_url: 'No'
       };
 
       $ = await loadPageData(randomService);
@@ -162,20 +198,30 @@ class LoadAudit extends Audit {
         '[data-element="appointment-booking"]'
       );
 
+      const inPageButton = $('[data-element="appointment-booking"]');
+      if (inPageButton.length > 0) {
+        item.in_page_url = "Sì";
+      }
+
+      if(bookingAppointmentPage.length === 0){
+        item.component_exist = 'No';
+      }
+
       if (
-        bookingAppointmentPage.length === 0 ||
         bookingAppointmentPage[0] !== bookingAppointmentUrl
       ) {
         if (score > 0) {
           score = 0;
         }
-        wrongItems.push(item);
-        continue;
+        item.correct_breadcrumb = 'No';
       }
 
-      const inPageButton = $('[data-element="appointment-booking"]');
-      if (inPageButton.length > 0) {
-        item.in_page_url = "Sì";
+      if (
+          bookingAppointmentPage.length === 0 ||
+          bookingAppointmentPage[0] !== bookingAppointmentUrl
+      ) {
+        wrongItems.push(item);
+        continue;
       }
 
       correctItems.push(item);
@@ -200,7 +246,9 @@ class LoadAudit extends Audit {
     if (wrongItems.length > 0) {
       results.push({
         result: auditData.subItem.redResult,
-        title_in_page_url: titleSubHeadings[0],
+        title_component_exist: titleSubHeadings[0],
+        title_correct_breadcrumb: titleSubHeadings[1],
+        title_in_page_url: titleSubHeadings[2],
       });
 
       for (const item of wrongItems) {
@@ -218,7 +266,9 @@ class LoadAudit extends Audit {
     if (correctItems.length > 0) {
       results.push({
         result: auditData.subItem.greenResult,
-        title_in_page_url: titleSubHeadings[0],
+        title_component_exist: titleSubHeadings[0],
+        title_correct_breadcrumb: titleSubHeadings[1],
+        title_in_page_url: titleSubHeadings[2],
       });
 
       for (const item of correctItems) {
