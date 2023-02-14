@@ -1,30 +1,30 @@
 export const feedbackComponentStructure = {
   component: {
     dataElement: "feedback",
-    missingError: "Componente non trovato",
+    missingError: "Componenete di valutazione non trovato",
   },
   title: {
     dataElement: "feedback-title",
     text: "Quanto sono chiare le informazioni su questa pagina?",
-    missingError: "Titolo non trovato",
-    error: "Titolo errato",
+    missingError: "Domanda iniziale non trovata",
+    error: "Domanda iniziale errata",
   },
   rate: {
     dataElement: "feedback-rate-",
     positiveThreshold: 3,
     numberOfComponents: 5,
-    missingError: "Rating inputs non trovati",
-    error: "Rating inputs presenti in un numero errato",
+    missingError: "Scala di valutazione non trovata",
+    error: "Scala di valutazione errata",
     errorAssociation:
-      "Le domande di rating non sono associate al valore del rate inputs",
+      "Le domande di follow up non sono associate ai valori corretti",
   },
   positive_rating: {
     dataElement: "feedback-rating-positive",
     question: {
       dataElement: "feedback-rating-question",
       text: "Quali sono stati gli aspetti che hai preferito?",
-      missingError: "Domanda rating positivo non trovata",
-      error: "Domanda rating positivo errata",
+      missingError: "Domanda positiva di follow up non trovata",
+      error: "Domanda positiva di follow up errata",
     },
     answers: {
       dataElement: "feedback-rating-answer",
@@ -35,18 +35,20 @@ export const feedbackComponentStructure = {
         "Non ho avuto problemi tecnici",
         "Altro",
       ],
-      missingError: "Risposte rating positivo non trovate",
-      error: "Risposte rating positivo non corrette",
+      missingError:
+        "Le risposte alla domanda positiva di follow up non sono state trovate",
+      error:
+        "Le risposte alla domanda positiva di follow up sono errate o mancanti",
     },
-    missingError: "Componente rating positivo non trovato",
+    missingError: "Componente di follow up positivo non trovato",
   },
   negative_rating: {
     dataElement: "feedback-rating-negative",
     question: {
       dataElement: "feedback-rating-question",
       text: "Dove hai incontrato le maggiori difficoltà?",
-      missingError: "Domanda rating negativo non trovata",
-      error: "Domanda rating negativo errata",
+      missingError: "Domanda negativa di follow up non trovata",
+      error: "Domanda negativa di follow up errata",
     },
     answers: {
       dataElement: "feedback-rating-answer",
@@ -57,13 +59,15 @@ export const feedbackComponentStructure = {
         "Ho avuto problemi tecnici",
         "Altro",
       ],
-      missingError: "Risposte rating negativo non trovate",
-      error: "Risposte rating negativo non corrette",
+      missingError:
+        "Le risposte alla domanda negativa di follow up non sono state trovate",
+      error:
+        "Le risposte alla domanda negativa di follow up sono errate o mancanti",
     },
-    missingError: "Componente rating negativo non trovato",
+    missingError: "Componente di follow up negativo non trovato",
   },
   input_text: {
     dataElement: "feedback-input-text",
-    missingError: "Casella di testo mancante",
+    missingError: "Campo di testo libero mancante",
   },
 };
