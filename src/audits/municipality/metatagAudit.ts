@@ -42,6 +42,7 @@ class LoadAudit extends Audit {
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
 
+    const titleSubHeadings = ["Metatag non presenti o errati"];
     const headings = [
       {
         key: "result",
@@ -171,7 +172,7 @@ class LoadAudit extends Audit {
     if (wrongItems.length > 0) {
       results.push({
         result: auditData.subItem.redResult,
-        title_missing_keys: "Metatag non presenti o errati",
+        title_missing_keys: titleSubHeadings[0],
       });
 
       for (const item of wrongItems) {
@@ -189,7 +190,7 @@ class LoadAudit extends Audit {
     if (toleranceItems.length > 0) {
       results.push({
         result: auditData.subItem.yellowResult,
-        title_missing_keys: "Metatag non presenti o errati",
+        title_missing_keys: titleSubHeadings[0],
       });
 
       for (const item of toleranceItems) {
@@ -207,7 +208,7 @@ class LoadAudit extends Audit {
     if (correctItems.length > 0) {
       results.push({
         result: auditData.subItem.greenResult,
-        title_missing_keys: "Metatag non presenti o errati",
+        title_missing_keys: titleSubHeadings[0],
       });
 
       for (const item of correctItems) {

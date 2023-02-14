@@ -38,6 +38,7 @@ class LoadAudit extends lighthouse.Audit {
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
 
+    const titleSubHeadings = ["Elementi errati o non trovati"];
     const headings = [
       {
         key: "result",
@@ -124,7 +125,7 @@ class LoadAudit extends lighthouse.Audit {
     if (wrongItems.length > 0) {
       results.push({
         result: auditData.subItem.redResult,
-        title_errors_found: "Errori trovati nel componente",
+        title_errors_found: titleSubHeadings[0],
       });
 
       for (const item of wrongItems) {
@@ -140,7 +141,7 @@ class LoadAudit extends lighthouse.Audit {
     if (toleranceItems.length > 0) {
       results.push({
         result: auditData.subItem.yellowResult,
-        title_errors_found: "Errori trovati nel componente",
+        title_errors_found: titleSubHeadings[0],
       });
 
       for (const item of toleranceItems) {
@@ -156,7 +157,7 @@ class LoadAudit extends lighthouse.Audit {
     if (correctItems.length > 0) {
       results.push({
         result: auditData.subItem.greenResult,
-        title_errors_found: "Errori trovati nel componente",
+        title_errors_found: titleSubHeadings[0],
       });
 
       for (const item of correctItems) {

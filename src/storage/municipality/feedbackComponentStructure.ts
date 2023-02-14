@@ -40,7 +40,8 @@ export const feedbackComponentStructure = {
       error:
         "Le risposte alla domanda positiva di follow up sono errate o mancanti",
     },
-    missingError: "Componente di follow up positivo non trovato",
+    missingError:
+      "Il componente che contiene la domanda positiva di follow up e le risposte non è stato trovato",
   },
   negative_rating: {
     dataElement: "feedback-rating-negative",
@@ -64,7 +65,8 @@ export const feedbackComponentStructure = {
       error:
         "Le risposte alla domanda negativa di follow up sono errate o mancanti",
     },
-    missingError: "Componente di follow up negativo non trovato",
+    missingError:
+      "Il componente che contiene la domanda negativa di follow up e le risposte non è stato trovato",
   },
   input_text: {
     dataElement: "feedback-input-text",

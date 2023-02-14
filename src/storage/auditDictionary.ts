@@ -40,13 +40,17 @@ export const auditDictionary = {
       'CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta a una dichiarazione di accessibilità AgID valida per il sito; MODALITÀ DI VERIFICA: ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione, viene verificata la presenza del link nel footer, che riporti a una pagina esistente, che l\'url della pagina di destinazione inizi con "https://form.agid.gov.it/view/" e che la pagina contenga l\'url del sito del Comune; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [AgID Linee guida sull’accessibilità degli strumenti informatici](https://docs.italia.it/AgID/documenti-in-consultazione/lg-accessibilita-docs/it/), [Direttiva UE n. 2102/2016](https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX%3A32016L2102), [Legge 9 gennaio 2004 n. 4](https://www.normattiva.it/atto/caricaDettaglioAtto?atto.dataPubblicazioneGazzetta=2004-01-17&atto.codiceRedazionale=004G0015&atto.articolo.numero=0&atto.articolo.sottoArticolo=1&atto.articolo.sottoArticolo1=10&qId=cb6b9a05-f5c3-40ac-81b8-f89e73e5b4c7&tabID=0.029511124589268523&title=lbl.dettaglioAtto), [Web Content Accessibility Guidelines WCAG 2.1](https://www.w3.org/Translations/WCAG21-it/#background-on-wcag-2), [AgID dichiarazione di accessibilità](https://www.agid.gov.it/it/design-servizi/accessibilita/dichiarazione-accessibilita), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "municipality-booking-appointment-check": {
-    greenResult: "Risultato totale verde",
+    greenResult:
+      "Il componente è presente nelle pagine analizzate e la breadcrumb rispetta i requisiti richiesti.",
     yellowResult: "",
-    redResult: "Risultato totale rosso",
+    redResult:
+      "Il componente non è presente nelle pagine analizzate o la breadcrumb non rispetta i requisiti richiesti.",
     subItem: {
-      greenResult: "Risultato parziale verde",
+      greenResult:
+        "Pagine nelle quali è presente il componente e la cui pagina di destinazione rispetta i requisiti della breadcrumb:",
       yellowResult: "",
-      redResult: "Risultato parziale rosso",
+      redResult:
+        "Pagine nelle quali non è presente il componente o in cui cui la pagina di destinazione non rispetta i requisiti della breadcrumb:",
     },
     nonExecuted:
       "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
@@ -55,7 +59,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.2.1 - PRENOTAZIONE APPUNTAMENTI - Il sito comunale deve consentire di prenotare un appuntamento presso lo sportello di competenza.",
     description:
-      'CONDIZIONI DI SUCCESSO: la funzionalità di prenotazione di un appuntamento presso lo sportello è presente in tutte le schede servizio; MODALITÀ DI VERIFICA: viene verificata la presenza del componente "Prenota appuntamento" all\'interno di una scheda servizio selezionata casualmente, ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+      'CONDIZIONI DI SUCCESSO: la funzionalità di prenotazione di un appuntamento è accessibile dalla sezione di funzionalità trasversali delle schede servizio e della pagina di primo livello "Servizi". La pagina della funzionalità deve corrispondere al livello immediatamente successivo a "/Servizi" nella breadcrumb; MODALITÀ DI VERIFICA: ricercando specifici attributi "data-element" come spiegato nella Documentazione delle App di valutazione, viene verificata la presenza del componente "Prenota appuntamento" all\'interno della sezione di funzionalità trasversali delle schede servizio analizzate e della pagina di primo livello "Servizi", verificando la breadcrumb della pagina di destinazione. Viene inoltre indicato se è stato rilevato il pulsante di accesso alla funzionalità di prenotazione appuntamento all\'interno della sezione "Accedi al servizio" delle schede servizio; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/versione-corrente/index.html), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/index.html).',
   },
   "municipality-ux-ui-consistency-bootstrap-italia-double-check": {
     greenResult:
@@ -93,11 +97,11 @@ export const auditDictionary = {
   },
   "municipality-controlled-vocabularies": {
     greenResult:
-      "Tutti gli argomenti appartengono all’elenco di voci del modello.",
+      "Tutti gli argomenti appartengono all’elenco di voci del modello e l'elenco degli argomenti è presente nella pagina dei risultati di ricerca.",
     yellowResult:
-      "Almeno il 50% degli argomenti appartengono all'elenco di voci del modello o al vocabolario EuroVoc.",
+      "Almeno il 50% degli argomenti appartengono all'elenco di voci del modello o al vocabolario EuroVoc e l'elenco degli argomenti è presente nella pagina dei risultati di ricerca.",
     redResult:
-      "Meno del 50% degli argomenti appartengono alle voci del modello Comuni o al vocabolario EuroVoc.",
+      "Meno del 50% degli argomenti appartengono alle voci del modello Comuni o al vocabolario EuroVoc o l'elenco degli argomenti non è presente nella pagina dei risultati di ricerca.",
     nonExecuted:
       "Non è stato possibile trovare gli argomenti o la pagina che li contiene. Controlla le “Modalità di verifica” per scoprire di più.",
     title:
@@ -105,7 +109,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.1.5 - VOCABOLARI CONTROLLATI - Il sito comunale deve utilizzare argomenti forniti dal modello di sito comunale ovvero quelli appartenenti al vocabolario controllato europeo EuroVoc.",
     description:
-      "CONDIZIONI DI SUCCESSO: gli argomenti utilizzati appartengono alla lista indicata all'interno del documento di architettura dell'informazione del modello Comuni alla voce \"Tassonomia ARGOMENTI\" o al vocabolario controllato EuroVoc; MODALITÀ DI VERIFICA: gli argomenti identificati all'interno della funzione di ricerca del sito vengono confrontati con l'elenco di voci presente nel documento di architettura dell'informazione e con il vocabolario controllato EuroVoc, ricercandoli usando specifici attributi \"data-element\" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Elenco degli argomenti del Modello Comuni](https://docs.google.com/spreadsheets/d/1D4KbaA__xO9x_iBm08KvZASjrrFLYLKX/edit#gid=428595160), [Vocabolario EuroVoc](https://eur-lex.europa.eu/browse/eurovoc.html?locale=it), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
+      "CONDIZIONI DI SUCCESSO: gli argomenti utilizzati appartengono alla lista indicata all'interno del documento di architettura dell'informazione del modello Comuni alla voce \"Tassonomia ARGOMENTI\" o al vocabolario controllato EuroVoc e l’elenco completo degli argomenti utilizzati è presente nella pagina dei risultati di ricerca; MODALITÀ DI VERIFICA: gli argomenti identificati all'interno della funzione di ricerca del sito vengono confrontati con l'elenco di voci presente nel documento di architettura dell'informazione e con il vocabolario controllato EuroVoc, ricercandoli usando specifici attributi \"data-element\" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/versione-corrente/index.html), [Elenco degli argomenti del Modello Comuni](https://docs.google.com/spreadsheets/d/1D4KbaA__xO9x_iBm08KvZASjrrFLYLKX/edit#gid=428595160), [Vocabolario EuroVoc](https://eur-lex.europa.eu/browse/eurovoc.html?locale=it), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/index.html).",
   },
   "municipality-legislation-cookie-domain-check": {
     greenResult:
@@ -114,9 +118,9 @@ export const auditDictionary = {
     redResult:
       "In almeno una delle pagine analizzate sono stati rilevati cookie non idonei.",
     subItem: {
-      greenResult: "Pagine in cui sono stati rilevati solo cookie idonei.",
+      greenResult: "Pagine nelle quali sono stati rilevati solo cookie idonei:",
       yellowResult: "",
-      redResult: "Pagine in cui sono stati rilevati cookie non idonei.",
+      redResult: "Pagine nelle quali sono stati rilevati cookie non idonei:",
     },
     nonExecuted: "",
     title:
@@ -154,16 +158,19 @@ export const auditDictionary = {
       'CONDIZIONI DI SUCCESSO: nel footer del sito è presente un link contenente le espressioni "FAQ" oppure "domande frequenti" che invia a una pagina di domande frequenti ; MODALITÀ DI VERIFICA: viene verificata la presenza del link nel footer, ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione, che il link invii ad una pagina esistente e che il testo del link contenga almeno una delle espressioni richieste, senza fare distinzione tra caratteri minuscoli o maiuscoli; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "municipality-feedback-element": {
-    greenResult: "Il componente è presente in tutte le pagine valutate.",
-    yellowResult: "Messaggio verde parziale risultato totale",
+    greenResult:
+      "In tutte le pagine analizzate il componente è presente e rispetta le caratteristiche richieste.",
+    yellowResult:
+      "In tutte le pagine analizzate il componente è presente ma potrebbe non rispettare tutte le caratteristiche richieste.",
     redResult:
-      "Il componente non è presente in una o più delle pagine valutate.",
+      "In almeno una delle pagine analizzate il componente non è presente o non rispetta le caratteristiche richieste.",
     subItem: {
       greenResult:
-        "Pagine in cui sono stati rilevati componenti di valutazione corretti.",
-      yellowResult: "Messaggio verde parziale risultato totale",
+        "Pagine nelle quali il componente è presente e rispetta le caratteristiche richieste:",
+      yellowResult:
+        "Pagine nelle quali il componente è presente ma potrebbe non rispettare tutte le caratteristiche richieste:",
       redResult:
-        "Pagine in cui sono stati rilevati componenti di valutazione con errori.",
+        "Pagine nelle quali il componente non è presente o non rispetta le caratteristiche richieste:",
     },
     nonExecuted:
       "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
@@ -172,7 +179,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.2.5 - VALUTAZIONE DELL'ESPERIENZA D'USO, CHIAREZZA DELLE PAGINE INFORMATIVE - Il sito comunale deve consentire al cittadino di fornire una valutazione della chiarezza di ogni pagina di primo e secondo livello.",
     description:
-      'CONDIZIONI DI SUCCESSO: la funzionalità per valutare la chiarezza informativa è presente su tutte le pagine di primo e secondo livello del sito; MODALITÀ DI VERIFICA: viene verificata la presenza del componente su una pagina di primo livello selezionata casualmente e su una pagina di secondo livello selezionata casualmente a partire dalla pagina "Servizi", ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+      'CONDIZIONI DI SUCCESSO: la funzionalità per valutare la chiarezza informativa è presente su tutte le pagine di primo e secondo livello del sito e rispetta tutte le caratteristiche e i passaggi richiesti; MODALITÀ DI VERIFICA: ricercando specifici attributi "data-element" come spiegato nella Documentazione delle App di valutazione, viene verificata la presenza del componente di valutazione nelle pagine di primo e di secondo livello, controllando che la funzionalità abbia le caratteristiche richieste nella documentazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/versione-corrente/index.html), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/index.html).',
   },
   "municipality-ux-ui-consistency-fonts-check": {
     greenResult: "La pagina [url] utilizza i font come richiesto.",
@@ -220,16 +227,19 @@ export const auditDictionary = {
       "CONDIZIONI DI SUCCESSO: le voci del menù di primo livello del sito sono esattamente quelle indicate nel documento di architettura dell'informazione e sono nell'ordine indicato (ovvero “Amministrazione”, “Novità”, “Servizi”, “Vivere il Comune” oppure “Vivere [nome del Comune]”); MODALITÀ DI VERIFICA: ricercando uno specifico attributo “data-element” come spiegato nella Documentazione delle App di valutazione, vengono identificate le voci presenti nel menù del sito e il loro ordine, confrontandole con quanto indicato nel documento di architettura dell'informazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
   },
   "municipality-metatag": {
-    greenResult: "Risultato totale verde",
-    yellowResult: "Risultato totale giallo",
-    redResult: "Risultato totale rosso",
+    greenResult:
+      "In tutte le schede servizio analizzate tutti i metatag richiesti sono presenti e corretti.",
+    yellowResult:
+      "In almeno una delle schede servizio analizzate non tutti i metatag richiesti sono presenti e corretti.",
+    redResult:
+      "In almeno una delle schede servizio analizzate meno del 50% dei metatag richiesti sono presenti e corretti.",
     subItem: {
       greenResult:
-        "Pagine per cui tutti i metatag richiesti sono presenti e corretti.",
+        "Pagine nelle quali tutti i metatag richiesti sono presenti e corretti:",
       yellowResult:
-        "Pagine per cui almeno il 50% dei metatag richiesti sono presenti e corretti.",
+        "Pagine nelle quali almeno il 50% dei metatag richiesti sono presenti e corretti:",
       redResult:
-        "Pagine per cui almeno il 50% dei metatag richiesti sono presenti e corretti.",
+        "Pagine nelle quali meno del 50% dei metatag richiesti sono presenti e corretti:",
     },
     nonExecuted:
       "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
@@ -238,21 +248,21 @@ export const auditDictionary = {
     failureTitle:
       "R.SI.1.1 - METATAG - Nel sito comunale, le voci della scheda servizio devono presentare i metatag descritti dal modello, in base agli standard internazionali.",
     description:
-      'CONDIZIONI DI SUCCESSO: le voci delle schede servizio presentano tutti i metatag richiesti dal modello; MODALITÀ DI VERIFICA: viene verificata la presenza e correttezza dei metatag indicati nella sezione "Dati strutturati e interoperabilità" della documentazione in una scheda servizio selezionata casualmente, ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Schema](http://www.schema.org/), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+      'CONDIZIONI DI SUCCESSO: le voci delle schede servizio presentano tutti i metatag richiesti dal modello; MODALITÀ DI VERIFICA: viene verificata la presenza e correttezza dei metatag indicati nella Documentazione delle App di valutazione all\'interno delle schede servizio analizzate, ricercando specifici attributi "data-element" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/versione-corrente/index.html), [Schema](https://www.schema.org/), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/index.html).',
   },
   "municipality-legislation-privacy-is-present": {
     greenResult:
       "Il link è nel footer e invia a una pagina esistente e sicura.",
-    yellowResult:
-      "Il link è nel footer e invia a una pagina esistente ma non sicura.",
-    redResult: "Il link non è nel footer o non invia a una pagina esistente.",
+    yellowResult: "",
+    redResult:
+      "Il link non è nel footer o non invia a una pagina esistente o sicura.",
     nonExecuted: "",
     title:
       "C.SI.3.3 - INFORMATIVA PRIVACY - Il sito comunale deve presentare l'informativa sul trattamento dei dati personali, secondo quanto previsto dalla normativa vigente.",
     failureTitle:
       "C.SI.3.3 - INFORMATIVA PRIVACY - Il sito comunale deve presentare l'informativa sul trattamento dei dati personali, secondo quanto previsto dalla normativa vigente.",
     description:
-      'CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta alla privacy policy; MODALITÀ DI VERIFICA: viene verificata la presenza del link nel footer, che riporti a una pagina esistente e con certificato HTTPS valido e attivo, ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [GDPR Artt. 13 e 14, Reg. UE n. 2016/679](https://www.garanteprivacy.it/regolamentoue), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+      'CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta a una pagina sicura riguardante l\'informativa sulla privacy; MODALITÀ DI VERIFICA: viene verificata la presenza del link nel footer, che riporti a una pagina esistente e con certificato HTTPS valido e attivo, ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/versione-corrente/index.html), [GDPR Artt. 13 e 14, Reg. UE n. 2016/679](https://www.garanteprivacy.it/regolamentoue), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/index.html).',
   },
   "municipality-second-level-pages": {
     greenResult: "Tutti i titoli usati sono corretti.",
@@ -288,11 +298,11 @@ export const auditDictionary = {
       "In almeno una delle pagine analizzate più di 2 voci obbligatorie o i relativi contenuti non sono presenti o più di 1 voce non è nell'ordine corretto.",
     subItem: {
       greenResult:
-        "Pagine nelle quali tutte le voci obbligatorie e i relativi contenuti sono presenti e, dove richiesto, sono nell'ordine corretto.",
+        "Pagine nelle quali tutte le voci obbligatorie e i relativi contenuti sono presenti e, dove richiesto, sono nell'ordine corretto:",
       yellowResult:
-        "Pagine nelle quali fino a 2 voci obbligatorie o i relativi contenuti non sono presenti o 1 voce non è nell'ordine corretto.",
+        "Pagine nelle quali fino a 2 voci obbligatorie o i relativi contenuti non sono presenti o 1 voce non è nell'ordine corretto:",
       redResult:
-        "Pagine nelle quali più di 2 voci obbligatorie o i relativi contenuti non sono presenti o più di 1 voce non è nell'ordine corretto.",
+        "Pagine nelle quali più di 2 voci obbligatorie o i relativi contenuti non sono presenti o più di 1 voce non è nell'ordine corretto:",
     },
     nonExecuted:
       "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
@@ -305,17 +315,18 @@ export const auditDictionary = {
   },
   "municipality-ux-ui-consistency-theme-version-check": {
     greenResult:
-      "Il sito utilizza una versione idonea del tema CMS del modello.",
-    yellowResult: "Il sito non sembra utilizzare il tema CMS del modello.",
-    redResult: "Il sito utilizza una versione datata del tema CMS del modello.",
+      "Il sito utilizza una versione uguale o superiore alla 1.0 del tema CMS del modello.",
+    yellowResult: "Il sito non utilizza il tema CMS del modello.",
+    redResult:
+      "Il sito non utilizza una versione uguale o superiore alla 1.0 del tema CMS del modello.",
     nonExecuted:
       'Non è stato possibile condurre il test. Controlla le "Modalità di verifica" per scoprire di più.',
     title:
-      "C.SI.1.4 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito comunale, deve utilizzarne la versione più recente disponibile alla data di inizio lavori.",
+      "C.SI.1.4 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito comunale, lo utilizza nella versione 1.0 o successive.",
     failureTitle:
-      "C.SI.1.4 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito comunale, deve utilizzarne la versione più recente disponibile alla data di inizio lavori.",
+      "C.SI.1.4 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito comunale, lo utilizza nella versione 1.0 o successive.",
     description:
-      "CONDIZIONI DI SUCCESSO: se è in uso il tema CMS del modello per i Comuni, la versione utilizzata è uguale o superiore alla 1.0; MODALITÀ DI VERIFICA: viene verificato l'uso del tema CMS del modello e la versione in uso ricercando il testo introduttivo commentato presente [nel file style.css del tema Wordpress](https://github.com/italia/design-comuni-wordpress-theme/blob/main/style.css) e [nel file style.css del tema Drupal](https://github.com/italia/design-comuni-drupal-theme/blob/main/comuni_theme/css/style.css), se presenti; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/).",
+      "CONDIZIONI DI SUCCESSO: se è in uso il tema CMS del modello per i Comuni, la versione utilizzata è uguale o superiore alla 1.0; MODALITÀ DI VERIFICA: viene verificato l'uso del tema CMS del modello e la versione in uso ricercando uno specifico testo all'interno di tutti i file .CSS presenti in pagina. Lo specifico testo ricercato viene indicato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/versione-corrente/index.html), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/index.html).",
   },
 
   "municipality-informative-cloud-infrastructure": {
@@ -355,16 +366,18 @@ export const auditDictionary = {
       "CONDIZIONI DI SUCCESSO: il sito comunale è raggiungibile senza necessità di inserimento del sottodominio “www.” e utilizza il sottodominio “comune.” immediatamente seguito da uno dei domini istituzionali per il Comune presente nell’Elenco Nomi a Dominio Riservati Per i Comuni Italiani (es: comune.anzio.roma.it) o dal nome del Comune se coincidente con il nome del capoluogo di provincia (es: comune.roma.it); MODALITÀ DI VERIFICA: viene verificato che il dominio utilizzato dal sito sia presente nell’Elenco Nomi a Dominio Riservati per i Comuni Italiani o sia un nome di capoluogo di provincia e che immediatamente prima di questo sia utilizzato il sottodominio “comune.; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Elenco Nomi a Dominio Riservati Per i Comuni Italiani](https://www.nic.it/sites/default/files/docs/comuni_list.html).",
   },
   "municipality-license-and-attribution": {
-    greenResult: "Risultato verde",
+    greenResult:
+      "La dicitura sulla licenza dei contenuti è presente nella pagina delle note legali raggiungibile dal footer.",
     yellowResult: "",
-    redResult: "Risultato rosso",
+    redResult:
+      "La dicitura sulla licenza dei contenuti è errata o non presente nella pagine delle note legali o questa non è raggiungibile dal footer.",
     nonExecuted: "",
     title:
       "C.SI.3.4 - LICENZA E ATTRIBUZIONE - Il sito comunale deve pubblicare dati, documenti e informazioni con licenza aperta comunicandolo come descritto nella documentazione del modello di sito comunale.",
     failureTitle:
       "C.SI.3.4 - LICENZA E ATTRIBUZIONE - Il sito comunale deve pubblicare dati, documenti e informazioni con licenza aperta comunicandolo come descritto nella documentazione del modello di sito comunale.",
     description:
-      "RIFERIMENTI TECNICI E NORMATIVI: CAD Art. 52 d.lgs. 82/2005, art. 7, comma 1, D.Lgs. n. 33/2013, d.lgs. n. 36/2006, AgID Linee guida su acquisizione e riuso di software per le pubbliche amministrazioni.",
+      'CONDIZIONI DI SUCCESSO: nella pagina delle noti legali viene indicato che i dati, documenti e informazion riportati sul sito sono rilasciati con licenza CC-BY 4.0; MODALITÀ DI VERIFICA: ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione, viene ricercata che la pagina delle note legali sia raggiungibile dal footer e che questa contenga una sezione "Licenza dei contenuti" riportante la dicitura indicata nella Documentazione del modello; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/versione-corrente/index.html), [CAD Art. 52 d.lgs. 82/2005](https://docs.italia.it/italia/piano-triennale-ict/codice-amministrazione-digitale-docs/it/stabile/_rst/capo_V-sezione_I-articolo_52.html), [art. 7, comma 1, D.Lgs. n. 33/2013](https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2013-03-14;33), [d.lgs. n. 36/2006](https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2006-01-24;36!vig=), [AgID Linee guida su acquisizione e riuso di software per le pubbliche amministrazioni](https://www.agid.gov.it/it/design-servizi/riuso-open-source/linee-guida-acquisizione-riuso-software-pa), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/index.html).',
   },
   "municipality-informative-reuse": {
     greenResult: "",
@@ -391,24 +404,28 @@ export const auditDictionary = {
       "CONDIZIONI DI SUCCESSO: il sito utilizza un certificato https valido e non obsoleto secondo le raccomandazioni AgID; MODALITÀ DI VERIFICA: viene verificato che il certificato https del sito sia valido e attivo; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Agid Raccomandazioni in merito allo standard Transport Layer Security (TLS)](https://cert-agid.gov.it/wp-content/uploads/2020/11/AgID-RACCSECTLS-01.pdf).",
   },
   "municipality-user-experience-evaluation": {
-    greenResult: "Il componente è presente in tutte le pagine valutate.",
-    yellowResult: "",
+    greenResult:
+      "In tutte le pagine analizzate il componente è presente e rispetta le caratteristiche richieste.",
+    yellowResult:
+      "In tutte le pagine analizzate il componente è presente ma potrebbe non rispettare tutte le caratteristiche richieste.",
     redResult:
-      "Il componente non è presente in una o più delle pagine valutate.",
+      "In almeno una delle pagine analizzate il componente non è presente o non rispetta le caratteristiche richieste.",
     subItem: {
       greenResult:
-        "Pagine in cui sono stati rilevati componenti di valutazione corretti.",
-      yellowResult: "",
+        "Pagine nelle quali il componente è presente e rispetta le caratteristiche richieste:",
+      yellowResult:
+        "Pagine nelle quali il componente è presente ma potrebbe non rispettare tutte le caratteristiche richieste:",
       redResult:
-        "Pagine in cui sono stati rilevati componenti di valutazione con errori.",
+        "Pagine nelle quali il componente non è presente o non rispetta le caratteristiche richieste:",
     },
-    nonExecuted: "",
+    nonExecuted:
+      "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
     title:
       "C.SI.2.6 - VALUTAZIONE DELL’ESPERIENZA D’USO, CHIAREZZA INFORMATIVA DELLA SCHEDA DI SERVIZIO - Il sito comunale deve permettere la valutazione della chiarezza informativa per ogni scheda di servizio secondo le modalità indicate nella documentazione del modello di sito comunale.",
     failureTitle:
       "C.SI.2.6 - VALUTAZIONE DELL’ESPERIENZA D’USO, CHIAREZZA INFORMATIVA DELLA SCHEDA DI SERVIZIO - Il sito comunale deve permettere la valutazione della chiarezza informativa per ogni scheda di servizio secondo le modalità indicate nella documentazione del modello di sito comunale.",
     description:
-      "RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment Benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1).",
+      'CONDIZIONI DI SUCCESSO: la funzionalità per valutare la chiarezza informativa è presente su tutte le schede servizio e rispetta tutte le caratteristiche e passaggi richiesti; MODALITÀ DI VERIFICA: ricercando specifici attributi "data-element" come spiegato nella Documentazione delle App di valutazione, viene verificata la presenza del componente di valutazione all\'interno delle schede servizio, controllando che la funzionalità abbia le caratteristiche richieste nella documentazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/versione-corrente/index.html), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/index.html).',
   },
 
   "school-legislation-accessibility-declaration-is-present": {

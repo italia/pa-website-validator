@@ -44,9 +44,9 @@ class LoadAudit extends Audit {
     const url = artifacts.origin;
 
     const titleSubHeadings = [
-      "Il componente di prenotazione è presente",
-      "Breadcrumb corretta",
-      "Bottone di prenotazione in pagina",
+      "Componente individuato",
+      "La breadcrumb rispetta i requisiti",
+      'Nella sezione "Accedi al servizio" della scheda servizio è presente il pulsante di prenotazione appuntamento',
     ];
     const headings = [
       {
@@ -137,7 +137,7 @@ class LoadAudit extends Audit {
       inspected_page: servicePageUrl,
       component_exist: "Sì",
       correct_breadcrumb: "Sì",
-      in_page_url: "No",
+      in_page_url: "Non si applica",
     };
 
     const bookingAppointmentUrl = bookingAppointmentPage[0];
