@@ -44,9 +44,9 @@ class LoadAudit extends Audit {
     const url = artifacts.origin;
 
     const titleSubHeadings = [
-        "Il componente di prenotazione è presente",
-        "Breadcrumb corretta",
-        "Bottone di prenotazione in pagina"
+      "Il componente di prenotazione è presente",
+      "Breadcrumb corretta",
+      "Bottone di prenotazione in pagina",
     ];
     const headings = [
       {
@@ -135,9 +135,9 @@ class LoadAudit extends Audit {
 
     const item = {
       inspected_page: servicePageUrl,
-      component_exist: 'Sì',
-      correct_breadcrumb: 'Sì',
-      in_page_url: 'No'
+      component_exist: "Sì",
+      correct_breadcrumb: "Sì",
+      in_page_url: "No",
     };
 
     const bookingAppointmentUrl = bookingAppointmentPage[0];
@@ -155,10 +155,9 @@ class LoadAudit extends Audit {
 
     if (!checkBreadcrumb(breadcrumbElements)) {
       score = 0;
-      item.correct_breadcrumb = 'No';
+      item.correct_breadcrumb = "No";
       wrongItems.push(item);
-    }
-    else {
+    } else {
       correctItems.push(item);
     }
 
@@ -183,13 +182,12 @@ class LoadAudit extends Audit {
       };
     }
 
-
     for (const randomService of randomServices) {
       const item = {
         inspected_page: randomService,
-        component_exist: 'Sì',
-        correct_breadcrumb: score === 0 ? 'No' : 'Sì',
-        in_page_url: 'No'
+        component_exist: "Sì",
+        correct_breadcrumb: score === 0 ? "No" : "Sì",
+        in_page_url: "No",
       };
 
       $ = await loadPageData(randomService);
@@ -203,22 +201,20 @@ class LoadAudit extends Audit {
         item.in_page_url = "Sì";
       }
 
-      if(bookingAppointmentPage.length === 0){
-        item.component_exist = 'No';
+      if (bookingAppointmentPage.length === 0) {
+        item.component_exist = "No";
       }
 
-      if (
-        bookingAppointmentPage[0] !== bookingAppointmentUrl
-      ) {
+      if (bookingAppointmentPage[0] !== bookingAppointmentUrl) {
         if (score > 0) {
           score = 0;
         }
-        item.correct_breadcrumb = 'No';
+        item.correct_breadcrumb = "No";
       }
 
       if (
-          bookingAppointmentPage.length === 0 ||
-          bookingAppointmentPage[0] !== bookingAppointmentUrl
+        bookingAppointmentPage.length === 0 ||
+        bookingAppointmentPage[0] !== bookingAppointmentUrl
       ) {
         wrongItems.push(item);
         continue;

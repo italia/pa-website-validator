@@ -53,11 +53,6 @@ class LoadAudit extends Audit {
         itemType: "text",
         text: "Versione del tema CMS in uso",
       },
-      {
-        key: "checked_element",
-        itemType: "text",
-        text: "Elemento controllato",
-      },
     ];
 
     const items = [
@@ -65,7 +60,6 @@ class LoadAudit extends Audit {
         result: auditData.yellowResult,
         cms_name: "Nessuno",
         theme_version: "N/A",
-        checked_element: "",
       },
     ];
 
@@ -83,7 +77,6 @@ class LoadAudit extends Audit {
         if ((await isInternalUrl(styleCSSUrl)) && !styleCSSUrl.includes(url)) {
           styleCSSUrl = await buildUrl(url, styleCSSUrl);
         }
-        items[0].checked_element = styleCSSUrl;
 
         let CSScontent = "";
         try {
