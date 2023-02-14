@@ -40,32 +40,32 @@ class LoadAudit extends Audit {
         text: "Risultato",
       },
       {
+        key: "link_name",
+        itemType: "text",
+        text: "Testo del link",
+      },
+      {
         key: "link_destination",
         itemType: "url",
         text: "Pagina di destinazione del link",
       },
       {
-        key: "existing_page",
-        itemType: "text",
-        text: "Pagina esistente",
-      },
-      {
         key: "page_section",
         itemType: "text",
-        text: "Sezione trovata nella pagine analizzata",
+        text: "Il titolo della sezione è corretto",
       },
       {
         key: "page_contains_correct_text",
         itemType: "text",
-        text: "Il testo nel body è corretto",
+        text: "La dicitura è corretta",
       },
     ];
 
     const items = [
       {
         result: auditData.redResult,
+        link_name: "",
         link_destination: "",
-        existing_page: "No",
         page_section: "No",
         page_contains_correct_text: "No",
       },
@@ -87,7 +87,7 @@ class LoadAudit extends Audit {
         };
       }
 
-      items[0].existing_page = "Sì";
+      items[0].link_name = legalNotesElements.text().trim() ?? "";
 
       $ = await loadPageData(elementObj.href);
       const sectionDataElement = `[data-element="${legalNotes.section.dataElement}"]`;

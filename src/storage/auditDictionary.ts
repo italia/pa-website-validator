@@ -11,7 +11,6 @@ export const auditDictionary = {
     description:
       "CONDIZIONI DI SUCCESSO: l'indirizzo IP fa riferimento a un datacenter localizzato su territorio europeo; MODALITÀ DI VERIFICA: verifica che la localizzazione dell'IP rientri all'interno di uno dei confini degli stati membri dell'UE; RIFERIMENTI TECNICI E NORMATIVI: GDPR",
   },
-
   "common-informative-ip-location": {
     greenResult: "",
     yellowResult: "",
@@ -24,7 +23,6 @@ export const auditDictionary = {
     description:
       "CONDIZIONI DI SUCCESSO: l'indirizzo IP fa riferimento a un datacenter localizzato su territorio europeo; MODALITÀ DI VERIFICA: verifica che la localizzazione dell'IP rientri all'interno di uno dei confini degli stati membri dell'UE; RIFERIMENTI TECNICI E NORMATIVI: GDPR",
   },
-
   "municipality-legislation-accessibility-declaration-is-present": {
     greenResult:
       "Il link è nel footer, invia alla pagina corretta e contiene l'URL corretto.",
@@ -129,6 +127,18 @@ export const auditDictionary = {
       "C.SI.3.1 - COOKIE - Il sito comunale deve presentare cookie tecnici in linea con la normativa vigente.",
     description:
       "CONDIZIONI DI SUCCESSO: il dominio di tutti i cookie già presenti nel sito, ovvero senza che sia stata espressa una preferenza da parte dell’utente riguardo il loro uso, è corrispondente al dominio del sito web del Comune; MODALITÀ DI VERIFICA: viene verificato che al caricamento di ogni pagina analizzata il dominio dei cookie identificati sia corrispondente al dominio del sito web; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Linee guida cookie e altri strumenti di tracciamento - 10 giugno 2021](https://www.garanteprivacy.it/home/docweb/-/docweb-display/docweb/9677876)",
+  },
+  "school-informative-cookie-domain-check": {
+    greenResult: "",
+    yellowResult: "",
+    redResult: "",
+    nonExecuted: "",
+    title:
+      "C.SC.2.3 - COOKIE - Il sito della scuola deve presentare cookie tecnici in linea con la normativa vigente.",
+    failureTitle:
+      "C.SC.2.3 - COOKIE - Il sito della scuola deve presentare cookie tecnici in linea con la normativa vigente.",
+    description:
+      "CONDIZIONI DI SUCCESSO: il sito presenta solo cookie idonei come definito dalla normativa; MODALITÀ DI VERIFICA: viene verificato che il dominio dei cookie identificati sia corrispondente al dominio del sito web. Se nella pagina analizzata non vengono rilevati cookie non verrà generata una tabella di risultati; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Linee guida cookie e altri strumenti di tracciamento - 10 giugno 2021](https://www.garanteprivacy.it/home/docweb/-/docweb-display/docweb/9677876).",
   },
   "municipality-domain": {
     greenResult: "Il dominio utilizzato è corretto.",
@@ -464,11 +474,11 @@ export const auditDictionary = {
   },
   "school-controlled-vocabularies": {
     greenResult:
-      "Tutti gli argomenti appartengono all’elenco di voci del modello.",
+      "Tutti gli argomenti appartengono all’elenco di voci del modello e l'elenco degli argomenti è presente nella pagina dei risultati di ricerca.",
     yellowResult:
-      "Almeno il 50% degli argomenti appartengono all'elenco di voci del modello.",
+      "Almeno il 50% degli argomenti appartengono all'elenco di voci del modello e l'elenco degli argomenti è presente nella pagina dei risultati di ricerca.",
     redResult:
-      "Meno del 50% degli argomenti appartengono alle voci del modello.",
+      "Meno del 50% degli argomenti appartengono alle voci del modello o l'elenco degli argomenti non è presente nella pagina dei risultati di ricerca.",
     nonExecuted:
       "Non è stato possibile trovare gli argomenti o la pagina che li contiene. Controlla le “Modalità di verifica” per scoprire di più.",
     title:
@@ -476,7 +486,7 @@ export const auditDictionary = {
     failureTitle:
       "R.SC.1.1 - VOCABOLARI CONTROLLATI - Il sito della scuola deve utilizzare argomenti forniti dal modello di sito scuola.",
     description:
-      "CONDIZIONI DI SUCCESSO: gli argomenti utilizzati appartengono alla lista indicata all'interno del documento di architettura dell'informazione del modello scuole alla voce “Le parole della scuola”; MODALITÀ DI VERIFICA: gli argomenti identificati all'interno della funzione di ricerca del sito vengono confrontati con l'elenco di voci presente nel documento di architettura dell'informazione, ricercandoli usando specifici attributi \"data-element\" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Elenco degli argomenti del Modello scuole](https://docs.google.com/spreadsheets/d/1MoayTY05SE4ixtgBsfsdngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=2135815526), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
+      "CONDIZIONI DI SUCCESSO: gli argomenti utilizzati appartengono alla lista indicata all'interno del documento di architettura dell'informazione del modello scuole alla voce \"Le parole della scuola\"  e l’elenco completo degli argomenti utilizzati è presente nella pagina dei risultati di ricerca; MODALITÀ DI VERIFICA: gli argomenti identificati all'interno della funzione di ricerca del sito vengono confrontati con l'elenco di voci presente nel documento di architettura dell'informazione, ricercandoli usando specifici attributi \"data-element\" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Elenco degli argomenti del Modello scuole](https://docs.google.com/spreadsheets/d/1MoayTY05SE4ixtgBsfsdngdrFJf_Z2KNvDkMF3tKfc8/edit#gid=2135815526), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
   },
   "school-legislation-cookie-domain-check": {
     greenResult:
@@ -485,9 +495,9 @@ export const auditDictionary = {
     redResult:
       "In almeno una delle pagine analizzate sono stati rilevati cookie non idonei.",
     subItem: {
-      greenResult: "Pagine in cui sono stati rilevati solo cookie idonei: ",
+      greenResult: "Pagine nelle quali sono stati rilevati solo cookie idonei:",
       yellowResult: "",
-      redResult: "Pagine in cui sono stati rilevati cookie non idonei.",
+      redResult: "Pagine nelle quali sono stati rilevati cookie non idonei:",
     },
     nonExecuted: "",
     title:
@@ -541,16 +551,16 @@ export const auditDictionary = {
   "school-legislation-privacy-is-present": {
     greenResult:
       "Il link è nel footer e invia a una pagina esistente e sicura.",
-    yellowResult:
-      "Il link è nel footer e invia a una pagina esistente ma non sicura.",
-    redResult: "Il link non è nel footer o non invia a una pagina esistente.",
+    yellowResult: "",
+    redResult:
+      "Il link non è nel footer o non invia a una pagina esistente o sicura.",
     nonExecuted: "",
     title:
       "C.SC.2.1 - INFORMATIVA PRIVACY - Il sito della scuola deve presentare l'informativa sul trattamento dei dati personali, secondo quanto previsto dalla normativa vigente.",
     failureTitle:
       "C.SC.2.1 - INFORMATIVA PRIVACY - Il sito della scuola deve presentare l'informativa sul trattamento dei dati personali, secondo quanto previsto dalla normativa vigente.",
     description:
-      'CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta alla privacy policy; MODALITÀ DI VERIFICA: viene verificata la presenza del link nel footer, che riporti a una pagina esistente e con certificato HTTPS valido e attivo, ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [GDPR Artt. 13 e 14, Reg. UE n. 2016/679](https://www.garanteprivacy.it/regolamentoue), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
+      'CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta a una pagina sicura riguardante l\'informativa sulla privacy; MODALITÀ DI VERIFICA: viene verificata la presenza del link nel footer, che riporti a una pagina esistente e con certificato HTTPS valido e attivo, ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/versione-corrente/index.html), [GDPR Artt. 13 e 14, Reg. UE n. 2016/679](https://www.garanteprivacy.it/regolamentoue), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/index.html).',
   },
   "school-security": {
     greenResult: "Il certificato del sito [url] è attivo e valido.",
@@ -573,11 +583,11 @@ export const auditDictionary = {
       "In almeno una delle pagine analizzate più di 2 voci obbligatorie o i relativi contenuti non sono presenti o più di 1 voce non è nell'ordine corretto.",
     subItem: {
       greenResult:
-        "Pagine nelle quali tutte le voci obbligatorie e i relativi contenuti sono presenti e, dove richiesto, sono nell'ordine corretto.",
+        "Pagine nelle quali tutte le voci obbligatorie e i relativi contenuti sono presenti e, dove richiesto, sono nell'ordine corretto:",
       yellowResult:
-        "Pagine nelle quali fino a 2 voci obbligatorie o i relativi contenuti non sono presenti o 1 voce non è nell'ordine corretto.",
+        "Pagine nelle quali fino a 2 voci obbligatorie o i relativi contenuti non sono presenti o 1 voce non è nell'ordine corretto:",
       redResult:
-        "Pagine nelle quali più di 2 voci obbligatorie o i relativi contenuti non sono presenti o più di 1 voce non è nell'ordine corretto.",
+        "Pagine nelle quali più di 2 voci obbligatorie o i relativi contenuti non sono presenti o più di 1 voce non è nell'ordine corretto:",
     },
     nonExecuted:
       "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
@@ -590,9 +600,10 @@ export const auditDictionary = {
   },
   "school-ux-ui-consistency-theme-version-check": {
     greenResult:
-      "Il sito utilizza una versione idonea del tema CMS del modello.",
-    yellowResult: "Il sito non sembra utilizzare il tema CMS del modello.",
-    redResult: "Il sito utilizza una versione datata del tema CMS del modello.",
+      "Il sito utilizza una versione uguale o superiore alla 2.0 del tema CMS del modello.",
+    yellowResult: "Il sito non utilizza il tema CMS del modello.",
+    redResult:
+      "Il sito non utilizza una versione uguale o superiore alla 2.0 del tema CMS del modello.",
     nonExecuted:
       'Non è stato possibile condurre il test. Controlla le "Modalità di verifica" per scoprire di più.',
     title:
@@ -600,7 +611,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SC.1.3 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito della scuola, lo utilizza nella versione 2.0 o successive.",
     description:
-      "CONDIZIONI DI SUCCESSO: se è in uso il tema CMS del modello scuole, la versione utilizzata è uguale o superiore alla 2.0; MODALITÀ DI VERIFICA: viene verificato l’uso del tema CMS del modello e la versione in uso ricercando il testo commentato presente [nel file style.css del tema Wordpress](https://github.com/italia/design-scuole-wordpress-theme/blob/main/style.css), se presente; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs).",
+      "CONDIZIONI DI SUCCESSO: se è in uso il tema CMS del modello scuole, la versione utilizzata è uguale o superiore alla 2.0; MODALITÀ DI VERIFICA: viene verificato l'uso del tema CMS del modello e la versione in uso ricercando uno specifico testo all'interno di tutti i file .CSS presenti in pagina. Lo specifico testo ricercato viene indicato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/versione-corrente/index.html), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/index.html).",
   },
 
   "school-informative-cloud-infrastructure": {
@@ -615,29 +626,19 @@ export const auditDictionary = {
     description:
       "RIFERIMENTI TECNICI E NORMATIVI: per consentire un'erogazione più sicura, efficiente e scalabile del sito della scuola, può essere utile considerare di impostare l'infrastruttura che lo ospita in cloud, secondo quanto descritto nella [Strategia Cloud Italia](https://cloud.italia.it/strategia-cloud-pa/).",
   },
-  "school-informative-cookie-domain-check": {
-    greenResult: "",
-    yellowResult: "",
-    redResult: "",
-    nonExecuted: "",
-    title:
-      "C.SC.2.3 - COOKIE - Il sito della scuola deve presentare cookie tecnici in linea con la normativa vigente.",
-    failureTitle:
-      "C.SC.2.3 - COOKIE - Il sito della scuola deve presentare cookie tecnici in linea con la normativa vigente.",
-    description:
-      "CONDIZIONI DI SUCCESSO: il sito presenta solo cookie idonei come definito dalla normativa; MODALITÀ DI VERIFICA: viene verificato che il dominio dei cookie identificati sia corrispondente al dominio del sito web. Se nella pagina analizzata non vengono rilevati cookie non verrà generata una tabella di risultati; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Linee guida cookie e altri strumenti di tracciamento - 10 giugno 2021](https://www.garanteprivacy.it/home/docweb/-/docweb-display/docweb/9677876).",
-  },
   "school-license-and-attribution": {
-    greenResult: "Risultato verde",
+    greenResult:
+      "La dicitura sulla licenza dei contenuti è presente nella pagina delle note legali raggiungibile dal footer.",
     yellowResult: "",
-    redResult: "Risultato rosso",
+    redResult:
+      "La dicitura sulla licenza dei contenuti è errata o non presente nella pagine delle note legali o questa non è raggiungibile dal footer.",
     nonExecuted: "",
     title:
       "R.SC.2.2 - LICENZA E ATTRIBUZIONE - Il sito della scuola deve pubblicare dati, documenti e informazioni con licenza aperta (es. CC-BY 4.0).",
     failureTitle:
       "R.SC.2.2 - LICENZA E ATTRIBUZIONE - Il sito della scuola deve pubblicare dati, documenti e informazioni con licenza aperta (es. CC-BY 4.0).",
     description:
-      "RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [CAD Art. 52 d.lgs. 82/2005](https://docs.italia.it/italia/piano-triennale-ict/codice-amministrazione-digitale-docs/it/stabile/_rst/capo_V-sezione_I-articolo_52.html), [art. 7, comma 1, D.Lgs. n. 33/2013](https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2013-03-14;33), [d.lgs. n. 36/2006](https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2006-01-24;36!vig=), [AgID Linee guida su acquisizione e riuso di software per le pubbliche amministrazioni](https://www.agid.gov.it/it/design-servizi/riuso-open-source/linee-guida-acquisizione-riuso-software-pa).",
+      'CONDIZIONI DI SUCCESSO: nella pagina delle noti legali viene indicato che i dati, documenti e informazion riportati sul sito sono rilasciati con licenza CC-BY 4.0; MODALITÀ DI VERIFICA: ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione, viene ricercata che la pagina delle note legali sia raggiungibile dal footer e che questa contenga una sezione "Licenza dei contenuti" riportante la dicitura indicata nella Documentazione del modello; RIFERIMENTI TECNICI E NORMATIVI: Documentazione del Modello scuole, CAD Art. 52 d.lgs. 82/2005, art. 7, comma 1, D.Lgs. n. 33/2013, d.lgs. n. 36/2006, AgID Linee guida su acquisizione e riuso di software per le pubbliche amministrazioni, Documentazione delle App di valutazione.',
   },
   "school-informative-reuse": {
     greenResult: "",
