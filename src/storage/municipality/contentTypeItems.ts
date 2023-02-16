@@ -31,10 +31,6 @@ export const contentTypeItemsIndexDataElement = {
       key: contentTypeItemsIndex[4],
       data_element: "service-calendar-text",
     },
-    {
-      key: contentTypeItemsIndex[5],
-      data_element: "service-generic-access",
-    },
   ],
   exist: [
     {

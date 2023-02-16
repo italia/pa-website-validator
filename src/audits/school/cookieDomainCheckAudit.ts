@@ -71,24 +71,50 @@ class LoadAudit extends Audit {
       },
     ];
 
+    const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
+      url,
+      auditVariables.numberOfFirstLevelPageToBeScanned
+    );
+
+    const randomSecondLevelPageUrl = await getRandomSecondLevelPagesUrl(
+      url,
+      auditVariables.numberOfSecondLevelPageToBeScanned
+    );
+
+    const randomServiceUrl = await getRandomServicesUrl(
+      url,
+      auditVariables.numberOfServicesToBeScanned
+    );
+
+    const randomLocationsUrl = await getRandomLocationsUrl(
+      url,
+      auditVariables.numberOfLocationsToBeScanned
+    );
+
+    if (
+      randomFirstLevelPagesUrl.length === 0 ||
+      randomSecondLevelPageUrl.length === 0 ||
+      randomServiceUrl.length === 0
+    ) {
+      return {
+        score: 0,
+        details: Audit.makeTableDetails(
+          [{ key: "result", itemType: "text", text: "Risultato" }],
+          [
+            {
+              result: auditData.nonExecuted,
+            },
+          ]
+        ),
+      };
+    }
+
     const pagesToBeAnalyzed = [
       url,
-      ...(await getRandomFirstLevelPagesUrl(
-        url,
-        auditVariables.numberOfFirstLevelPageToBeScanned
-      )),
-      ...(await getRandomSecondLevelPagesUrl(
-        url,
-        auditVariables.numberOfSecondLevelPageToBeScanned
-      )),
-      ...(await getRandomServicesUrl(
-        url,
-        auditVariables.numberOfServicesToBeScanned
-      )),
-      ...(await getRandomLocationsUrl(
-        url,
-        auditVariables.numberOfLocationsToBeScanned
-      )),
+      ...randomFirstLevelPagesUrl,
+      ...randomSecondLevelPageUrl,
+      ...randomServiceUrl,
+      ...randomLocationsUrl,
     ];
 
     let score = 1;

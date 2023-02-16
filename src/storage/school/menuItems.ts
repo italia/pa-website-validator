@@ -1,5 +1,7 @@
 export const primaryMenuItems = ["Scuola", "Servizi", "Novità", "Didattica"];
 
+export const primaryMenuDataElement = "overview";
+
 export const menuItems = {
   school: {
     label: "SCUOLA",

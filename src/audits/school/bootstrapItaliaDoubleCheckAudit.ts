@@ -85,20 +85,44 @@ class LoadAudit extends Audit {
 
     let score = 1;
 
+    const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
+      url,
+      auditVariables.numberOfFirstLevelPageToBeScanned
+    );
+
+    const randomSecondLevelPageUrl = await getRandomSecondLevelPagesUrl(
+      url,
+      auditVariables.numberOfSecondLevelPageToBeScanned
+    );
+
+    const randomServiceUrl = await getRandomServicesUrl(
+      url,
+      auditVariables.numberOfServicesToBeScanned
+    );
+
+    if (
+      randomFirstLevelPagesUrl.length === 0 ||
+      randomSecondLevelPageUrl.length === 0 ||
+      randomServiceUrl.length === 0
+    ) {
+      return {
+        score: 0,
+        details: Audit.makeTableDetails(
+          [{ key: "result", itemType: "text", text: "Risultato" }],
+          [
+            {
+              result: auditData.nonExecuted,
+            },
+          ]
+        ),
+      };
+    }
+
     const pagesToBeAnalyzed = [
       url,
-      ...(await getRandomFirstLevelPagesUrl(
-        url,
-        auditVariables.numberOfFirstLevelPageToBeScanned
-      )),
-      ...(await getRandomSecondLevelPagesUrl(
-        url,
-        auditVariables.numberOfSecondLevelPageToBeScanned
-      )),
-      ...(await getRandomServicesUrl(
-        url,
-        auditVariables.numberOfServicesToBeScanned
-      )),
+      ...randomFirstLevelPagesUrl,
+      ...randomSecondLevelPageUrl,
+      ...randomServiceUrl,
     ];
 
     const browser = await puppeteer.launch({

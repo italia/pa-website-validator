@@ -5,10 +5,11 @@ import lighthouse from "lighthouse";
 import { allowedFonts } from "../../storage/municipality/allowedFonts";
 import {
   getRandomThirdLevelPagesUrl,
-  getServicePageUrl,
+  getPrimaryPageUrl,
 } from "../../utils/municipality/utils";
 import puppeteer from "puppeteer";
 import { auditDictionary } from "../../storage/auditDictionary";
+import { primaryMenuItems } from "../../storage/municipality/menuItems";
 
 const Audit = lighthouse.Audit;
 
@@ -54,8 +55,8 @@ class LoadAudit extends Audit {
 
     const randomServices: string[] = await getRandomThirdLevelPagesUrl(
       url,
-      await getServicePageUrl(url),
-      '[data-element="service-link"]'
+      await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
+      `[data-element="${primaryMenuItems.services.third_item_data_element}"]`
     );
 
     if (randomServices.length === 0) {

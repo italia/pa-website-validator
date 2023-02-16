@@ -60,16 +60,37 @@ class LoadAudit extends lighthouse.Audit {
 
     let score = 1;
 
+    const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
+      url,
+      auditVariables.numberOfFirstLevelPageToBeScanned
+    );
+
+    const randomSecondLevelPagesUrl = await getRandomSecondLevelPagesUrl(
+      url,
+      auditVariables.numberOfSecondLevelPageToBeScanned
+    );
+
+    if (
+      randomFirstLevelPagesUrl.length === 0 ||
+      randomSecondLevelPagesUrl.length === 0
+    ) {
+      return {
+        score: 0,
+        details: Audit.makeTableDetails(
+          [{ key: "result", itemType: "text", text: "Risultato" }],
+          [
+            {
+              result: auditData.nonExecuted,
+            },
+          ]
+        ),
+      };
+    }
+
     const pagesToBeAnalyzed = [
       url,
-      ...(await getRandomFirstLevelPagesUrl(
-        url,
-        auditVariables.numberOfFirstLevelPageToBeScanned
-      )),
-      ...(await getRandomSecondLevelPagesUrl(
-        url,
-        auditVariables.numberOfSecondLevelPageToBeScanned
-      )),
+      ...randomFirstLevelPagesUrl,
+      ...randomSecondLevelPagesUrl,
     ];
 
     for (const pageToBeAnalyzed of pagesToBeAnalyzed) {

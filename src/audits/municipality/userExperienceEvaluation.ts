@@ -7,9 +7,10 @@ import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import {
   getRandomThirdLevelPagesUrl,
-  getServicePageUrl,
+  getPrimaryPageUrl,
   checkFeedbackComponent,
 } from "../../utils/municipality/utils";
+import { primaryMenuItems } from "../../storage/municipality/menuItems";
 
 const Audit = lighthouse.Audit;
 
@@ -63,8 +64,8 @@ class LoadAudit extends Audit {
     const pagesToBeAnalyzed = [
       ...(await getRandomThirdLevelPagesUrl(
         url,
-        await getServicePageUrl(url),
-        '[data-element="service-link"]',
+        await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
+        `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
         auditVariables.numberOfServicesToBeScanned
       )),
     ];

@@ -21,10 +21,10 @@ const getRandomFirstLevelPagesUrl = async (
 
   for (const [, primaryMenuItem] of Object.entries(primaryMenuItems)) {
     const dataElement = `[data-element="${primaryMenuItem.data_element}"]`;
-
+    let primaryLevelPageUrl = "";
     const element = $(dataElement);
     if (element) {
-      let primaryLevelPageUrl = $(element).attr()?.href;
+      primaryLevelPageUrl = $(element).attr()?.href ?? "";
       if (
         primaryLevelPageUrl &&
         primaryLevelPageUrl !== "#" &&
@@ -33,9 +33,12 @@ const getRandomFirstLevelPagesUrl = async (
         if (!primaryLevelPageUrl.includes(url)) {
           primaryLevelPageUrl = await buildUrl(url, primaryLevelPageUrl);
         }
-        pagesUrls.push(primaryLevelPageUrl);
       }
     }
+    if (primaryLevelPageUrl === "") {
+      return [];
+    }
+    pagesUrls.push(primaryLevelPageUrl);
   }
 
   return getRandomNString(pagesUrls, numberOfPages);
@@ -48,7 +51,7 @@ const getRandomSecondLevelPagesUrl = async (
   const $ = await loadPageData(url);
   let pagesUrls: string[] = [];
 
-  for (const [, primaryMenuItem] of Object.entries(primaryMenuItems)) {
+  for (const [key, primaryMenuItem] of Object.entries(primaryMenuItems)) {
     const dataElement = `[data-element="${primaryMenuItem.data_element}"]`;
 
     const element = $(dataElement);
@@ -63,13 +66,30 @@ const getRandomSecondLevelPagesUrl = async (
           primaryLevelPageUrl = await buildUrl(url, primaryLevelPageUrl);
         }
         const $2 = await loadPageData(primaryLevelPageUrl);
-        const dataElementSecondaryItem = `[data-element="${primaryMenuItem.secondary_item_data_element[0]}"]`;
-        pagesUrls = [
-          ...pagesUrls,
-          ...new Set(
-            await getHREFValuesDataAttribute($2, dataElementSecondaryItem)
-          ),
-        ];
+        let secondPageUrls = [];
+        if (key !== "live") {
+          const dataElementSecondaryItem = `[data-element="${primaryMenuItem.secondary_item_data_element[0]}"]`;
+          secondPageUrls = await getHREFValuesDataAttribute(
+            $2,
+            dataElementSecondaryItem
+          );
+        } else {
+          for (const secondaryItemDataElement of primaryMenuItem.secondary_item_data_element) {
+            const dataElementSecondaryItem = `[data-element="${secondaryItemDataElement}"]`;
+            const buttonUrl = await getButtonUrl(
+              $2,
+              url,
+              dataElementSecondaryItem
+            );
+            if (buttonUrl !== "") {
+              secondPageUrls.push(buttonUrl);
+            }
+          }
+        }
+        if (secondPageUrls === []) {
+          return [];
+        }
+        pagesUrls = [...pagesUrls, ...new Set(secondPageUrls)];
       }
     }
   }
@@ -138,12 +158,12 @@ const getRandomThirdLevelPagesUrl = async (
   return getRandomNString(pagesUrls, numberOfPages);
 };
 
-const getServicePageUrl = async (url: string) => {
+const getPrimaryPageUrl = async (url: string, dataElement: string) => {
   const $ = await loadPageData(url);
 
   const servicesPageHref = await getHREFValuesDataAttribute(
     $,
-    '[data-element="all-services"]'
+    `[data-element="${dataElement}"]`
   );
   if (servicesPageHref.length <= 0) {
     return "";
@@ -425,10 +445,36 @@ async function isLocatorReady(element: ElementHandle<Element>, page: Page) {
   return !!(visible && box);
 }
 
+const getButtonUrl = async (
+  $: CheerioAPI,
+  url: string,
+  dataElement: string
+) => {
+  const button = $(dataElement).attr();
+  if (
+    button !== null &&
+    button !== undefined &&
+    "onclick" in button &&
+    button.onclick.includes("location.href")
+  ) {
+    const onClick: string = button.onclick;
+    let secondPageLink = onClick.substring(
+      onClick.indexOf("'") + 1,
+      onClick.lastIndexOf("'")
+    );
+    if (!secondPageLink.includes(url)) {
+      secondPageLink = await buildUrl(url, secondPageLink);
+    }
+    return secondPageLink;
+  }
+  return "";
+};
+
 export {
   getRandomFirstLevelPagesUrl,
   getRandomSecondLevelPagesUrl,
   getRandomThirdLevelPagesUrl,
   checkFeedbackComponent,
-  getServicePageUrl,
+  getPrimaryPageUrl,
+  getButtonUrl,
 };

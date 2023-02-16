@@ -1,5 +1,9 @@
 "use strict";
-import { menuItems } from "../../storage/school/menuItems";
+import {
+  menuItems,
+  primaryMenuDataElement,
+  primaryMenuItems,
+} from "../../storage/school/menuItems";
 import {
   buildUrl,
   getHREFValuesDataAttribute,
@@ -15,9 +19,16 @@ const getRandomFirstLevelPagesUrl = async (
 
   const pagesUrls = [
     ...new Set(
-      await getHREFValuesDataAttribute($, '[data-element="overview"]')
+      await getHREFValuesDataAttribute(
+        $,
+        `[data-element="${primaryMenuDataElement}"]`
+      )
     ),
   ];
+
+  if (pagesUrls.length < primaryMenuItems.length) {
+    return [];
+  }
 
   for (let i = 0; i < pagesUrls.length; i++) {
     if (!pagesUrls[i].includes(url)) {
@@ -32,13 +43,14 @@ const getRandomSecondLevelPagesUrl = async (
   url: string,
   numberOfPages = 1
 ): Promise<string[]> => {
-  const pagesUrls = [];
+  let pagesUrls: string[] = [];
   const $ = await loadPageData(url);
 
   for (const [, value] of Object.entries(menuItems)) {
     const dataElement = `[data-element="${value.data_element}"]`;
 
     let elements = $(dataElement);
+    const secondLevelPagesUrls = [];
     if (Object.keys(elements).length > 0) {
       elements = elements.find("li > a");
       for (const element of elements) {
@@ -51,9 +63,15 @@ const getRandomSecondLevelPagesUrl = async (
           if (!secondLevelPageUrl.includes(url)) {
             secondLevelPageUrl = await buildUrl(url, secondLevelPageUrl);
           }
-          pagesUrls.push(secondLevelPageUrl);
+          secondLevelPagesUrls.push(secondLevelPageUrl);
         }
       }
+
+      if (secondLevelPagesUrls.length === 0) {
+        return [];
+      }
+
+      pagesUrls = [...pagesUrls, ...new Set(secondLevelPagesUrls)];
     }
   }
   return getRandomNString(pagesUrls, numberOfPages);

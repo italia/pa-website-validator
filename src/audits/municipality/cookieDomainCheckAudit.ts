@@ -11,10 +11,12 @@ import {
   getRandomFirstLevelPagesUrl,
   getRandomSecondLevelPagesUrl,
   getRandomThirdLevelPagesUrl,
-  getServicePageUrl,
+  getPrimaryPageUrl,
+  getButtonUrl,
 } from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
-import { getButtonUrl, loadPageData } from "../../utils/utils";
+import { loadPageData } from "../../utils/utils";
+import { primaryMenuItems } from "../../storage/municipality/menuItems";
 
 const Audit = lighthouse.Audit;
 
@@ -74,32 +76,60 @@ class LoadAudit extends Audit {
       },
     ];
 
+    const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
+      url,
+      auditVariables.numberOfFirstLevelPageToBeScanned
+    );
+
+    const randomSecondLevelPagesUrl = await getRandomSecondLevelPagesUrl(
+      url,
+      auditVariables.numberOfSecondLevelPageToBeScanned
+    );
+
+    const randomServicesUrl = await getRandomThirdLevelPagesUrl(
+      url,
+      await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
+      `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
+      auditVariables.numberOfServicesToBeScanned
+    );
+
+    const randomEventsUrl = await getRandomThirdLevelPagesUrl(
+      url,
+      await getButtonUrl(
+        await loadPageData(
+          await getPrimaryPageUrl(url, primaryMenuItems.live.data_element)
+        ),
+        url,
+        `[data-element="${primaryMenuItems.live.secondary_item_data_element[1]}"]`
+      ),
+      `[data-element="${primaryMenuItems.live.third_item_data_element}"]`,
+      auditVariables.numberOfEventsToBeScanned
+    );
+
+    if (
+      randomFirstLevelPagesUrl.length === 0 ||
+      randomSecondLevelPagesUrl.length === 0 ||
+      randomServicesUrl.length === 0
+    ) {
+      return {
+        score: 0,
+        details: Audit.makeTableDetails(
+          [{ key: "result", itemType: "text", text: "Risultato" }],
+          [
+            {
+              result: auditData.nonExecuted,
+            },
+          ]
+        ),
+      };
+    }
+
     const pagesToBeAnalyzed = [
       url,
-      ...(await getRandomFirstLevelPagesUrl(
-        url,
-        auditVariables.numberOfFirstLevelPageToBeScanned
-      )),
-      ...(await getRandomSecondLevelPagesUrl(
-        url,
-        auditVariables.numberOfSecondLevelPageToBeScanned
-      )),
-      ...(await getRandomThirdLevelPagesUrl(
-        url,
-        await getServicePageUrl(url),
-        '[data-element="service-link"]',
-        auditVariables.numberOfServicesToBeScanned
-      )),
-      ...(await getRandomThirdLevelPagesUrl(
-        url,
-        await getButtonUrl(
-          await loadPageData(url),
-          url,
-          `[data-element="live-button-events"]`
-        ),
-        '[data-element="event-link"]',
-        auditVariables.numberOfEventsToBeScanned
-      )),
+      ...randomFirstLevelPagesUrl,
+      ...randomSecondLevelPagesUrl,
+      ...randomServicesUrl,
+      ...randomEventsUrl,
     ];
 
     let score = 1;

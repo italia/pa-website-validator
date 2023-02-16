@@ -5,13 +5,14 @@ import lighthouse from "lighthouse";
 import { loadPageData } from "../../utils/utils";
 import {
   getRandomThirdLevelPagesUrl,
-  getServicePageUrl,
+  getPrimaryPageUrl,
 } from "../../utils/municipality/utils";
 import { CheerioAPI } from "cheerio";
 import { ValidatorResult } from "jsonschema";
 import * as jsonschema from "jsonschema";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
+import { primaryMenuItems } from "../../storage/municipality/menuItems";
 
 const Audit = lighthouse.Audit;
 
@@ -63,8 +64,8 @@ class LoadAudit extends Audit {
 
     const randomServices: string[] = await getRandomThirdLevelPagesUrl(
       url,
-      await getServicePageUrl(url),
-      '[data-element="service-link"]',
+      await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
+      `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
       auditVariables.numberOfServicesToBeScanned
     );
 

@@ -15,12 +15,13 @@ import {
   getRandomFirstLevelPagesUrl,
   getRandomSecondLevelPagesUrl,
   getRandomThirdLevelPagesUrl,
-  getServicePageUrl,
+  getPrimaryPageUrl,
 } from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import { cssClasses } from "../../storage/municipality/cssClasses";
 import puppeteer from "puppeteer";
 import { CheerioAPI } from "cheerio";
+import { primaryMenuItems } from "../../storage/municipality/menuItems";
 
 const Audit = lighthouse.Audit;
 
@@ -91,22 +92,46 @@ class LoadAudit extends Audit {
 
     let score = 1;
 
+    const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
+      url,
+      auditVariables.numberOfFirstLevelPageToBeScanned
+    );
+
+    const randomSecondLevelPagesUrl = await getRandomSecondLevelPagesUrl(
+      url,
+      auditVariables.numberOfSecondLevelPageToBeScanned
+    );
+
+    const randomServicesUrl = await getRandomThirdLevelPagesUrl(
+      url,
+      await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
+      `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
+      auditVariables.numberOfServicesToBeScanned
+    );
+
+    if (
+      randomFirstLevelPagesUrl.length === 0 ||
+      randomSecondLevelPagesUrl.length === 0 ||
+      randomServicesUrl.length === 0
+    ) {
+      return {
+        score: 0,
+        details: Audit.makeTableDetails(
+          [{ key: "result", itemType: "text", text: "Risultato" }],
+          [
+            {
+              result: auditData.nonExecuted,
+            },
+          ]
+        ),
+      };
+    }
+
     const pagesToBeAnalyzed = [
       url,
-      ...(await getRandomFirstLevelPagesUrl(
-        url,
-        auditVariables.numberOfFirstLevelPageToBeScanned
-      )),
-      ...(await getRandomSecondLevelPagesUrl(
-        url,
-        auditVariables.numberOfSecondLevelPageToBeScanned
-      )),
-      ...(await getRandomThirdLevelPagesUrl(
-        url,
-        await getServicePageUrl(url),
-        '[data-element="service-link"]',
-        auditVariables.numberOfServicesToBeScanned
-      )),
+      ...randomFirstLevelPagesUrl,
+      ...randomSecondLevelPagesUrl,
+      ...randomServicesUrl,
     ];
 
     const $: CheerioAPI = await loadPageData(url);

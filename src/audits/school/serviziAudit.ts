@@ -35,11 +35,6 @@ const accuracy = process.env["accuracy"] ?? "suggested";
 // @ts-ignore
 const auditVariables = auditScanVariables[accuracy][auditId];
 
-const greenResult = auditData.greenResult;
-const yellowResult = auditData.yellowResult;
-const redResult = auditData.redResult;
-const notExecuted = auditData.nonExecuted;
-
 class LoadAudit extends Audit {
   static get meta() {
     return {
@@ -108,7 +103,7 @@ class LoadAudit extends Audit {
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: notExecuted,
+              result: auditData.nonExecuted,
             },
           ]
         ),
@@ -255,17 +250,17 @@ class LoadAudit extends Audit {
     switch (score) {
       case 1:
         results.push({
-          result: greenResult,
+          result: auditData.greenResult,
         });
         break;
       case 0.5:
         results.push({
-          result: yellowResult,
+          result: auditData.yellowResult,
         });
         break;
       case 0:
         results.push({
-          result: redResult,
+          result: auditData.redResult,
         });
         break;
     }
