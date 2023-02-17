@@ -10,6 +10,7 @@ import * as sslCertificate from "get-ssl-certificate";
 import crawlerTypes from "../types/crawler-types";
 import cipher = crawlerTypes.cipher;
 import cipherInfo = crawlerTypes.cipherInfo;
+import puppeteer from "puppeteer";
 
 const Audit = lighthouse.Audit;
 const allowedTlsVersions = ["TLSv1.2", "TLSv1.3"];
@@ -46,6 +47,11 @@ const run = async (
     },
     { key: "tls_version", itemType: "text", text: "Versione TLS" },
     { key: "cipher_suite", itemType: "text", text: "Suite di cifratura" },
+    {
+      key: "redirect_to_https",
+      itemType: "text",
+      text: "Redirect ad HTTPS",
+    },
   ];
   const item = [
     {
@@ -54,6 +60,7 @@ const run = async (
       certificate_validation: "",
       tls_version: "",
       cipher_suite: "",
+      redirect_to_https: "",
     },
   ];
   let score = 0;
@@ -148,6 +155,30 @@ const run = async (
 
     item[0].result = redResult + errors.join(", ");
   }
+
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox"],
+  });
+  try {
+    const urlNoProtocol = url.replace(/(^\w+:|^)\/\//, "");
+    const page = await browser.newPage();
+    await page.goto("http://" + urlNoProtocol);
+
+    const protocolInPage = await page.evaluate(async function () {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      return window.location.protocol || null;
+    });
+
+    item[0].redirect_to_https = protocolInPage === "https:" ? "Sì" : "No";
+  } catch (e) {
+    // eslint-disable-next-line no-empty
+  }
+
+  await browser.close();
+
+  //const response = await axios.get('http://'+urlNoProtocol);
+  //console.log(response.request._redirectable._redirectCount);
 
   return {
     score: score,
