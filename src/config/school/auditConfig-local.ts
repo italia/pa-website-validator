@@ -144,14 +144,14 @@ export default {
     modelCompliance: {
       title: "Criteri di conformità",
       description:
-          "Vengono mostrati i risultati degli audit relativi ai [criteri di conformità del Pacchetto Scuola Online](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/versione-corrente/conformita-modello-scuola.html). NB: il superamento degli audit non implica il superamento dei corrispondenti criteri di conformità.",
+        "Vengono mostrati i risultati degli audit relativi ai [criteri di conformità del Pacchetto Scuola Online](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/versione-corrente/conformita-modello-scuola.html). NB: il superamento degli audit non implica il superamento dei corrispondenti criteri di conformità.",
       auditRefs: [...customModelComplianceAudits],
     },
 
     recommendations: {
       title: "Raccomandazioni progettuali",
       description:
-          "Vengono mostrati i risultati degli audit relativi ad alcune delle [raccomandazioni progettuali del Pacchetto Scuola Online](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/versione-corrente/conformita-modello-scuola.html#raccomandazioni).",
+        "Vengono mostrati i risultati degli audit relativi ad alcune delle [raccomandazioni progettuali del Pacchetto Scuola Online](https://docs.italia.it/italia/designers-italia/design-scuole-docs/it/versione-corrente/conformita-modello-scuola.html#raccomandazioni).",
       auditRefs: [...customReccomendationsAudits],
     },
 

@@ -215,7 +215,8 @@ class LoadAudit extends Audit {
 
       if (
         bookingAppointmentPage.length === 0 ||
-        bookingAppointmentPage[0] !== bookingAppointmentUrl
+        bookingAppointmentPage[0] !== bookingAppointmentUrl ||
+        item.correct_breadcrumb === "No"
       ) {
         wrongItems.push(item);
         continue;
