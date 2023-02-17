@@ -3,7 +3,12 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { CheerioAPI } from "cheerio";
-import { loadPageData, urlExists } from "../../utils/utils";
+import {
+  buildUrl,
+  isInternalUrl,
+  loadPageData,
+  urlExists,
+} from "../../utils/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
 import isEmail from "validator/lib/isEmail";
 
@@ -55,6 +60,11 @@ class LoadAudit extends Audit {
         itemType: "text",
         text: "Pagina esistente",
       },
+      {
+        key: "is_service",
+        itemType: "text",
+        text: "E' un servizio",
+      },
     ];
 
     const items = [
@@ -63,6 +73,7 @@ class LoadAudit extends Audit {
         link_name: "",
         link_destination: "",
         existing_page: "No",
+        is_service: "",
       },
     ];
 
@@ -86,7 +97,12 @@ class LoadAudit extends Audit {
         items[0].link_destination = elementObj.href;
         items[0].existing_page = "N/A";
       } else {
-        const checkUrl = await urlExists(url, elementObj.href);
+        let pageUrl = elementObj.href;
+        if ((await isInternalUrl(pageUrl)) && !pageUrl.includes(url)) {
+          pageUrl = await buildUrl(url, pageUrl);
+        }
+
+        const checkUrl = await urlExists(url, pageUrl);
         items[0].link_destination = checkUrl.inspectedUrl;
 
         if (!checkUrl.result) {
@@ -97,6 +113,9 @@ class LoadAudit extends Audit {
         }
 
         items[0].existing_page = "Sì";
+
+        const parts = new URL(pageUrl).pathname.split("/");
+        items[0].is_service = parts[1] === "servizi" ? "Sì" : "No";
       }
 
       if (
