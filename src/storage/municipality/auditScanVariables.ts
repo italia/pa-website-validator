@@ -18,6 +18,9 @@ export const auditScanVariables = {
       numberOfServicesToBeScanned: 1,
       numberOfEventsToBeScanned: 1,
     },
+    "municipality-contacts-assistency": {
+      numberOfServicesToBeScanned: 1,
+    },
     "municipality-servizi-structure-match-model": {
       numberOfServicesToBeScanned: 1,
     },
@@ -35,11 +38,11 @@ export const auditScanVariables = {
       numberOfServicesToBeScanned: 5,
     },
     "municipality-feedback-element": {
-      numberOfFirstLevelPageToBeScanned: 3,
-      numberOfSecondLevelPageToBeScanned: 3,
+      numberOfFirstLevelPageToBeScanned: 5,
+      numberOfSecondLevelPageToBeScanned: 5,
     },
     "municipality-user-experience-evaluation": {
-      numberOfServicesToBeScanned: 3,
+      numberOfServicesToBeScanned: 5,
     },
     "municipality-legislation-cookie-domain-check": {
       numberOfFirstLevelPageToBeScanned: 5,
@@ -47,14 +50,17 @@ export const auditScanVariables = {
       numberOfServicesToBeScanned: 5,
       numberOfEventsToBeScanned: 5,
     },
+    "municipality-contacts-assistency": {
+      numberOfServicesToBeScanned: 5,
+    },
     "municipality-servizi-structure-match-model": {
       numberOfServicesToBeScanned: 5,
     },
     "municipality-booking-appointment-check": {
-      numberOfServicesToBeScanned: 3,
+      numberOfServicesToBeScanned: 5,
     },
     "municipality-metatag": {
-      numberOfServicesToBeScanned: 3,
+      numberOfServicesToBeScanned: 5,
     },
   },
   high: {
@@ -75,6 +81,9 @@ export const auditScanVariables = {
       numberOfSecondLevelPageToBeScanned: 10,
       numberOfServicesToBeScanned: 10,
       numberOfEventsToBeScanned: 10,
+    },
+    "municipality-contacts-assistency": {
+      numberOfServicesToBeScanned: 10,
     },
     "municipality-servizi-structure-match-model": {
       numberOfServicesToBeScanned: 10,
@@ -104,6 +113,9 @@ export const auditScanVariables = {
       numberOfSecondLevelPageToBeScanned: -1,
       numberOfServicesToBeScanned: -1,
       numberOfEventsToBeScanned: -1,
+    },
+    "municipality-contacts-assistency": {
+      numberOfServicesToBeScanned: -1,
     },
     "municipality-servizi-structure-match-model": {
       numberOfServicesToBeScanned: -1,

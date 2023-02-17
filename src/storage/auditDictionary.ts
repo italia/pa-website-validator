@@ -81,9 +81,14 @@ export const auditDictionary = {
       "CONDIZIONI DI SUCCESSO: la libreria Bootstrap Italia è presente e in uso in una versione uguale o superiore alla 2.0; MODALITÀ DI VERIFICA: in ogni pagina analizzata viene verificata la presenza della libreria Bootstrap Italia e la versione in uso, individuando la proprietà CSS --bootstrap-italia-version all’interno del selettore :root o la variabile globale window.BOOTSTRAP_ITALIA_VERSION. Inoltre deve utilizzare almeno una tra le classi CSS di Bootstrap Italia indicate nella Documentazione dell'App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/).",
   },
   "municipality-contacts-assistency": {
-    greenResult: 'La voce "Contatti" è presente.',
+    greenResult: "Tutte le pagine del sito hanno la voce 'Contatti' presente.",
     yellowResult: "",
-    redResult: 'La voce "Contatti" è assente.',
+    redResult: "Almeno una pagina del sito ha la voce 'Contatti' assente.",
+    subItem: {
+      greenResult: "Pagine per cui la voce 'Contatti' è presente.",
+      yellowResult: "",
+      redResult: "Pagine per cui la voce 'Contatti' è assente.",
+    },
     nonExecuted:
       "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
     title:

@@ -9,16 +9,18 @@ import {
 } from "../../utils/municipality/utils";
 import { CheerioAPI } from "cheerio";
 import { auditDictionary } from "../../storage/auditDictionary";
+import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import { primaryMenuItems } from "../../storage/municipality/menuItems";
-
-const Audit = lighthouse.Audit;
 
 const auditId = "municipality-contacts-assistency";
 const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult;
-const redResult = auditData.redResult;
-const notExecuted = auditData.nonExecuted;
+const accuracy = process.env["accuracy"] ?? "suggested";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const auditVariables = auditScanVariables[accuracy][auditId];
+
+const Audit = lighthouse.Audit;
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -36,75 +38,139 @@ class LoadAudit extends Audit {
     artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
-    let score = 0;
 
+    const titleSubHeadings = ["Il componente è presente"];
     const headings = [
       {
         key: "result",
         itemType: "text",
         text: "Risultato",
+        subItemsHeading: {
+          key: "inspected_page",
+          itemType: "url",
+        },
       },
       {
-        key: "inspected_page",
+        key: "title_component_exists",
         itemType: "text",
-        text: "Pagina ispezionata",
-      },
-    ];
-
-    const item = [
-      {
-        result: redResult,
-        link_name: "",
-        link_destination: "",
-        inspected_page: "",
+        text: "",
+        subItemsHeading: {
+          key: "component_exists",
+          itemType: "text",
+        },
       },
     ];
 
     const randomServices: string[] = await getRandomThirdLevelPagesUrl(
       url,
       await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
-      `[data-element="${primaryMenuItems.services.third_item_data_element}"]`
+      `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
+      auditVariables.numberOfServicesToBeScanned
     );
 
     if (randomServices.length === 0) {
       return {
-        score: score,
+        score: 0,
         details: Audit.makeTableDetails(
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: notExecuted,
+              result: auditData.nonExecuted,
             },
           ]
         ),
       };
     }
 
-    const randomServiceToBeScanned: string = randomServices[0];
+    const correctItems = [];
+    const wrongItems = [];
 
-    item[0].inspected_page = randomServiceToBeScanned;
+    let score = 1;
 
-    const $: CheerioAPI = await loadPageData(randomServiceToBeScanned);
+    for (const randomService of randomServices) {
+      const item = {
+        inspected_page: randomService,
+        component_exists: "No",
+      };
 
-    const indexList = await getPageElementDataAttribute(
-      $,
-      '[data-element="page-index"]',
-      "> li > a"
-    );
+      const $: CheerioAPI = await loadPageData(randomService);
 
-    let contactsPresent = false;
-    if (indexList.includes("Contatti")) {
-      contactsPresent = true;
+      const indexList = await getPageElementDataAttribute(
+        $,
+        '[data-element="page-index"]',
+        "> li > a"
+      );
+
+      let contactsPresent = false;
+      if (indexList.includes("Contatti")) {
+        contactsPresent = true;
+      }
+
+      if (!contactsPresent) {
+        score = 0;
+        wrongItems.push(item);
+        continue;
+      }
+
+      item.component_exists = "Sì";
+      correctItems.push(item);
     }
 
-    if (contactsPresent) {
-      item[0].result = greenResult;
-      score = 1;
+    const results = [];
+    switch (score) {
+      case 1:
+        results.push({
+          result: auditData.greenResult,
+        });
+        break;
+      case 0:
+        results.push({
+          result: auditData.redResult,
+        });
+        break;
+    }
+
+    results.push({});
+
+    if (wrongItems.length > 0) {
+      results.push({
+        result: auditData.subItem.redResult,
+        title_component_exists: titleSubHeadings[0],
+      });
+
+      for (const item of wrongItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
+    }
+
+    if (correctItems.length > 0) {
+      results.push({
+        result: auditData.subItem.greenResult,
+        title_component_exists: titleSubHeadings[0],
+      });
+
+      for (const item of correctItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
     }
 
     return {
       score: score,
-      details: Audit.makeTableDetails(headings, item),
+      details: Audit.makeTableDetails(headings, results),
     };
   }
 }
