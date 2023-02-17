@@ -188,22 +188,22 @@ export default {
   categories: {
     performance: {
       title:
-        'Pacchetto Cittadino Informato: criterio "C.SI.4.1 - Velocità e tempi di risposta"',
+          'Pacchetto Cittadino Informato: criterio "C.SI.4.1 - Velocità e tempi di risposta"',
       description:
-        "CONDIZIONI DI SUCCESSO: il sito presenta livelli di prestazioni (media pesata di 6 metriche standard) pari o superiori a 50. Se il punteggio è inferiore a 50, il Comune deve pubblicare sul sito un “Piano di miglioramento del sito” che mostri, per ciascuna voce che impatta negativamente le prestazioni, le azioni future di miglioramento e le relative tempistiche di realizzazione attese; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/).\n",
+          "\"CONDIZIONI DI SUCCESSO: il sito presenta livelli di prestazioni (media pesata di 6 metriche standard) pari o superiori a 50. Se il punteggio è inferiore a 50, il Comune deve pubblicare sul sito un “Piano di miglioramento del sito” raggiungibile dal footer che mostri, per ciascuna voce che impatta negativamente le prestazioni, le azioni future di miglioramento e le relative tempistiche di realizzazione attese; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/).\n",
     },
 
     modelComplianceInformation: {
       title: "Pacchetto Cittadino Informato: criteri di conformità",
       description:
-        "Vengono mostrati i risultati degli audit relativi ai criteri di conformità del Pacchetto Cittadino Informato illustrati nell'[allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q000017NZMCQA4#allegati).",
+          "Vengono mostrati i risultati degli audit relativi ai [criteri di conformità del Pacchetto Cittadino Informato](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/versione-corrente/conformita/conformita-modello-sito.html). NB: il superamento degli audit non implica il superamento dei corrispondenti criteri di conformità.",
       auditRefs: [...modelComplianceInformationAudits],
     },
 
     reccomandationsAndAdditionalTests: {
       title: "Pacchetto Cittadino Informato: raccomandazioni progettuali",
       description:
-        "Vengono mostrati i risultati degli audit relativi ad alcune delle raccomandazioni progettuali del Pacchetto Cittadino Informato illustrate nell'[allegato 2 dell'Avviso 1.4.1](https://areariservata.padigitale2026.gov.it/Pa_digitale2026_dettagli_avviso?id=a017Q000017NZMCQA4#allegati).",
+          "Vengono mostrati i risultati degli audit relativi ad alcune delle [raccomandazioni progettuali del Pacchetto Cittadino Informato](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/versione-corrente/conformita/conformita-modello-sito.html#raccomandazioni).",
       auditRefs: [...reccomandationsAndAdditionalTestsAudits],
     },
 
