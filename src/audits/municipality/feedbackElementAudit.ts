@@ -88,7 +88,6 @@ class LoadAudit extends lighthouse.Audit {
     }
 
     const pagesToBeAnalyzed = [
-      url,
       ...randomFirstLevelPagesUrl,
       ...randomSecondLevelPagesUrl,
     ];

@@ -181,7 +181,7 @@ class LoadAudit extends Audit {
       );
 
       if (!checkBreadcrumb(breadcrumbElements)) {
-        missingMandatoryItems.push(mandatoryHeaderVoices[4]);
+        missingMandatoryItems.push(mandatoryHeaderVoices[2]);
       }
 
       const argumentsTag = await getPageElementDataAttribute(
