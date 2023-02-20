@@ -13,10 +13,6 @@ export const contentTypeItemsIndexDataElements = {
       data_element: "service-what-is",
     },
     {
-      key: contentTypeItemsIndex[1],
-      data_element: "service-generic-access",
-    },
-    {
       key: contentTypeItemsIndex[2],
       data_element: "service-needed",
     },
