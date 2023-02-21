@@ -11,6 +11,11 @@ export const auditScanVariables = {
       numberOfServicesToBeScanned: 1,
       numberOfLocationsToBeScanned: 1,
     },
+    "school-ux-ui-consistency-fonts-check": {
+      numberOfFirstLevelPageToBeScanned: 1,
+      numberOfSecondLevelPageToBeScanned: 1,
+      numberOfServicesToBeScanned: 1,
+    },
     "school-servizi-structure-match-model": {
       numberOfServicesToBeScanned: 1,
     },
@@ -26,6 +31,11 @@ export const auditScanVariables = {
       numberOfSecondLevelPageToBeScanned: 5,
       numberOfServicesToBeScanned: 5,
       numberOfLocationsToBeScanned: 5,
+    },
+    "school-ux-ui-consistency-fonts-check": {
+      numberOfFirstLevelPageToBeScanned: 5,
+      numberOfSecondLevelPageToBeScanned: 5,
+      numberOfServicesToBeScanned: 5,
     },
     "school-servizi-structure-match-model": {
       numberOfServicesToBeScanned: 5,
@@ -43,6 +53,11 @@ export const auditScanVariables = {
       numberOfServicesToBeScanned: 10,
       numberOfLocationsToBeScanned: 10,
     },
+    "school-ux-ui-consistency-fonts-check": {
+      numberOfFirstLevelPageToBeScanned: 10,
+      numberOfSecondLevelPageToBeScanned: 10,
+      numberOfServicesToBeScanned: 10,
+    },
     "school-servizi-structure-match-model": {
       numberOfServicesToBeScanned: 10,
     },
@@ -58,6 +73,11 @@ export const auditScanVariables = {
       numberOfSecondLevelPageToBeScanned: -1,
       numberOfServicesToBeScanned: -1,
       numberOfLocationsToBeScanned: -1,
+    },
+    "school-ux-ui-consistency-fonts-check": {
+      numberOfFirstLevelPageToBeScanned: -1,
+      numberOfSecondLevelPageToBeScanned: -1,
+      numberOfServicesToBeScanned: -1,
     },
     "school-servizi-structure-match-model": {
       numberOfServicesToBeScanned: -1,

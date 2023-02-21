@@ -206,11 +206,16 @@ export const auditDictionary = {
       'CONDIZIONI DI SUCCESSO: la funzionalità per valutare la chiarezza informativa è presente su tutte le pagine di primo e secondo livello del sito e rispetta tutte le caratteristiche e i passaggi richiesti; MODALITÀ DI VERIFICA: ricercando specifici attributi "data-element" come spiegato nella Documentazione delle App di valutazione, viene verificata la presenza del componente di valutazione nelle pagine di primo e di secondo livello, controllando che la funzionalità abbia le caratteristiche richieste nella documentazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/versione-corrente/index.html), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/index.html).',
   },
   "municipality-ux-ui-consistency-fonts-check": {
-    greenResult: "La pagina [url] utilizza i font come richiesto.",
+    greenResult: "Tutte le pagine analizzate utilizzano i font come richiesto.",
     yellowResult:
-      "Nella pagina [url] sono presenti <h> o <p> che utilizzano altri font oltre a quelli richiesti:",
+      "In almeno una pagina sono presenti <h> o <p> che utilizzano altri font oltre a quelli richiesti:",
     redResult:
-      "Nella pagina [url] sono presenti <h> o <p> che non utilizzano i font come richiesto:",
+      "In almeno una pagina sono presenti <h> o <p> che non utilizzano i font come richiesto:",
+    subItem: {
+      greenResult: "Pagine in cui sono stati rilevati solo font idonei",
+      yellowResult: "",
+      redResult: "Pagine in cui sono stati rilevati font non idonei.",
+    },
     nonExecuted:
       "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
     title:
@@ -522,11 +527,16 @@ export const auditDictionary = {
       "CONDIZIONI DI SUCCESSO: il dominio di tutti i cookie già presenti nel sito, ovvero senza che sia stata espressa una preferenza da parte dell’utente riguardo il loro uso, è corrispondente al dominio del sito web della scuola; MODALITÀ DI VERIFICA: viene verificato che al caricamento di ogni pagina analizzata il dominio dei cookie identificati sia corrispondente al dominio del sito web; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Linee guida cookie e altri strumenti di tracciamento - 10 giugno 2021](https://www.garanteprivacy.it/home/docweb/-/docweb-display/docweb/9677876).",
   },
   "school-ux-ui-consistency-fonts-check": {
-    greenResult: "La pagina [url] utilizza i font come richiesto.",
+    greenResult: "Tutte le pagine analizzate utilizzano i font come richiesto.",
     yellowResult:
-      "Nella pagina [url] sono presenti <h> o <p> che utilizzano altri font oltre a quelli richiesti:",
+      "In almeno una pagina sono presenti <h> o <p> che utilizzano altri font oltre a quelli richiesti:",
     redResult:
-      "Nella pagina [url] sono presenti <h> o <p> che non utilizzano i font come richiesto:",
+      "In almeno una pagina sono presenti <h> o <p> che non utilizzano i font come richiesto:",
+    subItem: {
+      greenResult: "Pagine in cui sono stati rilevati solo font idonei",
+      yellowResult: "",
+      redResult: "Pagine in cui sono stati rilevati font non idonei.",
+    },
     nonExecuted:
       "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
     title:

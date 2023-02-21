@@ -5,6 +5,11 @@ export const auditScanVariables = {
       numberOfSecondLevelPageToBeScanned: 1,
       numberOfServicesToBeScanned: 1,
     },
+    "municipality-ux-ui-consistency-fonts-check": {
+      numberOfFirstLevelPageToBeScanned: 1,
+      numberOfSecondLevelPageToBeScanned: 1,
+      numberOfServicesToBeScanned: 1,
+    },
     "municipality-feedback-element": {
       numberOfFirstLevelPageToBeScanned: 1,
       numberOfSecondLevelPageToBeScanned: 1,
@@ -33,6 +38,11 @@ export const auditScanVariables = {
   },
   suggested: {
     "municipality-ux-ui-consistency-bootstrap-italia-double-check": {
+      numberOfFirstLevelPageToBeScanned: 5,
+      numberOfSecondLevelPageToBeScanned: 5,
+      numberOfServicesToBeScanned: 5,
+    },
+    "municipality-ux-ui-consistency-fonts-check": {
       numberOfFirstLevelPageToBeScanned: 5,
       numberOfSecondLevelPageToBeScanned: 5,
       numberOfServicesToBeScanned: 5,
@@ -69,6 +79,11 @@ export const auditScanVariables = {
       numberOfSecondLevelPageToBeScanned: 10,
       numberOfServicesToBeScanned: 10,
     },
+    "municipality-ux-ui-consistency-fonts-check": {
+      numberOfFirstLevelPageToBeScanned: 10,
+      numberOfSecondLevelPageToBeScanned: 10,
+      numberOfServicesToBeScanned: 10,
+    },
     "municipality-feedback-element": {
       numberOfFirstLevelPageToBeScanned: 10,
       numberOfSecondLevelPageToBeScanned: 10,
@@ -97,6 +112,11 @@ export const auditScanVariables = {
   },
   all: {
     "municipality-ux-ui-consistency-bootstrap-italia-double-check": {
+      numberOfFirstLevelPageToBeScanned: -1,
+      numberOfSecondLevelPageToBeScanned: -1,
+      numberOfServicesToBeScanned: -1,
+    },
+    "municipality-ux-ui-consistency-fonts-check": {
       numberOfFirstLevelPageToBeScanned: -1,
       numberOfSecondLevelPageToBeScanned: -1,
       numberOfServicesToBeScanned: -1,
