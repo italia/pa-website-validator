@@ -67,34 +67,34 @@ class LoadAudit extends Audit {
     ];
 
     const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
-        url,
-        auditVariables.numberOfFirstLevelPageToBeScanned
+      url,
+      auditVariables.numberOfFirstLevelPageToBeScanned
     );
 
     const randomSecondLevelPageUrl = await getRandomSecondLevelPagesUrl(
-        url,
-        auditVariables.numberOfSecondLevelPageToBeScanned
+      url,
+      auditVariables.numberOfSecondLevelPageToBeScanned
     );
 
     const randomServiceUrl = await getRandomServicesUrl(
-        url,
-        auditVariables.numberOfServicesToBeScanned
+      url,
+      auditVariables.numberOfServicesToBeScanned
     );
 
     if (
-        randomFirstLevelPagesUrl.length === 0 ||
-        randomSecondLevelPageUrl.length === 0 ||
-        randomServiceUrl.length === 0
+      randomFirstLevelPagesUrl.length === 0 ||
+      randomSecondLevelPageUrl.length === 0 ||
+      randomServiceUrl.length === 0
     ) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
-            [{ key: "result", itemType: "text", text: "Risultato" }],
-            [
-              {
-                result: auditData.nonExecuted,
-              },
-            ]
+          [{ key: "result", itemType: "text", text: "Risultato" }],
+          [
+            {
+              result: auditData.nonExecuted,
+            },
+          ]
         ),
       };
     }

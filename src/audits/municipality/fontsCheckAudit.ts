@@ -14,7 +14,8 @@ import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
 import {
   buildUrl,
-  getHREFValuesDataAttribute, isInternalUrl,
+  getHREFValuesDataAttribute,
+  isInternalUrl,
   loadPageData,
 } from "../../utils/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
@@ -75,36 +76,36 @@ class LoadAudit extends Audit {
     ];
 
     const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
-        url,
-        auditVariables.numberOfFirstLevelPageToBeScanned
+      url,
+      auditVariables.numberOfFirstLevelPageToBeScanned
     );
 
     const randomSecondLevelPagesUrl = await getRandomSecondLevelPagesUrl(
-        url,
-        auditVariables.numberOfSecondLevelPageToBeScanned
+      url,
+      auditVariables.numberOfSecondLevelPageToBeScanned
     );
 
     const randomServicesUrl = await getRandomThirdLevelPagesUrl(
-        url,
-        await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
-        `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
-        auditVariables.numberOfServicesToBeScanned
+      url,
+      await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
+      `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
+      auditVariables.numberOfServicesToBeScanned
     );
 
     if (
-        randomFirstLevelPagesUrl.length === 0 ||
-        randomSecondLevelPagesUrl.length === 0 ||
-        randomServicesUrl.length === 0
+      randomFirstLevelPagesUrl.length === 0 ||
+      randomSecondLevelPagesUrl.length === 0 ||
+      randomServicesUrl.length === 0
     ) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
-            [{ key: "result", itemType: "text", text: "Risultato" }],
-            [
-              {
-                result: auditData.nonExecuted,
-              },
-            ]
+          [{ key: "result", itemType: "text", text: "Risultato" }],
+          [
+            {
+              result: auditData.nonExecuted,
+            },
+          ]
         ),
       };
     }
@@ -118,14 +119,14 @@ class LoadAudit extends Audit {
 
     const $: CheerioAPI = await loadPageData(url);
     const personalAreaLogin = await getHREFValuesDataAttribute(
-        $,
-        '[data-element="personal-area-login"]'
+      $,
+      '[data-element="personal-area-login"]'
     );
     if (personalAreaLogin.length === 1) {
       let personalAreaLoginUrl = personalAreaLogin[0];
       if (
-          (await isInternalUrl(personalAreaLoginUrl)) &&
-          !personalAreaLoginUrl.includes(url)
+        (await isInternalUrl(personalAreaLoginUrl)) &&
+        !personalAreaLoginUrl.includes(url)
       ) {
         personalAreaLoginUrl = await buildUrl(url, personalAreaLoginUrl);
       }
