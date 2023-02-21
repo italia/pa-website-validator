@@ -8,6 +8,7 @@ import {
   buildUrl,
   getHREFValuesDataAttribute,
   getRandomNString,
+  isInternalUrl,
   loadPageData,
 } from "../utils";
 
@@ -31,7 +32,7 @@ const getRandomFirstLevelPagesUrl = async (
   }
 
   for (let i = 0; i < pagesUrls.length; i++) {
-    if (!pagesUrls[i].includes(url)) {
+    if ((await isInternalUrl(pagesUrls[i])) && !pagesUrls[i].includes(url)) {
       pagesUrls[i] = await buildUrl(url, pagesUrls[i]);
     }
   }
@@ -60,7 +61,10 @@ const getRandomSecondLevelPagesUrl = async (
           secondLevelPageUrl !== "#" &&
           secondLevelPageUrl !== ""
         ) {
-          if (!secondLevelPageUrl.includes(url)) {
+          if (
+            (await isInternalUrl(secondLevelPageUrl)) &&
+            !secondLevelPageUrl.includes(url)
+          ) {
             secondLevelPageUrl = await buildUrl(url, secondLevelPageUrl);
           }
           secondLevelPagesUrls.push(secondLevelPageUrl);
@@ -95,7 +99,10 @@ const getRandomServicesUrl = async (
 
   let servicesUrls: string[] = [];
   for (let serviceTypeUrl of serviceTypeUrls) {
-    if (!serviceTypeUrl.includes(url)) {
+    if (
+      (await isInternalUrl(serviceTypeUrl)) &&
+      !serviceTypeUrl.includes(url)
+    ) {
       serviceTypeUrl = await buildUrl(url, serviceTypeUrl);
     }
 
@@ -111,7 +118,7 @@ const getRandomServicesUrl = async (
       ),
     ];
     for (let pagerPageUrl of pagerPagesUrls) {
-      if (!pagerPageUrl.includes(url)) {
+      if ((await isInternalUrl(pagerPageUrl)) && !pagerPageUrl.includes(url)) {
         pagerPageUrl = await buildUrl(url, pagerPageUrl);
       }
 
@@ -129,7 +136,10 @@ const getRandomServicesUrl = async (
   }
 
   for (let i = 0; i < servicesUrls.length; i++) {
-    if (!servicesUrls[i].includes(url)) {
+    if (
+      (await isInternalUrl(servicesUrls[i])) &&
+      !servicesUrls[i].includes(url)
+    ) {
       servicesUrls[i] = await buildUrl(url, servicesUrls[i]);
     }
   }
@@ -153,7 +163,7 @@ const getRandomLocationsUrl = async (
 
   let locationUrl = locationsElementsUrls[0];
 
-  if (!locationUrl.includes(url)) {
+  if ((await isInternalUrl(locationUrl)) && !locationUrl.includes(url)) {
     locationUrl = await buildUrl(url, locationUrl);
   }
 
@@ -166,7 +176,7 @@ const getRandomLocationsUrl = async (
 
   for (let i = 0; i < pagesUrls.length; i++) {
     const pageUrl = pagesUrls[i];
-    if (!pageUrl.includes(url)) {
+    if ((await isInternalUrl(pageUrl)) && !pageUrl.includes(url)) {
       pagesUrls[i] = await buildUrl(url, pageUrl);
     }
   }

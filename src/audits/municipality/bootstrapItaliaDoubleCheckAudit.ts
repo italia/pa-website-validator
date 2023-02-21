@@ -9,6 +9,7 @@ import {
   buildUrl,
   checkCSSClassesOnPage,
   getHREFValuesDataAttribute,
+  isInternalUrl,
   loadPageData,
 } from "../../utils/utils";
 import {
@@ -141,7 +142,10 @@ class LoadAudit extends Audit {
     );
     if (personalAreaLogin.length === 1) {
       let personalAreaLoginUrl = personalAreaLogin[0];
-      if (!personalAreaLoginUrl.includes(url)) {
+      if (
+        (await isInternalUrl(personalAreaLoginUrl)) &&
+        !personalAreaLoginUrl.includes(url)
+      ) {
         personalAreaLoginUrl = await buildUrl(url, personalAreaLoginUrl);
       }
       pagesToBeAnalyzed.push(personalAreaLoginUrl);

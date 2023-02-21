@@ -7,6 +7,7 @@ import {
   checkBreadcrumb,
   getHREFValuesDataAttribute,
   getPageElementDataAttribute,
+  isInternalUrl,
   loadPageData,
 } from "../../utils/utils";
 import {
@@ -107,7 +108,10 @@ class LoadAudit extends Audit {
     }
 
     let servicePageUrl = servicesPage[0];
-    if (!servicePageUrl.includes(url)) {
+    if (
+      (await isInternalUrl(servicePageUrl)) &&
+      !servicePageUrl.includes(url)
+    ) {
       servicePageUrl = await buildUrl(url, servicePageUrl);
     }
 

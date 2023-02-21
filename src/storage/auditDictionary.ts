@@ -146,9 +146,18 @@ export const auditDictionary = {
       "CONDIZIONI DI SUCCESSO: il sito presenta solo cookie idonei come definito dalla normativa; MODALITÀ DI VERIFICA: viene verificato che il dominio dei cookie identificati sia corrispondente al dominio del sito web. Se nella pagina analizzata non vengono rilevati cookie non verrà generata una tabella di risultati; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Linee guida cookie e altri strumenti di tracciamento - 10 giugno 2021](https://www.garanteprivacy.it/home/docweb/-/docweb-display/docweb/9677876).",
   },
   "municipality-domain": {
-    greenResult: "Il dominio utilizzato è corretto.",
+    greenResult:
+      "In tutte le pagine analizzate i domini sono corretti e si funzionanti anche senza www.",
     yellowResult: "",
-    redResult: "Il dominio utilizzato è errato.",
+    redResult:
+      "In almeno una delle pagine analizzate il dominio non è corretto oppure non funziona senza www.",
+    subItem: {
+      greenResult:
+        "Pagine in cui è stato rilevato dominio corretto ed è accessibile senza www.",
+      yellowResult: "",
+      redResult:
+        "Pagine in cui non è stato rilevato dominio corretto oppure non è accessibile senza www.",
+    },
     nonExecuted: "",
     title:
       "C.SI.5.2 - DOMINIO ISTITUZIONALE - Il sito comunale utilizza un dominio istituzionale secondo le modalità indicate nella documentazione del modello di sito comunale.",

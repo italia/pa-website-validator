@@ -7,6 +7,7 @@ import {
   buildUrl,
   getHREFValuesDataAttribute,
   getRandomNString,
+  isInternalUrl,
   loadPageData,
 } from "../utils";
 import { CheerioAPI } from "cheerio";
@@ -30,7 +31,10 @@ const getRandomFirstLevelPagesUrl = async (
         primaryLevelPageUrl !== "#" &&
         primaryLevelPageUrl !== ""
       ) {
-        if (!primaryLevelPageUrl.includes(url)) {
+        if (
+          (await isInternalUrl(primaryLevelPageUrl)) &&
+          !primaryLevelPageUrl.includes(url)
+        ) {
           primaryLevelPageUrl = await buildUrl(url, primaryLevelPageUrl);
         }
       }
@@ -62,7 +66,10 @@ const getRandomSecondLevelPagesUrl = async (
         primaryLevelPageUrl !== "#" &&
         primaryLevelPageUrl !== ""
       ) {
-        if (!primaryLevelPageUrl.includes(url)) {
+        if (
+          (await isInternalUrl(primaryLevelPageUrl)) &&
+          !primaryLevelPageUrl.includes(url)
+        ) {
           primaryLevelPageUrl = await buildUrl(url, primaryLevelPageUrl);
         }
         const $2 = await loadPageData(primaryLevelPageUrl);
@@ -95,7 +102,7 @@ const getRandomSecondLevelPagesUrl = async (
   }
 
   for (let i = 0; i < pagesUrls.length; i++) {
-    if (!pagesUrls[i].includes(url)) {
+    if ((await isInternalUrl(pagesUrls[i])) && !pagesUrls[i].includes(url)) {
       pagesUrls[i] = await buildUrl(url, pagesUrls[i]);
     }
   }
@@ -150,7 +157,7 @@ const getRandomThirdLevelPagesUrl = async (
   const pagesUrls = await getHREFValuesDataAttribute($, linkDataElement);
 
   for (let i = 0; i < pagesUrls.length; i++) {
-    if (!pagesUrls[i].includes(url)) {
+    if ((await isInternalUrl(pagesUrls[i])) && !pagesUrls[i].includes(url)) {
       pagesUrls[i] = await buildUrl(url, pagesUrls[i]);
     }
   }
@@ -170,7 +177,7 @@ const getPrimaryPageUrl = async (url: string, dataElement: string) => {
   }
 
   let allServicesUrl = servicesPageHref[0];
-  if (!allServicesUrl.includes(url)) {
+  if ((await isInternalUrl(allServicesUrl)) && !allServicesUrl.includes(url)) {
     allServicesUrl = await buildUrl(url, allServicesUrl);
   }
 

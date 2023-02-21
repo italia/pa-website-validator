@@ -7,6 +7,7 @@ import {
   buildUrl,
   getHREFValuesDataAttribute,
   getPageElementDataAttribute,
+  isInternalUrl,
   loadPageData,
 } from "../../utils/utils";
 import { getButtonUrl } from "../../utils/municipality/utils";
@@ -101,7 +102,10 @@ class LoadAudit extends lighthouse.Audit {
       }
 
       let secondLevelPageUrl = secondLevelPageHref[0];
-      if (!secondLevelPageUrl.includes(url)) {
+      if (
+        (await isInternalUrl(secondLevelPageUrl)) &&
+        !secondLevelPageUrl.includes(url)
+      ) {
         secondLevelPageUrl = await buildUrl(url, secondLevelPageHref[0]);
       }
 
@@ -159,7 +163,10 @@ class LoadAudit extends lighthouse.Audit {
       }
 
       let secondLevelPageUrl = secondLevelPageHref[0];
-      if (!secondLevelPageUrl.includes(url)) {
+      if (
+        (await isInternalUrl(secondLevelPageUrl)) &&
+        !secondLevelPageUrl.includes(url)
+      ) {
         secondLevelPageUrl = await buildUrl(url, secondLevelPageHref[0]);
       }
 

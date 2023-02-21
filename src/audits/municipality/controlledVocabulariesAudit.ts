@@ -12,6 +12,7 @@ import {
   buildUrl,
   getHREFValuesDataAttribute,
   getPageElementDataAttribute,
+  isInternalUrl,
   loadPageData,
 } from "../../utils/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
@@ -92,7 +93,10 @@ class LoadAudit extends lighthouse.Audit {
     }
 
     let allArgumentsPageUrl = allArgumentsHREF[0];
-    if (!allArgumentsPageUrl.includes(url)) {
+    if (
+      (await isInternalUrl(allArgumentsPageUrl)) &&
+      !allArgumentsPageUrl.includes(url)
+    ) {
       allArgumentsPageUrl = await buildUrl(url, allArgumentsHREF[0]);
     }
 
