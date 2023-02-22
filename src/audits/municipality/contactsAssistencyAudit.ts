@@ -39,7 +39,10 @@ class LoadAudit extends Audit {
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
 
-    const titleSubHeadings = ["Il componente è presente"];
+    const titleSubHeadings = [
+      "La voce è presente nell'indice",
+      "Il componente è presente in pagina",
+    ];
     const headings = [
       {
         key: "result",
@@ -48,6 +51,24 @@ class LoadAudit extends Audit {
         subItemsHeading: {
           key: "inspected_page",
           itemType: "url",
+        },
+      },
+      {
+        key: "title_in_index",
+        itemType: "text",
+        text: "",
+        subItemsHeading: {
+          key: "in_index",
+          itemType: "text",
+        },
+      },
+      {
+        key: "title_component_exists",
+        itemType: "text",
+        text: "",
+        subItemsHeading: {
+          key: "component_exists",
+          itemType: "text",
         },
       },
     ];
@@ -81,6 +102,8 @@ class LoadAudit extends Audit {
     for (const randomService of randomServices) {
       const item = {
         inspected_page: randomService,
+        in_index: "No",
+        component_exists: "No",
       };
 
       const $: CheerioAPI = await loadPageData(randomService);
@@ -91,7 +114,15 @@ class LoadAudit extends Audit {
         "> li > a"
       );
 
+      if (indexList.includes("Contatti")) {
+        item.in_index = "Sì";
+      }
+
       const contactComponent = $('[data-element="service-area"]');
+
+      if (contactComponent.length > 0) {
+        item.component_exists = "Sì";
+      }
 
       let contactsPresent = false;
       if (indexList.includes("Contatti") && contactComponent.length > 0) {
@@ -125,7 +156,8 @@ class LoadAudit extends Audit {
     if (wrongItems.length > 0) {
       results.push({
         result: auditData.subItem.redResult,
-        title_component_exists: titleSubHeadings[0],
+        title_in_index: titleSubHeadings[0],
+        title_component_exists: titleSubHeadings[1],
       });
 
       for (const item of wrongItems) {
@@ -143,7 +175,8 @@ class LoadAudit extends Audit {
     if (correctItems.length > 0) {
       results.push({
         result: auditData.subItem.greenResult,
-        title_component_exists: titleSubHeadings[0],
+        title_in_index: titleSubHeadings[0],
+        title_component_exists: titleSubHeadings[1],
       });
 
       for (const item of correctItems) {

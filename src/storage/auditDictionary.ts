@@ -86,16 +86,16 @@ export const auditDictionary = {
   },
   "municipality-contacts-assistency": {
     greenResult:
-      'Schede servizio analizzate nelle quali la voce "Contatti" è presente:',
+      'In tutte le schede servizio analizzate la voce "Contatti" è presente.',
     yellowResult: "",
     redResult:
-      'Schede servizio analizzate nelle quali la voce "Contatti" è assente:',
+      'In almeno una delle schede servizio analizzate la voce "Contatti" è assente.',
     subItem: {
       greenResult:
-        'In tutte le schede servizio analizzate la voce "Contatti" è presente.',
+        'Schede servizio analizzate nelle quali la voce "Contatti" è presente:',
       yellowResult: "",
       redResult:
-        'In almeno una delle schede servizio analizzate la voce "Contatti" è assente.',
+        'Schede servizio analizzate nelle quali la voce "Contatti" è assente:',
     },
     nonExecuted:
       "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
@@ -104,7 +104,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.2.2 - RICHIESTA DI ASSISTENZA / CONTATTI - All'interno del sito comunale, nel contenuto della scheda servizio, devono essere comunicati i contatti dell'ufficio preposto all'erogazione del servizio.",
     description:
-      "CONDIZIONI DI SUCCESSO: i contatti dell'ufficio preposto all'erogazione del servizio sono presenti in tutte le schede servizio; MODALITÀ DI VERIFICA: viene verificata la presenza della voce \"Contatti\" all'interno dell'indice e nel corpo della pagina delle schede servizio analizzate, ricercando specifici attributi \"data-element\" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/)."
+      "CONDIZIONI DI SUCCESSO: i contatti dell'ufficio preposto all'erogazione del servizio sono presenti in tutte le schede servizio; MODALITÀ DI VERIFICA: viene verificata la presenza della voce \"Contatti\" all'interno dell'indice e nel corpo della pagina delle schede servizio analizzate, ricercando specifici attributi \"data-element\" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
   },
   "municipality-controlled-vocabularies": {
     greenResult:
@@ -163,10 +163,10 @@ export const auditDictionary = {
       'Almeno una delle pagine analizzate non è raggiungibile senza inserire "www." o il dominio utilizzato è errato.',
     subItem: {
       greenResult:
-        "Pagine raggiungibili senza che sia necessario inserire \"www.\" e nelle quali il dominio utilizzato è corretto:",
+        'Pagine raggiungibili senza che sia necessario inserire "www." e nelle quali il dominio utilizzato è corretto:',
       yellowResult: "",
       redResult:
-        "Pagine non raggiungibili senza inserire \"www.\" o nelle quali il dominio utilizzato è errato:",
+        'Pagine non raggiungibili senza inserire "www." o nelle quali il dominio utilizzato è errato:',
     },
     nonExecuted:
       "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
@@ -219,18 +219,18 @@ export const auditDictionary = {
   },
   "municipality-ux-ui-consistency-fonts-check": {
     greenResult:
-      "Pagine analizzate nelle quali vengono utilizzati i font come richiesto:",
+      "In tutte le pagine analizzate vengono utilizzati i font come richiesto.",
     yellowResult:
-      "Pagine analizzate nelle quali sono presenti <h> o <p> che includono altri font oltre a quelli richiesti:",
+      "In almeno una delle pagine analizzate sono presenti <h> o <p> che includono altri font oltre a quelli richiesti.",
     redResult:
-      "Pagine analizzate nelle quali sono presenti <h> o <p> che non utilizzano i font come richiesto:",
+      "In almeno una delle pagine analizzate sono presenti <h> o <p> che non utilizzano i font come richiesto.",
     subItem: {
       greenResult:
-        "In tutte le pagine analizzate vengono utilizzati i font come richiesto.",
+        "Pagine analizzate nelle quali vengono utilizzati i font come richiesto:",
       yellowResult:
-        "In almeno una delle pagine analizzate sono presenti <h> o <p> che includono altri font oltre a quelli richiesti.",
+        "Pagine analizzate nelle quali sono presenti <h> o <p> che includono altri font oltre a quelli richiesti:",
       redResult:
-        "In almeno una delle pagine analizzate sono presenti <h> o <p> che non utilizzano i font come richiesto.",
+        "Pagine analizzate nelle quali sono presenti <h> o <p> che non utilizzano i font come richiesto:",
     },
     nonExecuted:
       "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
@@ -377,7 +377,6 @@ export const auditDictionary = {
     description:
       "CONDIZIONI DI SUCCESSO: se è in uso il tema CMS del modello per i Comuni, la versione utilizzata è uguale o superiore alla 1.0; MODALITÀ DI VERIFICA: viene verificato l'uso del tema CMS del modello e la versione in uso ricercando uno specifico testo all'interno di tutti i file .CSS presenti in pagina. Lo specifico testo ricercato viene indicato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/versione-corrente/index.html), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/index.html).",
   },
-
   "municipality-informative-cloud-infrastructure": {
     greenResult: "",
     yellowResult: "",
