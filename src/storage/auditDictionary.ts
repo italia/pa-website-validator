@@ -104,7 +104,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.2.2 - RICHIESTA DI ASSISTENZA / CONTATTI - All'interno del sito comunale, nel contenuto della scheda servizio, devono essere comunicati i contatti dell'ufficio preposto all'erogazione del servizio.",
     description:
-      "CONDIZIONI DI SUCCESSO: i contatti dell'ufficio preposto all'erogazione del servizio sono presenti in tutte le schede servizio; MODALITÀ DI VERIFICA: viene verificata la presenza della voce \"Contatti\" all'interno dell'indice delle schede servizio analizzate, ricercando uno specifico attributo \"data-element\" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
+      "CONDIZIONI DI SUCCESSO: i contatti dell'ufficio preposto all'erogazione del servizio sono presenti in tutte le schede servizio; MODALITÀ DI VERIFICA: viene verificata la presenza della voce \"Contatti\" all'interno dell'indice e nel corpo della pagina delle schede servizio analizzate, ricercando specifici attributi \"data-element\" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/)."
   },
   "municipality-controlled-vocabularies": {
     greenResult:
@@ -157,16 +157,16 @@ export const auditDictionary = {
   },
   "municipality-domain": {
     greenResult:
-      'Il dominio utilizzato è corretto e il sito è raggiungibile senza che sia necessario inserire "www."',
+      'Tutte le pagine analizzate sono raggiungibili senza che sia necessario inserire "www." e il dominio utilizzato è corretto.',
     yellowResult: "",
     redResult:
-      'Il dominio utilizzato è errato o il sito è raggiungibile solo inserendo "www."',
+      'Almeno una delle pagine analizzate non è raggiungibile senza inserire "www." o il dominio utilizzato è errato.',
     subItem: {
       greenResult:
-        "Pagine in cui è stato rilevato dominio corretto ed è accessibile senza www.",
+        "Pagine raggiungibili senza che sia necessario inserire \"www.\" e nelle quali il dominio utilizzato è corretto:",
       yellowResult: "",
       redResult:
-        "Pagine in cui non è stato rilevato dominio corretto oppure non è accessibile senza www.",
+        "Pagine non raggiungibili senza inserire \"www.\" o nelle quali il dominio utilizzato è errato:",
     },
     nonExecuted:
       "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",

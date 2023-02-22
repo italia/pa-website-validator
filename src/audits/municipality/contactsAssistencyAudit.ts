@@ -91,8 +91,10 @@ class LoadAudit extends Audit {
         "> li > a"
       );
 
+      const contactComponent = $('[data-element="service-area"]');
+
       let contactsPresent = false;
-      if (indexList.includes("Contatti")) {
+      if (indexList.includes("Contatti") && contactComponent.length > 0) {
         contactsPresent = true;
       }
 

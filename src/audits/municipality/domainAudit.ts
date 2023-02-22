@@ -37,7 +37,7 @@ class LoadAudit extends Audit {
 
     const titleSubHeadings = [
       "Dominio utilizzato",
-      "Viene usato il sottodominio 'comune.'",
+      "Viene usato il sottodominio \"comune.\" seguito da un dominio istituzionale riservato",
       "Accessibile senza WWW",
     ];
     const headings = [
