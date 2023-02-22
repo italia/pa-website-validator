@@ -17,10 +17,6 @@ const Audit = lighthouse.Audit;
 const auditId = "municipality-inefficiency-report";
 const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult;
-const yellowResult = auditData.yellowResult;
-const redResult = auditData.redResult;
-
 class LoadAudit extends Audit {
   static get meta() {
     return {
@@ -69,7 +65,7 @@ class LoadAudit extends Audit {
 
     const items = [
       {
-        result: redResult,
+        result: auditData.redResult,
         link_name: "",
         link_destination: "",
         existing_page: "No",
@@ -125,14 +121,14 @@ class LoadAudit extends Audit {
         label !== "segnala disservizio" &&
         label !== "segnalazione disservizio"
       ) {
-        items[0].result = yellowResult;
+        items[0].result = auditData.yellowResult;
         return {
           score: 0.5,
           details: Audit.makeTableDetails(headings, items),
         };
       }
 
-      items[0].result = greenResult;
+      items[0].result = auditData.greenResult;
       score = 1;
     }
 
