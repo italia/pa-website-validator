@@ -3,7 +3,8 @@ export const auditDictionary = {
     greenResult: "L'hosting è su territorio europeo.",
     yellowResult: "",
     redResult: "L'hosting non è su territorio europeo.",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "LOCALIZZAZIONE IP - Il sito deve essere hostato su datacenter localizzati su territorio europeo.",
     failureTitle:
@@ -15,7 +16,8 @@ export const auditDictionary = {
     greenResult: "",
     yellowResult: "",
     redResult: "",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "LOCALIZZAZIONE IP - Il sito deve essere hostato su datacenter localizzati su territorio europeo.",
     failureTitle:
@@ -29,7 +31,8 @@ export const auditDictionary = {
     yellowResult: "",
     redResult:
       "Il link non è nel footer o non invia alla pagina corretta o la pagina non esiste.",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.3.2 - DICHIARAZIONE DI ACCESSIBILITÀ - Il sito comunale deve esporre la dichiarazione di accessibilità in conformità al modello e alle linee guida rese disponibili da AgID in ottemperanza alla normativa vigente in materia di accessibilità e con livelli di accessibilità contemplati nelle specifiche tecniche WCAG 2.1.",
     failureTitle:
@@ -51,7 +54,7 @@ export const auditDictionary = {
         "Pagine nelle quali non è presente il componente o in cui cui la pagina di destinazione non rispetta i requisiti della breadcrumb:",
     },
     nonExecuted:
-      "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.2.1 - PRENOTAZIONE APPUNTAMENTI - Il sito comunale deve consentire di prenotare un appuntamento presso lo sportello di competenza.",
     failureTitle:
@@ -72,7 +75,8 @@ export const auditDictionary = {
       redResult:
         "Pagine che non utilizzano la libreria Bootstrap Italia in una versione idonea o non utilizzano nessuna delle classi CSS indicate: ",
     },
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito comunale deve utilizzare la libreria Bootstrap Italia.",
     failureTitle:
@@ -81,22 +85,26 @@ export const auditDictionary = {
       "CONDIZIONI DI SUCCESSO: la libreria Bootstrap Italia è presente e in uso in una versione uguale o superiore alla 2.0; MODALITÀ DI VERIFICA: in ogni pagina analizzata viene verificata la presenza della libreria Bootstrap Italia e la versione in uso, individuando la proprietà CSS --bootstrap-italia-version all’interno del selettore :root o la variabile globale window.BOOTSTRAP_ITALIA_VERSION. Inoltre deve utilizzare almeno una tra le classi CSS di Bootstrap Italia indicate nella Documentazione dell'App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/).",
   },
   "municipality-contacts-assistency": {
-    greenResult: "Tutte le pagine del sito hanno la voce 'Contatti' presente.",
+    greenResult:
+      'Schede servizio analizzate nelle quali la voce "Contatti" è presente:',
     yellowResult: "",
-    redResult: "Almeno una pagina del sito ha la voce 'Contatti' assente.",
+    redResult:
+      'Schede servizio analizzate nelle quali la voce "Contatti" è assente:',
     subItem: {
-      greenResult: "Pagine per cui la voce 'Contatti' è presente.",
+      greenResult:
+        'In tutte le schede servizio analizzate la voce "Contatti" è presente.',
       yellowResult: "",
-      redResult: "Pagine per cui la voce 'Contatti' è assente.",
+      redResult:
+        'In almeno una delle schede servizio analizzate la voce "Contatti" è assente.',
     },
     nonExecuted:
-      "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.2.2 - RICHIESTA DI ASSISTENZA / CONTATTI - All'interno del sito comunale, nel contenuto della scheda servizio, devono essere comunicati i contatti dell'ufficio preposto all'erogazione del servizio.",
     failureTitle:
       "C.SI.2.2 - RICHIESTA DI ASSISTENZA / CONTATTI - All'interno del sito comunale, nel contenuto della scheda servizio, devono essere comunicati i contatti dell'ufficio preposto all'erogazione del servizio.",
     description:
-      "CONDIZIONI DI SUCCESSO: i contatti dell'ufficio preposto all'erogazione del servizio sono presenti in tutte le schede servizio; MODALITÀ DI VERIFICA: viene verificata la presenza della voce \"Contatti\" all'interno dell'indice di una scheda servizio selezionata casualmente, ricercando uno specifico attributo \"data-element\" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
+      "CONDIZIONI DI SUCCESSO: i contatti dell'ufficio preposto all'erogazione del servizio sono presenti in tutte le schede servizio; MODALITÀ DI VERIFICA: viene verificata la presenza della voce \"Contatti\" all'interno dell'indice delle schede servizio analizzate, ricercando uno specifico attributo \"data-element\" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
   },
   "municipality-controlled-vocabularies": {
     greenResult:
@@ -106,13 +114,13 @@ export const auditDictionary = {
     redResult:
       "Meno del 50% degli argomenti appartengono alle voci del modello Comuni o al vocabolario EuroVoc o l'elenco degli argomenti non è presente nella pagina dei risultati di ricerca.",
     nonExecuted:
-      "Non è stato possibile trovare gli argomenti o la pagina che li contiene. Controlla le “Modalità di verifica” per scoprire di più.",
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.1.5 - VOCABOLARI CONTROLLATI - Il sito comunale deve utilizzare argomenti forniti dal modello di sito comunale ovvero quelli appartenenti al vocabolario controllato europeo EuroVoc.",
     failureTitle:
       "C.SI.1.5 - VOCABOLARI CONTROLLATI - Il sito comunale deve utilizzare argomenti forniti dal modello di sito comunale ovvero quelli appartenenti al vocabolario controllato europeo EuroVoc.",
     description:
-      "CONDIZIONI DI SUCCESSO: gli argomenti utilizzati appartengono alla lista indicata all'interno del documento di architettura dell'informazione del modello Comuni alla voce \"Tassonomia ARGOMENTI\" o al vocabolario controllato EuroVoc e l’elenco completo degli argomenti utilizzati è presente nella pagina dei risultati di ricerca; MODALITÀ DI VERIFICA: gli argomenti identificati all'interno della funzione di ricerca del sito vengono confrontati con l'elenco di voci presente nel documento di architettura dell'informazione e con il vocabolario controllato EuroVoc, ricercandoli usando specifici attributi \"data-element\" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/versione-corrente/index.html), [Elenco degli argomenti del Modello Comuni](https://docs.google.com/spreadsheets/d/1D4KbaA__xO9x_iBm08KvZASjrrFLYLKX/edit#gid=428595160), [Vocabolario EuroVoc](https://eur-lex.europa.eu/browse/eurovoc.html?locale=it), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/index.html).",
+      "CONDIZIONI DI SUCCESSO: gli argomenti utilizzati appartengono alla lista indicata all'interno del documento di architettura dell'informazione del modello Comuni alla voce \"Tassonomia argomenti\" o al vocabolario controllato EuroVoc e l’elenco completo degli argomenti utilizzati è presente in una pagina raggiungibile dall'homepage; MODALITÀ DI VERIFICA: gli argomenti identificati all'interno della pagina contenente l'elenco degli argomenti vengono confrontati con l'elenco di voci presente nel documento di architettura dell'informazione e con il vocabolario controllato EuroVoc, ricercandoli usando specifici attributi \"data-element\" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Elenco degli argomenti del Modello Comuni](https://docs.google.com/spreadsheets/d/1D4KbaA__xO9x_iBm08KvZASjrrFLYLKX/edit#gid=428595160), [Vocabolario EuroVoc](https://eur-lex.europa.eu/browse/eurovoc.html?locale=it), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
   },
   "municipality-legislation-cookie-domain-check": {
     greenResult:
@@ -125,7 +133,8 @@ export const auditDictionary = {
       yellowResult: "",
       redResult: "Pagine nelle quali sono stati rilevati cookie non idonei:",
     },
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.3.1 - COOKIE - Il sito comunale deve presentare cookie tecnici in linea con la normativa vigente.",
     failureTitle:
@@ -137,7 +146,8 @@ export const auditDictionary = {
     greenResult: "",
     yellowResult: "",
     redResult: "",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SC.2.3 - COOKIE - Il sito della scuola deve presentare cookie tecnici in linea con la normativa vigente.",
     failureTitle:
@@ -147,10 +157,10 @@ export const auditDictionary = {
   },
   "municipality-domain": {
     greenResult:
-      "In tutte le pagine analizzate i domini sono corretti e si funzionanti anche senza www.",
+      'Il dominio utilizzato è corretto e il sito è raggiungibile senza che sia necessario inserire "www."',
     yellowResult: "",
     redResult:
-      "In almeno una delle pagine analizzate il dominio non è corretto oppure non funziona senza www.",
+      'Il dominio utilizzato è errato o il sito è raggiungibile solo inserendo "www."',
     subItem: {
       greenResult:
         "Pagine in cui è stato rilevato dominio corretto ed è accessibile senza www.",
@@ -158,13 +168,14 @@ export const auditDictionary = {
       redResult:
         "Pagine in cui non è stato rilevato dominio corretto oppure non è accessibile senza www.",
     },
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.5.2 - DOMINIO ISTITUZIONALE - Il sito comunale utilizza un dominio istituzionale secondo le modalità indicate nella documentazione del modello di sito comunale.",
     failureTitle:
       "C.SI.5.2 - DOMINIO ISTITUZIONALE - Il sito comunale utilizza un dominio istituzionale secondo le modalità indicate nella documentazione del modello di sito comunale.",
     description:
-      "CONDIZIONI DI SUCCESSO: il sito comunale è raggiungibile senza necessità di inserimento del sottodominio “www.” e utilizza il sottodominio “comune.” immediatamente seguito da uno dei domini istituzionali per il Comune presente nell’Elenco Nomi a Dominio Riservati Per i Comuni Italiani (es: comune.anzio.roma.it) o dal nome del Comune se coincidente con il nome del capoluogo di provincia (es: comune.roma.it); MODALITÀ DI VERIFICA: viene verificato che il dominio utilizzato dal sito sia presente nell’Elenco Nomi a Dominio Riservati per i Comuni Italiani o sia un nome di capoluogo di provincia e che immediatamente prima di questo sia utilizzato il sottodominio “comune.”; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Elenco Nomi a Dominio Riservati Per i Comuni Italiani](https://www.nic.it/sites/default/files/docs/comuni_list.html).",
+      'CONDIZIONI DI SUCCESSO: il sito comunale è raggiungibile senza necessità di inserimento del sottodominio “www.” e utilizza il sottodominio "comune." immediatamente seguito da uno dei domini istituzionali per il Comune presente nell\'Elenco Nomi a Dominio Riservati Per i Comuni Italiani (es: comune.anzio.roma.it) o dal nome del Comune se coincidente con il nome del capoluogo di provincia (es: comune.roma.it); MODALITÀ DI VERIFICA: viene verificato che il dominio utilizzato dal sito sia presente nell\'Elenco Nomi a Dominio Riservati per i Comuni Italiani o sia un nome di capoluogo di provincia e che immediatamente prima di questo sia utilizzato il sottodominio "comune.". Se è presente una pagina di accesso all\'area riservata, questa viene identificata ricercando specifici attributi "data-element" come spiegato nella Documentazione delle App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Elenco Nomi a Dominio Riservati Per i Comuni Italiani](https://www.nic.it/sites/default/files/docs/comuni_list.html); [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "municipality-faq-is-present": {
     greenResult:
@@ -173,7 +184,8 @@ export const auditDictionary = {
       "Il link è nel footer, la pagina di destinazione esiste ma la label non è nominata correttamente.",
     redResult:
       "Il link non è nel footer o la pagina di destinazione è inesistente.",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.2.3 - RICHIESTA DI ASSISTENZA / DOMANDE FREQUENTI - Il sito comunale deve contenere una sezione per le domande più frequenti (FAQ).",
     failureTitle:
@@ -197,7 +209,7 @@ export const auditDictionary = {
         "Pagine nelle quali il componente non è presente o non rispetta le caratteristiche richieste:",
     },
     nonExecuted:
-      "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.2.5 - VALUTAZIONE DELL'ESPERIENZA D'USO, CHIAREZZA DELLE PAGINE INFORMATIVE - Il sito comunale deve consentire al cittadino di fornire una valutazione della chiarezza di ogni pagina di primo e secondo livello.",
     failureTitle:
@@ -206,24 +218,28 @@ export const auditDictionary = {
       'CONDIZIONI DI SUCCESSO: la funzionalità per valutare la chiarezza informativa è presente su tutte le pagine di primo e secondo livello del sito e rispetta tutte le caratteristiche e i passaggi richiesti; MODALITÀ DI VERIFICA: ricercando specifici attributi "data-element" come spiegato nella Documentazione delle App di valutazione, viene verificata la presenza del componente di valutazione nelle pagine di primo e di secondo livello, controllando che la funzionalità abbia le caratteristiche richieste nella documentazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/versione-corrente/index.html), [eGovernment benchmark method paper 2020-2023](https://op.europa.eu/en/publication-detail/-/publication/333fe21f-4372-11ec-89db-01aa75ed71a1), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/index.html).',
   },
   "municipality-ux-ui-consistency-fonts-check": {
-    greenResult: "Tutte le pagine analizzate utilizzano i font come richiesto.",
+    greenResult:
+      "Pagine analizzate nelle quali vengono utilizzati i font come richiesto:",
     yellowResult:
-      "In almeno una pagina sono presenti <h> o <p> che utilizzano altri font oltre a quelli richiesti:",
+      "Pagine analizzate nelle quali sono presenti <h> o <p> che includono altri font oltre a quelli richiesti:",
     redResult:
-      "In almeno una pagina sono presenti <h> o <p> che non utilizzano i font come richiesto:",
+      "Pagine analizzate nelle quali sono presenti <h> o <p> che non utilizzano i font come richiesto:",
     subItem: {
-      greenResult: "Pagine in cui sono stati rilevati solo font idonei",
-      yellowResult: "",
-      redResult: "Pagine in cui sono stati rilevati font non idonei.",
+      greenResult:
+        "In tutte le pagine analizzate vengono utilizzati i font come richiesto.",
+      yellowResult:
+        "In almeno una delle pagine analizzate sono presenti <h> o <p> che includono altri font oltre a quelli richiesti.",
+      redResult:
+        "In almeno una delle pagine analizzate sono presenti <h> o <p> che non utilizzano i font come richiesto.",
     },
     nonExecuted:
-      "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.1.1 - COERENZA DELL'UTILIZZO DEI FONT (librerie di caratteri) - Il sito comunale deve utilizzare i font indicati dalla documentazione del modello di sito comunale.",
     failureTitle:
       "C.SI.1.1 - COERENZA DELL'UTILIZZO DEI FONT (librerie di caratteri) - Il sito comunale deve utilizzare i font indicati dalla documentazione del modello di sito comunale.",
     description:
-      "CONDIZIONI DI SUCCESSO: tutti i titoli (heading) e tutti i paragrafi delle pagine del sito in lingua italiana devono usare esclusivamente i font Titillium Web, Lora e Roboto Mono; MODALITÀ DI VERIFICA: ricercando uno specifico attributo “data-element” come spiegato nella Documentazione delle App di valutazione, viene verificato che i font richiesti abbiano la precedenza tra i font a disposizione all’interno di tutti gli <h> e <p> in una scheda servizio casualmente selezionata; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs).",
+      'CONDIZIONI DI SUCCESSO: tutti i titoli (heading) e tutti i paragrafi delle pagine del sito in lingua italiana utilizzano esclusivamente i font Titillium Web, Lora o Roboto Mono come font di default; MODALITÀ DI VERIFICA: ricercando specifici attributi "data-element" come spiegato nella Documentazione delle App di valutazione, nelle pagine analizzate viene verificato che i font di default siano quelli richiesti all\'interno di tutti gli <h> e <p>; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/versione-corrente/conformita/conformita-modello-sito.html), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "municipality-inefficiency-report": {
     greenResult:
@@ -232,7 +248,8 @@ export const auditDictionary = {
       "Il link è nel footer, la pagina di destinazione esiste ma la label non è nominata correttamente.",
     redResult:
       "Il link non è nel footer o la pagina di destinazione è inesistente.",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.2.4 - SEGNALAZIONE DISSERVIZIO - Il sito comunale deve fornire al cittadino la possibilità di segnalare un disservizio, tramite email o servizio dedicato.",
     failureTitle:
@@ -247,7 +264,8 @@ export const auditDictionary = {
       "Le voci del menù obbligatorie e il loro ordine è corretto ma sono presenti fino a 3 voci aggiuntive.",
     redResult:
       "Almeno una delle voci obbligatorie è assente o inesatta e/o le voci obbligatorie sono in ordine errato e/o sono presenti 8 o più voci nel menù del sito.",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.1.6 - VOCI DI MENÙ DI PRIMO LIVELLO - Il sito comunale deve presentare tutte le voci di menù di primo livello, nell'esatto ordine descritto dalla documentazione del modello di sito comunale.",
     failureTitle:
@@ -271,7 +289,7 @@ export const auditDictionary = {
         "Pagine nelle quali meno del 50% dei metatag richiesti sono presenti e corretti:",
     },
     nonExecuted:
-      "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "R.SI.1.1 - METATAG - Nel sito comunale, le voci della scheda servizio devono presentare i metatag descritti dal modello, in base agli standard internazionali.",
     failureTitle:
@@ -285,7 +303,8 @@ export const auditDictionary = {
     yellowResult: "",
     redResult:
       "Il link non è nel footer o non invia a una pagina esistente o sicura.",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.3.3 - INFORMATIVA PRIVACY - Il sito comunale deve presentare l'informativa sul trattamento dei dati personali, secondo quanto previsto dalla normativa vigente.",
     failureTitle:
@@ -298,7 +317,7 @@ export const auditDictionary = {
     yellowResult: "Almeno il 50% dei titoli usati è corretto.",
     redResult: "Meno del 50% dei titoli usati è corretto.",
     nonExecuted:
-      'Non è stato possibile condurre il test. Controlla le "Modalità di verifica" per scoprire di più.',
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.1.7 - TITOLI DELLE PAGINE DI SECONDO LIVELLO - Nel sito comunale, i titoli delle pagine di secondo livello devono rispettare il vocabolario descritto dalla documentazione del modello di sito comunale.",
     failureTitle:
@@ -310,7 +329,8 @@ export const auditDictionary = {
     greenResult: "Il certificato del sito [url] è attivo e valido.",
     yellowResult: "",
     redResult: "Il certificato del sito [url] non è attivo o valido: ",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.5.1 - CERTIFICATO HTTPS - Il sito comunale deve avere un certificato https valido e attivo.",
     failureTitle:
@@ -334,7 +354,7 @@ export const auditDictionary = {
         "Pagine nelle quali più di 2 voci obbligatorie o i relativi contenuti non sono presenti o più di 1 voce non è nell'ordine corretto:",
     },
     nonExecuted:
-      "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.1.3 - SCHEDE INFORMATIVE DI SERVIZIO PER IL CITTADINO - Tutte le schede informative dei servizi per il cittadino devono mostrare le voci segnalate come obbligatorie all'interno dell'architettura dell'informazione, nell'ordine segnalato dal modello.",
     failureTitle:
@@ -349,7 +369,7 @@ export const auditDictionary = {
     redResult:
       "Il sito non utilizza una versione uguale o superiore alla 1.0 del tema CMS del modello.",
     nonExecuted:
-      'Non è stato possibile condurre il test. Controlla le "Modalità di verifica" per scoprire di più.',
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.1.4 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito comunale, lo utilizza nella versione 1.0 o successive.",
     failureTitle:
@@ -362,7 +382,8 @@ export const auditDictionary = {
     greenResult: "",
     yellowResult: "",
     redResult: "",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "R.SI.2.1 - INFRASTRUTTURE CLOUD - Il sito comunale deve essere ospitato su infrastrutture qualificate ai sensi della normativa vigente.",
     failureTitle:
@@ -374,7 +395,8 @@ export const auditDictionary = {
     greenResult: "",
     yellowResult: "",
     redResult: "",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.3.1 - COOKIE - Il sito comunale deve presentare cookie tecnici in linea con la normativa vigente.",
     failureTitle:
@@ -386,7 +408,8 @@ export const auditDictionary = {
     greenResult: "",
     yellowResult: "",
     redResult: "",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.5.2 - DOMINIO ISTITUZIONALE - Il sito comunale utilizza un dominio istituzionale secondo le modalità indicate nella documentazione del modello di sito comunale.",
     failureTitle:
@@ -400,7 +423,8 @@ export const auditDictionary = {
     yellowResult: "",
     redResult:
       "La dicitura sulla licenza dei contenuti è errata o non presente nella pagine delle note legali o questa non è raggiungibile dal footer.",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.3.4 - LICENZA E ATTRIBUZIONE - Il sito comunale deve pubblicare dati, documenti e informazioni con licenza aperta comunicandolo come descritto nella documentazione del modello di sito comunale.",
     failureTitle:
@@ -412,7 +436,8 @@ export const auditDictionary = {
     greenResult: "",
     yellowResult: "",
     redResult: "",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "R.SI.2.2 - RIUSO - Il Comune deve mettere a riuso sotto licenza aperta il software secondo le Linee Guida “acquisizione e riuso di software e riuso di software per le pubbliche amministrazioni.",
     failureTitle:
@@ -424,7 +449,8 @@ export const auditDictionary = {
     greenResult: "",
     yellowResult: "",
     redResult: "",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.5.1 - CERTIFICATO HTTPS - Il sito comunale deve avere un certificato https valido e attivo.",
     failureTitle:
@@ -448,7 +474,7 @@ export const auditDictionary = {
         "Pagine nelle quali il componente non è presente o non rispetta le caratteristiche richieste:",
     },
     nonExecuted:
-      "Non è stato possibile identificare l'elemento su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SI.2.6 - VALUTAZIONE DELL’ESPERIENZA D’USO, CHIAREZZA INFORMATIVA DELLA SCHEDA DI SERVIZIO - Il sito comunale deve permettere la valutazione della chiarezza informativa per ogni scheda di servizio secondo le modalità indicate nella documentazione del modello di sito comunale.",
     failureTitle:
@@ -462,7 +488,8 @@ export const auditDictionary = {
     yellowResult: "",
     redResult:
       "Il link non è nel footer o non invia alla pagina corretta o la pagina non esiste.",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SC.2.2 - DICHIARAZIONE DI ACCESSIBILITÀ - Il sito della scuola deve esporre la dichiarazione di accessibilità.",
     failureTitle:
@@ -483,7 +510,8 @@ export const auditDictionary = {
       redResult:
         "Pagine che non utilizzano la libreria Bootstrap Italia in una versione idonea o non utilizzano nessuna delle classi CSS indicate: ",
     },
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SC.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito della scuola deve utilizzare la libreria Bootstrap Italia in una versione più recente di 1.6.",
     failureTitle:
@@ -499,7 +527,7 @@ export const auditDictionary = {
     redResult:
       "Meno del 50% degli argomenti appartengono alle voci del modello o l'elenco degli argomenti non è presente nella pagina dei risultati di ricerca.",
     nonExecuted:
-      "Non è stato possibile trovare gli argomenti o la pagina che li contiene. Controlla le “Modalità di verifica” per scoprire di più.",
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "R.SC.1.1 - VOCABOLARI CONTROLLATI - Il sito della scuola deve utilizzare argomenti forniti dal modello di sito scuola.",
     failureTitle:
@@ -518,7 +546,8 @@ export const auditDictionary = {
       yellowResult: "",
       redResult: "Pagine nelle quali sono stati rilevati cookie non idonei:",
     },
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SC.2.3 - COOKIE - Il sito della scuola deve presentare cookie tecnici in linea con la normativa vigente.",
     failureTitle:
@@ -527,24 +556,28 @@ export const auditDictionary = {
       "CONDIZIONI DI SUCCESSO: il dominio di tutti i cookie già presenti nel sito, ovvero senza che sia stata espressa una preferenza da parte dell’utente riguardo il loro uso, è corrispondente al dominio del sito web della scuola; MODALITÀ DI VERIFICA: viene verificato che al caricamento di ogni pagina analizzata il dominio dei cookie identificati sia corrispondente al dominio del sito web; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Linee guida cookie e altri strumenti di tracciamento - 10 giugno 2021](https://www.garanteprivacy.it/home/docweb/-/docweb-display/docweb/9677876).",
   },
   "school-ux-ui-consistency-fonts-check": {
-    greenResult: "Tutte le pagine analizzate utilizzano i font come richiesto.",
+    greenResult:
+      "In tutte le pagine analizzate vengono utilizzati i font come richiesto.",
     yellowResult:
-      "In almeno una pagina sono presenti <h> o <p> che utilizzano altri font oltre a quelli richiesti:",
+      "In almeno una delle pagine analizzate sono presenti <h> o <p> che includono altri font oltre a quelli richiesti.",
     redResult:
-      "In almeno una pagina sono presenti <h> o <p> che non utilizzano i font come richiesto:",
+      "In almeno una delle pagine analizzate sono presenti <h> o <p> che non utilizzano i font come richiesto.",
     subItem: {
-      greenResult: "Pagine in cui sono stati rilevati solo font idonei",
-      yellowResult: "",
-      redResult: "Pagine in cui sono stati rilevati font non idonei.",
+      greenResult:
+        "Pagine analizzate nelle quali vengono utilizzati i font come richiesto:",
+      yellowResult:
+        "Pagine analizzate nelle quali sono presenti <h> o <p> che includono altri font oltre a quelli richiesti:",
+      redResult:
+        "Pagine analizzate nelle quali sono presenti <h> o <p> che non utilizzano i font come richiesto:",
     },
     nonExecuted:
-      "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SC.1.1 - COERENZA DELL'UTILIZZO DEI FONT (librerie di caratteri) - Il sito della scuola deve utilizzare i font indicati dalla documentazione del modello di sito della scuola.",
     failureTitle:
       "C.SC.1.1 - COERENZA DELL'UTILIZZO DEI FONT (librerie di caratteri) - Il sito della scuola deve utilizzare i font indicati dalla documentazione del modello di sito della scuola.",
     description:
-      "CONDIZIONI DI SUCCESSO: tutti i titoli (heading) e tutti i paragrafi delle pagine del sito in lingua italiana devono usare esclusivamente i font Titillium Web, Lora e Roboto Mono; MODALITÀ DI VERIFICA: ricercando uno specifico attributo “data-element” come spiegato nella Documentazione delle App di valutazione, viene verificato che i font richiesti abbiano la precedenza tra i font a disposizione all’interno di tutti gli <h> e <p> in una scheda servizio casualmente selezionata; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs)",
+      'CONDIZIONI DI SUCCESSO: tutti i titoli (heading) e tutti i paragrafi delle pagine del sito in lingua italiana utilizzano esclusivamente i font Titillium Web, Lora o Roboto Mono come font di default; MODALITÀ DI VERIFICA: ricercando specifici attributi "data-element" come spiegato nella Documentazione delle App di valutazione, nelle pagine analizzate viene verificato che i font di default siano quelli richiesti all\'interno di tutti gli <h> e <p>; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "school-menu-structure-match-model": {
     greenResult: "Le voci del menù sono corrette e nell'ordine giusto.",
@@ -552,7 +585,8 @@ export const auditDictionary = {
       "L'ordine delle voci del menu è corretto ma sono presenti fino a 3 voci aggiuntive.",
     redResult:
       "Almeno una delle voci obbligatorie è assente o inesatta e/o le voci obbligatorie sono in ordine errato e/o sono presenti 8 o più voci nel menù del sito.",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SC.1.4 - VOCI DI MENÙ DI PRIMO LIVELLO - Il sito della scuola deve presentare tutte le voci di menù di primo livello, nell'esatto ordine descritto dalla documentazione del modello di sito scolastico.",
     failureTitle:
@@ -564,7 +598,8 @@ export const auditDictionary = {
     greenResult: "Tutte le voci usate sono corrette.",
     yellowResult: "Almeno il 30% delle voci usate sono corrette.",
     redResult: "Meno del 30% delle voci sono corrette.",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SC.1.5 - VOCI DI MENÙ DI SECONDO LIVELLO - Il sito presenta le voci di menù di secondo livello come descritto nella documentazione del modello di sito della scuola.",
     failureTitle:
@@ -578,7 +613,8 @@ export const auditDictionary = {
     yellowResult: "",
     redResult:
       "Il link non è nel footer o non invia a una pagina esistente o sicura.",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SC.2.1 - INFORMATIVA PRIVACY - Il sito della scuola deve presentare l'informativa sul trattamento dei dati personali, secondo quanto previsto dalla normativa vigente.",
     failureTitle:
@@ -590,7 +626,8 @@ export const auditDictionary = {
     greenResult: "Il certificato del sito [url] è attivo e valido.",
     yellowResult: "",
     redResult: "Il certificato del sito [url] non è attivo o valido: ",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SC.3.1 - CERTIFICATO HTTPS - Il sito della scuola deve avere un certificato https valido e attivo.",
     failureTitle:
@@ -614,7 +651,7 @@ export const auditDictionary = {
         "Pagine nelle quali più di 2 voci obbligatorie o i relativi contenuti non sono presenti o più di 1 voce non è nell'ordine corretto:",
     },
     nonExecuted:
-      "Non è stato possibile trovare una scheda servizio su cui condurre il test. Controlla le “Modalità di verifica” per scoprire di più.",
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "R.SC.1.2 - SCHEDE INFORMATIVE DI SERVIZIO - Tutte le schede informative dei servizi devono mostrare le voci segnalate come obbligatorie all'interno dell'architettura dell'informazione, nell'ordine segnalato dal modello.",
     failureTitle:
@@ -629,7 +666,7 @@ export const auditDictionary = {
     redResult:
       "Il sito non utilizza una versione uguale o superiore alla 2.0 del tema CMS del modello.",
     nonExecuted:
-      'Non è stato possibile condurre il test. Controlla le "Modalità di verifica" per scoprire di più.',
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SC.1.3 - UTILIZZO DI TEMI PER CMS - Nel caso in cui il sito utilizzi un tema messo a disposizione nella documentazione del modello di sito della scuola, lo utilizza nella versione 2.0 o successive.",
     failureTitle:
@@ -642,7 +679,8 @@ export const auditDictionary = {
     greenResult: "",
     yellowResult: "",
     redResult: "",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "R.SC.2.3 - INFRASTRUTTURE CLOUD - Il sito della scuola deve essere ospitato su infrastrutture qualificate ai sensi della normativa vigente.",
     failureTitle:
@@ -656,7 +694,8 @@ export const auditDictionary = {
     yellowResult: "",
     redResult:
       "La dicitura sulla licenza dei contenuti è errata o non presente nella pagine delle note legali o questa non è raggiungibile dal footer.",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "R.SC.2.2 - LICENZA E ATTRIBUZIONE - Il sito della scuola deve pubblicare dati, documenti e informazioni con licenza aperta (es. CC-BY 4.0).",
     failureTitle:
@@ -668,7 +707,8 @@ export const auditDictionary = {
     greenResult: "",
     yellowResult: "",
     redResult: "",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "R.SC.2.1 - RIUSO - La scuola deve mettere a riuso sotto licenza aperta il software secondo le Linee Guida “acquisizione e riuso di software e riuso di software per le pubbliche amministrazioni“.",
     failureTitle:
@@ -680,7 +720,8 @@ export const auditDictionary = {
     greenResult: "",
     yellowResult: "",
     redResult: "",
-    nonExecuted: "",
+    nonExecuted:
+      "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
       "C.SC.3.1 - CERTIFICATO HTTPS - Il sito della scuola deve avere un certificato https valido e attivo.",
     failureTitle:

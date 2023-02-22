@@ -63,7 +63,7 @@ class LoadAudit extends Audit {
       {
         key: "is_service",
         itemType: "text",
-        text: "E' un servizio",
+        text: "Viene usato il servizio dedicato",
       },
     ];
 
@@ -73,7 +73,7 @@ class LoadAudit extends Audit {
         link_name: "",
         link_destination: "",
         existing_page: "No",
-        is_service: "",
+        is_service: "No",
       },
     ];
 
@@ -115,7 +115,9 @@ class LoadAudit extends Audit {
         items[0].existing_page = "Sì";
 
         const parts = new URL(pageUrl).pathname.split("/");
-        items[0].is_service = parts[1] === "servizi" ? "Sì" : "No";
+        if (parts[1] === "servizi") {
+          items[0].is_service = "Sì";
+        }
       }
 
       if (

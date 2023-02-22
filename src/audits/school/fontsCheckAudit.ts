@@ -42,8 +42,8 @@ class LoadAudit extends Audit {
     const url = artifacts.origin;
 
     const titleSubHeadings = [
-      "Font errati trovati",
-      "Numero di elementi con font errati trovati",
+      "Numero di <h> o <p> con font errati",
+      "Font errati individuati",
     ];
     const headings = [
       {
@@ -53,16 +53,16 @@ class LoadAudit extends Audit {
         subItemsHeading: { key: "inspected_page", itemType: "url" },
       },
       {
-        key: "title_wrong_fonts",
-        itemType: "text",
-        text: "",
-        subItemsHeading: { key: "wrong_fonts", itemType: "text" },
-      },
-      {
         key: "title_wrong_number_elements",
         itemType: "text",
         text: "",
         subItemsHeading: { key: "wrong_number_elements", itemType: "text" },
+      },
+      {
+        key: "title_wrong_fonts",
+        itemType: "text",
+        text: "",
+        subItemsHeading: { key: "wrong_fonts", itemType: "text" },
       },
     ];
 
@@ -234,8 +234,8 @@ class LoadAudit extends Audit {
     if (wrongItems.length > 0) {
       results.push({
         result: auditData.subItem.redResult,
-        title_wrong_fonts: titleSubHeadings[0],
-        title_wrong_number_elements: titleSubHeadings[1],
+        title_wrong_number_elements: titleSubHeadings[0],
+        title_wrong_fonts: titleSubHeadings[1],
       });
 
       for (const item of wrongItems) {
@@ -253,8 +253,8 @@ class LoadAudit extends Audit {
     if (toleranceItems.length > 0) {
       results.push({
         result: auditData.subItem.yellowResult,
-        title_wrong_fonts: titleSubHeadings[0],
-        title_wrong_number_elements: titleSubHeadings[1],
+        title_wrong_number_elements: titleSubHeadings[0],
+        title_wrong_fonts: titleSubHeadings[1],
       });
 
       for (const item of toleranceItems) {
@@ -272,8 +272,8 @@ class LoadAudit extends Audit {
     if (correctItems.length > 0) {
       results.push({
         result: auditData.subItem.greenResult,
-        title_wrong_fonts: titleSubHeadings[0],
-        title_wrong_number_elements: titleSubHeadings[1],
+        title_wrong_number_elements: titleSubHeadings[0],
+        title_wrong_fonts: titleSubHeadings[1],
       });
 
       for (const item of correctItems) {

@@ -35,7 +35,11 @@ class LoadAudit extends Audit {
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
 
-    const titleSubHeadings = ["Dominio utilizzato", "Accessibile senza WWW"];
+    const titleSubHeadings = [
+      "Dominio utilizzato",
+      "Viene usato il sottodominio 'comune.'",
+      "Accessibile senza WWW",
+    ];
     const headings = [
       {
         key: "result",
@@ -49,6 +53,15 @@ class LoadAudit extends Audit {
         text: "",
         subItemsHeading: {
           key: "domain",
+          itemType: "text",
+        },
+      },
+      {
+        key: "title_correct_domain",
+        itemType: "text",
+        text: "",
+        subItemsHeading: {
+          key: "correct_domain",
           itemType: "text",
         },
       },
@@ -91,6 +104,7 @@ class LoadAudit extends Audit {
       const item = {
         inspected_page: pageToBeAnalyzed,
         domain: hostname,
+        correct_domain: "No",
         www_access: "",
       };
 
@@ -98,6 +112,7 @@ class LoadAudit extends Audit {
       for (const domain of domains) {
         if (hostname === "comune." + domain) {
           correctDomain = true;
+          item.correct_domain = "Sì";
           break;
         }
       }
@@ -134,7 +149,8 @@ class LoadAudit extends Audit {
       results.push({
         result: auditData.subItem.redResult,
         title_domain: titleSubHeadings[0],
-        title_www_access: titleSubHeadings[1],
+        title_correct_domain: titleSubHeadings[1],
+        title_www_access: titleSubHeadings[2],
       });
 
       for (const item of wrongItems) {
@@ -153,7 +169,8 @@ class LoadAudit extends Audit {
       results.push({
         result: auditData.subItem.greenResult,
         title_domain: titleSubHeadings[0],
-        title_www_access: titleSubHeadings[1],
+        title_correct_domain: titleSubHeadings[1],
+        title_www_access: titleSubHeadings[2],
       });
 
       for (const item of correctItems) {

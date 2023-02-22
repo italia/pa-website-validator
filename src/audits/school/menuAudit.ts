@@ -71,9 +71,25 @@ class LoadAudit extends lighthouse.Audit {
 
     const $: CheerioAPI = await loadPageData(url);
 
+    const menuDataElement = '[data-element="menu"]';
+    const menuComponent = $(menuDataElement);
+    if (menuComponent.length > 0) {
+      return {
+        score: 0,
+        details: Audit.makeTableDetails(
+          [{ key: "result", itemType: "text", text: "Risultato" }],
+          [
+            {
+              result: auditData.nonExecuted,
+            },
+          ]
+        ),
+      };
+    }
+
     const foundMenuElements = await getPageElementDataAttribute(
       $,
-      '[data-element="menu"]',
+      menuDataElement,
       "> li > a"
     );
 

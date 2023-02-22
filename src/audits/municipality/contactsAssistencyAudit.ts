@@ -50,15 +50,6 @@ class LoadAudit extends Audit {
           itemType: "url",
         },
       },
-      {
-        key: "title_component_exists",
-        itemType: "text",
-        text: "",
-        subItemsHeading: {
-          key: "component_exists",
-          itemType: "text",
-        },
-      },
     ];
 
     const randomServices: string[] = await getRandomThirdLevelPagesUrl(
@@ -90,7 +81,6 @@ class LoadAudit extends Audit {
     for (const randomService of randomServices) {
       const item = {
         inspected_page: randomService,
-        component_exists: "No",
       };
 
       const $: CheerioAPI = await loadPageData(randomService);
@@ -111,8 +101,6 @@ class LoadAudit extends Audit {
         wrongItems.push(item);
         continue;
       }
-
-      item.component_exists = "Sì";
       correctItems.push(item);
     }
 

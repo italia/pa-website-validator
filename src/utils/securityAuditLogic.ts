@@ -50,7 +50,7 @@ const run = async (
     {
       key: "redirect_to_https",
       itemType: "text",
-      text: "Redirect ad HTTPS",
+      text: "La pagina effettua redirect da http a https",
     },
   ];
   const item = [

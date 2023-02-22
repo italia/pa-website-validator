@@ -80,9 +80,25 @@ class LoadAudit extends Audit {
       };
 
       const $: CheerioAPI = await loadPageData(url);
+      const menuDataElement = `[data-element="${secondaryMenuItem.data_element}"]`;
+      const menuComponent = $(menuDataElement);
+      if (menuComponent.length > 0) {
+        return {
+          score: 0,
+          details: Audit.makeTableDetails(
+            [{ key: "result", itemType: "text", text: "Risultato" }],
+            [
+              {
+                result: auditData.nonExecuted,
+              },
+            ]
+          ),
+        };
+      }
+
       const headerUlTest = await getPageElementDataAttribute(
         $,
-        `[data-element="${secondaryMenuItem.data_element}"]`,
+        menuDataElement,
         "a"
       );
 
