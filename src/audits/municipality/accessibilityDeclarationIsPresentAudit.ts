@@ -67,7 +67,7 @@ class LoadAudit extends Audit {
         link_name: "",
         link_destination: "",
         existing_page: "No",
-        page_contains_correct_url: "No",
+        page_contains_correct_url: "",
       },
     ];
 
@@ -102,6 +102,8 @@ class LoadAudit extends Audit {
           details: Audit.makeTableDetails(headings, items),
         };
       }
+
+      items[0].page_contains_correct_url = "No";
 
       const privacyPageHTML: string = await getAllPageHTML(href);
       if (!privacyPageHTML.includes(url)) {
