@@ -158,7 +158,7 @@ class LoadAudit extends Audit {
 
     if (wrongItems.length > 0) {
       results.push({
-        result: auditData.subItem.greenResult,
+        result: auditData.subItem.redResult,
         title_cookie_domain: titleSubHeadings[0],
         title_cookie_name: titleSubHeadings[1],
         title_cookie_value: titleSubHeadings[2],
