@@ -48,6 +48,28 @@ try {
   ]);
 
   console.log();
+
+  const { accuracy }: { accuracy: "min" | "suggested" | "high" | "all" } =
+    await inquirer.prompt([
+      {
+        message: "Seleziona quanto vuoi che sia approfondita l'analisi:",
+        name: "accuracy",
+        type: "list",
+        default: "suggested",
+        choices: [
+          {
+            name: "Veloce",
+            value: "suggested",
+          },
+          {
+            name: "Completa (richiede più tempo)",
+            value: "all",
+          },
+        ],
+      },
+    ]);
+
+  console.log();
   const currentDate = new Date();
   const hostname = new URL(url).hostname;
   const dest = homedir();
@@ -59,7 +81,8 @@ try {
     true,
     dest,
     `report-${hostname}-${dateFormat(currentDate, "UTC:yyyymmdd'T'HHMMss'Z'")}`,
-    true
+    true,
+    accuracy
   );
 
   console.log();
