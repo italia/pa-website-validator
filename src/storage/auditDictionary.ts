@@ -421,7 +421,7 @@ export const auditDictionary = {
       "La dicitura sulla licenza dei contenuti è presente nella pagina delle note legali raggiungibile dal footer.",
     yellowResult: "",
     redResult:
-      "La dicitura sulla licenza dei contenuti è errata o non presente nella pagine delle note legali o questa non è raggiungibile dal footer.",
+      "La dicitura sulla licenza dei contenuti è errata o non presente nella pagina delle note legali o questa non è raggiungibile dal footer.",
     nonExecuted:
       "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
@@ -692,7 +692,7 @@ export const auditDictionary = {
       "La dicitura sulla licenza dei contenuti è presente nella pagina delle note legali raggiungibile dal footer.",
     yellowResult: "",
     redResult:
-      "La dicitura sulla licenza dei contenuti è errata o non presente nella pagine delle note legali o questa non è raggiungibile dal footer.",
+      "La dicitura sulla licenza dei contenuti è errata o non presente nella pagina delle note legali o questa non è raggiungibile dal footer.",
     nonExecuted:
       "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:

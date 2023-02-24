@@ -106,7 +106,6 @@ class LoadAudit extends Audit {
         };
       }
 
-
       items[0].page_contains_correct_url = "No";
 
       const privacyPageHTML: string = await getAllPageHTML(href);

@@ -88,8 +88,8 @@ class LoadAudit extends Audit {
       }
 
       items[0].link_name = legalNotesElements.text().trim() ?? "";
-      items[0].page_section = 'No';
-      items[0].page_contains_correct_text = 'No';
+      items[0].page_section = "No";
+      items[0].page_contains_correct_text = "No";
 
       $ = await loadPageData(elementObj.href);
       const sectionDataElement = `[data-element="${legalNotes.section.dataElement}"]`;
