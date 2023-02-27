@@ -63,7 +63,5 @@ export const primaryMenuItems = {
   },
 };
 
-export const secondaryMenuItems = {};
-
 export const customPrimaryMenuItemsDataElement = "custom-submenu-";
 export const customSecondaryMenuItemsDataElement = "custom-category-link";

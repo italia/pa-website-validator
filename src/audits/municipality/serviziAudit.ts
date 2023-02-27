@@ -160,13 +160,13 @@ class LoadAudit extends Audit {
       );
 
       const title = $('[data-element="service-title"]').text().trim() ?? "";
-      if (!title) {
+      if (title.length < 3) {
         missingMandatoryItems.push(mandatoryHeaderVoices[0]);
       }
 
       const description =
         $('[data-element="service-description"]').text().trim() ?? "";
-      if (!description) {
+      if (description.length < 3) {
         missingMandatoryItems.push(mandatoryHeaderVoices[1]);
       }
 
@@ -198,7 +198,7 @@ class LoadAudit extends Audit {
       }
 
       const area = $('[data-element="service-area"]').text().trim() ?? "";
-      if (!area) {
+      if (area.length < 3) {
         missingMandatoryItems.push(mandatoryBodyVoices[0]);
       }
 
