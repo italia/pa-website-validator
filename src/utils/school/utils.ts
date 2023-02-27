@@ -1,5 +1,6 @@
 "use strict";
 import {
+  customPrimaryMenuItemsDataElement,
   menuItems,
   primaryMenuDataElement,
   primaryMenuItems,
@@ -47,8 +48,16 @@ const getRandomSecondLevelPagesUrl = async (
   let pagesUrls: string[] = [];
   const $ = await loadPageData(url);
 
+  const menuDataElements = [];
+
   for (const [, value] of Object.entries(menuItems)) {
-    const dataElement = `[data-element="${value.data_element}"]`;
+    menuDataElements.push(value.data_element);
+  }
+
+  menuDataElements.push(customPrimaryMenuItemsDataElement);
+
+  for (const value of menuDataElements) {
+    const dataElement = `[data-element="${value}"]`;
 
     let elements = $(dataElement);
     const secondLevelPagesUrls = [];
@@ -78,6 +87,9 @@ const getRandomSecondLevelPagesUrl = async (
       pagesUrls = [...pagesUrls, ...new Set(secondLevelPagesUrls)];
     }
   }
+
+  //custom
+
   return getRandomNString(pagesUrls, numberOfPages);
 };
 
