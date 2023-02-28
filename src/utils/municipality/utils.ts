@@ -201,20 +201,20 @@ const getRandomThirdLevelPagesUrl = async (
 const getPrimaryPageUrl = async (url: string, dataElement: string) => {
   const $ = await loadPageData(url);
 
-  const servicesPageHref = await getHREFValuesDataAttribute(
+  const pageElements = await getHREFValuesDataAttribute(
     $,
     `[data-element="${dataElement}"]`
   );
-  if (servicesPageHref.length <= 0) {
+  if (pageElements.length <= 0) {
     return "";
   }
 
-  let allServicesUrl = servicesPageHref[0];
-  if ((await isInternalUrl(allServicesUrl)) && !allServicesUrl.includes(url)) {
-    allServicesUrl = await buildUrl(url, allServicesUrl);
+  let pageUrl = pageElements[0];
+  if ((await isInternalUrl(pageUrl)) && !pageUrl.includes(url)) {
+    pageUrl = await buildUrl(url, pageUrl);
   }
 
-  return allServicesUrl;
+  return pageUrl;
 };
 
 const checkFeedbackComponent = async (url: string) => {
@@ -510,25 +510,6 @@ const getButtonUrl = async (
   return "";
 };
 
-const getSinglePageUrl = async (url: string, dataElement: string) => {
-  const $: CheerioAPI = await loadPageData(url);
-  const personalAreaLogin = await getHREFValuesDataAttribute(
-    $,
-    `[data-element="${dataElement}"]`
-  );
-  if (personalAreaLogin.length === 1) {
-    let personalAreaLoginUrl = personalAreaLogin[0];
-    if (
-      (await isInternalUrl(personalAreaLoginUrl)) &&
-      !personalAreaLoginUrl.includes(url)
-    ) {
-      personalAreaLoginUrl = await buildUrl(url, personalAreaLoginUrl);
-    }
-    return personalAreaLoginUrl;
-  }
-  return "";
-};
-
 export {
   getRandomFirstLevelPagesUrl,
   getRandomSecondLevelPagesUrl,
@@ -536,5 +517,4 @@ export {
   checkFeedbackComponent,
   getPrimaryPageUrl,
   getButtonUrl,
-  getSinglePageUrl,
 };

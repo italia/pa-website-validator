@@ -5,15 +5,12 @@
 import lighthouse from "lighthouse";
 import semver from "semver";
 import { auditDictionary } from "../../storage/auditDictionary";
-import {
-  checkCSSClassesOnPage,
-} from "../../utils/utils";
+import { checkCSSClassesOnPage } from "../../utils/utils";
 import {
   getRandomFirstLevelPagesUrl,
   getRandomSecondLevelPagesUrl,
   getRandomThirdLevelPagesUrl,
   getPrimaryPageUrl,
-  getSinglePageUrl,
 } from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import { cssClasses } from "../../storage/municipality/cssClasses";
@@ -131,7 +128,7 @@ class LoadAudit extends Audit {
       ...randomServicesUrl,
     ];
 
-    const personalAreaLoginPage = await getSinglePageUrl(
+    const personalAreaLoginPage = await getPrimaryPageUrl(
       url,
       "personal-area-login"
     );
@@ -139,12 +136,16 @@ class LoadAudit extends Audit {
       pagesToBeAnalyzed.push(personalAreaLoginPage);
     }
 
-    const bookingAppointmentPage = await getSinglePageUrl(
-      url,
-      "appointment-booking"
-    );
-    if (bookingAppointmentPage !== "") {
-      pagesToBeAnalyzed.push(bookingAppointmentPage);
+    const servicesPage = await getPrimaryPageUrl(url, "all-services");
+
+    if (servicesPage !== "") {
+      const bookingAppointmentPage = await getPrimaryPageUrl(
+        servicesPage,
+        "appointment-booking"
+      );
+      if (bookingAppointmentPage !== "") {
+        pagesToBeAnalyzed.push(bookingAppointmentPage);
+      }
     }
 
     const browser = await puppeteer.launch({

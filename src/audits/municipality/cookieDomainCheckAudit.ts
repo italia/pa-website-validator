@@ -13,7 +13,6 @@ import {
   getRandomThirdLevelPagesUrl,
   getPrimaryPageUrl,
   getButtonUrl,
-  getSinglePageUrl,
 } from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import { loadPageData } from "../../utils/utils";
@@ -133,7 +132,7 @@ class LoadAudit extends Audit {
       ...randomEventsUrl,
     ];
 
-    const personalAreaLoginPage = await getSinglePageUrl(
+    const personalAreaLoginPage = await getPrimaryPageUrl(
       url,
       "personal-area-login"
     );
@@ -141,12 +140,16 @@ class LoadAudit extends Audit {
       pagesToBeAnalyzed.push(personalAreaLoginPage);
     }
 
-    const bookingAppointmentPage = await getSinglePageUrl(
-      url,
-      "appointment-booking"
-    );
-    if (bookingAppointmentPage !== "") {
-      pagesToBeAnalyzed.push(bookingAppointmentPage);
+    const servicesPage = await getPrimaryPageUrl(url, "all-services");
+
+    if (servicesPage !== "") {
+      const bookingAppointmentPage = await getPrimaryPageUrl(
+        servicesPage,
+        "appointment-booking"
+      );
+      if (bookingAppointmentPage !== "") {
+        pagesToBeAnalyzed.push(bookingAppointmentPage);
+      }
     }
 
     let score = 1;

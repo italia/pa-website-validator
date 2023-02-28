@@ -4,10 +4,8 @@
 import lighthouse from "lighthouse";
 import { domains } from "../../storage/municipality/allowedDomains";
 import { auditDictionary } from "../../storage/auditDictionary";
-import {
-  urlExists,
-} from "../../utils/utils";
-import { getSinglePageUrl } from "../../utils/municipality/utils";
+import { urlExists } from "../../utils/utils";
+import { getPrimaryPageUrl } from "../../utils/municipality/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -74,7 +72,7 @@ class LoadAudit extends Audit {
 
     const pagesToBeAnalyzed = [url];
 
-    const personalAreaLoginPage = await getSinglePageUrl(
+    const personalAreaLoginPage = await getPrimaryPageUrl(
       url,
       "personal-area-login"
     );

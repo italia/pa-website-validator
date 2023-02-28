@@ -8,7 +8,6 @@ import {
   getRandomSecondLevelPagesUrl,
   getRandomThirdLevelPagesUrl,
   getPrimaryPageUrl,
-  getSinglePageUrl,
 } from "../../utils/municipality/utils";
 import puppeteer from "puppeteer";
 import { auditDictionary } from "../../storage/auditDictionary";
@@ -111,7 +110,7 @@ class LoadAudit extends Audit {
       ...randomServicesUrl,
     ];
 
-    const personalAreaLoginPage = await getSinglePageUrl(
+    const personalAreaLoginPage = await getPrimaryPageUrl(
       url,
       "personal-area-login"
     );

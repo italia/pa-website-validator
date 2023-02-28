@@ -3,17 +3,13 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import {
-  buildUrl,
   checkBreadcrumb,
-  getHREFValuesDataAttribute,
   getPageElementDataAttribute,
-  isInternalUrl,
   loadPageData,
 } from "../../utils/utils";
 import {
   getRandomThirdLevelPagesUrl,
   getPrimaryPageUrl,
-  getSinglePageUrl,
 } from "../../utils/municipality/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
@@ -88,13 +84,9 @@ class LoadAudit extends Audit {
     ];
 
     let $ = await loadPageData(url);
+    const servicesPage = await getPrimaryPageUrl(url, "all-services");
 
-    const servicesPage = await getHREFValuesDataAttribute(
-      $,
-      '[data-element="all-services"]'
-    );
-
-    if (servicesPage.length === 0) {
+    if (servicesPage === "") {
       return {
         score: 0,
         details: Audit.makeTableDetails(
@@ -108,16 +100,8 @@ class LoadAudit extends Audit {
       };
     }
 
-    let servicePageUrl = servicesPage[0];
-    if (
-      (await isInternalUrl(servicePageUrl)) &&
-      !servicePageUrl.includes(url)
-    ) {
-      servicePageUrl = await buildUrl(url, servicePageUrl);
-    }
-
-    const bookingAppointmentPage = await getSinglePageUrl(
-      servicePageUrl,
+    const bookingAppointmentPage = await getPrimaryPageUrl(
+      servicesPage,
       "appointment-booking"
     );
 
@@ -139,7 +123,7 @@ class LoadAudit extends Audit {
     const wrongItems = [];
 
     const item = {
-      inspected_page: servicePageUrl,
+      inspected_page: servicesPage,
       component_exist: "Sì",
       correct_breadcrumb: "Sì",
       in_page_url: "Non si applica",
@@ -164,14 +148,14 @@ class LoadAudit extends Audit {
       correctItems.push(item);
     }
 
-    const randomServicesUrl = await getRandomThirdLevelPagesUrl(
+    const randomServices = await getRandomThirdLevelPagesUrl(
       url,
       await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
       `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
       auditVariables.numberOfServicesToBeScanned
     );
 
-    if (randomServicesUrl.length === 0) {
+    if (randomServices.length === 0) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
@@ -185,7 +169,8 @@ class LoadAudit extends Audit {
       };
     }
 
-    for (const randomService of randomServicesUrl) {
+    for (const randomService of randomServices) {
+      $ = await loadPageData(randomService);
       const item = {
         inspected_page: randomService,
         component_exist: "Sì",
@@ -193,18 +178,18 @@ class LoadAudit extends Audit {
         in_page_url: "No",
       };
 
-      const bookingAppointmentServicePage = await getSinglePageUrl(
+      const bookingAppointmentServicePage = await getPrimaryPageUrl(
         randomService,
         "appointment-booking"
       );
 
-      const inPageButton = $('[data-element="appointment-booking"]');
-      if (inPageButton.length > 0) {
-        item.in_page_url = "Sì";
+      if (bookingAppointmentServicePage === "") {
+        item.component_exist = "No";
       }
 
-      if (bookingAppointmentServicePage !== "") {
-        item.component_exist = "No";
+      const inPageButton = $('[data-element="service-booking-access"]');
+      if (inPageButton.length > 0) {
+        item.in_page_url = "Sì";
       }
 
       if (bookingAppointmentServicePage !== bookingAppointmentPage) {
@@ -215,7 +200,7 @@ class LoadAudit extends Audit {
       }
 
       if (
-        bookingAppointmentServicePage !== "" ||
+        bookingAppointmentServicePage === "" ||
         bookingAppointmentServicePage !== bookingAppointmentPage ||
         item.correct_breadcrumb === "No"
       ) {
