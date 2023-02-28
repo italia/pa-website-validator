@@ -49,7 +49,6 @@ const getRandomSecondLevelPagesUrl = async (
   const $ = await loadPageData(url);
 
   const menuDataElements = [];
-
   for (const [, value] of Object.entries(menuItems)) {
     menuDataElements.push(value.data_element);
   }
@@ -80,15 +79,16 @@ const getRandomSecondLevelPagesUrl = async (
         }
       }
 
-      if (secondLevelPagesUrls.length === 0) {
+      if (
+        secondLevelPagesUrls.length === 0 &&
+        value !== customPrimaryMenuItemsDataElement
+      ) {
         return [];
       }
 
       pagesUrls = [...pagesUrls, ...new Set(secondLevelPagesUrls)];
     }
   }
-
-  //custom
 
   return getRandomNString(pagesUrls, numberOfPages);
 };

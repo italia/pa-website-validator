@@ -46,4 +46,4 @@ export const menuItems = {
   },
 };
 
-export const customPrimaryMenuItemsDataElement = "custom-submenu-";
+export const customPrimaryMenuItemsDataElement = "custom-submenu";

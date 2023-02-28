@@ -1,7 +1,10 @@
 "use strict";
 import * as cheerio from "cheerio";
 import puppeteer, { ElementHandle, Page } from "puppeteer";
-import { primaryMenuItems } from "../../storage/municipality/menuItems";
+import {
+  customSecondaryMenuItemsDataElement,
+  primaryMenuItems,
+} from "../../storage/municipality/menuItems";
 import {
   areAllElementsInVocabulary,
   buildUrl,
@@ -12,37 +15,55 @@ import {
 } from "../utils";
 import { CheerioAPI } from "cheerio";
 import { feedbackComponentStructure } from "../../storage/municipality/feedbackComponentStructure";
+import { customPrimaryMenuItemsDataElement } from "../../storage/municipality/menuItems";
 
 const getRandomFirstLevelPagesUrl = async (
   url: string,
   numberOfPages = 1
 ): Promise<string[]> => {
   const $ = await loadPageData(url);
-  const pagesUrls: string[] = [];
+  let pagesUrls: string[] = [];
 
-  for (const [, primaryMenuItem] of Object.entries(primaryMenuItems)) {
-    const dataElement = `[data-element="${primaryMenuItem.data_element}"]`;
-    let primaryLevelPageUrl = "";
-    const element = $(dataElement);
-    if (element) {
-      primaryLevelPageUrl = $(element).attr()?.href ?? "";
-      if (
-        primaryLevelPageUrl &&
-        primaryLevelPageUrl !== "#" &&
-        primaryLevelPageUrl !== ""
-      ) {
+  const menuDataElements = [];
+
+  for (const [, value] of Object.entries(primaryMenuItems)) {
+    menuDataElements.push(value.data_element);
+  }
+
+  menuDataElements.push(customPrimaryMenuItemsDataElement);
+
+  for (const value of menuDataElements) {
+    const dataElement = `[data-element="${value}"]`;
+
+    const elements = $(dataElement);
+    const primaryLevelPageUrls = [];
+    if (Object.keys(elements).length > 0) {
+      for (const element of elements) {
+        let primaryLevelPageUrl = $(element).attr()?.href;
         if (
-          (await isInternalUrl(primaryLevelPageUrl)) &&
-          !primaryLevelPageUrl.includes(url)
+          primaryLevelPageUrl &&
+          primaryLevelPageUrl !== "#" &&
+          primaryLevelPageUrl !== ""
         ) {
-          primaryLevelPageUrl = await buildUrl(url, primaryLevelPageUrl);
+          if (
+            (await isInternalUrl(primaryLevelPageUrl)) &&
+            !primaryLevelPageUrl.includes(url)
+          ) {
+            primaryLevelPageUrl = await buildUrl(url, primaryLevelPageUrl);
+          }
+          primaryLevelPageUrls.push(primaryLevelPageUrl);
         }
       }
+
+      if (
+        primaryLevelPageUrls.length === 0 &&
+        value !== customPrimaryMenuItemsDataElement
+      ) {
+        return [];
+      }
+
+      pagesUrls = [...pagesUrls, ...new Set(primaryLevelPageUrls)];
     }
-    if (primaryLevelPageUrl === "") {
-      return [];
-    }
-    pagesUrls.push(primaryLevelPageUrl);
   }
 
   return getRandomNString(pagesUrls, numberOfPages);
@@ -55,48 +76,60 @@ const getRandomSecondLevelPagesUrl = async (
   const $ = await loadPageData(url);
   let pagesUrls: string[] = [];
 
-  for (const [key, primaryMenuItem] of Object.entries(primaryMenuItems)) {
+  const customMenuElement = {
+    custom: {
+      data_element: customPrimaryMenuItemsDataElement,
+      secondary_item_data_element: customSecondaryMenuItemsDataElement,
+    },
+  };
+
+  const menuItems = Object.assign({}, primaryMenuItems, customMenuElement);
+
+  for (const [key, primaryMenuItem] of Object.entries(menuItems)) {
     const dataElement = `[data-element="${primaryMenuItem.data_element}"]`;
 
-    const element = $(dataElement);
-    if (element) {
-      let primaryLevelPageUrl = $(element).attr()?.href;
-      if (
-        primaryLevelPageUrl &&
-        primaryLevelPageUrl !== "#" &&
-        primaryLevelPageUrl !== ""
-      ) {
+    const elements = $(dataElement);
+    if (Object.keys(elements).length > 0) {
+      for (const element of elements) {
+        let primaryLevelPageUrl = $(element).attr()?.href;
         if (
-          (await isInternalUrl(primaryLevelPageUrl)) &&
-          !primaryLevelPageUrl.includes(url)
+          primaryLevelPageUrl &&
+          primaryLevelPageUrl !== "#" &&
+          primaryLevelPageUrl !== ""
         ) {
-          primaryLevelPageUrl = await buildUrl(url, primaryLevelPageUrl);
-        }
-        const $2 = await loadPageData(primaryLevelPageUrl);
-        let secondPageUrls = [];
-        if (key !== "live") {
-          const dataElementSecondaryItem = `[data-element="${primaryMenuItem.secondary_item_data_element[0]}"]`;
-          secondPageUrls = await getHREFValuesDataAttribute(
-            $2,
-            dataElementSecondaryItem
-          );
-        } else {
-          for (const secondaryItemDataElement of primaryMenuItem.secondary_item_data_element) {
-            const dataElementSecondaryItem = `[data-element="${secondaryItemDataElement}"]`;
-            const buttonUrl = await getButtonUrl(
+          if (
+            (await isInternalUrl(primaryLevelPageUrl)) &&
+            !primaryLevelPageUrl.includes(url)
+          ) {
+            primaryLevelPageUrl = await buildUrl(url, primaryLevelPageUrl);
+          }
+
+          const $2 = await loadPageData(primaryLevelPageUrl);
+          let secondPageUrls = [];
+          if (key !== "live") {
+            const dataElementSecondaryItem = `[data-element="${primaryMenuItem.secondary_item_data_element[0]}"]`;
+            secondPageUrls = await getHREFValuesDataAttribute(
               $2,
-              url,
               dataElementSecondaryItem
             );
-            if (buttonUrl !== "") {
-              secondPageUrls.push(buttonUrl);
+          } else {
+            for (const secondaryItemDataElement of primaryMenuItem.secondary_item_data_element) {
+              const dataElementSecondaryItem = `[data-element="${secondaryItemDataElement}"]`;
+              const buttonUrl = await getButtonUrl(
+                $2,
+                url,
+                dataElementSecondaryItem
+              );
+              if (buttonUrl !== "") {
+                secondPageUrls.push(buttonUrl);
+              }
             }
           }
+          if (secondPageUrls === [] && key !== "custom") {
+            return [];
+          }
+          pagesUrls = [...pagesUrls, ...new Set(secondPageUrls)];
         }
-        if (secondPageUrls === []) {
-          return [];
-        }
-        pagesUrls = [...pagesUrls, ...new Set(secondPageUrls)];
       }
     }
   }
@@ -476,6 +509,8 @@ const getButtonUrl = async (
   }
   return "";
 };
+
+async function get
 
 export {
   getRandomFirstLevelPagesUrl,

@@ -81,20 +81,6 @@ class LoadAudit extends Audit {
 
       const $: CheerioAPI = await loadPageData(url);
       const menuDataElement = `[data-element="${secondaryMenuItem.data_element}"]`;
-      const menuComponent = $(menuDataElement);
-      if (menuComponent.length > 0) {
-        return {
-          score: 0,
-          details: Audit.makeTableDetails(
-            [{ key: "result", itemType: "text", text: "Risultato" }],
-            [
-              {
-                result: auditData.nonExecuted,
-              },
-            ]
-          ),
-        };
-      }
 
       const headerUlTest = await getPageElementDataAttribute(
         $,
@@ -102,44 +88,35 @@ class LoadAudit extends Audit {
         "a"
       );
 
-      if (headerUlTest[0] === "Panoramica") headerUlTest.shift();
-
       for (const element of headerUlTest) {
-        if (secondaryMenuItem.dictionary.includes(element.toLowerCase())) {
-          item.pagesInVocabulary.push(element);
-        } else {
-          item.pagesNotInVocabulary.push(element);
+        if (element !== "Panoramica") {
+          if (secondaryMenuItem.dictionary.includes(element.toLowerCase())) {
+            item.pagesInVocabulary.push(element);
+          } else {
+            item.pagesNotInVocabulary.push(element);
+          }
         }
-
         totalNumberOfTitleFound++;
       }
 
       itemsPage.push(item);
     }
 
-    let j = 0;
-    let checkExistence = true;
     const errorVoices = [];
 
-    while (checkExistence) {
-      const $: CheerioAPI = await loadPageData(url);
-      const headerUlTest = await getPageElementDataAttribute(
-        $,
-        `[data-element="${customPrimaryMenuItemsDataElement + j.toString()}"]`,
-        "a"
-      );
+    const $: CheerioAPI = await loadPageData(url);
+    const headerUlTest = await getPageElementDataAttribute(
+      $,
+      `[data-element="${customPrimaryMenuItemsDataElement}"]`,
+      "a"
+    );
 
-      if (headerUlTest.length === 0) {
-        checkExistence = false;
-        continue;
-      }
-
-      if (headerUlTest[0] === "Panoramica") headerUlTest.shift();
-
+    if (headerUlTest.length > 0) {
       for (const element of headerUlTest) {
-        errorVoices.push(element.toLowerCase());
+        if (element !== "Panoramica") {
+          errorVoices.push(element.toLowerCase());
+        }
       }
-      j++;
     }
 
     let pagesInVocabulary = 0;
@@ -160,12 +137,12 @@ class LoadAudit extends Audit {
         wrongTitleFound += itemPage.pagesNotInVocabulary.join(", ");
         wrongTitleFound += "; ";
       }
+    }
 
-      if (errorVoices.length > 0) {
-        wrongTitleFound += "Voci menu custom: ";
-        wrongTitleFound += errorVoices.join(", ");
-        wrongTitleFound += "; ";
-      }
+    if (errorVoices.length > 0) {
+      wrongTitleFound += "ALTRE VOCI: ";
+      wrongTitleFound += errorVoices.join(", ");
+      wrongTitleFound += "; ";
     }
 
     const presentVoicesPercentage: number = parseInt(

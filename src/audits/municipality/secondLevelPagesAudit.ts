@@ -93,41 +93,36 @@ class LoadAudit extends lighthouse.Audit {
         $,
         primaryMenuDataElement
       );
-      if (secondLevelPageHref.length <= 0) {
-        items[0].result = auditData.nonExecuted;
-        return {
-          score: score,
-          details: Audit.makeTableDetails(headings, items),
-        };
-      }
 
-      let secondLevelPageUrl = secondLevelPageHref[0];
-      if (
-        (await isInternalUrl(secondLevelPageUrl)) &&
-        !secondLevelPageUrl.includes(url)
-      ) {
-        secondLevelPageUrl = await buildUrl(url, secondLevelPageHref[0]);
-      }
+      let secondLevelPagesNames: string[] = [];
+      if (secondLevelPageHref.length > 0) {
+        let secondLevelPageUrl = secondLevelPageHref[0];
+        if (
+          (await isInternalUrl(secondLevelPageUrl)) &&
+          !secondLevelPageUrl.includes(url)
+        ) {
+          secondLevelPageUrl = await buildUrl(url, secondLevelPageHref[0]);
+        }
 
-      $ = await loadPageData(secondLevelPageUrl);
-      const secondaryMenuDataElement = `[data-element="${primaryMenuItem.secondary_item_data_element[0]}"]`;
-      let secondLevelPagesNames = [];
+        $ = await loadPageData(secondLevelPageUrl);
+        const secondaryMenuDataElement = `[data-element="${primaryMenuItem.secondary_item_data_element[0]}"]`;
 
-      if (key !== "live" && primaryMenuItem.dictionary.length > 0) {
-        secondLevelPagesNames = await getPageElementDataAttribute(
-          $,
-          secondaryMenuDataElement
-        );
-      } else {
-        for (const dataElement of primaryMenuItem.secondary_item_data_element) {
-          const buttonDataElement = `[data-element="${dataElement}"]`;
-          const pageLinkUrl = await getButtonUrl($, url, buttonDataElement);
+        if (key !== "live" && primaryMenuItem.dictionary.length > 0) {
+          secondLevelPagesNames = await getPageElementDataAttribute(
+            $,
+            secondaryMenuDataElement
+          );
+        } else {
+          for (const dataElement of primaryMenuItem.secondary_item_data_element) {
+            const buttonDataElement = `[data-element="${dataElement}"]`;
+            const pageLinkUrl = await getButtonUrl($, url, buttonDataElement);
 
-          if (pageLinkUrl.length > 0) {
-            const $2 = await loadPageData(pageLinkUrl);
-            secondLevelPagesNames.push(
-              $2('[data-element="page-name"]').text().trim() ?? ""
-            );
+            if (pageLinkUrl.length > 0) {
+              const $2 = await loadPageData(pageLinkUrl);
+              secondLevelPagesNames.push(
+                $2('[data-element="page-name"]').text().trim() ?? ""
+              );
+            }
           }
         }
       }
@@ -145,24 +140,15 @@ class LoadAudit extends lighthouse.Audit {
       itemsPage.push(item);
     }
 
-    let j = 0;
-    let checkExistence = true;
     let errorVoices: string[] = [];
 
-    while (checkExistence) {
-      const primaryMenuDataElement = `[data-element="${
-        customPrimaryMenuItemsDataElement + j.toString()
-      }"]`;
-      const secondLevelPageHref = await getHREFValuesDataAttribute(
-        $,
-        primaryMenuDataElement
-      );
-      if (secondLevelPageHref.length <= 0) {
-        checkExistence = false;
-        continue;
-      }
+    const primaryMenuDataElement = `[data-element="${customPrimaryMenuItemsDataElement}"]`;
+    const secondLevelPageHref = await getHREFValuesDataAttribute(
+      $,
+      primaryMenuDataElement
+    );
 
-      let secondLevelPageUrl = secondLevelPageHref[0];
+    for (let secondLevelPageUrl of secondLevelPageHref) {
       if (
         (await isInternalUrl(secondLevelPageUrl)) &&
         !secondLevelPageUrl.includes(url)
@@ -178,14 +164,6 @@ class LoadAudit extends lighthouse.Audit {
       );
 
       errorVoices = [...errorVoices, ...secondLevelPagesNames];
-      j++;
-    }
-
-    if (totalNumberOfTitleFound === 0) {
-      return {
-        score: score,
-        details: Audit.makeTableDetails(headings, items),
-      };
     }
 
     let pagesInVocabulary = 0;
@@ -206,12 +184,12 @@ class LoadAudit extends lighthouse.Audit {
         wrongTitleFound += itemPage.pagesNotInVocabulary.join(", ");
         wrongTitleFound += "; ";
       }
+    }
 
-      if (errorVoices.length > 0) {
-        wrongTitleFound += "Voci menu custom: ";
-        wrongTitleFound += errorVoices.join(", ");
-        wrongTitleFound += "; ";
-      }
+    if (errorVoices.length > 0) {
+      wrongTitleFound += "ALTRI TITOLI: ";
+      wrongTitleFound += errorVoices.join(", ");
+      wrongTitleFound += "; ";
     }
 
     const pagesFoundInVocabularyPercentage = parseInt(
