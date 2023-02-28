@@ -73,7 +73,7 @@ class LoadAudit extends lighthouse.Audit {
 
     const menuDataElement = '[data-element="menu"]';
     const menuComponent = $(menuDataElement);
-    if (menuComponent.length > 0) {
+    if (menuComponent.length === 0) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
