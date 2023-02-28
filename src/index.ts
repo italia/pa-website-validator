@@ -42,6 +42,14 @@ const parser = yargs(hideBin(process.argv))
     describe: "View report after scan",
     type: "string",
     demandOption: false,
+  })
+  .option("accuracy", {
+    describe:
+      "Indicates the precision with which scanning is done: the greater the precision the greater the number of pages scanned",
+    type: "string",
+    demandOption: true,
+    default: "suggested",
+    choices: ["min", "suggested", "high", "all"],
   });
 
 try {
@@ -61,7 +69,8 @@ try {
     true,
     args.destination,
     args.report,
-    "view" in args
+    "view" in args,
+    args.accuracy
   );
 
   console.log("[INFO] Status result:", result.status);

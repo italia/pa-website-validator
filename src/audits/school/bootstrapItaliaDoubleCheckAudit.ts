@@ -8,13 +8,23 @@ import { auditDictionary } from "../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
 
+import { checkCSSClassesOnPage } from "../../utils/utils";
+import {
+  getRandomFirstLevelPagesUrl,
+  getRandomSecondLevelPagesUrl,
+  getRandomServicesUrl,
+} from "../../utils/school/utils";
+import { auditScanVariables } from "../../storage/school/auditScanVariables";
+import { cssClasses } from "../../storage/school/cssClasses";
+import puppeteer from "puppeteer";
+
 const auditId = "school-ux-ui-consistency-bootstrap-italia-double-check";
 const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult;
-const redResult = auditData.redResult;
-
-const libraryName = "Bootstrap italia";
+const accuracy = process.env["accuracy"] ?? "suggested";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const auditVariables = auditScanVariables[accuracy][auditId];
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -24,89 +34,247 @@ class LoadAudit extends Audit {
       failureTitle: auditData.failureTitle,
       description: auditData.description,
       scoreDisplayMode: Audit.SCORING_MODES.BINARY,
-      requiredArtifacts: [
-        "bootstrapItaliaSelectorCheck",
-        "bootstrapItaliaCheck",
-      ],
+      requiredArtifacts: ["origin"],
     };
   }
 
   static async audit(
     artifacts: LH.Artifacts & {
-      bootstrapItaliaCheck: string;
-      bootstrapItaliaSelectorCheck: string;
+      origin: string;
     }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
-    const bootstrapItaliaVariableVersion =
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-ignore
-      artifacts.bootstrapItaliaCheck?.toString().trim().replaceAll('"', "") ??
-      "";
-    const bootstrapItaliaSelectorVariableVersion =
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-ignore
-      artifacts.bootstrapItaliaSelectorCheck
-        ?.toString()
-        .trim()
-        .replaceAll('"', "") ?? "";
+    const url = artifacts.origin;
+
+    const titleSubHeadings = [
+      "La libreria Bootstrap Italia è presente",
+      "Versione in uso",
+      "Classi CSS trovate",
+    ];
+
+    const subResults = ["Nessuna", "Almeno una"];
 
     const headings = [
       {
         key: "result",
         itemType: "text",
-        text: "Risultato",
+        text: "Risultato totale",
+        subItemsHeading: { key: "inspected_page", itemType: "url" },
       },
       {
-        key: "library_name",
+        key: "title_library_name",
         itemType: "text",
-        text: "Nome libreria in uso",
+        text: "",
+        subItemsHeading: { key: "library_name", itemType: "text" },
       },
       {
-        key: "library_version",
+        key: "title_library_version",
         itemType: "text",
-        text: "Versione libreria in uso",
+        text: "",
+        subItemsHeading: { key: "library_version", itemType: "text" },
+      },
+      {
+        key: "title_classes_found",
+        itemType: "text",
+        text: "",
+        subItemsHeading: { key: "classes_found", itemType: "text" },
       },
     ];
-    const items = [
-      {
-        result: redResult,
-        library_name: "",
+
+    const correctItems = [];
+    const wrongItems = [];
+
+    let score = 1;
+
+    const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
+      url,
+      auditVariables.numberOfFirstLevelPageToBeScanned
+    );
+
+    const randomSecondLevelPageUrl = await getRandomSecondLevelPagesUrl(
+      url,
+      auditVariables.numberOfSecondLevelPageToBeScanned
+    );
+
+    const randomServiceUrl = await getRandomServicesUrl(
+      url,
+      auditVariables.numberOfServicesToBeScanned
+    );
+
+    if (
+      randomFirstLevelPagesUrl.length === 0 ||
+      randomSecondLevelPageUrl.length === 0 ||
+      randomServiceUrl.length === 0
+    ) {
+      return {
+        score: 0,
+        details: Audit.makeTableDetails(
+          [{ key: "result", itemType: "text", text: "Risultato" }],
+          [
+            {
+              result: auditData.nonExecuted,
+            },
+          ]
+        ),
+      };
+    }
+
+    const pagesToBeAnalyzed = [
+      url,
+      ...randomFirstLevelPagesUrl,
+      ...randomSecondLevelPageUrl,
+      ...randomServiceUrl,
+    ];
+
+    const browser = await puppeteer.launch({
+      args: ["--no-sandbox"],
+    });
+
+    for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
+      let singleResult = 0;
+      const item = {
+        inspected_page: pageToBeAnalyzed,
+        library_name: "No",
         library_version: "",
-      },
-    ];
-    let score = 0;
+        classes_found: "",
+      };
 
-    try {
-      if (
-        bootstrapItaliaVariableVersion !== null &&
-        bootstrapItaliaVariableVersion
-      ) {
-        items[0].library_version = bootstrapItaliaVariableVersion;
-        items[0].library_name = libraryName;
+      try {
+        const page = await browser.newPage();
+        await page.goto(pageToBeAnalyzed);
 
-        if (semver.gte(bootstrapItaliaVariableVersion, "1.6.0")) {
-          score = 1;
-          items[0].result = greenResult;
+        let bootstrapItaliaVariableVersion = await page.evaluate(
+          async function () {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-ignore
+            return window.BOOTSTRAP_ITALIA_VERSION || null;
+          }
+        );
+
+        if (bootstrapItaliaVariableVersion !== null)
+          bootstrapItaliaVariableVersion = bootstrapItaliaVariableVersion
+            .trim()
+            .replaceAll('"', "");
+
+        let bootstrapItaliaSelectorVariableVersion = await page.evaluate(
+          async function () {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-ignore
+            return (
+              getComputedStyle(document.body).getPropertyValue(
+                "--bootstrap-italia-version"
+              ) || null
+            );
+          }
+        );
+
+        if (bootstrapItaliaSelectorVariableVersion !== null)
+          bootstrapItaliaSelectorVariableVersion =
+            bootstrapItaliaSelectorVariableVersion.trim().replaceAll('"', "");
+
+        if (
+          bootstrapItaliaVariableVersion !== null &&
+          bootstrapItaliaVariableVersion
+        ) {
+          item.library_version = bootstrapItaliaVariableVersion;
+          item.library_name = "Sì";
+
+          if (semver.gte(bootstrapItaliaVariableVersion, "1.6.0")) {
+            singleResult = 1;
+          }
+        } else if (
+          bootstrapItaliaSelectorVariableVersion !== null &&
+          bootstrapItaliaSelectorVariableVersion
+        ) {
+          item.library_version = bootstrapItaliaSelectorVariableVersion;
+          item.library_name = "Sì";
+
+          if (semver.gte(bootstrapItaliaSelectorVariableVersion, "1.6.0")) {
+            singleResult = 1;
+          }
         }
-      } else if (
-        bootstrapItaliaSelectorVariableVersion !== null &&
-        bootstrapItaliaSelectorVariableVersion
-      ) {
-        items[0].library_version = bootstrapItaliaSelectorVariableVersion;
-        items[0].library_name = libraryName;
-
-        if (semver.gte(bootstrapItaliaSelectorVariableVersion, "1.6.0")) {
-          score = 1;
-          items[0].result = greenResult;
-        }
+      } catch (e) {
+        // eslint-disable-next-line no-empty
       }
-    } catch (e) {
-      //eslint-disable-next-line
+
+      const foundClasses = await checkCSSClassesOnPage(
+        pageToBeAnalyzed,
+        cssClasses
+      );
+
+      if (foundClasses.length === 0) {
+        singleResult = 0;
+        item.classes_found = subResults[0];
+      } else {
+        item.classes_found = subResults[1];
+      }
+
+      if (singleResult === 1) {
+        correctItems.push(item);
+      } else {
+        score = 0;
+        wrongItems.push(item);
+      }
+    }
+
+    await browser.close();
+
+    const results = [];
+    switch (score) {
+      case 1:
+        results.push({
+          result: auditData.greenResult,
+        });
+        break;
+      case 0:
+        results.push({
+          result: auditData.redResult,
+        });
+        break;
+    }
+
+    results.push({});
+
+    if (wrongItems.length > 0) {
+      results.push({
+        result: auditData.subItem.redResult,
+        title_library_name: titleSubHeadings[0],
+        title_library_version: titleSubHeadings[1],
+        title_classes_found: titleSubHeadings[2],
+      });
+
+      for (const item of wrongItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+    }
+
+    if (correctItems.length > 0) {
+      results.push({
+        result: auditData.subItem.greenResult,
+        title_library_name: titleSubHeadings[0],
+        title_library_version: titleSubHeadings[1],
+        title_classes_found: titleSubHeadings[2],
+      });
+
+      for (const item of correctItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
     }
 
     return {
       score: score,
-      details: Audit.makeTableDetails(headings, items),
+      details: Audit.makeTableDetails(headings, results),
     };
   }
 }

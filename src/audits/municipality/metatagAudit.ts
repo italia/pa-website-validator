@@ -2,24 +2,27 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
+import { loadPageData } from "../../utils/utils";
 import {
-  getRandomMunicipalityServiceUrl,
-  loadPageData,
-} from "../../utils/utils";
+  getRandomThirdLevelPagesUrl,
+  getPrimaryPageUrl,
+} from "../../utils/municipality/utils";
 import { CheerioAPI } from "cheerio";
 import { ValidatorResult } from "jsonschema";
 import * as jsonschema from "jsonschema";
 import { auditDictionary } from "../../storage/auditDictionary";
+import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
+import { primaryMenuItems } from "../../storage/municipality/menuItems";
 
 const Audit = lighthouse.Audit;
 
 const auditId = "municipality-metatag";
 const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult;
-const yellowResult = auditData.yellowResult;
-const redResult = auditData.redResult;
-const notExecuted = auditData.nonExecuted;
+const accuracy = process.env["accuracy"] ?? "suggested";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const auditVariables = auditScanVariables[accuracy][auditId];
 
 const totalJSONVoices = 10;
 
@@ -39,104 +42,191 @@ class LoadAudit extends Audit {
     artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
-    let score = 0;
 
+    const titleSubHeadings = ["Metatag non presenti o errati"];
     const headings = [
-      { key: "result", itemType: "text", text: "Risultato" },
       {
-        key: "inspected_page",
+        key: "result",
         itemType: "text",
-        text: "Scheda servizio ispezionata",
+        text: "Risultato",
+        subItemsHeading: { key: "inspected_page", itemType: "url" },
       },
       {
-        key: "missing_keys",
+        key: "title_missing_keys",
         itemType: "text",
-        text: "Metatag non presenti o errati",
+        text: "",
+        subItemsHeading: {
+          key: "missing_keys",
+          itemType: "text",
+        },
       },
     ];
 
-    const item = [
-      {
-        result: redResult,
-        inspected_page: "",
-        missing_keys: "",
-      },
-    ];
-
-    const randomServiceToBeScanned: string =
-      await getRandomMunicipalityServiceUrl(url);
-
-    if (!randomServiceToBeScanned) {
-      return {
-        score: 0,
-        details: Audit.makeTableDetails(
-          [{ key: "result", itemType: "text", text: "Risultato" }],
-          [
-            {
-              result: notExecuted,
-            },
-          ]
-        ),
-      };
-    }
-
-    item[0].inspected_page = randomServiceToBeScanned;
-    const $: CheerioAPI = await loadPageData(randomServiceToBeScanned);
-    const metatagElement = $('[data-element="metatag"]');
-    const metatagJSON = metatagElement.html() ?? "";
-
-    if (!metatagJSON) {
-      return {
-        score: 0,
-        details: Audit.makeTableDetails(headings, item),
-      };
-    }
-
-    let parsedMetatagJSON = {};
-    try {
-      parsedMetatagJSON = JSON.parse(metatagJSON.toString());
-    } catch (e) {
-      return {
-        score: 0,
-        details: Audit.makeTableDetails(
-          [{ key: "result", itemType: "text", text: "Risultato" }],
-          [
-            {
-              result: notExecuted,
-            },
-          ]
-        ),
-      };
-    }
-
-    const result: ValidatorResult = jsonschema.validate(
-      parsedMetatagJSON,
-      metatadaJSONStructure
+    const randomServices: string[] = await getRandomThirdLevelPagesUrl(
+      url,
+      await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
+      `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
+      auditVariables.numberOfServicesToBeScanned
     );
-    if (result.errors.length <= 0) {
-      score = 1;
-      item[0].result = greenResult;
-    } else {
-      const missingJSONVoices = await getMissingVoices(result);
 
-      const missingVoicesAmountPercentage = parseInt(
-        ((missingJSONVoices.length / totalJSONVoices) * 100).toFixed(0)
-      );
+    if (randomServices.length === 0) {
+      return {
+        score: 0,
+        details: Audit.makeTableDetails(
+          [{ key: "result", itemType: "text", text: "Risultato" }],
+          [
+            {
+              result: auditData.nonExecuted,
+            },
+          ]
+        ),
+      };
+    }
 
-      if (missingVoicesAmountPercentage >= 50) {
-        score = 0;
-        item[0].result = redResult;
-      } else {
-        score = 0.5;
-        item[0].result = yellowResult;
+    const correctItems = [];
+    const toleranceItems = [];
+    const wrongItems = [];
+
+    let score = 1;
+
+    for (const randomService of randomServices) {
+      const item = {
+        inspected_page: randomService,
+        missing_keys: "",
+      };
+
+      const $: CheerioAPI = await loadPageData(randomService);
+      const metatagElement = $('[data-element="metatag"]');
+      const metatagJSON = metatagElement.html() ?? "";
+
+      if (!metatagJSON) {
+        wrongItems.push(item);
+        continue;
       }
 
-      item[0].missing_keys = missingJSONVoices.join(", ");
+      let parsedMetatagJSON = {};
+      try {
+        parsedMetatagJSON = JSON.parse(metatagJSON.toString());
+      } catch (e) {
+        return {
+          score: 0,
+          details: Audit.makeTableDetails(
+            [{ key: "result", itemType: "text", text: "Risultato" }],
+            [
+              {
+                result: auditData.nonExecuted,
+              },
+            ]
+          ),
+        };
+      }
+
+      const result: ValidatorResult = jsonschema.validate(
+        parsedMetatagJSON,
+        metatadaJSONStructure
+      );
+      if (result.errors.length <= 0) {
+        correctItems.push(item);
+      } else {
+        const missingJSONVoices = await getMissingVoices(result);
+
+        const missingVoicesAmountPercentage = parseInt(
+          ((missingJSONVoices.length / totalJSONVoices) * 100).toFixed(0)
+        );
+        item.missing_keys = missingJSONVoices.join(", ");
+
+        if (missingVoicesAmountPercentage >= 50) {
+          if (score > 0) {
+            score = 0;
+          }
+          wrongItems.push(item);
+        } else {
+          if (score > 0.5) {
+            score = 0.5;
+          }
+          toleranceItems.push(item);
+        }
+      }
+    }
+
+    const results = [];
+    switch (score) {
+      case 1:
+        results.push({
+          result: auditData.greenResult,
+        });
+        break;
+      case 0.5:
+        results.push({
+          result: auditData.yellowResult,
+        });
+        break;
+      case 0:
+        results.push({
+          result: auditData.redResult,
+        });
+        break;
+    }
+
+    results.push({});
+
+    if (wrongItems.length > 0) {
+      results.push({
+        result: auditData.subItem.redResult,
+        title_missing_keys: titleSubHeadings[0],
+      });
+
+      for (const item of wrongItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
+    }
+
+    if (toleranceItems.length > 0) {
+      results.push({
+        result: auditData.subItem.yellowResult,
+        title_missing_keys: titleSubHeadings[0],
+      });
+
+      for (const item of toleranceItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
+    }
+
+    if (correctItems.length > 0) {
+      results.push({
+        result: auditData.subItem.greenResult,
+        title_missing_keys: titleSubHeadings[0],
+      });
+
+      for (const item of correctItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
     }
 
     return {
       score: score,
-      details: Audit.makeTableDetails(headings, item),
+      details: Audit.makeTableDetails(headings, results),
     };
   }
 }

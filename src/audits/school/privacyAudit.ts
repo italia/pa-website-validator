@@ -12,10 +12,6 @@ const Audit = lighthouse.Audit;
 const auditId = "school-legislation-privacy-is-present";
 const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult;
-const yellowResult = auditData.yellowResult;
-const redResult = auditData.redResult;
-
 class LoadAudit extends Audit {
   static get meta() {
     return {
@@ -64,7 +60,7 @@ class LoadAudit extends Audit {
 
     const items = [
       {
-        result: redResult,
+        result: auditData.redResult,
         link_name: "",
         link_destination: "",
         existing_page: "No",
@@ -86,18 +82,13 @@ class LoadAudit extends Audit {
       elementObj.href !== "#" &&
       elementObj.href !== ""
     ) {
-      const checkUrl = await urlExists(url, elementObj.href, false);
       const checkUrlHttps = await urlExists(url, elementObj.href, true);
 
       if (checkUrlHttps.result) {
-        items[0].result = greenResult;
+        items[0].result = auditData.greenResult;
         items[0].existing_page = "Sì";
         items[0].secure_page = "Sì";
         score = 1;
-      } else if (checkUrl.result) {
-        items[0].result = yellowResult;
-        items[0].existing_page = "Sì";
-        score = 0.5;
       }
     }
 

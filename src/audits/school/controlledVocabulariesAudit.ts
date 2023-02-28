@@ -90,7 +90,7 @@ class LoadAudit extends lighthouse.Audit {
     if (schoolModelCheck.allArgumentsInVocabulary) {
       item[0].result = greenResult;
       score = 1;
-    } else if (numberOfElementsNotInScuoleModelPercentage < 50) {
+    } else if (numberOfElementsNotInScuoleModelPercentage <= 50) {
       item[0].result = yellowResult;
       score = 0.5;
     }

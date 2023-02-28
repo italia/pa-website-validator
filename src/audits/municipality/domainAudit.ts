@@ -4,14 +4,13 @@
 import lighthouse from "lighthouse";
 import { domains } from "../../storage/municipality/allowedDomains";
 import { auditDictionary } from "../../storage/auditDictionary";
+import { urlExists } from "../../utils/utils";
+import { getPrimaryPageUrl } from "../../utils/municipality/utils";
 
 const Audit = lighthouse.Audit;
 
 const auditId = "municipality-domain";
 const auditData = auditDictionary[auditId];
-
-const greenResult = auditData.greenResult;
-const redResult = auditData.redResult;
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -30,46 +29,151 @@ class LoadAudit extends Audit {
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
 
-    let score = 0;
-
+    const titleSubHeadings = [
+      "Dominio utilizzato",
+      'Viene usato il sottodominio "comune." seguito da un dominio istituzionale riservato',
+      'Sito raggiungibile senza "www."',
+    ];
     const headings = [
       {
         key: "result",
         itemType: "text",
         text: "Risultato",
+        subItemsHeading: { key: "inspected_page", itemType: "url" },
       },
       {
-        key: "domain",
+        key: "title_domain",
         itemType: "text",
-        text: "Dominio utilizzato",
+        text: "",
+        subItemsHeading: {
+          key: "domain",
+          itemType: "text",
+        },
       },
-    ];
-
-    const hostname = new URL(url).hostname.replace("www.", "");
-
-    const items = [
       {
-        result: redResult,
-        domain: hostname,
+        key: "title_correct_domain",
+        itemType: "text",
+        text: "",
+        subItemsHeading: {
+          key: "correct_domain",
+          itemType: "text",
+        },
+      },
+      {
+        key: "title_www_access",
+        itemType: "text",
+        text: "",
+        subItemsHeading: {
+          key: "www_access",
+          itemType: "text",
+        },
       },
     ];
 
-    let correctDomain = false;
-    for (const domain of domains) {
-      if (hostname === "comune." + domain) {
-        correctDomain = true;
-        break;
-      }
+    const pagesToBeAnalyzed = [url];
+
+    const personalAreaLoginPage = await getPrimaryPageUrl(
+      url,
+      "personal-area-login"
+    );
+    if (personalAreaLoginPage !== "") {
+      pagesToBeAnalyzed.push(personalAreaLoginPage);
     }
 
-    if (correctDomain) {
-      score = 1;
-      items[0].result = greenResult;
+    const correctItems = [];
+    const wrongItems = [];
+
+    let score = 0;
+
+    for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
+      const hostname = new URL(url).hostname.replace("www.", "");
+      const item = {
+        inspected_page: pageToBeAnalyzed,
+        domain: hostname,
+        correct_domain: "No",
+        www_access: "",
+      };
+
+      let correctDomain = false;
+      for (const domain of domains) {
+        if (hostname === "comune." + domain) {
+          correctDomain = true;
+          item.correct_domain = "Sì";
+          break;
+        }
+      }
+
+      const wwwAccess = (await urlExists(url, url.replace("www.", ""))).result;
+
+      item.www_access = wwwAccess ? "Sì" : "No";
+
+      if (correctDomain && wwwAccess) {
+        correctItems.push(item);
+        continue;
+      }
+      wrongItems.push(item);
+      score = 0;
+    }
+
+    const results = [];
+    switch (score) {
+      case 1:
+        results.push({
+          result: auditData.greenResult,
+        });
+        break;
+      case 0:
+        results.push({
+          result: auditData.redResult,
+        });
+        break;
+    }
+
+    results.push({});
+
+    if (wrongItems.length > 0) {
+      results.push({
+        result: auditData.subItem.redResult,
+        title_domain: titleSubHeadings[0],
+        title_correct_domain: titleSubHeadings[1],
+        title_www_access: titleSubHeadings[2],
+      });
+
+      for (const item of wrongItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
+    }
+
+    if (correctItems.length > 0) {
+      results.push({
+        result: auditData.subItem.greenResult,
+        title_domain: titleSubHeadings[0],
+        title_correct_domain: titleSubHeadings[1],
+        title_www_access: titleSubHeadings[2],
+      });
+
+      for (const item of correctItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
     }
 
     return {
       score: score,
-      details: Audit.makeTableDetails(headings, items),
+      details: Audit.makeTableDetails(headings, results),
     };
   }
 }

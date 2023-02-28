@@ -3,34 +3,26 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { allowedFonts } from "../../storage/school/allowedFonts";
-import { getRandomSchoolServiceUrl } from "../../utils/utils";
+import {
+  getRandomFirstLevelPagesUrl,
+  getRandomSecondLevelPagesUrl,
+  getRandomServicesUrl,
+} from "../../utils/school/utils";
 import puppeteer from "puppeteer";
 import { auditDictionary } from "../../storage/auditDictionary";
+import { auditScanVariables } from "../../storage/school/auditScanVariables";
 
 const Audit = lighthouse.Audit;
 
 const auditId = "school-ux-ui-consistency-fonts-check";
 const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult;
-const yellowResult = auditData.yellowResult;
-const redResult = auditData.redResult;
-const notExecuted = auditData.nonExecuted;
-const maxLength = 100;
+const accuracy = process.env["accuracy"] ?? "suggested";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const auditVariables = auditScanVariables[accuracy][auditId];
 
-type BadElement = [string, boolean]; // First value is element snippet, second is whether it is tolerable
-
-const headings: LH.Audit.Details.TableColumnHeading[] = [
-  {
-    key: "result",
-    itemType: "text",
-    text: "Risultato",
-    subItemsHeading: {
-      key: "node",
-      itemType: "node",
-    },
-  },
-];
+type BadElement = [string[], boolean]; // First value is element snippet, second is whether it is tolerable
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -49,114 +41,257 @@ class LoadAudit extends Audit {
   ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
 
-    const randomServiceToBeScanned: string = await getRandomSchoolServiceUrl(
-      url
+    const titleSubHeadings = [
+      "Numero di <h> o <p> con font errati",
+      "Font errati individuati",
+    ];
+    const headings = [
+      {
+        key: "result",
+        itemType: "text",
+        text: "Risultato",
+        subItemsHeading: { key: "inspected_page", itemType: "url" },
+      },
+      {
+        key: "title_wrong_number_elements",
+        itemType: "text",
+        text: "",
+        subItemsHeading: { key: "wrong_number_elements", itemType: "text" },
+      },
+      {
+        key: "title_wrong_fonts",
+        itemType: "text",
+        text: "",
+        subItemsHeading: { key: "wrong_fonts", itemType: "text" },
+      },
+    ];
+
+    const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
+      url,
+      auditVariables.numberOfFirstLevelPageToBeScanned
     );
 
-    if (!randomServiceToBeScanned) {
+    const randomSecondLevelPageUrl = await getRandomSecondLevelPagesUrl(
+      url,
+      auditVariables.numberOfSecondLevelPageToBeScanned
+    );
+
+    const randomServiceUrl = await getRandomServicesUrl(
+      url,
+      auditVariables.numberOfServicesToBeScanned
+    );
+
+    if (
+      randomFirstLevelPagesUrl.length === 0 ||
+      randomSecondLevelPageUrl.length === 0 ||
+      randomServiceUrl.length === 0
+    ) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: notExecuted,
+              result: auditData.nonExecuted,
             },
           ]
         ),
       };
     }
 
+    const pagesToBeAnalyzed = [
+      url,
+      ...randomFirstLevelPagesUrl,
+      ...randomSecondLevelPageUrl,
+      ...randomServiceUrl,
+    ];
+
+    const correctItems = [];
+    const toleranceItems = [];
+    const wrongItems = [];
+
+    let score = 1;
+
     const browser = await puppeteer.launch({
       args: ["--no-sandbox"],
     });
 
-    try {
-      const page = await browser.newPage();
-      await page.goto(randomServiceToBeScanned);
+    for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
+      const item = {
+        inspected_page: pageToBeAnalyzed,
+        wrong_fonts: "",
+        wrong_number_elements: 0,
+      };
+      try {
+        const page = await browser.newPage();
+        await page.goto(pageToBeAnalyzed);
 
-      const badElements: Array<BadElement> = await page.evaluate(
-        (requiredFonts) => {
-          const badElements: Array<BadElement> = [];
-          const outerElems = window.document.body.querySelectorAll(
-            "h1, h2, h3, h4, h5, h6, p"
-          );
-
-          const isBad = (e: Element) =>
-            !requiredFonts.includes(
-              window
-                .getComputedStyle(e)
-                .fontFamily.split(",", 1)
-                .map((s) => s.replace(/^"|"$/g, ""))[0] // "Titillium Web" => Titillium Web
+        const badElements: Array<BadElement> = await page.evaluate(
+          (requiredFonts) => {
+            const badElements: Array<BadElement> = [];
+            const outerElems = window.document.body.querySelectorAll(
+              "h1, h2, h3, h4, h5, h6, p"
             );
 
-          for (const e of outerElems) {
-            if (isBad(e)) {
-              badElements.push([e.outerHTML, false]);
-            } else if ([...e.querySelectorAll("*")].some(isBad)) {
-              // If good parent element has some bad descendant we add it to the list in tolerance mode
-              badElements.push([e.outerHTML, true]);
-            }
-          }
-          return badElements;
-        },
-        allowedFonts
-      );
+            const wrongFonts = (e: Element) => {
+              const elementFonts = window
+                .getComputedStyle(e)
+                .fontFamily.split(",", 1)
+                .map((s) => s.replace(/^"|"$/g, ""));
+              return elementFonts.filter((x) => !requiredFonts.includes(x));
+            };
 
-      if (badElements.length === 0) {
-        const item: LH.Audit.Details.TableItem = {
-          result: greenResult.replace("[url]", randomServiceToBeScanned),
-          subItems: {
-            type: "subitems",
-            items: [],
+            const isBad = (e: Element) => {
+              return wrongFonts(e).length > 0;
+            };
+
+            for (const e of outerElems) {
+              const elementWrongFonts = wrongFonts(e);
+              if (elementWrongFonts.length > 0) {
+                badElements.push([elementWrongFonts, false]);
+              } else if ([...e.querySelectorAll("*")].some(isBad)) {
+                // If good parent element has some bad descendant we add it to the list in tolerance mode
+                badElements.push([elementWrongFonts, true]);
+              }
+            }
+            return badElements;
           },
+          allowedFonts
+        );
+
+        if (badElements.length === 0) {
+          correctItems.push(item);
+          continue;
+        }
+
+        const reallyBadElements = badElements.filter((e) => !e[1]);
+
+        const wrongFontsUnique = (arrays: Array<BadElement>) => {
+          const arrayUnique = (array: string[]) => {
+            const a = array.concat();
+            for (let i = 0; i < a.length; ++i) {
+              for (let j = i + 1; j < a.length; ++j) {
+                if (a[i] === a[j]) a.splice(j--, 1);
+              }
+            }
+            return a;
+          };
+
+          let arrayMerged: string[] = [];
+          for (const array of arrays) {
+            arrayMerged = arrayMerged.concat(array[0]);
+          }
+          return arrayUnique(arrayMerged);
         };
 
+        if (reallyBadElements.length > 0) {
+          if (score > 0) {
+            score = 0;
+          }
+          item.wrong_fonts = wrongFontsUnique(reallyBadElements).join(", ");
+          item.wrong_number_elements = reallyBadElements.length;
+          wrongItems.push(item);
+          continue;
+        }
+
+        if (score > 0.5) {
+          score = 0.5;
+        }
+        item.wrong_fonts = wrongFontsUnique(badElements).join(", ");
+        item.wrong_number_elements = badElements.length;
+        toleranceItems.push(item);
+      } catch (e) {
+        await browser.close();
         return {
-          score: 1,
-          details: Audit.makeTableDetails(headings, [item]),
+          errorMessage: e instanceof Error ? e.message : "",
+          score: 0,
         };
       }
-
-      const reallyBadElements = badElements.filter((e) => !e[1]);
-
-      const toSnippets = (
-        es: BadElement[]
-      ): { node: LH.Audit.Details.NodeValue }[] =>
-        es.map((e) => ({
-          node: {
-            type: "node",
-            snippet:
-              e[0].slice(0, maxLength) + (e[0].length > maxLength ? "..." : ""),
-          },
-        }));
-
-      const item: LH.Audit.Details.TableItem = {
-        result:
-          reallyBadElements.length > 0
-            ? redResult.replace("[url]", randomServiceToBeScanned)
-            : yellowResult.replace("[url]", randomServiceToBeScanned),
-        subItems: {
-          type: "subitems",
-          items:
-            reallyBadElements.length > 0
-              ? toSnippets(reallyBadElements)
-              : toSnippets(badElements),
-        },
-      };
-
-      return {
-        score: reallyBadElements.length > 0 ? 0 : 0.5,
-        details: Audit.makeTableDetails(headings, [item]),
-      };
-    } catch (e) {
-      return {
-        errorMessage: e instanceof Error ? e.message : "",
-        score: 0,
-      };
-    } finally {
-      await browser.close();
     }
+    await browser.close();
+
+    const results = [];
+    switch (score) {
+      case 1:
+        results.push({
+          result: auditData.greenResult,
+        });
+        break;
+      case 0.5:
+        results.push({
+          result: auditData.yellowResult,
+        });
+        break;
+      case 0:
+        results.push({
+          result: auditData.redResult,
+        });
+        break;
+    }
+
+    results.push({});
+
+    if (wrongItems.length > 0) {
+      results.push({
+        result: auditData.subItem.redResult,
+        title_wrong_number_elements: titleSubHeadings[0],
+        title_wrong_fonts: titleSubHeadings[1],
+      });
+
+      for (const item of wrongItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
+    }
+
+    if (toleranceItems.length > 0) {
+      results.push({
+        result: auditData.subItem.yellowResult,
+        title_wrong_number_elements: titleSubHeadings[0],
+        title_wrong_fonts: titleSubHeadings[1],
+      });
+
+      for (const item of toleranceItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
+    }
+
+    if (correctItems.length > 0) {
+      results.push({
+        result: auditData.subItem.greenResult,
+        title_wrong_number_elements: titleSubHeadings[0],
+        title_wrong_fonts: titleSubHeadings[1],
+      });
+
+      for (const item of correctItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
+    }
+
+    return {
+      score: score,
+      details: Audit.makeTableDetails(headings, results),
+    };
   }
 }
 

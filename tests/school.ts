@@ -145,7 +145,7 @@ describe.each<[...ExpectedLocalEntry, number]>(
     ["Security", "school-informative-security"],
     ["IP location", "common-informative-ip-location"],
     ["Reuse", "school-informative-reuse"],
-    ["License", "school-informative-license-and-attribution"],
+    ["License", "school-license-and-attribution"],
     ["Cloud", "school-informative-cloud-infrastructure"],
   ])("%s", (_, audit) => {
     expect(report.audits[audit].score).toBe(null);
@@ -181,7 +181,7 @@ describe.each(expectedOnline)("Online: %s", (url, expectedResults) => {
 
   test.each([
     ["Reuse", "school-informative-reuse"],
-    ["License", "school-informative-license-and-attribution"],
+    ["License", "school-license-and-attribution"],
     ["Cloud", "school-informative-cloud-infrastructure"],
   ])("%s", (_, audit) => {
     expect(report.audits[audit].score).toBe(null);

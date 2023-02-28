@@ -19,10 +19,6 @@ const Audit = lighthouse.Audit;
 const auditId = "municipality-ux-ui-consistency-theme-version-check";
 const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult;
-const yellowResult = auditData.yellowResult;
-const redResult = auditData.redResult;
-
 class LoadAudit extends Audit {
   static get meta() {
     return {
@@ -57,41 +53,34 @@ class LoadAudit extends Audit {
         itemType: "text",
         text: "Versione del tema CMS in uso",
       },
-      {
-        key: "checked_element",
-        itemType: "text",
-        text: "Elemento controllato",
-      },
     ];
 
     const items = [
       {
-        result: yellowResult,
+        result: auditData.yellowResult,
         cms_name: "Nessuno",
         theme_version: "N/A",
-        checked_element: "",
       },
     ];
 
     const $: CheerioAPI = await loadPageData(url);
     const linkTags = $("link");
 
-    let styleCSSurl = "";
+    let styleCSSUrl = "";
     for (const linkTag of linkTags) {
       if (!linkTag.attribs || !("href" in linkTag.attribs)) {
         continue;
       }
 
-      if (linkTag.attribs.href.includes("style.css")) {
-        styleCSSurl = linkTag.attribs.href;
-        if ((await isInternalUrl(styleCSSurl)) && !styleCSSurl.includes(url)) {
-          styleCSSurl = await buildUrl(url, styleCSSurl);
+      if (linkTag.attribs.href.includes(".css")) {
+        styleCSSUrl = linkTag.attribs.href;
+        if ((await isInternalUrl(styleCSSUrl)) && !styleCSSUrl.includes(url)) {
+          styleCSSUrl = await buildUrl(url, styleCSSUrl);
         }
-        items[0].checked_element = styleCSSurl;
 
         let CSScontent = "";
         try {
-          const response = await axios.get(styleCSSurl);
+          const response = await axios.get(styleCSSUrl);
           CSScontent = response.data;
         } catch (e) {
           CSScontent = "";
@@ -100,10 +89,7 @@ class LoadAudit extends Audit {
         const match = CSScontent.match(cmsThemeRx);
 
         if (match === null || !match.groups) {
-          score = 0.5;
-          items[0].result = yellowResult;
-
-          break;
+          continue;
         }
 
         items[0].cms_name = match.groups.name;
@@ -111,11 +97,11 @@ class LoadAudit extends Audit {
         items[0].theme_version = version;
 
         score = 0;
-        items[0].result = redResult;
+        items[0].result = auditData.redResult;
 
         if (semver.gte(version, "1.0.0")) {
           score = 1;
-          items[0].result = greenResult;
+          items[0].result = auditData.greenResult;
         }
         break;
       }

@@ -3,7 +3,12 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { CheerioAPI } from "cheerio";
-import { loadPageData, urlExists } from "../../utils/utils";
+import {
+  buildUrl,
+  isInternalUrl,
+  loadPageData,
+  urlExists,
+} from "../../utils/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
 import isEmail from "validator/lib/isEmail";
 
@@ -11,10 +16,6 @@ const Audit = lighthouse.Audit;
 
 const auditId = "municipality-inefficiency-report";
 const auditData = auditDictionary[auditId];
-
-const greenResult = auditData.greenResult;
-const yellowResult = auditData.yellowResult;
-const redResult = auditData.redResult;
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -47,7 +48,7 @@ class LoadAudit extends Audit {
       },
       {
         key: "link_destination",
-        itemType: "text",
+        itemType: "url",
         text: "Pagina di destinazione",
       },
       {
@@ -55,14 +56,20 @@ class LoadAudit extends Audit {
         itemType: "text",
         text: "Pagina esistente",
       },
+      {
+        key: "is_service",
+        itemType: "text",
+        text: "Viene usato il servizio dedicato",
+      },
     ];
 
     const items = [
       {
-        result: redResult,
+        result: auditData.redResult,
         link_name: "",
         link_destination: "",
         existing_page: "No",
+        is_service: "No",
       },
     ];
 
@@ -86,7 +93,12 @@ class LoadAudit extends Audit {
         items[0].link_destination = elementObj.href;
         items[0].existing_page = "N/A";
       } else {
-        const checkUrl = await urlExists(url, elementObj.href);
+        let pageUrl = elementObj.href;
+        if ((await isInternalUrl(pageUrl)) && !pageUrl.includes(url)) {
+          pageUrl = await buildUrl(url, pageUrl);
+        }
+
+        const checkUrl = await urlExists(url, pageUrl);
         items[0].link_destination = checkUrl.inspectedUrl;
 
         if (!checkUrl.result) {
@@ -97,6 +109,11 @@ class LoadAudit extends Audit {
         }
 
         items[0].existing_page = "Sì";
+
+        const parts = new URL(pageUrl).pathname.split("/");
+        if (parts[1] === "servizi") {
+          items[0].is_service = "Sì";
+        }
       }
 
       if (
@@ -104,14 +121,14 @@ class LoadAudit extends Audit {
         label !== "segnala disservizio" &&
         label !== "segnalazione disservizio"
       ) {
-        items[0].result = yellowResult;
+        items[0].result = auditData.yellowResult;
         return {
           score: 0.5,
           details: Audit.makeTableDetails(headings, items),
         };
       }
 
-      items[0].result = greenResult;
+      items[0].result = auditData.greenResult;
       score = 1;
     }
 

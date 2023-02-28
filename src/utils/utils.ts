@@ -124,41 +124,22 @@ const getHREFValuesDataAttribute = async (
   return serviceUrls;
 };
 
-const getRandomSchoolServiceUrl = async (url: string): Promise<string> => {
-  let $ = await loadPageData(url);
+const checkCSSClassesOnPage = async (url: string, cssClasses: string[]) => {
+  const $ = await loadPageData(url);
+  const foundClasses: string[] = [];
 
-  const serviceUrls = await getHREFValuesDataAttribute(
-    $,
-    '[data-element="service-type"]'
-  );
-  if (serviceUrls.length <= 0) {
-    return "";
+  for (const cssClass of cssClasses) {
+    const elements = $(`.${cssClass}`);
+    if (elements.length > 0) {
+      foundClasses.push(cssClass);
+    }
   }
 
-  let serviceUrl = serviceUrls[Math.floor(Math.random() * serviceUrls.length)];
-  if (!serviceUrl.includes(url)) {
-    serviceUrl = await buildUrl(url, serviceUrl);
-  }
-
-  $ = await loadPageData(serviceUrl);
-  const cardUrls = await getHREFValuesDataAttribute(
-    $,
-    '[data-element="service-link"]'
-  );
-  if (cardUrls.length <= 0) {
-    return "";
-  }
-
-  let serviceToInspect = cardUrls[Math.floor(Math.random() * cardUrls.length)];
-  if (!serviceToInspect.includes(url)) {
-    serviceToInspect = await buildUrl(url, serviceToInspect);
-  }
-
-  return serviceToInspect;
+  return foundClasses;
 };
 
-const buildUrl = async (url: string, service: string): Promise<string> => {
-  return new URL(service, url).href;
+const buildUrl = async (url: string, path: string): Promise<string> => {
+  return new URL(path, url).href;
 };
 
 const isInternalUrl = async (url: string) => {
@@ -189,7 +170,8 @@ const checkOrder = (
   let numberOfElementsNotInSequence = 0;
   const elementsNotInSequence = [];
 
-  for (let i = 0; i < newFoundElements.length; i++) {
+  //The first element is always in the right order
+  for (let i = 1; i < newFoundElements.length; i++) {
     const indexInMandatory = newMandatoryElements.findIndex((e) =>
       e.regExp.test(newFoundElements[i])
     );
@@ -295,41 +277,6 @@ const urlExists = async (
     };
   }
 };
-
-const getRandomMunicipalityServiceUrl = async (url: string) => {
-  let $ = await loadPageData(url);
-
-  const servicesPageHref = await getHREFValuesDataAttribute(
-    $,
-    '[data-element="all-services"]'
-  );
-  if (servicesPageHref.length <= 0) {
-    return "";
-  }
-
-  let allServicesUrl = servicesPageHref[0];
-  if (!allServicesUrl.includes(url)) {
-    allServicesUrl = await buildUrl(url, allServicesUrl);
-  }
-
-  $ = await loadPageData(allServicesUrl);
-
-  const serviceUrls = await getHREFValuesDataAttribute(
-    $,
-    '[data-element="service-link"]'
-  );
-  if (serviceUrls.length <= 0) {
-    return "";
-  }
-
-  let randomUrl = serviceUrls[Math.floor(Math.random() * serviceUrls.length)];
-  if (!randomUrl.includes(url)) {
-    randomUrl = await buildUrl(url, randomUrl);
-  }
-
-  return randomUrl;
-};
-
 const areAllElementsInVocabulary = async (
   pageArguments: string[],
   vocabularyElements: string[]
@@ -362,16 +309,49 @@ const areAllElementsInVocabulary = async (
   };
 };
 
+const getRandomNString = async (array: string[], numberOfElements: number) => {
+  if (array.length <= 0) {
+    return [];
+  }
+
+  array = [...new Set(array)];
+
+  if (numberOfElements > array.length || numberOfElements === -1) {
+    return array;
+  }
+
+  array = array.sort(() => Math.random() - 0.5);
+  array = array.slice(0, numberOfElements);
+
+  return array;
+};
+
+const checkBreadcrumb = (array: string[]) => {
+  if (array.length === 0) return false;
+
+  const indexService = array.indexOf("servizi");
+
+  if (indexService < 0 || indexService + 1 >= array.length) return false;
+
+  return array[indexService + 1].length >= 3;
+};
+
 const cmsThemeRx =
   /\/\*!\s*Theme Name:.*\s+Author:.*\s+Description:\s+Design (Comuni|Scuole) Italia .*(?<name>WordPress|Drupal).*\s+Version:\s+(?<version>.*)\s+License:.*\s+Text Domain: design_(comuni|scuole)_italia\s*\*\//;
+
+const getAllPageHTML = async (url: string): Promise<string> => {
+  const $: CheerioAPI = await loadPageData(url);
+
+  return $("html").text() ?? "";
+};
 
 export {
   toMenuItem,
   checkOrder,
   missingMenuItems,
   loadPageData,
-  getRandomSchoolServiceUrl,
-  getRandomMunicipalityServiceUrl,
+  checkCSSClassesOnPage,
+  getRandomNString,
   getPageElementDataAttribute,
   getHREFValuesDataAttribute,
   getElementHrefValuesDataAttribute,
@@ -380,5 +360,7 @@ export {
   buildUrl,
   urlExists,
   areAllElementsInVocabulary,
+  checkBreadcrumb,
   cmsThemeRx,
+  getAllPageHTML,
 };

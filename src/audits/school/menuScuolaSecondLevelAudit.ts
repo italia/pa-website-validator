@@ -4,7 +4,10 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { getPageElementDataAttribute, loadPageData } from "../../utils/utils";
-import { secondaryMenuItems } from "../../storage/school/menuItems";
+import {
+  menuItems,
+  customPrimaryMenuItemsDataElement,
+} from "../../storage/school/menuItems";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
 
@@ -13,9 +16,11 @@ const Audit = lighthouse.Audit;
 const auditId = "school-menu-scuola-second-level-structure-match-model";
 const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult;
-const yellowResult = auditData.yellowResult;
-const redResult = auditData.redResult;
+interface itemPage {
+  key: string;
+  pagesInVocabulary: string[];
+  pagesNotInVocabulary: string[];
+}
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -41,74 +46,125 @@ class LoadAudit extends Audit {
       {
         key: "correct_voices_percentage",
         itemType: "text",
-        text: "% di voci obbligatorie tra quelle usate",
+        text: "% di voci corrette tra quelle usate",
       },
       {
         key: "correct_voices",
         itemType: "text",
-        text: "Voci di menù obbligatorie identificate",
+        text: "Voci corrette identificate",
       },
       {
-        key: "missing_voices",
+        key: "wrong_voices",
         itemType: "text",
-        text: "Voci di menù obbligatorie mancanti",
+        text: "Voci aggiuntive trovate",
       },
     ];
 
     const items = [
       {
-        result: redResult,
+        result: auditData.redResult,
         correct_voices_percentage: "",
         correct_voices: "",
-        wrong_voices_order: "",
-        missing_voices: "",
+        wrong_voices: "",
       },
     ];
 
-    let score = 0;
+    let totalNumberOfTitleFound = 0;
+    const itemsPage: itemPage[] = [];
 
-    const secondaryMenuScuolaItems: string[] = [];
-    for (const element of secondaryMenuItems.Scuola) {
-      secondaryMenuScuolaItems.push(element.toLowerCase());
+    for (const [, secondaryMenuItem] of Object.entries(menuItems)) {
+      const item: itemPage = {
+        key: secondaryMenuItem.label,
+        pagesInVocabulary: [],
+        pagesNotInVocabulary: [],
+      };
+
+      const $: CheerioAPI = await loadPageData(url);
+      const menuDataElement = `[data-element="${secondaryMenuItem.data_element}"]`;
+
+      const headerUlTest = await getPageElementDataAttribute(
+        $,
+        menuDataElement,
+        "a"
+      );
+
+      for (const element of headerUlTest) {
+        if (element !== "Panoramica") {
+          if (secondaryMenuItem.dictionary.includes(element.toLowerCase())) {
+            item.pagesInVocabulary.push(element);
+          } else {
+            item.pagesNotInVocabulary.push(element);
+          }
+        }
+        totalNumberOfTitleFound++;
+      }
+
+      itemsPage.push(item);
     }
+
+    const errorVoices = [];
 
     const $: CheerioAPI = await loadPageData(url);
     const headerUlTest = await getPageElementDataAttribute(
       $,
-      '[data-element="school-submenu"]',
+      `[data-element="${customPrimaryMenuItemsDataElement}"]`,
       "a"
     );
 
-    if (headerUlTest[0] === "Panoramica") headerUlTest.shift();
+    if (headerUlTest.length > 0) {
+      for (const element of headerUlTest) {
+        if (element !== "Panoramica") {
+          errorVoices.push(element.toLowerCase());
+        }
+      }
+    }
 
-    const elementsFound: string[] = [];
-    const correctElementsFound: string[] = [];
-    for (const element of headerUlTest) {
-      if (secondaryMenuScuolaItems.includes(element.toLowerCase())) {
-        correctElementsFound.push(element.toLowerCase());
+    let pagesInVocabulary = 0;
+    let correctTitleFound = "";
+    let wrongTitleFound = "";
+
+    for (const itemPage of itemsPage) {
+      pagesInVocabulary += itemPage.pagesInVocabulary.length;
+
+      if (itemPage.pagesInVocabulary.length > 0) {
+        correctTitleFound += itemPage.key + ": ";
+        correctTitleFound += itemPage.pagesInVocabulary.join(", ");
+        correctTitleFound += "; ";
       }
 
-      elementsFound.push(element.toLowerCase());
+      if (itemPage.pagesNotInVocabulary.length > 0) {
+        wrongTitleFound += itemPage.key + ": ";
+        wrongTitleFound += itemPage.pagesNotInVocabulary.join(", ");
+        wrongTitleFound += "; ";
+      }
+    }
+
+    if (errorVoices.length > 0) {
+      wrongTitleFound += "ALTRE VOCI: ";
+      wrongTitleFound += errorVoices.join(", ");
+      wrongTitleFound += "; ";
     }
 
     const presentVoicesPercentage: number = parseInt(
-      ((correctElementsFound.length / elementsFound.length) * 100).toFixed(0)
+      (
+        (pagesInVocabulary / (totalNumberOfTitleFound + errorVoices.length)) *
+        100
+      ).toFixed(0)
     );
 
+    let score = 0;
     if (presentVoicesPercentage >= 30 && presentVoicesPercentage < 100) {
       score = 0.5;
-      items[0].result = yellowResult;
+      items[0].result = auditData.yellowResult;
     } else if (presentVoicesPercentage === 100) {
       score = 1;
-      items[0].result = greenResult;
+      items[0].result = auditData.greenResult;
     }
 
-    items[0].correct_voices = correctElementsFound.join(", ");
+    items[0].correct_voices = correctTitleFound;
     items[0].correct_voices_percentage =
       presentVoicesPercentage.toString() + "%";
-    items[0].missing_voices = secondaryMenuScuolaItems
-      .filter((x) => !correctElementsFound.includes(x))
-      .join(", ");
+    items[0].wrong_voices = wrongTitleFound;
 
     return {
       score: score,

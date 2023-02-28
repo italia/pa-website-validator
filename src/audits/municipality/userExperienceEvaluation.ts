@@ -4,16 +4,17 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { auditDictionary } from "../../storage/auditDictionary";
+import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import {
-  getRandomFirstLevelPagesUrl,
-  getRandomSecondLevelPagesUrl,
+  getRandomThirdLevelPagesUrl,
+  getPrimaryPageUrl,
   checkFeedbackComponent,
 } from "../../utils/municipality/utils";
-import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
+import { primaryMenuItems } from "../../storage/municipality/menuItems";
 
 const Audit = lighthouse.Audit;
 
-const auditId = "municipality-feedback-element";
+const auditId = "municipality-user-experience-evaluation";
 const auditData = auditDictionary[auditId];
 
 const accuracy = process.env["accuracy"] ?? "suggested";
@@ -21,7 +22,7 @@ const accuracy = process.env["accuracy"] ?? "suggested";
 // @ts-ignore
 const auditVariables = auditScanVariables[accuracy][auditId];
 
-class LoadAudit extends lighthouse.Audit {
+class LoadAudit extends Audit {
   static get meta() {
     return {
       id: auditId,
@@ -60,20 +61,16 @@ class LoadAudit extends lighthouse.Audit {
 
     let score = 1;
 
-    const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
-      url,
-      auditVariables.numberOfFirstLevelPageToBeScanned
-    );
+    const pagesToBeAnalyzed = [
+      ...(await getRandomThirdLevelPagesUrl(
+        url,
+        await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
+        `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
+        auditVariables.numberOfServicesToBeScanned
+      )),
+    ];
 
-    const randomSecondLevelPagesUrl = await getRandomSecondLevelPagesUrl(
-      url,
-      auditVariables.numberOfSecondLevelPageToBeScanned
-    );
-
-    if (
-      randomFirstLevelPagesUrl.length === 0 ||
-      randomSecondLevelPagesUrl.length === 0
-    ) {
+    if (pagesToBeAnalyzed.length === 0) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
@@ -86,11 +83,6 @@ class LoadAudit extends lighthouse.Audit {
         ),
       };
     }
-
-    const pagesToBeAnalyzed = [
-      ...randomFirstLevelPagesUrl,
-      ...randomSecondLevelPagesUrl,
-    ];
 
     for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
       const item = {

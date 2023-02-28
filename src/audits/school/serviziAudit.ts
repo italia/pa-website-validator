@@ -4,27 +4,36 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import {
+  checkBreadcrumb,
   checkOrder,
   getElementHrefValuesDataAttribute,
   getPageElementDataAttribute,
-  getRandomSchoolServiceUrl,
   loadPageData,
   missingMenuItems,
   toMenuItem,
 } from "../../utils/utils";
-import { contentTypeItems } from "../../storage/school/contentTypeItems";
+import { getRandomServicesUrl } from "../../utils/school/utils";
+import {
+  contentTypeItemsBody,
+  contentTypeItemsHeaders,
+  contentTypeItemsIndex,
+  contentTypeItemsIndexDataElements,
+  contentTypeItemsLocation,
+  contentTypeItemsMetadata,
+} from "../../storage/school/contentTypeItems";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
+import { auditScanVariables } from "../../storage/school/auditScanVariables";
 
 const Audit = lighthouse.Audit;
 
 const auditId = "school-servizi-structure-match-model";
 const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult;
-const yellowResult = auditData.yellowResult;
-const redResult = auditData.redResult;
-const notExecuted = auditData.nonExecuted;
+const accuracy = process.env["accuracy"] ?? "suggested";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const auditVariables = auditScanVariables[accuracy][auditId];
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -43,155 +52,281 @@ class LoadAudit extends Audit {
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
 
+    const titleSubHeadings = [
+      "Voci mancanti o senza contenuto",
+      "Voci che non rispettano l'ordine richiesto",
+    ];
     const headings = [
-      { key: "result", itemType: "text", text: "Risultato" },
       {
-        key: "inspected_page",
+        key: "result",
         itemType: "text",
-        text: "Scheda di servizio ispezionata",
+        text: "Risultato",
+        subItemsHeading: { key: "inspected_page", itemType: "url" },
       },
       {
-        key: "missing_mandatory_elements_found",
+        key: "title_missing_elements",
         itemType: "text",
-        text: "Voci obbligatorie mancanti",
+        text: "",
+        subItemsHeading: {
+          key: "missing_elements",
+          itemType: "text",
+        },
       },
       {
-        key: "mandatory_elements_not_right_order",
+        key: "title_wrong_order_elements",
         itemType: "text",
-        text: "Voci obbligatorie che non rispettano l'ordine corretto",
+        text: "",
+        subItemsHeading: {
+          key: "wrong_order_elements",
+          itemType: "text",
+        },
       },
     ];
 
-    const item = [
-      {
-        result: greenResult,
-        missing_mandatory_elements_found: "",
-        mandatory_elements_not_right_order: "",
-        inspected_page: "",
-      },
-    ];
+    const mandatoryVoices = contentTypeItemsIndex;
+    const mandatoryVoicesDataElements = contentTypeItemsIndexDataElements;
+    const mandatoryHeaderVoices = contentTypeItemsHeaders;
+    const mandatoryBodyVoices = contentTypeItemsBody;
+    const mandatoryPlaceInfo = contentTypeItemsLocation;
 
-    let score = 1;
+    const mandatoryMetadata = contentTypeItemsMetadata;
 
-    const mandatoryVoices = contentTypeItems.Indice;
-    const mandatoryHeaderVoices = contentTypeItems.Header;
-    const mandatoryBodyVoices = contentTypeItems.Body;
-    const mandatoryPlaceInfo = contentTypeItems.Luogo;
-
-    const mandatoryMetadata = contentTypeItems.Metadati;
-    const breadcrumbMandatoryElements = contentTypeItems.Breadcrumb;
-
-    const randomServiceToBeScanned: string = await getRandomSchoolServiceUrl(
-      url
+    const randomServices: string[] = await getRandomServicesUrl(
+      url,
+      auditVariables.numberOfServicesToBeScanned
     );
 
-    if (!randomServiceToBeScanned) {
+    if (randomServices.length === 0) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: notExecuted,
+              result: auditData.nonExecuted,
             },
           ]
         ),
       };
     }
 
-    item[0].inspected_page = randomServiceToBeScanned;
+    const correctItems = [];
+    const toleranceItems = [];
+    const wrongItems = [];
 
-    const $: CheerioAPI = await loadPageData(randomServiceToBeScanned);
+    let score = 1;
 
-    const indexElements = await getServicesFromIndex($, mandatoryVoices);
-    const mandatoryMenuItems = mandatoryVoices.map(toMenuItem);
-    const orderResult = checkOrder(mandatoryMenuItems, indexElements);
+    for (const randomService of randomServices) {
+      const item = {
+        missing_elements: "",
+        wrong_order_elements: "",
+        inspected_page: "",
+      };
 
-    let missingMandatoryItems = missingMenuItems(
-      indexElements,
-      mandatoryMenuItems
-    );
+      item.inspected_page = randomService;
 
-    const title = $('[data-element="service-title"]').text().trim() ?? "";
-    if (!title) {
-      missingMandatoryItems.push(mandatoryHeaderVoices[0]);
+      const $: CheerioAPI = await loadPageData(randomService);
+
+      let indexElements = await getServicesFromIndex($, mandatoryVoices);
+
+      const mandatoryMenuItems = mandatoryVoices.map(toMenuItem);
+      const orderResult = checkOrder(mandatoryMenuItems, indexElements);
+
+      //For Contatti we don't check its content
+      const indexElementsWithContent: string[] = ["Contatti"];
+
+      for (const mandatoryVoiceDataElement of mandatoryVoicesDataElements.paragraph) {
+        const dataElement = `[data-element="${mandatoryVoiceDataElement.data_element}"]`;
+        const content = await getPageElementDataAttribute($, dataElement, "p");
+        if (content && content.length > 0 && content[0].length >= 3) {
+          indexElementsWithContent.push(mandatoryVoiceDataElement.key);
+        }
+      }
+
+      for (const mandatoryVoiceDataElement of mandatoryVoicesDataElements.exist) {
+        const dataElement = `[data-element="${mandatoryVoiceDataElement.data_element}"]`;
+        const element = $(dataElement);
+        if (element.length > 0) {
+          indexElementsWithContent.push(mandatoryVoiceDataElement.key);
+        }
+      }
+
+      indexElements = indexElements.filter((value) =>
+        indexElementsWithContent.includes(value)
+      );
+
+      let missingMandatoryItems = missingMenuItems(
+        indexElements,
+        mandatoryMenuItems
+      );
+
+      const title = $('[data-element="service-title"]').text().trim() ?? "";
+      if (title.length < 3) {
+        missingMandatoryItems.push(mandatoryHeaderVoices[0]);
+      }
+
+      const description =
+        $('[data-element="service-description"]').text().trim() ?? "";
+      if (description.length < 3) {
+        missingMandatoryItems.push(mandatoryHeaderVoices[1]);
+      }
+
+      let breadcrumbElements = await getPageElementDataAttribute(
+        $,
+        '[data-element="breadcrumb"]',
+        "li"
+      );
+      breadcrumbElements = breadcrumbElements.map((x) =>
+        x.trim().toLowerCase().replaceAll("/", "")
+      );
+
+      if (!checkBreadcrumb(breadcrumbElements)) {
+        missingMandatoryItems.push(mandatoryHeaderVoices[2]);
+      }
+
+      const argumentsTag = await getPageElementDataAttribute(
+        $,
+        '[data-element="topic-list"]'
+      );
+      if (argumentsTag.length <= 0) {
+        missingMandatoryItems.push(mandatoryHeaderVoices[3]);
+      }
+
+      const whatNeeds = $('[data-element="used-for"]').text().trim() ?? "";
+      if (whatNeeds.length < 3) {
+        missingMandatoryItems.push(mandatoryBodyVoices[0]);
+      }
+
+      const responsibleStructure = await getPageElementDataAttribute(
+        $,
+        '[data-element="structures"]',
+        "a"
+      );
+      if (responsibleStructure.length <= 0) {
+        missingMandatoryItems.push(mandatoryBodyVoices[1]);
+      }
+
+      const placeInfo = await getPlaceInfo($, mandatoryPlaceInfo);
+      if (placeInfo.length > 0) {
+        missingMandatoryItems = [...missingMandatoryItems, ...placeInfo];
+      }
+
+      const metadata = $('[data-element="metadata"]').text().trim() ?? "";
+      if (
+        !metadata.toLowerCase().includes(mandatoryMetadata[0].toLowerCase()) ||
+        !metadata.toLowerCase().includes(mandatoryMetadata[1].toLowerCase())
+      ) {
+        missingMandatoryItems.push(mandatoryBodyVoices[2]);
+      }
+
+      item.missing_elements = missingMandatoryItems.join(", ");
+      item.wrong_order_elements = orderResult.elementsNotInSequence.join(", ");
+
+      const missingVoicesAmount = missingMandatoryItems.length;
+      const voicesNotInCorrectOrderAmount =
+        orderResult.numberOfElementsNotInSequence;
+
+      if (missingVoicesAmount > 2 || voicesNotInCorrectOrderAmount > 1) {
+        if (score > 0) {
+          score = 0;
+        }
+
+        wrongItems.push(item);
+      } else if (
+        (missingVoicesAmount > 0 && missingVoicesAmount <= 2) ||
+        voicesNotInCorrectOrderAmount === 1
+      ) {
+        if (score > 0.5) {
+          score = 0.5;
+        }
+
+        toleranceItems.push(item);
+      } else {
+        correctItems.push(item);
+      }
     }
 
-    const description =
-      $('[data-element="service-description"]').text().trim() ?? "";
-    if (!description) {
-      missingMandatoryItems.push(mandatoryHeaderVoices[1]);
+    const results = [];
+    switch (score) {
+      case 1:
+        results.push({
+          result: auditData.greenResult,
+        });
+        break;
+      case 0.5:
+        results.push({
+          result: auditData.yellowResult,
+        });
+        break;
+      case 0:
+        results.push({
+          result: auditData.redResult,
+        });
+        break;
     }
 
-    const breadcrumbElements = await getPageElementDataAttribute(
-      $,
-      '[data-element="breadcrumb"]',
-      "li"
-    );
-    if (
-      !breadcrumbElements.includes(breadcrumbMandatoryElements[0]) &&
-      !breadcrumbElements.includes(breadcrumbMandatoryElements[1])
-    ) {
-      missingMandatoryItems.push(mandatoryHeaderVoices[2]);
+    results.push({});
+
+    if (wrongItems.length > 0) {
+      results.push({
+        result: auditData.subItem.redResult,
+        title_missing_elements: titleSubHeadings[0],
+        title_wrong_order_elements: titleSubHeadings[1],
+      });
+
+      for (const item of wrongItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
     }
 
-    const argumentsTag = await getPageElementDataAttribute(
-      $,
-      '[data-element="topic-list"]'
-    );
-    if (argumentsTag.length <= 0) {
-      missingMandatoryItems.push(mandatoryHeaderVoices[3]);
+    if (toleranceItems.length > 0) {
+      results.push({
+        result: auditData.subItem.yellowResult,
+        title_missing_elements: titleSubHeadings[0],
+        title_wrong_order_elements: titleSubHeadings[1],
+      });
+
+      for (const item of toleranceItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
     }
 
-    const whatNeeds = $('[data-element="used-for"]').text().trim() ?? "";
-    if (!whatNeeds) {
-      missingMandatoryItems.push(mandatoryBodyVoices[0]);
+    if (correctItems.length > 0) {
+      results.push({
+        result: auditData.subItem.greenResult,
+        title_missing_elements: titleSubHeadings[0],
+        title_wrong_order_elements: titleSubHeadings[1],
+      });
+
+      for (const item of correctItems) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+
+      results.push({});
     }
-
-    const responsibleStructure = await getPageElementDataAttribute(
-      $,
-      '[data-element="structures"]',
-      "a"
-    );
-    if (responsibleStructure.length <= 0) {
-      missingMandatoryItems.push(mandatoryBodyVoices[1]);
-    }
-
-    const placeInfo = await getPlaceInfo($, mandatoryPlaceInfo);
-    if (placeInfo.length > 0) {
-      missingMandatoryItems = [...missingMandatoryItems, ...placeInfo];
-    }
-
-    const metadata = $('[data-element="metadata"]').text().trim() ?? "";
-    if (
-      !metadata.toLowerCase().includes(mandatoryMetadata[0].toLowerCase()) ||
-      !metadata.toLowerCase().includes(mandatoryMetadata[1].toLowerCase())
-    ) {
-      missingMandatoryItems.push(mandatoryBodyVoices[2]);
-    }
-
-    const missingVoicesAmount = missingMandatoryItems.length;
-    const voicesNotInCorrectOrderAmount =
-      orderResult.numberOfElementsNotInSequence;
-
-    if (missingVoicesAmount > 2 || voicesNotInCorrectOrderAmount > 1) {
-      score = 0;
-      item[0].result = redResult;
-    } else if (
-      (missingVoicesAmount > 0 && missingVoicesAmount <= 2) ||
-      voicesNotInCorrectOrderAmount === 1
-    ) {
-      score = 0.5;
-      item[0].result = yellowResult;
-    }
-
-    item[0].missing_mandatory_elements_found = missingMandatoryItems.join(", ");
-    item[0].mandatory_elements_not_right_order =
-      orderResult.elementsNotInSequence.join(", ");
 
     return {
       score: score,
-      details: Audit.makeTableDetails(headings, item),
+      details: Audit.makeTableDetails(headings, results),
     };
   }
 }
