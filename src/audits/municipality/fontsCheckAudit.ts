@@ -8,16 +8,10 @@ import {
   getRandomSecondLevelPagesUrl,
   getRandomThirdLevelPagesUrl,
   getPrimaryPageUrl,
+  getSinglePageUrl,
 } from "../../utils/municipality/utils";
 import puppeteer from "puppeteer";
 import { auditDictionary } from "../../storage/auditDictionary";
-import { CheerioAPI } from "cheerio";
-import {
-  buildUrl,
-  getHREFValuesDataAttribute,
-  isInternalUrl,
-  loadPageData,
-} from "../../utils/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import { primaryMenuItems } from "../../storage/municipality/menuItems";
 
@@ -117,20 +111,12 @@ class LoadAudit extends Audit {
       ...randomServicesUrl,
     ];
 
-    const $: CheerioAPI = await loadPageData(url);
-    const personalAreaLogin = await getHREFValuesDataAttribute(
-      $,
-      '[data-element="personal-area-login"]'
+    const personalAreaLoginPage = await getSinglePageUrl(
+      url,
+      "personal-area-login"
     );
-    if (personalAreaLogin.length === 1) {
-      let personalAreaLoginUrl = personalAreaLogin[0];
-      if (
-        (await isInternalUrl(personalAreaLoginUrl)) &&
-        !personalAreaLoginUrl.includes(url)
-      ) {
-        personalAreaLoginUrl = await buildUrl(url, personalAreaLoginUrl);
-      }
-      pagesToBeAnalyzed.push(personalAreaLoginUrl);
+    if (personalAreaLoginPage !== "") {
+      pagesToBeAnalyzed.push(personalAreaLoginPage);
     }
 
     const correctItems = [];

@@ -13,6 +13,7 @@ import {
 import {
   getRandomThirdLevelPagesUrl,
   getPrimaryPageUrl,
+  getSinglePageUrl,
 } from "../../utils/municipality/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
@@ -115,13 +116,12 @@ class LoadAudit extends Audit {
       servicePageUrl = await buildUrl(url, servicePageUrl);
     }
 
-    $ = await loadPageData(servicePageUrl);
-    const bookingAppointmentPage = await getHREFValuesDataAttribute(
-      $,
-      '[data-element="appointment-booking"]'
+    const bookingAppointmentPage = await getSinglePageUrl(
+      servicePageUrl,
+      "appointment-booking"
     );
 
-    if (bookingAppointmentPage.length === 0) {
+    if (bookingAppointmentPage === "") {
       return {
         score: 0,
         details: Audit.makeTableDetails(
@@ -145,10 +145,8 @@ class LoadAudit extends Audit {
       in_page_url: "Non si applica",
     };
 
-    const bookingAppointmentUrl = bookingAppointmentPage[0];
-
     let score = 1;
-    $ = await loadPageData(bookingAppointmentUrl);
+    $ = await loadPageData(bookingAppointmentPage);
     let breadcrumbElements = await getPageElementDataAttribute(
       $,
       '[data-element="breadcrumb"]',
@@ -195,10 +193,9 @@ class LoadAudit extends Audit {
         in_page_url: "No",
       };
 
-      $ = await loadPageData(randomService);
-      const bookingAppointmentPage = await getHREFValuesDataAttribute(
-        $,
-        '[data-element="appointment-booking"]'
+      const bookingAppointmentServicePage = await getSinglePageUrl(
+        randomService,
+        "appointment-booking"
       );
 
       const inPageButton = $('[data-element="appointment-booking"]');
@@ -206,11 +203,11 @@ class LoadAudit extends Audit {
         item.in_page_url = "Sì";
       }
 
-      if (bookingAppointmentPage.length === 0) {
+      if (bookingAppointmentServicePage !== "") {
         item.component_exist = "No";
       }
 
-      if (bookingAppointmentPage[0] !== bookingAppointmentUrl) {
+      if (bookingAppointmentServicePage !== bookingAppointmentPage) {
         if (score > 0) {
           score = 0;
         }
@@ -218,8 +215,8 @@ class LoadAudit extends Audit {
       }
 
       if (
-        bookingAppointmentPage.length === 0 ||
-        bookingAppointmentPage[0] !== bookingAppointmentUrl ||
+        bookingAppointmentServicePage !== "" ||
+        bookingAppointmentServicePage !== bookingAppointmentPage ||
         item.correct_breadcrumb === "No"
       ) {
         wrongItems.push(item);

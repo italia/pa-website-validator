@@ -5,13 +5,9 @@ import lighthouse from "lighthouse";
 import { domains } from "../../storage/municipality/allowedDomains";
 import { auditDictionary } from "../../storage/auditDictionary";
 import {
-  buildUrl,
-  getHREFValuesDataAttribute,
-  isInternalUrl,
-  loadPageData,
   urlExists,
 } from "../../utils/utils";
-import { CheerioAPI } from "cheerio";
+import { getSinglePageUrl } from "../../utils/municipality/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -78,20 +74,12 @@ class LoadAudit extends Audit {
 
     const pagesToBeAnalyzed = [url];
 
-    const $: CheerioAPI = await loadPageData(url);
-    const personalAreaLogin = await getHREFValuesDataAttribute(
-      $,
-      '[data-element="personal-area-login"]'
+    const personalAreaLoginPage = await getSinglePageUrl(
+      url,
+      "personal-area-login"
     );
-    if (personalAreaLogin.length === 1) {
-      let personalAreaLoginUrl = personalAreaLogin[0];
-      if (
-        (await isInternalUrl(personalAreaLoginUrl)) &&
-        !personalAreaLoginUrl.includes(url)
-      ) {
-        personalAreaLoginUrl = await buildUrl(url, personalAreaLoginUrl);
-      }
-      pagesToBeAnalyzed.push(personalAreaLoginUrl);
+    if (personalAreaLoginPage !== "") {
+      pagesToBeAnalyzed.push(personalAreaLoginPage);
     }
 
     const correctItems = [];

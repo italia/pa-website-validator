@@ -510,7 +510,24 @@ const getButtonUrl = async (
   return "";
 };
 
-async function get
+const getSinglePageUrl = async (url: string, dataElement: string) => {
+  const $: CheerioAPI = await loadPageData(url);
+  const personalAreaLogin = await getHREFValuesDataAttribute(
+    $,
+    `[data-element="${dataElement}"]`
+  );
+  if (personalAreaLogin.length === 1) {
+    let personalAreaLoginUrl = personalAreaLogin[0];
+    if (
+      (await isInternalUrl(personalAreaLoginUrl)) &&
+      !personalAreaLoginUrl.includes(url)
+    ) {
+      personalAreaLoginUrl = await buildUrl(url, personalAreaLoginUrl);
+    }
+    return personalAreaLoginUrl;
+  }
+  return "";
+};
 
 export {
   getRandomFirstLevelPagesUrl,
@@ -519,4 +536,5 @@ export {
   checkFeedbackComponent,
   getPrimaryPageUrl,
   getButtonUrl,
+  getSinglePageUrl,
 };
