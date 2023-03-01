@@ -57,7 +57,7 @@ try {
         type: "list",
         choices: [
           {
-            name: "Completa (richiede più tempo)",
+            name: "Approfondita (richiede più tempo)",
             value: "all",
           },
           {
