@@ -293,7 +293,7 @@ async function getCipherVersion(hostname: string): Promise<string> {
       .request(hostname, function (res) {
         resolve((res.socket as TLSSocket).getCipher().version);
       })
-      .on("error", function (e) {
+      .on("error", function () {
         resolve("");
       })
       .end();
@@ -306,7 +306,7 @@ async function getCipherStandardName(hostname: string): Promise<string> {
       .request(hostname, function (res) {
         resolve((res.socket as TLSSocket).getCipher().standardName);
       })
-      .on("error", function (e) {
+      .on("error", function () {
         resolve("");
       })
       .end();
