@@ -16,9 +16,9 @@ Istruzioni di utilizzo:
 
 5.  Usando le frecce sulla tastiera, sposta il cursore per selezionare se vuoi condurre un'analisi approfondita (vengono valutate tutte le pagine trovate delle categorie specificate) o un'analisi veloce (vengono valutate alcune pagine selezionate casualmente)
 
-5.  Attendi qualche secondo che l’app inizi l’analisi. Per il completamento ci vorranno fino a 10 minuti, in base al tipo di analisi scelta e alla dimensione del sito
+6.  Attendi qualche secondo che l’app inizi l’analisi. Per il completamento ci vorranno fino a 10 minuti, in base al tipo di analisi scelta e alla dimensione del sito
 
-6.  Consulta il report che si aprirà automaticamente al termine dell’analisi. Il report viene salvato nella cartella indicata dall’App.
+7.  Consulta il report che si aprirà automaticamente al termine dell’analisi. Il report viene salvato nella cartella indicata dall’App.
 
 [Scopri di più sul funzionamento dell’App e su come leggere il report](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs).
 
