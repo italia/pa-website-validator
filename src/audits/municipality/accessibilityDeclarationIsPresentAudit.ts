@@ -95,6 +95,7 @@ class LoadAudit extends Audit {
       }
 
       items[0].existing_page = "Sì";
+      items[0].page_contains_correct_url = "No";
 
       if (!href.includes("https://form.agid.gov.it/view/")) {
         return {
@@ -102,8 +103,6 @@ class LoadAudit extends Audit {
           details: Audit.makeTableDetails(headings, items),
         };
       }
-
-      items[0].page_contains_correct_url = "No";
 
       const privacyPageHTML: string = await getAllPageHTML(href);
       if (!privacyPageHTML.includes(url)) {
