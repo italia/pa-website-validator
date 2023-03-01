@@ -94,37 +94,63 @@ class LoadAudit extends lighthouse.Audit {
         primaryMenuDataElement
       );
 
+      if (secondLevelPageHref.length === 0) {
+        return {
+          score: 0,
+          details: Audit.makeTableDetails(
+            [{ key: "result", itemType: "text", text: "Risultato" }],
+            [
+              {
+                result: auditData.nonExecuted,
+              },
+            ]
+          ),
+        };
+      }
+
       let secondLevelPagesNames: string[] = [];
-      if (secondLevelPageHref.length > 0) {
-        let secondLevelPageUrl = secondLevelPageHref[0];
-        if (
-          (await isInternalUrl(secondLevelPageUrl)) &&
-          !secondLevelPageUrl.includes(url)
-        ) {
-          secondLevelPageUrl = await buildUrl(url, secondLevelPageHref[0]);
-        }
+      let secondLevelPageUrl = secondLevelPageHref[0];
+      if (
+        (await isInternalUrl(secondLevelPageUrl)) &&
+        !secondLevelPageUrl.includes(url)
+      ) {
+        secondLevelPageUrl = await buildUrl(url, secondLevelPageHref[0]);
+      }
 
-        $ = await loadPageData(secondLevelPageUrl);
-        const secondaryMenuDataElement = `[data-element="${primaryMenuItem.secondary_item_data_element[0]}"]`;
+      $ = await loadPageData(secondLevelPageUrl);
+      const secondaryMenuDataElement = `[data-element="${primaryMenuItem.secondary_item_data_element[0]}"]`;
 
-        if (key !== "live" && primaryMenuItem.dictionary.length > 0) {
-          secondLevelPagesNames = await getPageElementDataAttribute(
-            $,
-            secondaryMenuDataElement
-          );
-        } else {
-          for (const dataElement of primaryMenuItem.secondary_item_data_element) {
-            const buttonDataElement = `[data-element="${dataElement}"]`;
-            const pageLinkUrl = await getButtonUrl($, url, buttonDataElement);
+      if (key !== "live" && primaryMenuItem.dictionary.length > 0) {
+        secondLevelPagesNames = await getPageElementDataAttribute(
+          $,
+          secondaryMenuDataElement
+        );
+      } else {
+        for (const dataElement of primaryMenuItem.secondary_item_data_element) {
+          const buttonDataElement = `[data-element="${dataElement}"]`;
+          const pageLinkUrl = await getButtonUrl($, url, buttonDataElement);
 
-            if (pageLinkUrl.length > 0) {
-              const $2 = await loadPageData(pageLinkUrl);
-              secondLevelPagesNames.push(
-                $2('[data-element="page-name"]').text().trim() ?? ""
-              );
-            }
+          if (pageLinkUrl.length > 0) {
+            const $2 = await loadPageData(pageLinkUrl);
+            secondLevelPagesNames.push(
+              $2('[data-element="page-name"]').text().trim() ?? ""
+            );
           }
         }
+      }
+
+      if (secondLevelPagesNames.length === 0) {
+        return {
+          score: 0,
+          details: Audit.makeTableDetails(
+            [{ key: "result", itemType: "text", text: "Risultato" }],
+            [
+              {
+                result: auditData.nonExecuted,
+              },
+            ]
+          ),
+        };
       }
 
       for (const pageTitle of secondLevelPagesNames) {
@@ -142,28 +168,31 @@ class LoadAudit extends lighthouse.Audit {
 
     let errorVoices: string[] = [];
 
-    const primaryMenuDataElement = `[data-element="${customPrimaryMenuItemsDataElement}"]`;
-    const secondLevelPageHref = await getHREFValuesDataAttribute(
+    const customPrimaryMenuDataElement = `[data-element="${customPrimaryMenuItemsDataElement}"]`;
+    const customSecondLevelPageHref = await getHREFValuesDataAttribute(
       $,
-      primaryMenuDataElement
+      customPrimaryMenuDataElement
     );
 
-    for (let secondLevelPageUrl of secondLevelPageHref) {
+    for (let customSecondLevelPageUrl of customSecondLevelPageHref) {
       if (
-        (await isInternalUrl(secondLevelPageUrl)) &&
-        !secondLevelPageUrl.includes(url)
+        (await isInternalUrl(customSecondLevelPageUrl)) &&
+        !customSecondLevelPageUrl.includes(url)
       ) {
-        secondLevelPageUrl = await buildUrl(url, secondLevelPageHref[0]);
+        customSecondLevelPageUrl = await buildUrl(
+          url,
+          customSecondLevelPageHref[0]
+        );
       }
 
-      $ = await loadPageData(secondLevelPageUrl);
-      const secondaryMenuDataElement = `[data-element="${customSecondaryMenuItemsDataElement}"]`;
-      const secondLevelPagesNames = await getPageElementDataAttribute(
+      $ = await loadPageData(customSecondLevelPageUrl);
+      const customSecondaryMenuDataElement = `[data-element="${customSecondaryMenuItemsDataElement}"]`;
+      const customSecondLevelPagesNames = await getPageElementDataAttribute(
         $,
-        secondaryMenuDataElement
+        customSecondaryMenuDataElement
       );
 
-      errorVoices = [...errorVoices, ...secondLevelPagesNames];
+      errorVoices = [...errorVoices, ...customSecondLevelPagesNames];
     }
 
     let pagesInVocabulary = 0;
