@@ -36,12 +36,12 @@ try {
       type: "list",
       choices: [
         {
-          name: "Ambiente locale (sito in fase di sviluppo, es. di URL: http://localhost:8080)",
-          value: "local",
-        },
-        {
           name: `Ambiente di produzione (sito online e pubblico, es. di URL: https://${typeIT}.it)`,
           value: "online",
+        },
+        {
+          name: "Ambiente locale (sito in fase di sviluppo, es. di URL: http://localhost:8080)",
+          value: "local",
         },
       ],
     },
@@ -55,15 +55,14 @@ try {
         message: "Seleziona quanto vuoi che sia approfondita l'analisi:",
         name: "accuracy",
         type: "list",
-        default: "suggested",
         choices: [
-          {
-            name: "Veloce",
-            value: "suggested",
-          },
           {
             name: "Completa (richiede più tempo)",
             value: "all",
+          },
+          {
+            name: "Veloce",
+            value: "suggested",
           },
         ],
       },
