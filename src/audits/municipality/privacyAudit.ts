@@ -42,7 +42,7 @@ class LoadAudit extends Audit {
       },
       {
         key: "link_destination",
-        itemType: "text",
+        itemType: "url",
         text: "Pagina di destinazione del link",
       },
       {
