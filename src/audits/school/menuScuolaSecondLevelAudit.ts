@@ -88,6 +88,20 @@ class LoadAudit extends Audit {
         "a"
       );
 
+      if (headerUlTest.length === 0) {
+        return {
+          score: 0,
+          details: Audit.makeTableDetails(
+            [{ key: "result", itemType: "text", text: "Risultato" }],
+            [
+              {
+                result: auditData.nonExecuted,
+              },
+            ]
+          ),
+        };
+      }
+
       for (const element of headerUlTest) {
         if (element !== "Panoramica") {
           if (secondaryMenuItem.dictionary.includes(element.toLowerCase())) {
