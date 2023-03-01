@@ -95,7 +95,7 @@ const run = async (
     cipherSuite = await checkCipherSuite(url);
   } catch (e) {
     item[0].protocol = protocol;
-    item[0].result = redResult + " Internal exception";
+    item[0].result = redResult + " Certificato non trovato";
     return {
       score: 0,
       details: Audit.makeTableDetails(headings, item),
@@ -177,9 +177,6 @@ const run = async (
 
   await browser.close();
 
-  //const response = await axios.get('http://'+urlNoProtocol);
-  //console.log(response.request._redirectable._redirectCount);
-
   return {
     score: score,
     details: Audit.makeTableDetails(headings, item),
@@ -205,29 +202,25 @@ async function checkCertificateValidation(
     valid_to: "",
   };
 
-  try {
-    const hostname = new URL(url).hostname;
+  const hostname = new URL(url).hostname;
 
-    const certificate = await sslCertificate.get(hostname);
-    if (certificate) {
-      const validFromTimestamp = Date.parse(certificate.valid_from ?? null);
-      const validToTimestamp = Date.parse(certificate.valid_to ?? null);
+  const certificate = await sslCertificate.get(hostname);
+  if (certificate) {
+    const validFromTimestamp = Date.parse(certificate.valid_from ?? null);
+    const validToTimestamp = Date.parse(certificate.valid_to ?? null);
 
-      if (!isNaN(validFromTimestamp) && !isNaN(validToTimestamp)) {
-        const todayTimestamp = Date.now();
-        if (
-          todayTimestamp > validFromTimestamp &&
-          todayTimestamp < validToTimestamp
-        ) {
-          returnObj.valid = true;
-        }
+    if (!isNaN(validFromTimestamp) && !isNaN(validToTimestamp)) {
+      const todayTimestamp = Date.now();
+      if (
+        todayTimestamp > validFromTimestamp &&
+        todayTimestamp < validToTimestamp
+      ) {
+        returnObj.valid = true;
       }
-
-      returnObj.valid_from = certificate.valid_from;
-      returnObj.valid_to = certificate.valid_to;
     }
-  } catch (e) {
-    console.log(e);
+
+    returnObj.valid_from = certificate.valid_from;
+    returnObj.valid_to = certificate.valid_to;
   }
 
   return returnObj;
@@ -300,6 +293,9 @@ async function getCipherVersion(hostname: string): Promise<string> {
       .request(hostname, function (res) {
         resolve((res.socket as TLSSocket).getCipher().version);
       })
+      .on("error", function (e) {
+        resolve("");
+      })
       .end();
   });
 }
@@ -309,6 +305,9 @@ async function getCipherStandardName(hostname: string): Promise<string> {
     https
       .request(hostname, function (res) {
         resolve((res.socket as TLSSocket).getCipher().standardName);
+      })
+      .on("error", function (e) {
+        resolve("");
       })
       .end();
   });
