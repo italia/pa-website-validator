@@ -108,17 +108,8 @@ class LoadAudit extends Audit {
       try {
         parsedMetatagJSON = JSON.parse(metatagJSON.toString());
       } catch (e) {
-        return {
-          score: 0,
-          details: Audit.makeTableDetails(
-            [{ key: "result", itemType: "text", text: "Risultato" }],
-            [
-              {
-                result: auditData.nonExecuted,
-              },
-            ]
-          ),
-        };
+        wrongItems.push(item);
+        continue;
       }
 
       const result: ValidatorResult = jsonschema.validate(
