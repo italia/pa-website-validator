@@ -6,9 +6,9 @@ export const auditDictionary = {
     nonExecuted:
       "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
-      "LOCALIZZAZIONE IP - Il sito deve essere hostato su datacenter localizzati su territorio europeo.",
+      "LOCALIZZAZIONE IP - Il sito deve essere ospitato su datacenter localizzati su territorio europeo.",
     failureTitle:
-      "LOCALIZZAZIONE IP - Il sito deve essere hostato su datacenter localizzati su territorio europeo.",
+      "LOCALIZZAZIONE IP - Il sito deve essere ospitato su datacenter localizzati su territorio europeo.",
     description:
       "CONDIZIONI DI SUCCESSO: l'indirizzo IP fa riferimento a un datacenter localizzato su territorio europeo; MODALITÀ DI VERIFICA: verifica che la localizzazione dell'IP rientri all'interno di uno dei confini degli stati membri dell'UE; RIFERIMENTI TECNICI E NORMATIVI: GDPR",
   },
@@ -19,9 +19,9 @@ export const auditDictionary = {
     nonExecuted:
       "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
-      "LOCALIZZAZIONE IP - Il sito deve essere hostato su datacenter localizzati su territorio europeo.",
+      "LOCALIZZAZIONE IP - Il sito deve essere ospitato su datacenter localizzati su territorio europeo.",
     failureTitle:
-      "LOCALIZZAZIONE IP - Il sito deve essere hostato su datacenter localizzati su territorio europeo.",
+      "LOCALIZZAZIONE IP - Il sito deve essere ospitato su datacenter localizzati su territorio europeo.",
     description:
       "CONDIZIONI DI SUCCESSO: l'indirizzo IP fa riferimento a un datacenter localizzato su territorio europeo; MODALITÀ DI VERIFICA: verifica che la localizzazione dell'IP rientri all'interno di uno dei confini degli stati membri dell'UE; RIFERIMENTI TECNICI E NORMATIVI: GDPR",
   },

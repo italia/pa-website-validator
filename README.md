@@ -138,7 +138,7 @@ Note:
 
 - `--scope` indica la tipologia di audit da eseguire:
 
-  - `local` se il tool è lanciato su un sito web hostato in locale: esegue tutti gli audit che lavorano sulla struttura del sito ispezionato e mostra dei messaggi informativi per alcuni audit che non producono risultati se eseguiti in un ambiente locale.
+  - `local` se il tool è lanciato su un sito web in ambiente locale: esegue tutti gli audit che lavorano sulla struttura del sito ispezionato e mostra dei messaggi informativi per alcuni audit che non producono risultati se eseguiti in un ambiente locale.
   - `online` esegue tutti gli audit disponibili.
 
 - `--view` se passato al comando alla fine dell'auditing lancia un'istanza di chrome che mostra automaticamente la reportistica generata.
