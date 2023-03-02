@@ -125,7 +125,7 @@ const getRandomSecondLevelPagesUrl = async (
               }
             }
           }
-          if (secondPageUrls === [] && key !== "custom") {
+          if (secondPageUrls.length === 0 && key !== "custom") {
             return [];
           }
           pagesUrls = [...pagesUrls, ...new Set(secondPageUrls)];
