@@ -41,9 +41,9 @@ export const auditDictionary = {
       'CONDIZIONI DI SUCCESSO: il sito presenta una voce nel footer che riporta a una dichiarazione di accessibilità AgID valida per il sito; MODALITÀ DI VERIFICA: ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione, viene verificata la presenza del link nel footer, che riporti a una pagina esistente, che l\'url della pagina di destinazione inizi con "https://form.agid.gov.it/view/" e che la pagina contenga l\'url del sito del Comune; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [AgID Linee guida sull’accessibilità degli strumenti informatici](https://docs.italia.it/AgID/documenti-in-consultazione/lg-accessibilita-docs/it/), [Direttiva UE n. 2102/2016](https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX%3A32016L2102), [Legge 9 gennaio 2004 n. 4](https://www.normattiva.it/atto/caricaDettaglioAtto?atto.dataPubblicazioneGazzetta=2004-01-17&atto.codiceRedazionale=004G0015&atto.articolo.numero=0&atto.articolo.sottoArticolo=1&atto.articolo.sottoArticolo1=10&qId=cb6b9a05-f5c3-40ac-81b8-f89e73e5b4c7&tabID=0.029511124589268523&title=lbl.dettaglioAtto), [Web Content Accessibility Guidelines WCAG 2.1](https://www.w3.org/Translations/WCAG21-it/#background-on-wcag-2), [AgID dichiarazione di accessibilità](https://www.agid.gov.it/it/design-servizi/accessibilita/dichiarazione-accessibilita), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "municipality-booking-appointment-check": {
-    greenResult: "Il componente è presente nelle pagine analizzate.",
+    greenResult: "Il componente è presente in tutte le pagine analizzate.",
     yellowResult: "",
-    redResult: "Il componente non è presente nelle pagine analizzate.",
+    redResult: "Il componente non è presente in tutte le pagine analizzate.",
     subItem: {
       greenResult: "Pagine nelle quali è presente il componente:",
       yellowResult: "",

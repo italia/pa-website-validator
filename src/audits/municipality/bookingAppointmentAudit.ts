@@ -35,14 +35,14 @@ class LoadAudit extends Audit {
 
   static async audit(
     artifacts: LH.Artifacts & { origin: string }
-  ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
+  ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
 
     const titleSubHeadings = [
       "Componente individuato",
       'Nella sezione "Accedi al servizio" della scheda servizio è presente il pulsante di prenotazione appuntamento',
     ];
-    const headings = [
+    const headings: LH.Audit.Details.TableColumnHeading[] = [
       {
         key: "result",
         itemType: "text",
@@ -111,7 +111,6 @@ class LoadAudit extends Audit {
     const item = {
       inspected_page: servicesPage,
       component_exist: "Sì",
-      correct_breadcrumb: "Sì",
       in_page_url: "Non si applica",
     };
 
@@ -163,7 +162,7 @@ class LoadAudit extends Audit {
       }
 
       if (
-        bookingAppointmentServicePage !== bookingAppointmentPage ||
+        bookingAppointmentServicePage !== bookingAppointmentPage &&
         score > 0
       ) {
         score = 0;
