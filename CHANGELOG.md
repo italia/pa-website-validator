@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.1](https://github.com/italia/pa-website-validator/compare/v2.0.0...v2.0.1) (2023-03-02)
+
+
+### Bug Fixes
+
+* **C.SI.2.1:** show correct audit result ([196c90b](https://github.com/italia/pa-website-validator/commit/196c90bd528503425f163127e08a25422dda2314))
+* reword ([b6f6e5a](https://github.com/italia/pa-website-validator/commit/b6f6e5a941655638d2925ebaaf74441826248eee))
+
 ## [2.0.0](https://github.com/italia/pa-website-validator/compare/v1.2.0-pre.1...v2.0.0) (2023-03-01)
 
 
