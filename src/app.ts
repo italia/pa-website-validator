@@ -52,12 +52,12 @@ try {
   const { accuracy }: { accuracy: "min" | "suggested" | "high" | "all" } =
     await inquirer.prompt([
       {
-        message: "Seleziona quanto vuoi che sia approfondita l'analisi:",
+        message: "Seleziona quanto vuoi che sia accurata l'analisi:",
         name: "accuracy",
         type: "list",
         choices: [
           {
-            name: "Completa (richiede più tempo)",
+            name: "Approfondita (richiede più tempo)",
             value: "all",
           },
           {

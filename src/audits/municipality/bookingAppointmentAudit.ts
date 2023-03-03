@@ -2,11 +2,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import {
-  checkBreadcrumb,
-  getPageElementDataAttribute,
-  loadPageData,
-} from "../../utils/utils";
+import { loadPageData } from "../../utils/utils";
 import {
   getRandomThirdLevelPagesUrl,
   getPrimaryPageUrl,
@@ -39,15 +35,14 @@ class LoadAudit extends Audit {
 
   static async audit(
     artifacts: LH.Artifacts & { origin: string }
-  ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
+  ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
 
     const titleSubHeadings = [
       "Componente individuato",
-      "La breadcrumb rispetta i requisiti",
       'Nella sezione "Accedi al servizio" della scheda servizio è presente il pulsante di prenotazione appuntamento',
     ];
-    const headings = [
+    const headings: LH.Audit.Details.TableColumnHeading[] = [
       {
         key: "result",
         itemType: "text",
@@ -60,15 +55,6 @@ class LoadAudit extends Audit {
         text: "",
         subItemsHeading: {
           key: "component_exist",
-          itemType: "text",
-        },
-      },
-      {
-        key: "title_correct_breadcrumb",
-        itemType: "text",
-        text: "",
-        subItemsHeading: {
-          key: "correct_breadcrumb",
           itemType: "text",
         },
       },
@@ -125,28 +111,12 @@ class LoadAudit extends Audit {
     const item = {
       inspected_page: servicesPage,
       component_exist: "Sì",
-      correct_breadcrumb: "Sì",
       in_page_url: "Non si applica",
     };
 
     let score = 1;
-    $ = await loadPageData(bookingAppointmentPage);
-    let breadcrumbElements = await getPageElementDataAttribute(
-      $,
-      '[data-element="breadcrumb"]',
-      "li"
-    );
-    breadcrumbElements = breadcrumbElements.map((x) =>
-      x.trim().toLowerCase().replaceAll("/", "")
-    );
 
-    if (!checkBreadcrumb(breadcrumbElements)) {
-      score = 0;
-      item.correct_breadcrumb = "No";
-      wrongItems.push(item);
-    } else {
-      correctItems.push(item);
-    }
+    correctItems.push(item);
 
     const randomServices = await getRandomThirdLevelPagesUrl(
       url,
@@ -174,7 +144,6 @@ class LoadAudit extends Audit {
       const item = {
         inspected_page: randomService,
         component_exist: "Sì",
-        correct_breadcrumb: score === 0 ? "No" : "Sì",
         in_page_url: "No",
       };
 
@@ -192,17 +161,16 @@ class LoadAudit extends Audit {
         item.in_page_url = "Sì";
       }
 
-      if (bookingAppointmentServicePage !== bookingAppointmentPage) {
-        if (score > 0) {
-          score = 0;
-        }
-        item.correct_breadcrumb = "No";
+      if (
+        bookingAppointmentServicePage !== bookingAppointmentPage &&
+        score > 0
+      ) {
+        score = 0;
       }
 
       if (
         bookingAppointmentServicePage === "" ||
-        bookingAppointmentServicePage !== bookingAppointmentPage ||
-        item.correct_breadcrumb === "No"
+        bookingAppointmentServicePage !== bookingAppointmentPage
       ) {
         wrongItems.push(item);
         continue;
@@ -231,8 +199,7 @@ class LoadAudit extends Audit {
       results.push({
         result: auditData.subItem.redResult,
         title_component_exist: titleSubHeadings[0],
-        title_correct_breadcrumb: titleSubHeadings[1],
-        title_in_page_url: titleSubHeadings[2],
+        title_in_page_url: titleSubHeadings[1],
       });
 
       for (const item of wrongItems) {
@@ -251,8 +218,7 @@ class LoadAudit extends Audit {
       results.push({
         result: auditData.subItem.greenResult,
         title_component_exist: titleSubHeadings[0],
-        title_correct_breadcrumb: titleSubHeadings[1],
-        title_in_page_url: titleSubHeadings[2],
+        title_in_page_url: titleSubHeadings[1],
       });
 
       for (const item of correctItems) {

@@ -83,7 +83,7 @@ class LoadAudit extends Audit {
     const correctItems = [];
     const wrongItems = [];
 
-    let score = 0;
+    let score = 1;
 
     for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
       const hostname = new URL(url).hostname.replace("www.", "");

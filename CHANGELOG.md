@@ -1,5 +1,34 @@
 # Changelog
 
+## [2.0.1](https://github.com/italia/pa-website-validator/compare/v2.0.0...v2.0.1) (2023-03-02)
+
+
+### Bug Fixes
+
+* **C.SI.2.1:** show correct audit result ([196c90b](https://github.com/italia/pa-website-validator/commit/196c90bd528503425f163127e08a25422dda2314))
+* reword ([b6f6e5a](https://github.com/italia/pa-website-validator/commit/b6f6e5a941655638d2925ebaaf74441826248eee))
+
+## [2.0.0](https://github.com/italia/pa-website-validator/compare/v1.2.0-pre.1...v2.0.0) (2023-03-01)
+
+
+### Bug Fixes
+
+* **app:** change option description ([ffeccec](https://github.com/italia/pa-website-validator/commit/ffeccecebcb0b257e615e0e38d68cb282f86eb7d))
+* **app:** change option text ([5b309d3](https://github.com/italia/pa-website-validator/commit/5b309d3f5e2ef0f7a52fcbf66ab51ace81427ca7))
+* **app:** change order of options ([6550e15](https://github.com/italia/pa-website-validator/commit/6550e151a5c21aa15c24e0b6b75c304b89916739))
+* audit non eseguito se non viene trovata almeno una voce per sotto menù ([4f38ee1](https://github.com/italia/pa-website-validator/commit/4f38ee17d4bd8adda2f1023ebc0dab8cc127440d))
+* **C.SI.2.1:** remove breadcrumb check ([3715139](https://github.com/italia/pa-website-validator/commit/371513985c9f9cb50ed89aee5e8441423a5cddac))
+* cambiamento itemType a url per link di destinazione ([eb4b694](https://github.com/italia/pa-website-validator/commit/eb4b694f572cfbfc48c27c72445fc2af81bd7a39))
+* gestione eccezione https.request ([66670f8](https://github.com/italia/pa-website-validator/commit/66670f82bc73ea869b9b3d85f10c2e876cd0f345))
+* logica inizializzazione audit ([1d0665c](https://github.com/italia/pa-website-validator/commit/1d0665c50e87abb560d0d62a9edc8bef2492e7e8))
+* modifica scrittura risultati ([43a4fad](https://github.com/italia/pa-website-validator/commit/43a4fadce6994454c64381343e111a88d8b5e231))
+* static checks ([7d5995a](https://github.com/italia/pa-website-validator/commit/7d5995a02a5e651e09d4364fc7633fa8c1eb97a2))
+
+
+### Miscellaneous Chores
+
+* release 2.0.0 ([c279585](https://github.com/italia/pa-website-validator/commit/c279585e01f3d193db4f0921247765b132ca517c))
+
 ## [1.2.0-pre.1](https://github.com/italia/pa-website-validator/compare/v1.1.0...v1.2.0-pre.1) (2023-02-28)
 
 
