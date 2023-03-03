@@ -163,7 +163,15 @@ class LoadAudit extends Audit {
 
       try {
         const page = await browser.newPage();
-        await page.goto(pageToBeAnalyzed);
+        await page.goto(pageToBeAnalyzed, {
+          waitUntil: [
+            "load",
+            "domcontentloaded",
+            "networkidle0",
+            "networkidle2",
+          ],
+          timeout: 10000,
+        });
 
         let bootstrapItaliaVariableVersion = await page.evaluate(
           async function () {

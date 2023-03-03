@@ -100,14 +100,27 @@ class LoadAudit extends Audit {
       const metatagJSON = metatagElement.html() ?? "";
 
       if (!metatagJSON) {
-        wrongItems.push(item);
-        continue;
+        return {
+          score: 0,
+          details: Audit.makeTableDetails(
+            [{ key: "result", itemType: "text", text: "Risultato" }],
+            [
+              {
+                result: auditData.nonExecuted,
+              },
+            ]
+          ),
+        };
       }
 
       let parsedMetatagJSON = {};
       try {
         parsedMetatagJSON = JSON.parse(metatagJSON.toString());
       } catch (e) {
+        if (score > 0) {
+          score = 0;
+        }
+        //item.missing_keys = "JSON non valido";
         wrongItems.push(item);
         continue;
       }

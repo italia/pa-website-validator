@@ -118,7 +118,10 @@ async function getArgumentsElements(url: string): Promise<string[]> {
 
   try {
     const page = await browser.newPage();
-    await page.goto(url, { waitUntil: "load" });
+    await page.goto(url, {
+      waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
+      timeout: 10000,
+    });
 
     await page.waitForSelector('[data-element="search-modal-button"]', {
       visible: true,
