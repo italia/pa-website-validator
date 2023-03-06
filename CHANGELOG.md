@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.2](https://github.com/italia/pa-website-validator/compare/v2.0.1...v2.0.2) (2023-03-06)
+
+
+### Bug Fixes
+
+* check url in page with and without www ([e948514](https://github.com/italia/pa-website-validator/commit/e948514ae5859801cd876c2ab3e50a752baa8576))
+* minor fixes and packages update ([d750591](https://github.com/italia/pa-website-validator/commit/d75059162d0db9a905ae5c1fa4047f39b4ff77a5))
+
 ## [2.0.1](https://github.com/italia/pa-website-validator/compare/v2.0.0...v2.0.1) (2023-03-02)
 
 
