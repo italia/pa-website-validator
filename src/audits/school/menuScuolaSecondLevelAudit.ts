@@ -109,8 +109,8 @@ class LoadAudit extends Audit {
           } else {
             item.pagesNotInVocabulary.push(element);
           }
+          totalNumberOfTitleFound++;
         }
-        totalNumberOfTitleFound++;
       }
 
       itemsPage.push(item);

@@ -100,14 +100,6 @@ class LoadAudit extends Audit {
       const metatagJSON = metatagElement.html() ?? "";
 
       if (!metatagJSON) {
-        wrongItems.push(item);
-        continue;
-      }
-
-      let parsedMetatagJSON = {};
-      try {
-        parsedMetatagJSON = JSON.parse(metatagJSON.toString());
-      } catch (e) {
         return {
           score: 0,
           details: Audit.makeTableDetails(
@@ -119,6 +111,18 @@ class LoadAudit extends Audit {
             ]
           ),
         };
+      }
+
+      let parsedMetatagJSON = {};
+      try {
+        parsedMetatagJSON = JSON.parse(metatagJSON.toString());
+      } catch (e) {
+        if (score > 0) {
+          score = 0;
+        }
+        //item.missing_keys = "JSON non valido";
+        wrongItems.push(item);
+        continue;
       }
 
       const result: ValidatorResult = jsonschema.validate(

@@ -162,7 +162,10 @@ const run = async (
   try {
     const urlNoProtocol = url.replace(/(^\w+:|^)\/\//, "");
     const page = await browser.newPage();
-    await page.goto("http://" + urlNoProtocol);
+    await page.goto("http://" + urlNoProtocol, {
+      waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
+      timeout: 10000,
+    });
 
     const protocolInPage = await page.evaluate(async function () {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment

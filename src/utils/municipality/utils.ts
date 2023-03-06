@@ -125,7 +125,7 @@ const getRandomSecondLevelPagesUrl = async (
               }
             }
           }
-          if (secondPageUrls === [] && key !== "custom") {
+          if (secondPageUrls.length === 0 && key !== "custom") {
             return [];
           }
           pagesUrls = [...pagesUrls, ...new Set(secondPageUrls)];
@@ -161,6 +161,7 @@ const getRandomThirdLevelPagesUrl = async (
     const page: Page = await browser.newPage();
     await page.goto(pageUrl, {
       waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
+      timeout: 10000,
     });
 
     let clickButton = true;
@@ -263,6 +264,7 @@ const checkFeedbackComponent = async (url: string) => {
     const page: Page = await browser.newPage();
     await page.goto(url, {
       waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
+      timeout: 10000,
     });
 
     const feedbackRatingPositiveElement = await page.$(

@@ -22,7 +22,10 @@ const loadPageData = async (url: string): Promise<CheerioAPI> => {
   });
   try {
     const page = await browser.newPage();
-    await page.goto(url, { waitUntil: "networkidle0" });
+    await page.goto(url, {
+      waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
+      timeout: 10000,
+    });
     // await page.goto(url, {waitUntil: 'networkidle2'});
     data = await page.content();
     await browser.close();

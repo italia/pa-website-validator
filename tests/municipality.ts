@@ -124,10 +124,10 @@ const onlineDescriptions = [
   ...extraDescriptions,
 ] as const;
 
-type LocalAudits = typeof localAudits[number];
-type OnlineAudits = typeof onlineAudits[number];
-type LocalDescriptions = typeof localDescriptions[number];
-type OnlineDescriptions = typeof onlineDescriptions[number];
+type LocalAudits = (typeof localAudits)[number];
+type OnlineAudits = (typeof onlineAudits)[number];
+type LocalDescriptions = (typeof localDescriptions)[number];
+type OnlineDescriptions = (typeof onlineDescriptions)[number];
 
 const expandExpectedLocal = (line: ExpectedLocalEntry[1]) =>
   localAudits.map((e, ix): [LocalDescriptions, LocalAudits, number] => [

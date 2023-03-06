@@ -22,6 +22,7 @@ const run = async (
     const page: Page = await browser.newPage();
     await page.goto(url, {
       waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
+      timeout: 10000,
     });
 
     cookies = await page.cookies();
