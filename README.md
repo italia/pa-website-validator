@@ -42,7 +42,7 @@ PA Website Validator utilizza le seguenti tecnologie
 
 ## Requirements
 
-PA Website Validator necessita [Node.js](https://nodejs.org/it/) v16+ (LTS), [npm] e [Google Chrome](https://www.google.com/chrome/).
+PA Website Validator necessita [Node.js](https://nodejs.org/it/) v18+ (LTS), [npm] e [Google Chrome](https://www.google.com/chrome/).
 
 ## Plugins
 
