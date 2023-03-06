@@ -107,8 +107,16 @@ class LoadAudit extends Audit {
         };
       }
 
+      const urlObj = new URL(url);
+      const urlWithWWW =
+        urlObj.protocol + "//" + "www." + urlObj.host.replace("www.", "");
+      const urlNoWWW = urlObj.protocol + "//" + urlObj.host.replace("www.", "");
+
       const privacyPageHTML: string = await getAllPageHTML(href);
-      if (!privacyPageHTML.includes(url)) {
+      if (
+        !privacyPageHTML.includes(urlWithWWW) &&
+        !privacyPageHTML.includes(urlNoWWW)
+      ) {
         return {
           score: 0,
           details: Audit.makeTableDetails(headings, items),
