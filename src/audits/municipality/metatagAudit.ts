@@ -43,13 +43,22 @@ class LoadAudit extends Audit {
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
 
-    const titleSubHeadings = ["Metatag non presenti o errati"];
+    const titleSubHeadings = ["JSON valido", "Metatag non presenti o errati"];
     const headings = [
       {
         key: "result",
         itemType: "text",
         text: "Risultato",
         subItemsHeading: { key: "inspected_page", itemType: "url" },
+      },
+      {
+        key: "title_valid_json",
+        itemType: "text",
+        text: "",
+        subItemsHeading: {
+          key: "valid_json",
+          itemType: "text",
+        },
       },
       {
         key: "title_missing_keys",
@@ -92,6 +101,7 @@ class LoadAudit extends Audit {
     for (const randomService of randomServices) {
       const item = {
         inspected_page: randomService,
+        valid_json: "No",
         missing_keys: "",
       };
 
@@ -120,10 +130,11 @@ class LoadAudit extends Audit {
         if (score > 0) {
           score = 0;
         }
-        //item.missing_keys = "JSON non valido";
         wrongItems.push(item);
         continue;
       }
+
+      item.valid_json = "Sì";
 
       const result: ValidatorResult = jsonschema.validate(
         parsedMetatagJSON,
@@ -177,7 +188,8 @@ class LoadAudit extends Audit {
     if (wrongItems.length > 0) {
       results.push({
         result: auditData.subItem.redResult,
-        title_missing_keys: titleSubHeadings[0],
+        title_valid_json: titleSubHeadings[0],
+        title_missing_keys: titleSubHeadings[1],
       });
 
       for (const item of wrongItems) {
@@ -195,7 +207,8 @@ class LoadAudit extends Audit {
     if (toleranceItems.length > 0) {
       results.push({
         result: auditData.subItem.yellowResult,
-        title_missing_keys: titleSubHeadings[0],
+        title_valid_json: titleSubHeadings[0],
+        title_missing_keys: titleSubHeadings[1],
       });
 
       for (const item of toleranceItems) {
@@ -213,7 +226,8 @@ class LoadAudit extends Audit {
     if (correctItems.length > 0) {
       results.push({
         result: auditData.subItem.greenResult,
-        title_missing_keys: titleSubHeadings[0],
+        title_valid_json: titleSubHeadings[0],
+        title_missing_keys: titleSubHeadings[1],
       });
 
       for (const item of correctItems) {
