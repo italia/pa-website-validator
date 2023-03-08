@@ -190,7 +190,7 @@ class LoadAudit extends Audit {
         "li"
       );
       breadcrumbElements = breadcrumbElements.map((x) =>
-        x.trim().toLowerCase().replaceAll("/", "")
+        x.trim().toLowerCase().replaceAll(/[^a-zA-Z0-9 ]/g, '')
       );
 
       if (!checkBreadcrumb(breadcrumbElements)) {
