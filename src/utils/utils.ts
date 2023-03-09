@@ -151,10 +151,6 @@ const isInternalUrl = async (url: string) => {
   );
 };
 
-const isHttpsUrl = async (url: string) => {
-  return url.includes("https");
-};
-
 const toMenuItem = (str: string): MenuItem => ({
   name: str,
   regExp: new RegExp(`^${str}$`),
@@ -236,7 +232,7 @@ const urlExists = async (
 
   try {
     if (checkHttps) {
-      if (!(await isHttpsUrl(inspectUrl))) {
+      if (!inspectUrl.includes("https")) {
         return {
           result: false,
           reason: " Protocollo HTTPS mancante nell'URL.",
@@ -359,7 +355,6 @@ export {
   getHREFValuesDataAttribute,
   getElementHrefValuesDataAttribute,
   isInternalUrl,
-  isHttpsUrl,
   buildUrl,
   urlExists,
   areAllElementsInVocabulary,

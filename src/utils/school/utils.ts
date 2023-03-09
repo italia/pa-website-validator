@@ -55,6 +55,8 @@ const getRandomSecondLevelPagesUrl = async (
 
   menuDataElements.push(customPrimaryMenuItemsDataElement);
 
+  const host = new URL(url).hostname.replace("www.", "");
+
   for (const value of menuDataElements) {
     const dataElement = `[data-element="${value}"]`;
 
@@ -75,7 +77,14 @@ const getRandomSecondLevelPagesUrl = async (
           ) {
             secondLevelPageUrl = await buildUrl(url, secondLevelPageUrl);
           }
-          secondLevelPagesUrls.push(secondLevelPageUrl);
+
+          const secondLevelPageHost = new URL(
+            secondLevelPageUrl
+          ).hostname.replace("www.", "");
+
+          if (secondLevelPageHost.includes(host)) {
+            secondLevelPagesUrls.push(secondLevelPageUrl);
+          }
         }
       }
 
