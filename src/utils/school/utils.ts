@@ -119,39 +119,42 @@ const getRandomServicesUrl = async (
   serviceTypeUrls = [...new Set(serviceTypeUrls)];
 
   let servicesUrls: string[] = [];
-  for (let serviceTypeUrl of serviceTypeUrls) {
-    if (
-      (await isInternalUrl(serviceTypeUrl)) &&
-      !serviceTypeUrl.includes(url)
-    ) {
-      serviceTypeUrl = await buildUrl(url, serviceTypeUrl);
-    }
+  for (const serviceTypeUrl of serviceTypeUrls) {
+    const pagesToBeAnalyzed = [serviceTypeUrl];
+    const pagesAnalyzed = [];
 
-    $ = await loadPageData(serviceTypeUrl);
-    servicesUrls = [
-      ...servicesUrls,
-      ...(await getHREFValuesDataAttribute($, '[data-element="service-link"]')),
-    ];
-
-    const pagerPagesUrls = [
-      ...new Set(
-        await getHREFValuesDataAttribute($, '[data-element="pager-link"]')
-      ),
-    ];
-    for (let pagerPageUrl of pagerPagesUrls) {
-      if ((await isInternalUrl(pagerPageUrl)) && !pagerPageUrl.includes(url)) {
-        pagerPageUrl = await buildUrl(url, pagerPageUrl);
+    while (pagesToBeAnalyzed.length > 0) {
+      let pageToBeAnalyzed: string = pagesToBeAnalyzed.pop() ?? "";
+      if (
+        (await isInternalUrl(pageToBeAnalyzed)) &&
+        !pageToBeAnalyzed.includes(url)
+      ) {
+        pageToBeAnalyzed = await buildUrl(url, pageToBeAnalyzed);
       }
 
-      if (pagerPageUrl !== serviceTypeUrl) {
-        $ = await loadPageData(pagerPageUrl);
-        servicesUrls = [
-          ...servicesUrls,
-          ...(await getHREFValuesDataAttribute(
-            $,
-            '[data-element="service-link"]'
-          )),
-        ];
+      $ = await loadPageData(pageToBeAnalyzed);
+      servicesUrls = [
+        ...servicesUrls,
+        ...(await getHREFValuesDataAttribute(
+          $,
+          '[data-element="service-link"]'
+        )),
+      ];
+
+      pagesAnalyzed.push(pageToBeAnalyzed);
+
+      const pagerPagesUrls = [
+        ...new Set(
+          await getHREFValuesDataAttribute($, '[data-element="pager-link"]')
+        ),
+      ];
+      for (const pagerPageUrl of pagerPagesUrls) {
+        if (
+          !pagesAnalyzed.includes(pagerPageUrl) &&
+          !pagesToBeAnalyzed.includes(pagerPageUrl)
+        ) {
+          pagesToBeAnalyzed.push(pagerPageUrl);
+        }
       }
     }
   }
