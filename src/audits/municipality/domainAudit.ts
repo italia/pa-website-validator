@@ -104,7 +104,7 @@ class LoadAudit extends Audit {
       }
 
       const wwwAccess = (
-        await urlExists(pageToBeAnalyzed, pageToBeAnalyzed.replace("www.", ""))
+        await urlExists(url, pageToBeAnalyzed.replace("www.", ""))
       ).result;
 
       item.www_access = wwwAccess ? "Sì" : "No";
