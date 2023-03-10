@@ -85,6 +85,7 @@ class LoadAudit extends Audit {
 
     let score = 1;
 
+    const originHostname = new URL(url).hostname.replace("www.", "");
     for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
       const hostname = new URL(pageToBeAnalyzed).hostname.replace("www.", "");
       const item = {
@@ -96,7 +97,10 @@ class LoadAudit extends Audit {
 
       let correctDomain = false;
       for (const domain of domains) {
-        if (hostname.includes("comune." + domain)) {
+        if (
+          hostname === "comune." + domain ||
+          (hostname != originHostname && hostname.endsWith(".comune." + domain))
+        ) {
           correctDomain = true;
           item.correct_domain = "Sì";
           break;
