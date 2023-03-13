@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1](https://github.com/italia/pa-website-validator/compare/v2.1.0...v2.1.1) (2023-03-13)
+
+
+### Bug Fixes
+
+* gestione eccezione con buttone non ajax, fix breadcrumb, fix visualizzazione voci secondo livello ([05eedac](https://github.com/italia/pa-website-validator/commit/05eedaca7b3f3b2cb9f49ff202de0ef2b955abe2))
+
 ## [2.1.0](https://github.com/italia/pa-website-validator/compare/v2.0.2...v2.1.0) (2023-03-13)
 
 
