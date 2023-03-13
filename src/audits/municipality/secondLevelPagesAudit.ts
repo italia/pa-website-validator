@@ -132,9 +132,11 @@ class LoadAudit extends lighthouse.Audit {
 
           if (pageLinkUrl.length > 0) {
             const $2 = await loadPageData(pageLinkUrl);
-            secondLevelPagesNames.push(
-              $2('[data-element="page-name"]').text().trim() ?? ""
-            );
+            const pageName =
+              $2('[data-element="page-name"]').text().trim() ?? "";
+            if (pageName.length > 0) {
+              secondLevelPagesNames.push(pageName);
+            }
           }
         }
       }

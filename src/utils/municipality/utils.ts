@@ -173,13 +173,18 @@ const getRandomThirdLevelPagesUrl = async (
           continue;
         }
         const xhrCatcher = page.waitForResponse(
-          (r) => r.request().method() != "OPTIONS"
+          (r) => r.request().method() != "OPTIONS",
+          {
+            timeout: 5000,
+          }
         );
-        await element.click({ delay: 500 });
+        await element.click();
         await xhrCatcher;
         break;
         // eslint-disable-next-line no-empty
-      } catch (e) {}
+      } catch (e) {
+        clickButton = false;
+      }
     }
     const data = await page.content();
     $ = cheerio.load(data);
