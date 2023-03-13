@@ -85,8 +85,9 @@ class LoadAudit extends Audit {
 
     let score = 1;
 
+    const originHostname = new URL(url).hostname.replace("www.", "");
     for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
-      const hostname = new URL(url).hostname.replace("www.", "");
+      const hostname = new URL(pageToBeAnalyzed).hostname.replace("www.", "");
       const item = {
         inspected_page: pageToBeAnalyzed,
         domain: hostname,
@@ -96,14 +97,19 @@ class LoadAudit extends Audit {
 
       let correctDomain = false;
       for (const domain of domains) {
-        if (hostname === "comune." + domain) {
+        if (
+          hostname === "comune." + domain ||
+          (hostname != originHostname && hostname.endsWith(".comune." + domain))
+        ) {
           correctDomain = true;
           item.correct_domain = "Sì";
           break;
         }
       }
 
-      const wwwAccess = (await urlExists(url, url.replace("www.", ""))).result;
+      const wwwAccess = (
+        await urlExists(url, pageToBeAnalyzed.replace("www.", ""))
+      ).result;
 
       item.www_access = wwwAccess ? "Sì" : "No";
 
