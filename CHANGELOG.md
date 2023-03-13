@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.1.0](https://github.com/italia/pa-website-validator/compare/v2.0.2...v2.1.0) (2023-03-13)
+
+
+### Features
+
+* colonna per JSON valido in audit metatag ([acc9845](https://github.com/italia/pa-website-validator/commit/acc984565a0f4ef41161adf501bce0143e957677))
+* controllo se url è interno al sito per pagine di secondo livello di scuole ([46eac99](https://github.com/italia/pa-website-validator/commit/46eac993fbe228e35c6360c5c34fcb00b0c4d68f))
+
+
+### Bug Fixes
+
+* **C.SI.5.2:** logica di controllo per sottodomini ([75d3d89](https://github.com/italia/pa-website-validator/commit/75d3d89d4b52e3a838c52e89db7f4ea805f5f85c))
+* caricamento pagine da paginatore per scuole ([ed2080c](https://github.com/italia/pa-website-validator/commit/ed2080c72d4cdabdf1af53b8183bf320cbc5cc47))
+* eliminazione caratteri speciali durante controllo breadcrumb ([6db9447](https://github.com/italia/pa-website-validator/commit/6db94476a05b5960550454a4329f364a1fe86bd3))
+* eliminazione caratteri speciali durante controllo breadcrumb ([948e390](https://github.com/italia/pa-website-validator/commit/948e39045cff969325a29a37cbaf2046f979816a))
+
 ## [2.0.2](https://github.com/italia/pa-website-validator/compare/v2.0.1...v2.0.2) (2023-03-06)
 
 
