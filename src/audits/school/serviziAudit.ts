@@ -367,7 +367,7 @@ async function getPlaceInfo($: CheerioAPI, mandatoryElements: string[]) {
   for (const element of elements) {
     const placeCard = [];
     const innerElementLabels = $(element).find("div > span");
-    const innerElementValues = $(element).find("p");
+    const innerElementValues = $(element).find("div > p");
 
     const gps = await getElementHrefValuesDataAttribute(
       $,
