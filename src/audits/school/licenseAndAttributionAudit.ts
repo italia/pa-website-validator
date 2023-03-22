@@ -109,12 +109,16 @@ class LoadAudit extends Audit {
         textBody += $(bodyElement)?.text().trim().toLowerCase() ?? "";
       }
       if (textBody === legalNotes.body.text.toLowerCase()) {
-        items[0].page_section = "Sì";
+        items[0].page_contains_correct_text = "Sì";
       }
 
-      items[0].page_contains_correct_text = "Sì";
-      items[0].result = auditData.greenResult;
-      score = 1;
+      if (
+        items[0].page_section === "Sì" &&
+        items[0].page_contains_correct_text === "Sì"
+      ) {
+        items[0].result = auditData.greenResult;
+        score = 1;
+      }
     }
 
     return {
