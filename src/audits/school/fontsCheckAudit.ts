@@ -8,6 +8,7 @@ import {
   getRandomSecondLevelPagesUrl,
   getRandomServicesUrl,
 } from "../../utils/school/utils";
+import { requestTimeout } from "../../utils/utils";
 import puppeteer from "puppeteer";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/school/auditScanVariables";
@@ -131,7 +132,7 @@ class LoadAudit extends Audit {
             "networkidle0",
             "networkidle2",
           ],
-          timeout: 10000,
+          timeout: requestTimeout,
         });
 
         const badElements: Array<BadElement> = await page.evaluate(

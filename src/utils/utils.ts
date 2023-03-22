@@ -10,6 +10,7 @@ import NodeCache from "node-cache";
 import { MenuItem } from "../types/menuItem";
 
 const loadPageCache = new NodeCache();
+const requestTimeout = parseInt(process.env["requestTimeout"] ?? "10000");
 
 const loadPageData = async (url: string): Promise<CheerioAPI> => {
   let data = "";
@@ -24,7 +25,7 @@ const loadPageData = async (url: string): Promise<CheerioAPI> => {
     const page = await browser.newPage();
     await page.goto(url, {
       waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
-      timeout: 10000,
+      timeout: requestTimeout,
     });
     // await page.goto(url, {waitUntil: 'networkidle2'});
     data = await page.content();
@@ -32,6 +33,7 @@ const loadPageData = async (url: string): Promise<CheerioAPI> => {
     loadPageCache.set(url, cheerio.load(data));
     return cheerio.load(data);
   } catch (ex) {
+    process.env["DEBUG"] && console.log(ex);
     await browser.close();
     loadPageCache.set(url, cheerio.load(data));
     return cheerio.load(data);
@@ -361,4 +363,5 @@ export {
   checkBreadcrumb,
   cmsThemeRx,
   getAllPageHTML,
+  requestTimeout,
 };

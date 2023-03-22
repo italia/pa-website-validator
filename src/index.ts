@@ -50,6 +50,13 @@ const parser = yargs(hideBin(process.argv))
     demandOption: true,
     default: "suggested",
     choices: ["min", "suggested", "high", "all"],
+  })
+  .option("timeout", {
+    describe:
+      "Request timeout in milliseconds. If the request takes longer than this value, the request will be aborted",
+    type: "number",
+    demandOption: false,
+    default: 10000,
   });
 
 try {
@@ -70,7 +77,8 @@ try {
     args.destination,
     args.report,
     "view" in args,
-    args.accuracy
+    args.accuracy,
+    args.timeout
   );
 
   console.log("[INFO] Status result:", result.status);

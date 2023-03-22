@@ -7,6 +7,7 @@ import { schoolModelVocabulary } from "../../storage/school/controlledVocabulary
 import {
   getPageElementDataAttribute,
   areAllElementsInVocabulary,
+  requestTimeout,
 } from "../../utils/utils";
 import puppeteer from "puppeteer";
 import * as cheerio from "cheerio";
@@ -120,7 +121,7 @@ async function getArgumentsElements(url: string): Promise<string[]> {
     const page = await browser.newPage();
     await page.goto(url, {
       waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
-      timeout: 10000,
+      timeout: requestTimeout,
     });
 
     await page.waitForSelector('[data-element="search-modal-button"]', {
