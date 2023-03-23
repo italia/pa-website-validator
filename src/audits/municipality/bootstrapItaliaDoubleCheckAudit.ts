@@ -5,7 +5,7 @@
 import lighthouse from "lighthouse";
 import semver from "semver";
 import { auditDictionary } from "../../storage/auditDictionary";
-import { checkCSSClassesOnPage } from "../../utils/utils";
+import { checkCSSClassesOnPage, requestTimeout } from "../../utils/utils";
 import {
   getRandomFirstLevelPagesUrl,
   getRandomSecondLevelPagesUrl,
@@ -170,7 +170,7 @@ class LoadAudit extends Audit {
             "networkidle0",
             "networkidle2",
           ],
-          timeout: 10000,
+          timeout: requestTimeout,
         });
 
         let bootstrapItaliaVariableVersion = await page.evaluate(
