@@ -6,7 +6,12 @@ import lighthouse from "lighthouse";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { legalNotes } from "../../storage/common/legalNotes";
 import { CheerioAPI } from "cheerio";
-import { loadPageData, urlExists } from "../../utils/utils";
+import {
+  buildUrl,
+  isInternalUrl,
+  loadPageData,
+  urlExists,
+} from "../../utils/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -77,9 +82,13 @@ class LoadAudit extends Audit {
     const elementObj = $(legalNotesElements).attr();
 
     if (elementObj && "href" in elementObj && elementObj["href"] !== "#") {
-      items[0].link_destination = elementObj.href;
+      let pageUrl = elementObj.href;
+      if ((await isInternalUrl(pageUrl)) && !pageUrl.includes(url)) {
+        pageUrl = await buildUrl(url, pageUrl);
+      }
+      items[0].link_destination = pageUrl;
 
-      const checkUrl = await urlExists(url, elementObj.href);
+      const checkUrl = await urlExists(url, pageUrl);
       if (!checkUrl.result) {
         return {
           score: 0,
@@ -91,7 +100,7 @@ class LoadAudit extends Audit {
       items[0].page_section = "No";
       items[0].page_contains_correct_text = "No";
 
-      $ = await loadPageData(elementObj.href);
+      $ = await loadPageData(pageUrl);
       const sectionDataElement = `[data-element="${legalNotes.section.dataElement}"]`;
       const sectionElement = $(sectionDataElement);
       const sectionTitle = sectionElement?.text().trim().toLowerCase() ?? "";
@@ -106,7 +115,10 @@ class LoadAudit extends Audit {
       const bodyElements = $(bodyDataElement);
       let textBody = "";
       for (const bodyElement of bodyElements) {
-        textBody += $(bodyElement)?.text().trim().toLowerCase() ?? "";
+        textBody +=
+          $(bodyElement)?.text().trim().toLowerCase().replaceAll(/\s+/g, " ") ??
+          "";
+        textBody += " ";
       }
       if (textBody === legalNotes.body.text.toLowerCase()) {
         items[0].page_contains_correct_text = "Sì";
