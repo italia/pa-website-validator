@@ -5,7 +5,7 @@
 import lighthouse from "lighthouse";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
-import { loadPageData, urlExists } from "../../utils/utils";
+import { buildUrl, isInternalUrl, loadPageData, urlExists } from "../../utils/utils";
 import { legalNotes } from "../../storage/common/legalNotes";
 
 const Audit = lighthouse.Audit;
@@ -91,7 +91,13 @@ class LoadAudit extends Audit {
       items[0].page_section = "No";
       items[0].page_contains_correct_text = "No";
 
-      $ = await loadPageData(elementObj.href);
+      let licenseAndAttributeUrl = elementObj.href
+      if ((await isInternalUrl(licenseAndAttributeUrl)) && !licenseAndAttributeUrl.includes(url)) {
+        licenseAndAttributeUrl = await buildUrl(url, licenseAndAttributeUrl);
+      }
+
+      $ = await loadPageData(licenseAndAttributeUrl);
+
       const sectionDataElement = `[data-element="${legalNotes.section.dataElement}"]`;
       const sectionElement = $(sectionDataElement);
       const sectionTitle = sectionElement?.text().trim().toLowerCase() ?? "";
