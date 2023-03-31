@@ -33,7 +33,7 @@ const run = async (
   reportName: string,
   view = false,
   accuracy = "suggested",
-  requestTimeout = 10000
+  requestTimeout = 20000
 ) => {
   process.env["accuracy"] = accuracy;
   process.env["requestTimeout"] = requestTimeout.toString();

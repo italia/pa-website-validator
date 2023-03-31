@@ -56,7 +56,7 @@ const parser = yargs(hideBin(process.argv))
       "Request timeout in milliseconds. If the request takes longer than this value, the request will be aborted",
     type: "number",
     demandOption: false,
-    default: 10000,
+    default: 20000,
   });
 
 try {
