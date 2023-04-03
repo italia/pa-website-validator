@@ -172,13 +172,13 @@ I pacchetti delle app per MacOS basati su architettura ARM non possono essere ge
 2. Aprire un Terminale e copiare i seguenti comandi:
 
    ```console
-   export PATH="~/Downloads/node-v18.15.0-darwin-arm64/bin:$PATH"
+   export PATH="$HOME/Downloads/node-v18.15.0-darwin-arm64/bin:$PATH"
    cd pa-website-validator
+   git pull
    rm -rf dist node_modules
    PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=1 npm install
    LICENSE_KEY="chiave licenza GeoIP valida" npm run updateGeoIPData
-   npm run bundle:municipality
-   npm run bundle:school
+   ./scripts/create-zips.sh macOS arm64
    ```
 
 3. Caricare i pacchetti generati nella pagina della release di GitHub.
