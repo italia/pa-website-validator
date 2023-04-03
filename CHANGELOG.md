@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.2.0](https://github.com/italia/pa-website-validator/compare/v2.1.1...v2.2.0) (2023-04-03)
+
+
+### Features
+
+* parametro timeout per le richieste al sito ([#229](https://github.com/italia/pa-website-validator/issues/229)) ([bbd92ca](https://github.com/italia/pa-website-validator/commit/bbd92caca1c05564ca9f6013c9245a249ff8b478))
+
+
+### Bug Fixes
+
+* building internal url and replace hidden characters in string ([ee2a38b](https://github.com/italia/pa-website-validator/commit/ee2a38be1aea1efe69c75f74b0ab104beafeef82))
+* increase default value of request timeout ([2f173cb](https://github.com/italia/pa-website-validator/commit/2f173cb6ad66adc06297e9443a3b9022a3ccdbb0))
+* modifica caricamento span ([87d273e](https://github.com/italia/pa-website-validator/commit/87d273e61ba3911acd9d175f0b1a3bac89bc567d))
+* selector p ([2b338f5](https://github.com/italia/pa-website-validator/commit/2b338f543b6a5a0bfaf28735a82f4136e4b68ca4))
+* success logic ([b45594d](https://github.com/italia/pa-website-validator/commit/b45594df794383bac2806431affef5673bf2b29e))
+
 ## [2.1.1](https://github.com/italia/pa-website-validator/compare/v2.1.0...v2.1.1) (2023-03-13)
 
 
