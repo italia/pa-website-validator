@@ -162,3 +162,23 @@ Note:
 [docs-app-valutazione]: https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs
 [verifica-scuole]: https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/requisiti-e-modalita-verifica-scuole.html
 [verifica-comuni]: https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/requisiti-e-modalita-verifica-comuni.html
+
+## Generazione pacchetti MacOS per Apple silicon
+
+I pacchetti delle app per MacOS basati su architettura ARM non possono essere generati automaticamente dalla Action di GitHub come avviene per gli altri. Queste sono le istruzioni per generarli manualmente:
+
+1. Scaricare il binario di NodeJS da [qui](https://nodejs.org/dist/v18.15.0/node-v18.15.0-darwin-arm64.tar.gz) e decompattarlo in una directory, es. `~/Downloads`. (Attenzione: scaricare il binario e non l'Installer o altra distribuzione).
+
+2. Aprire un Terminale e copiare i seguenti comandi:
+
+   ```console
+   export PATH="~/Downloads/node-v18.15.0-darwin-arm64/bin:$PATH"
+   cd pa-website-validator
+   rm -rf dist node_modules
+   PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=1 npm install
+   LICENSE_KEY="chiave licenza GeoIP valida" npm run updateGeoIPData
+   npm run bundle:municipality
+   npm run bundle:school
+   ```
+
+3. Caricare i pacchetti generati nella pagina della release di GitHub.
