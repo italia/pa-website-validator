@@ -513,12 +513,7 @@ const getButtonUrl = async (
       secondPageLink = await buildUrl(url, secondPageLink);
     }
     return secondPageLink;
-  }
-  else if (
-    button !== null &&
-    button !== undefined &&
-    "href" in button
-  ) {
+  } else if (button !== null && button !== undefined && "href" in button) {
     // tag 'A'
     let secondPageLink = button.href;
     if (!secondPageLink.includes(url)) {
