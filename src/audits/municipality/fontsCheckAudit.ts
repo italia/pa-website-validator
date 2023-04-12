@@ -162,17 +162,20 @@ class LoadAudit extends Audit {
               return elementFonts.filter((x) => !requiredFonts.includes(x));
             };
 
-            const isBad = (e: Element) => {
-              return wrongFonts(e).length > 0;
-            };
-
             for (const e of outerElems) {
               const elementWrongFonts = wrongFonts(e);
               if (elementWrongFonts.length > 0) {
                 badElements.push([elementWrongFonts, false]);
-              } else if ([...e.querySelectorAll("*")].some(isBad)) {
-                // If good parent element has some bad descendant we add it to the list in tolerance mode
-                badElements.push([elementWrongFonts, true]);
+                continue;
+              }
+
+              const children = [...e.querySelectorAll("*")];
+              for (const child of children) {
+                const wrongFontChild = wrongFonts(child);
+                if (wrongFontChild.length > 0) {
+                  badElements.push([wrongFontChild, true]);
+                  break;
+                }
               }
             }
             return badElements;
