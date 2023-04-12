@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.2.1](https://github.com/italia/pa-website-validator/compare/v2.2.0...v2.2.1) (2023-04-12)
+
+
+### Bug Fixes
+
+* follow A links ([#249](https://github.com/italia/pa-website-validator/issues/249)) ([1f1d0c1](https://github.com/italia/pa-website-validator/commit/1f1d0c1f8906bed5dca2ada8f7a4a2d0b1cb425a))
+* indicate the child font when yellow result ([8840f7a](https://github.com/italia/pa-website-validator/commit/8840f7a870962c1b5cab52b711cc70b44e7a87f1))
+* make local C.SC.2.2 and C.SI.3.2 informative ([68c6087](https://github.com/italia/pa-website-validator/commit/68c6087229ac52186593f2ddd433b6b76f4a7ec6))
+
 ## [2.2.0](https://github.com/italia/pa-website-validator/compare/v2.1.1...v2.2.0) (2023-04-03)
 
 
