@@ -85,7 +85,7 @@ const modelComplianceInformationAudits = [
     group: "legislation",
   },
   {
-    id: "municipality-legislation-accessibility-declaration-is-present",
+    id: "municipality-informative-legislation-accessibility-declaration-is-present",
     weight: 86,
     group: "legislation",
   },
@@ -159,7 +159,6 @@ export default {
     municipalityAuditsFolder + "/menuAudit.js",
     municipalityAuditsFolder + "/secondLevelPagesAudit.js",
     municipalityAuditsFolder + "/bootstrapItaliaDoubleCheckAudit.js",
-    municipalityAuditsFolder + "/accessibilityDeclarationIsPresentAudit.js",
     municipalityAuditsFolder + "/privacyAudit.js",
     municipalityAuditsFolder + "/faqAudit.js",
     municipalityAuditsFolder + "/inefficiencyReportAudit.js",
@@ -174,6 +173,8 @@ export default {
     municipalityAuditsFolder + "/licenseAndAttributionAudit.js",
     municipalityAuditsFolder + "/userExperienceEvaluation.js",
 
+    municipalityInformativeAuditsFolder +
+      "/accessibilityDeclarationIsPresentAudit.js",
     municipalityInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
     municipalityInformativeAuditsFolder + "/cookieDomainCheckAudit.js",
     municipalityInformativeAuditsFolder + "/domainAudit.js",

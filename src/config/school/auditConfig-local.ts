@@ -45,7 +45,7 @@ const customModelComplianceAudits = [
     group: "legislation",
   },
   {
-    id: "school-legislation-accessibility-declaration-is-present",
+    id: "school-informative-legislation-accessibility-declaration-is-present",
     weight: 94,
     group: "legislation",
   },
@@ -119,7 +119,6 @@ export default {
     schoolAuditsFolder + "/fontsCheckAudit.js",
     schoolAuditsFolder + "/themeVersionCheckAudit.js",
 
-    schoolAuditsFolder + "/accessibilityDeclarationIsPresentAudit.js",
     schoolAuditsFolder + "/privacyAudit.js",
 
     schoolAuditsFolder + "/menuAudit.js",
@@ -130,6 +129,8 @@ export default {
 
     schoolInformativeAuditsFolder + "/reuseAudit.js",
     schoolInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
+    schoolInformativeAuditsFolder +
+      "/accessibilityDeclarationIsPresentAudit.js",
     schoolInformativeAuditsFolder + "/cookieDomainCheckAudit.js",
     schoolInformativeAuditsFolder + "/securityAudit.js",
 
