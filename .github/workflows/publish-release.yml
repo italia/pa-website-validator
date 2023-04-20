@@ -78,3 +78,8 @@ jobs:
           omitBodyDuringUpdate: true
           omitNameDuringUpdate: true
           token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: italia/slack-notify-release-action@v0
+        with:
+          channel_id: ${{ secrets.SLACK_CHANNEL }}
+          project_name: App valutazione modelli
+          slack_token: ${{ secrets.SLACK_TOKEN }}
