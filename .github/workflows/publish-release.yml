@@ -78,8 +78,15 @@ jobs:
           omitBodyDuringUpdate: true
           omitNameDuringUpdate: true
           token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: italia/slack-notify-release-action@v0
+      - name: Notify to design-modello-comuni
+        uses: italia/slack-notify-release-action@v0
         with:
-          channel_id: ${{ secrets.SLACK_CHANNEL }}
+          channel_id: ${{ secrets.SLACK_CHANNEL_COMUNI }}
+          project_name: App valutazione modelli
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+      - name: Notify to design-modello-scuole
+        uses: italia/slack-notify-release-action@v0
+        with:
+          channel_id: ${{ secrets.SLACK_CHANNEL_SCUOLE }}
           project_name: App valutazione modelli
           slack_token: ${{ secrets.SLACK_TOKEN }}
