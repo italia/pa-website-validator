@@ -1,11 +1,12 @@
 "use strict";
 
-import { Page, Protocol } from "puppeteer";
+import { Protocol } from "puppeteer";
 import crawlerTypes from "../types/crawler-types";
 import cookie = crawlerTypes.cookie;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import puppeteer from "puppeteer";
+import { requestTimeout } from "./utils";
 
 const run = async (
   url: string
@@ -16,21 +17,29 @@ const run = async (
   let cookies: Protocol.Network.Cookie[] = [];
 
   const browser = await puppeteer.launch({
-    args: ["--no-sandbox"],
+    headless: true,
+    args: ["--single-process", "--no-zygote", "--no-sandbox"],
   });
+  const browserWSEndpoint = await browser.wsEndpoint();
   try {
-    const page: Page = await browser.newPage();
+    const browser2 = await puppeteer.connect({ browserWSEndpoint });
+    const page = await browser2.newPage();
+
     await page.goto(url, {
       waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
-      timeout: 10000,
+      timeout: requestTimeout,
     });
 
     cookies = await page.cookies();
-    await browser.close();
+
+    await page.goto("about:blank");
+    await page.close();
+    await browser2.disconnect();
   } catch (e) {
-    await browser.close();
+    // eslint-disable-next-line no-empty
   }
 
+  await browser.close();
   const resultCookies = await checkCookieDomain(url, cookies);
 
   for (const resultCookie of resultCookies) {

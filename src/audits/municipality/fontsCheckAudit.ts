@@ -126,8 +126,10 @@ class LoadAudit extends Audit {
     let score = 1;
 
     const browser = await puppeteer.launch({
-      args: ["--no-sandbox"],
+      headless: true,
+      args: ["--single-process", "--no-zygote", "--no-sandbox"],
     });
+    const browserWSEndpoint = await browser.wsEndpoint();
 
     for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
       const item = {
@@ -136,7 +138,8 @@ class LoadAudit extends Audit {
         wrong_number_elements: 0,
       };
       try {
-        const page = await browser.newPage();
+        const browser2 = await puppeteer.connect({ browserWSEndpoint });
+        const page = await browser2.newPage();
         await page.goto(pageToBeAnalyzed, {
           waitUntil: [
             "load",
@@ -224,6 +227,10 @@ class LoadAudit extends Audit {
         item.wrong_fonts = wrongFontsUnique(badElements).join(", ");
         item.wrong_number_elements = badElements.length;
         toleranceItems.push(item);
+
+        await page.goto("about:blank");
+        await page.close();
+        await browser2.disconnect();
       } catch (e) {
         await browser.close();
         return {

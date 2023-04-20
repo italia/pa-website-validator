@@ -126,8 +126,10 @@ class LoadAudit extends Audit {
     ];
 
     const browser = await puppeteer.launch({
-      args: ["--no-sandbox"],
+      headless: true,
+      args: ["--single-process", "--no-zygote", "--no-sandbox"],
     });
+    const browserWSEndpoint = await browser.wsEndpoint();
 
     for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
       let singleResult = 0;
@@ -139,7 +141,8 @@ class LoadAudit extends Audit {
       };
 
       try {
-        const page = await browser.newPage();
+        const browser2 = await puppeteer.connect({ browserWSEndpoint });
+        const page = await browser2.newPage();
         await page.goto(pageToBeAnalyzed, {
           waitUntil: [
             "load",
@@ -200,6 +203,9 @@ class LoadAudit extends Audit {
             singleResult = 1;
           }
         }
+        await page.goto("about:blank");
+        await page.close();
+        await browser2.disconnect();
       } catch (e) {
         // eslint-disable-next-line no-empty
       }

@@ -12,6 +12,7 @@ import {
   getRandomNString,
   isInternalUrl,
   loadPageData,
+  requestTimeout,
 } from "../utils";
 import { CheerioAPI } from "cheerio";
 import { feedbackComponentStructure } from "../../storage/municipality/feedbackComponentStructure";
@@ -155,13 +156,16 @@ const getRandomThirdLevelPagesUrl = async (
   let $ = await loadPageData(url);
 
   const browser = await puppeteer.launch({
-    args: ["--no-sandbox"],
+    headless: true,
+    args: ["--single-process", "--no-zygote", "--no-sandbox"],
   });
+  const browserWSEndpoint = await browser.wsEndpoint();
   try {
-    const page: Page = await browser.newPage();
+    const browser2 = await puppeteer.connect({ browserWSEndpoint });
+    const page = await browser2.newPage();
     await page.goto(pageUrl, {
       waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
-      timeout: 10000,
+      timeout: requestTimeout,
     });
 
     let clickButton = true;
@@ -188,11 +192,15 @@ const getRandomThirdLevelPagesUrl = async (
     }
     const data = await page.content();
     $ = cheerio.load(data);
-    await browser.close();
+
+    await page.goto("about:blank");
+    await page.close();
+    await browser2.disconnect();
   } catch (e) {
-    await browser.close();
+    // eslint-disable-next-line no-empty
   }
 
+  await browser.close();
   const pagesUrls = await getHREFValuesDataAttribute($, linkDataElement);
 
   for (let i = 0; i < pagesUrls.length; i++) {
@@ -262,14 +270,19 @@ const checkFeedbackComponent = async (url: string) => {
   let checkRateComponent = true; //false if there are not the right amount of rating inputs
   let existsRatingQAComponents = true; //false if there is not a rating component (positive or negative)
   let checkRateComponentAssociation = true; //false if the association between rating input and rating components is incorrect
+
   const browser = await puppeteer.launch({
-    args: ["--no-sandbox"],
+    headless: true,
+    args: ["--single-process", "--no-zygote", "--no-sandbox"],
   });
+  const browserWSEndpoint = await browser.wsEndpoint();
+
   try {
-    const page: Page = await browser.newPage();
+    const browser2 = await puppeteer.connect({ browserWSEndpoint });
+    const page = await browser2.newPage();
     await page.goto(url, {
       waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
-      timeout: 10000,
+      timeout: requestTimeout,
     });
 
     const feedbackRatingPositiveElement = await page.$(
@@ -318,10 +331,14 @@ const checkFeedbackComponent = async (url: string) => {
         checkRateComponentAssociation = false;
       }
     }
-    await browser.close();
+    await page.goto("about:blank");
+    await page.close();
+    await browser2.disconnect();
   } catch (e) {
-    await browser.close();
+    // eslint-disable-next-line no-empty
   }
+
+  await browser.close();
 
   if (!existsRateComponents) {
     if (score > 0.5) score = 0.5;

@@ -19,16 +19,24 @@ const loadPageData = async (url: string): Promise<CheerioAPI> => {
     return <CheerioAPI>data_from_cache;
   }
   const browser = await puppeteer.launch({
-    args: ["--no-sandbox"],
+    headless: true,
+    args: ["--single-process", "--no-zygote", "--no-sandbox"],
   });
+  const browserWSEndpoint = await browser.wsEndpoint();
   try {
-    const page = await browser.newPage();
+    const browser2 = await puppeteer.connect({ browserWSEndpoint });
+    const page = await browser2.newPage();
     await page.goto(url, {
       waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
       timeout: requestTimeout,
     });
-    // await page.goto(url, {waitUntil: 'networkidle2'});
+
     data = await page.content();
+
+    await page.goto("about:blank");
+    await page.close();
+    await browser2.disconnect();
+
     await browser.close();
     loadPageCache.set(url, cheerio.load(data));
     return cheerio.load(data);

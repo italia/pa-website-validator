@@ -11,6 +11,7 @@ import crawlerTypes from "../types/crawler-types";
 import cipher = crawlerTypes.cipher;
 import cipherInfo = crawlerTypes.cipherInfo;
 import puppeteer from "puppeteer";
+import { requestTimeout } from "./utils";
 
 const Audit = lighthouse.Audit;
 const allowedTlsVersions = ["TLSv1.2", "TLSv1.3"];
@@ -157,14 +158,17 @@ const run = async (
   }
 
   const browser = await puppeteer.launch({
-    args: ["--no-sandbox"],
+    headless: true,
+    args: ["--single-process", "--no-zygote", "--no-sandbox"],
   });
+  const browserWSEndpoint = await browser.wsEndpoint();
   try {
     const urlNoProtocol = url.replace(/(^\w+:|^)\/\//, "");
-    const page = await browser.newPage();
+    const browser2 = await puppeteer.connect({ browserWSEndpoint });
+    const page = await browser2.newPage();
     await page.goto("http://" + urlNoProtocol, {
       waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
-      timeout: 10000,
+      timeout: requestTimeout,
     });
 
     const protocolInPage = await page.evaluate(async function () {
@@ -172,6 +176,10 @@ const run = async (
       //@ts-ignore
       return window.location.protocol || null;
     });
+
+    await page.goto("about:blank");
+    await page.close();
+    await browser2.disconnect();
 
     item[0].redirect_to_https = protocolInPage === "https:" ? "Sì" : "No";
   } catch (e) {
