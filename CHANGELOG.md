@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.0](https://github.com/italia/pa-website-validator/compare/v2.2.1...v2.3.0) (2023-04-26)
+
+
+### Features
+
+* puppeteer single process ([7bdace1](https://github.com/italia/pa-website-validator/commit/7bdace180f9d2bedc6c4f3d76356cca046fac781))
+
 ## [2.2.1](https://github.com/italia/pa-website-validator/compare/v2.2.0...v2.2.1) (2023-04-12)
 
 
