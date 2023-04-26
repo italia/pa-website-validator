@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.1](https://github.com/italia/pa-website-validator/compare/v2.3.0...v2.3.1) (2023-04-26)
+
+
+### Bug Fixes
+
+* Fix release workflow ([23ff878](https://github.com/italia/pa-website-validator/commit/23ff87853814caf3f24f500b7983cfaa471a73f2))
+
 ## [2.3.0](https://github.com/italia/pa-website-validator/compare/v2.2.1...v2.3.0) (2023-04-26)
 
 
