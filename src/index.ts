@@ -84,6 +84,8 @@ try {
   console.log("[INFO] Status result:", result.status);
   console.log("[INFO] HTML report file:", result.data.htmlResultPath);
   console.log("[INFO] JSON report file:", result.data.jsonResultPath);
+
+  process.exit(0);
 } catch (e) {
   console.error(e);
   process.exit(1);
