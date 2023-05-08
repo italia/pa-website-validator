@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.2](https://github.com/italia/pa-website-validator/compare/v2.3.1...v2.3.2) (2023-05-08)
+
+
+### Bug Fixes
+
+* process.exit in index.ts ([ff75f26](https://github.com/italia/pa-website-validator/commit/ff75f26ebbc7c6f228bb74733feb69aad06224e6))
+
 ## [2.3.1](https://github.com/italia/pa-website-validator/compare/v2.3.0...v2.3.1) (2023-04-26)
 
 
