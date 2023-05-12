@@ -25,6 +25,7 @@ import {
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import { primaryMenuItems } from "../../storage/municipality/menuItems";
+import { convert } from "html-to-text";
 
 const Audit = lighthouse.Audit;
 
@@ -136,8 +137,8 @@ class LoadAudit extends Audit {
 
       for (const mandatoryVoiceDataElement of mandatoryVoicesDataElements.paragraph) {
         const dataElement = `[data-element="${mandatoryVoiceDataElement.data_element}"]`;
-        const content = await getPageElementDataAttribute($, dataElement, "p");
-        if (content && content.length > 0 && content[0].length >= 3) {
+        const content = await getPageElementDataAttribute($, dataElement);
+        if (content && content.length > 0 && convert(content[0]).length >= 3) {
           indexElementsWithContent.push(mandatoryVoiceDataElement.key);
         }
       }
