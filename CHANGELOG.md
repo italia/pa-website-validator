@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.3](https://github.com/italia/pa-website-validator/compare/v2.3.2...v2.3.3) (2023-05-12)
+
+
+### Bug Fixes
+
+* check content length in C.SI.1.3 and R.SC.1.2 ([b089866](https://github.com/italia/pa-website-validator/commit/b089866454ff8c892eb9978382c51342dad96bf3))
+
 ## [2.3.2](https://github.com/italia/pa-website-validator/compare/v2.3.1...v2.3.2) (2023-05-08)
 
 
