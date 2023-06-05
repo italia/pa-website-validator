@@ -6,44 +6,51 @@ import puppeteer from "puppeteer";
 import { CheerioAPI } from "cheerio";
 import axios from "axios";
 import vocabularyResult = crawlerTypes.vocabularyResult;
-import NodeCache from "node-cache";
+import { LRUCache } from "lru-cache";
 import { MenuItem } from "../types/menuItem";
 
-const loadPageCache = new NodeCache();
+const cache = new LRUCache<string, CheerioAPI>({ max: 128 });
 const requestTimeout = parseInt(process.env["requestTimeout"] ?? "10000");
 
 const loadPageData = async (url: string): Promise<CheerioAPI> => {
-  let data = "";
-  const data_from_cache = loadPageCache.get(url);
+  const data_from_cache = cache.get(url);
   if (data_from_cache !== undefined) {
-    return <CheerioAPI>data_from_cache;
+    return data_from_cache;
   }
+  let data = "";
   const browser = await puppeteer.launch({
     headless: true,
     args: ["--single-process", "--no-zygote", "--no-sandbox"],
   });
-  const browserWSEndpoint = await browser.wsEndpoint();
+  const browserWSEndpoint = browser.wsEndpoint();
   try {
     const browser2 = await puppeteer.connect({ browserWSEndpoint });
     const page = await browser2.newPage();
-    await page.goto(url, {
+    page.on("request", (e) => {
+      const res = e.response();
+      if (res !== null && !res.ok())
+        console.log(`Failed to load ${res.url()}: ${res.status()}`);
+    });
+    const res = await page.goto(url, {
       waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
       timeout: requestTimeout,
     });
+
+    console.log(res?.url(), res?.status());
 
     data = await page.content();
 
     await page.goto("about:blank");
     await page.close();
-    await browser2.disconnect();
+    browser2.disconnect();
 
     await browser.close();
-    loadPageCache.set(url, cheerio.load(data));
-    return cheerio.load(data);
+    const c = cheerio.load(data);
+    cache.set(url, c);
+    return c;
   } catch (ex) {
     process.env["DEBUG"] && console.log(ex);
     await browser.close();
-    loadPageCache.set(url, cheerio.load(data));
     return cheerio.load(data);
   }
 };
