@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.4](https://github.com/italia/pa-website-validator/compare/v2.3.3...v2.3.4) (2023-06-05)
+
+
+### Bug Fixes
+
+* increase output verbosity during page loading ([f044878](https://github.com/italia/pa-website-validator/commit/f0448783f24af5d722856f9ea7a3874fc3d60aae))
+* revert internal URL check for schools ([e84262a](https://github.com/italia/pa-website-validator/commit/e84262a1174d798c3852098457176435efaed7fe))
+
 ## [2.3.3](https://github.com/italia/pa-website-validator/compare/v2.3.2...v2.3.3) (2023-05-12)
 
 
