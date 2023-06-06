@@ -129,7 +129,7 @@ class LoadAudit extends Audit {
       headless: true,
       args: ["--single-process", "--no-zygote", "--no-sandbox"],
     });
-    const browserWSEndpoint = await browser.wsEndpoint();
+    const browserWSEndpoint = browser.wsEndpoint();
 
     for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
       const item = {
@@ -140,7 +140,12 @@ class LoadAudit extends Audit {
       try {
         const browser2 = await puppeteer.connect({ browserWSEndpoint });
         const page = await browser2.newPage();
-        await page.goto(pageToBeAnalyzed, {
+        page.on("request", (e) => {
+          const res = e.response();
+          if (res !== null && !res.ok())
+            console.log(`Failed to load ${res.url()}: ${res.status()}`);
+        });
+        const res = await page.goto(pageToBeAnalyzed, {
           waitUntil: [
             "load",
             "domcontentloaded",
@@ -149,6 +154,7 @@ class LoadAudit extends Audit {
           ],
           timeout: requestTimeout,
         });
+        console.log(res?.url(), res?.status());
 
         const badElements: Array<BadElement> = await page.evaluate(
           (requiredFonts) => {
@@ -230,7 +236,7 @@ class LoadAudit extends Audit {
 
         await page.goto("about:blank");
         await page.close();
-        await browser2.disconnect();
+        browser2.disconnect();
       } catch (e) {
         await browser.close();
         return {

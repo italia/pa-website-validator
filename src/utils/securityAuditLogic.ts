@@ -161,15 +161,21 @@ const run = async (
     headless: true,
     args: ["--single-process", "--no-zygote", "--no-sandbox"],
   });
-  const browserWSEndpoint = await browser.wsEndpoint();
+  const browserWSEndpoint = browser.wsEndpoint();
   try {
     const urlNoProtocol = url.replace(/(^\w+:|^)\/\//, "");
     const browser2 = await puppeteer.connect({ browserWSEndpoint });
     const page = await browser2.newPage();
-    await page.goto("http://" + urlNoProtocol, {
+    page.on("request", (e) => {
+      const res = e.response();
+      if (res !== null && !res.ok())
+        console.log(`Failed to load ${res.url()}: ${res.status()}`);
+    });
+    const res = await page.goto("http://" + urlNoProtocol, {
       waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
       timeout: requestTimeout,
     });
+    console.log(res?.url(), res?.status());
 
     const protocolInPage = await page.evaluate(async function () {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -179,11 +185,11 @@ const run = async (
 
     await page.goto("about:blank");
     await page.close();
-    await browser2.disconnect();
+    browser2.disconnect();
 
     item[0].redirect_to_https = protocolInPage === "https:" ? "Sì" : "No";
   } catch (e) {
-    // eslint-disable-next-line no-empty
+    console.error(`ERROR: ${e}`);
   }
 
   await browser.close();

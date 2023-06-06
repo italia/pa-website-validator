@@ -20,23 +20,29 @@ const run = async (
     headless: true,
     args: ["--single-process", "--no-zygote", "--no-sandbox"],
   });
-  const browserWSEndpoint = await browser.wsEndpoint();
+  const browserWSEndpoint = browser.wsEndpoint();
   try {
     const browser2 = await puppeteer.connect({ browserWSEndpoint });
     const page = await browser2.newPage();
 
-    await page.goto(url, {
+    page.on("request", (e) => {
+      const res = e.response();
+      if (res !== null && !res.ok())
+        console.log(`Failed to load ${res.url()}: ${res.status()}`);
+    });
+    const res = await page.goto(url, {
       waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
       timeout: requestTimeout,
     });
+    console.log(res?.url(), res?.status());
 
     cookies = await page.cookies();
 
     await page.goto("about:blank");
     await page.close();
-    await browser2.disconnect();
+    browser2.disconnect();
   } catch (e) {
-    // eslint-disable-next-line no-empty
+    console.error(`ERROR: ${e}`);
   }
 
   await browser.close();
