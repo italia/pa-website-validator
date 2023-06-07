@@ -172,12 +172,7 @@ class LoadAudit extends Audit {
             console.log(`Failed to load ${res.url()}: ${res.status()}`);
         });
         const res = await page.goto(pageToBeAnalyzed, {
-          waitUntil: [
-            "load",
-            "domcontentloaded",
-            "networkidle0",
-            "networkidle2",
-          ],
+          waitUntil: ["load", "networkidle0"],
           timeout: requestTimeout,
         });
         console.log(res?.url(), res?.status());
@@ -237,7 +232,7 @@ class LoadAudit extends Audit {
         await page.close();
         browser2.disconnect();
       } catch (e) {
-        console.error(`ERROR: ${e}`);
+        console.error(`ERROR ${url}: ${e}`);
       }
 
       const foundClasses = await checkCSSClassesOnPage(

@@ -172,7 +172,7 @@ const run = async (
         console.log(`Failed to load ${res.url()}: ${res.status()}`);
     });
     const res = await page.goto("http://" + urlNoProtocol, {
-      waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
+      waitUntil: ["load", "networkidle0"],
       timeout: requestTimeout,
     });
     console.log(res?.url(), res?.status());
@@ -189,7 +189,7 @@ const run = async (
 
     item[0].redirect_to_https = protocolInPage === "https:" ? "Sì" : "No";
   } catch (e) {
-    console.error(`ERROR: ${e}`);
+    console.error(`ERROR ${url}: ${e}`);
   }
 
   await browser.close();

@@ -31,7 +31,7 @@ const run = async (
         console.log(`Failed to load ${res.url()}: ${res.status()}`);
     });
     const res = await page.goto(url, {
-      waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
+      waitUntil: ["load", "networkidle0"],
       timeout: requestTimeout,
     });
     console.log(res?.url(), res?.status());
@@ -42,7 +42,7 @@ const run = async (
     await page.close();
     browser2.disconnect();
   } catch (e) {
-    console.error(`ERROR: ${e}`);
+    console.error(`ERROR ${url}: ${e}`);
   }
 
   await browser.close();

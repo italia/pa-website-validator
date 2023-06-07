@@ -128,7 +128,7 @@ async function getArgumentsElements(url: string): Promise<string[]> {
         console.log(`Failed to load ${res.url()}: ${res.status()}`);
     });
     const res = await page.goto(url, {
-      waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
+      waitUntil: ["load", "networkidle0"],
       timeout: requestTimeout,
     });
     console.log(res?.url(), res?.status());

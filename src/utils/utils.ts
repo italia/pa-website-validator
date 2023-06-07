@@ -32,7 +32,7 @@ const loadPageData = async (url: string): Promise<CheerioAPI> => {
         console.log(`Failed to load ${res.url()}: ${res.status()}`);
     });
     const res = await page.goto(url, {
-      waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
+      waitUntil: ["load", "networkidle0"],
       timeout: requestTimeout,
     });
 
@@ -49,7 +49,7 @@ const loadPageData = async (url: string): Promise<CheerioAPI> => {
     cache.set(url, c);
     return c;
   } catch (ex) {
-    process.env["DEBUG"] && console.log(ex);
+    console.error(`ERROR ${url}: ${ex}`);
     await browser.close();
     return cheerio.load(data);
   }
