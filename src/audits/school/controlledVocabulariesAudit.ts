@@ -175,6 +175,7 @@ async function getArgumentsElements(url: string): Promise<string[]> {
 
     return elements;
   } catch (ex) {
+    console.error(`ERROR ${url}: ${ex}`);
     await browser.close();
 
     return [];

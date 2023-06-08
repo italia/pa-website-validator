@@ -233,6 +233,7 @@ class LoadAudit extends Audit {
         await page.close();
         browser2.disconnect();
       } catch (e) {
+        console.error(`ERROR ${pageToBeAnalyzed}: ${e}`);
         await browser.close();
         return {
           errorMessage: e instanceof Error ? e.message : "",

@@ -203,7 +203,7 @@ const getRandomThirdLevelPagesUrl = async (
     await page.close();
     browser2.disconnect();
   } catch (e) {
-    console.error(`ERROR ${url}: ${e}`);
+    console.error(`ERROR ${pageUrl}: ${e}`);
   }
 
   await browser.close();

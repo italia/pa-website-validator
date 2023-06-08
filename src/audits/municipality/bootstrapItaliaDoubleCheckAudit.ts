@@ -232,7 +232,7 @@ class LoadAudit extends Audit {
         await page.close();
         browser2.disconnect();
       } catch (e) {
-        console.error(`ERROR ${url}: ${e}`);
+        console.error(`ERROR ${pageToBeAnalyzed}: ${e}`);
       }
 
       const foundClasses = await checkCSSClassesOnPage(
