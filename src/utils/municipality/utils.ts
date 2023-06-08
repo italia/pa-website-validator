@@ -156,7 +156,7 @@ const getRandomThirdLevelPagesUrl = async (
   let $ = await loadPageData(url);
 
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: "new",
     args: ["--single-process", "--no-zygote", "--no-sandbox"],
   });
   const browserWSEndpoint = browser.wsEndpoint();
@@ -278,7 +278,7 @@ const checkFeedbackComponent = async (url: string) => {
   let checkRateComponentAssociation = true; //false if the association between rating input and rating components is incorrect
 
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: "new",
     args: ["--single-process", "--no-zygote", "--no-sandbox"],
   });
   const browserWSEndpoint = browser.wsEndpoint();

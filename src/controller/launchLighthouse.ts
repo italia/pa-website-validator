@@ -40,6 +40,7 @@ const run = async (
   //L'oggetto chrome non è incluso nel try-catch in modo tale che la sua istanza venga killata anche in caso di eccezione lanciata da altri processi
   const browser = await puppeteer.launch({
     args: ["--no-sandbox"],
+    headless: "new",
   });
 
   try {

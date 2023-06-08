@@ -114,7 +114,7 @@ module.exports = LoadAudit;
 async function getArgumentsElements(url: string): Promise<string[]> {
   let elements: string[] = [];
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: "new",
     args: ["--single-process", "--no-zygote", "--no-sandbox"],
   });
   const browserWSEndpoint = browser.wsEndpoint();

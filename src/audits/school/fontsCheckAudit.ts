@@ -114,7 +114,7 @@ class LoadAudit extends Audit {
     let score = 1;
 
     const browser = await puppeteer.launch({
-      headless: true,
+      headless: "new",
       args: ["--single-process", "--no-zygote", "--no-sandbox"],
     });
     const browserWSEndpoint = browser.wsEndpoint();
