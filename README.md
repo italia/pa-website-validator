@@ -31,6 +31,19 @@ Le App di valutazione sono strumenti che integrano la libreria [Lighthouse][ligh
 | Pacchetto Cittadino Informato: raccomandazioni progettuali                        | Vengono mostrati i risultati degli audit relativi alle [raccomandazioni progettuali per il sito comunale][verifica-comuni].                                                                                                              |
 | Test aggiuntivi                                                                   | Vengono mostrati i risultati di test standard forniti da lighthouse. Non sono rilevanti in termini di raggiungimento dei criteri di conformità, ma rappresentano comunque indicazioni utili a valutare eventuali miglioramenti del sito. |
 
+## Report e messaggi in console
+
+L'applicazione genera un report in stile Lighthouse del risultato della valutazione, che viene mostrato nel browser. Inoltre nella console dove è stato lanciato il comando vengono mostrati in tempo reale dei messaggi relativi agli audit che l'applicazione sta conducendo in quel momento, inclusi messaggi di errore; in particolare, per ogni pagina che viene caricata appariranno messaggi del tipo:
+
+```console
+...
+https://esempio.scuola.edu.it/novita/ 200
+https://esempio.scuola.edu.it/didattica/ 200
+...
+```
+
+che indicano il risultato del caricamento della pagina in questione ([200 = successo][codici-http]). Quest'informazione può essere usata per fare debug di un sito o dell'applicazione stessa.
+
 ## Tecnologie
 
 PA Website Validator utilizza le seguenti tecnologie
@@ -172,3 +185,4 @@ I pacchetti delle app per MacOS basati su architettura ARM non possono essere ge
 [docs-app-valutazione]: https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs
 [verifica-scuole]: https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/requisiti-e-modalita-verifica-scuole.html
 [verifica-comuni]: https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/requisiti-e-modalita-verifica-comuni.html
+[codici-http]: https://it.wikipedia.org/wiki/Codici_di_stato_HTTP
