@@ -81,13 +81,6 @@ Esempio:
 node dist --type school --destination ~/pa-italia-crawler-reports --report myreport --website https://www.ismonnet.edu.it/ --scope online --view --accuracy all
 ```
 
-**NB**: per i dispositivi basati su macOS con processore ARM occorre abilitare la variabile d’ambiente `PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM` per tutti i comandi descritti sopra, cioè:
-
-```console
-PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=1 npm install
-PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=1 node dist ...
-```
-
 ## Installazione globale
 
 Una volta effettuata l’installazione globale sarà possibile usare il comando `pa-website-validator` dal terminale, senza dover entrare nella directory clonata. Questa è la procedura per installare il comando globalmente:
@@ -98,9 +91,7 @@ npm install
 npm install -g --install-links
 ```
 
-(usare `PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM` se necessario come descritto sopra).
-
-NB: Potrebbe essere necessario riavviare la shell/terminale per la propagazione del comando e la pulizia della cache npm:
+**NB**: Potrebbe essere necessario riavviare la shell/terminale per la propagazione del comando e la pulizia della cache npm:
 
 ```console
 npm cache clean
@@ -145,24 +136,6 @@ Note:
 - `--accuracy` indica la precisione della scansione, definita come il numero di pagina analizzate:
   - `all` la scansione è effettuata su tutte le pagine disponibili.
 
-[lighthouse]: https://www.npmjs.com/package/lighthouse
-[node.js]: http://nodejs.org
-[npm]: https://www.npmjs.com/
-[typescript]: https://www.typescriptlang.org/
-[repository]: https://github.com/italia/pa-website-validator/
-[yargs-url]: https://github.com/yargs/yargs
-[lighthouse-url]: https://github.com/GoogleChrome/lighthouse
-[puppeteer-url]: https://github.com/puppeteer/puppeteer
-[cheerio-url]: https://github.com/cheeriojs/cheerio
-[jsdom-url]: https://github.com/jsdom/jsdom
-[geoip-url]: https://github.com/geoip-lite/node-geoip
-[get-ssl-certificate-url]: https://github.com/johncrisostomo/get-ssl-certificate
-[modello-comuni]: https://designers.italia.it/modello/comuni
-[modello-scuole]: https://designers.italia.it/modello/scuole
-[docs-app-valutazione]: https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs
-[verifica-scuole]: https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/requisiti-e-modalita-verifica-scuole.html
-[verifica-comuni]: https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/requisiti-e-modalita-verifica-comuni.html
-
 ## Generazione pacchetti MacOS per Apple silicon
 
 I pacchetti delle app per MacOS basati su architettura ARM non possono essere generati automaticamente dalla Action di GitHub come avviene per gli altri. Queste sono le istruzioni per generarli manualmente:
@@ -176,9 +149,26 @@ I pacchetti delle app per MacOS basati su architettura ARM non possono essere ge
    cd pa-website-validator
    git pull
    rm -rf dist node_modules
-   PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=1 npm install
+   PUPPETEER_CACHE_DIR="$PWD/dist/puppeteer" npm install
    LICENSE_KEY="chiave licenza GeoIP valida" npm run updateGeoIPData
    ./scripts/create-zips.sh macOS arm64
    ```
 
 3. Caricare i pacchetti generati nella pagina della release di GitHub.
+
+[lighthouse]: https://www.npmjs.com/package/lighthouse
+[node.js]: http://nodejs.org
+[npm]: https://www.npmjs.com/
+[typescript]: https://www.typescriptlang.org/
+[yargs-url]: https://github.com/yargs/yargs
+[lighthouse-url]: https://github.com/GoogleChrome/lighthouse
+[puppeteer-url]: https://github.com/puppeteer/puppeteer
+[cheerio-url]: https://github.com/cheeriojs/cheerio
+[jsdom-url]: https://github.com/jsdom/jsdom
+[geoip-url]: https://github.com/geoip-lite/node-geoip
+[get-ssl-certificate-url]: https://github.com/johncrisostomo/get-ssl-certificate
+[modello-comuni]: https://designers.italia.it/modello/comuni
+[modello-scuole]: https://designers.italia.it/modello/scuole
+[docs-app-valutazione]: https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs
+[verifica-scuole]: https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/requisiti-e-modalita-verifica-scuole.html
+[verifica-comuni]: https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/it/versione-attuale/requisiti-e-modalita-verifica-comuni.html
