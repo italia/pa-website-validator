@@ -7,9 +7,11 @@ import { getPageElementDataAttribute, loadPageData } from "../../utils/utils";
 import {
   menuItems,
   customPrimaryMenuItemsDataElement,
+  primaryMenuDataElement,
 } from "../../storage/school/menuItems";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
+import { detectLang } from "../../utils/school/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -72,14 +74,30 @@ class LoadAudit extends Audit {
     let totalNumberOfTitleFound = 0;
     const itemsPage: itemPage[] = [];
 
+    const $: CheerioAPI = await loadPageData(url);
+    const foundMenuElements = await getPageElementDataAttribute(
+      $,
+      '[data-element="menu"]',
+      "> li > a"
+    );
+
+    const lang = detectLang(foundMenuElements);
+
+    // "Panoramica"
+    const overviewText = (
+      await getPageElementDataAttribute(
+        $,
+        `[data-element="${primaryMenuDataElement}"]`
+      )
+    )[0];
+
     for (const [, secondaryMenuItem] of Object.entries(menuItems)) {
       const item: itemPage = {
-        key: secondaryMenuItem.label,
+        key: secondaryMenuItem.label[lang],
         pagesInVocabulary: [],
         pagesNotInVocabulary: [],
       };
 
-      const $: CheerioAPI = await loadPageData(url);
       const menuDataElement = `[data-element="${secondaryMenuItem.data_element}"]`;
 
       const headerUlTest = await getPageElementDataAttribute(
@@ -103,8 +121,10 @@ class LoadAudit extends Audit {
       }
 
       for (const element of headerUlTest) {
-        if (element !== "Panoramica") {
-          if (secondaryMenuItem.dictionary.includes(element.toLowerCase())) {
+        if (element !== overviewText) {
+          if (
+            secondaryMenuItem.dictionary[lang].includes(element.toLowerCase())
+          ) {
             item.pagesInVocabulary.push(element);
           } else {
             item.pagesNotInVocabulary.push(element);
@@ -118,7 +138,6 @@ class LoadAudit extends Audit {
 
     const errorVoices = [];
 
-    const $: CheerioAPI = await loadPageData(url);
     const headerUlTest = await getPageElementDataAttribute(
       $,
       `[data-element="${customPrimaryMenuItemsDataElement}"]`,
@@ -127,7 +146,7 @@ class LoadAudit extends Audit {
 
     if (headerUlTest.length > 0) {
       for (const element of headerUlTest) {
-        if (element !== "Panoramica") {
+        if (element !== overviewText) {
           errorVoices.push(element.toLowerCase());
         }
       }

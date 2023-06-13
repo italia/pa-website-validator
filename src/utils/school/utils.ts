@@ -28,7 +28,7 @@ const getRandomFirstLevelPagesUrl = async (
     ),
   ];
 
-  if (pagesUrls.length < primaryMenuItems.length) {
+  if (pagesUrls.length < primaryMenuItems.it.length) {
     return [];
   }
 
@@ -199,9 +199,24 @@ const getRandomLocationsUrl = async (
   return getRandomNString(pagesUrls, numberOfPages);
 };
 
+const detectLang = (entries: string[]): "it" | "de" | "lld_ga" | "lld_ba" => {
+  const comp = (str: string, items: string[]): boolean =>
+    items.some(
+      (e) => e.localeCompare(str, "it", { sensitivity: "base" }) === 0
+    );
+
+  for (const entry of entries) {
+    if (comp(entry, primaryMenuItems.de)) return "de";
+    else if (comp(entry, primaryMenuItems.lld_ba)) return "lld_ba";
+    else if (comp(entry, primaryMenuItems.lld_ga)) return "lld_ga";
+  }
+  return "it";
+};
+
 export {
   getRandomServicesUrl,
   getRandomFirstLevelPagesUrl,
   getRandomSecondLevelPagesUrl,
   getRandomLocationsUrl,
+  detectLang,
 };

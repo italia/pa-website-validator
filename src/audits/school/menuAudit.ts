@@ -13,6 +13,7 @@ import {
 import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
 import { MenuItem } from "../../types/menuItem";
+import { detectLang } from "../../utils/school/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -95,7 +96,9 @@ class LoadAudit extends lighthouse.Audit {
 
     items[0].found_menu_voices = foundMenuElements.join(", ");
 
-    const mandatoryPrimaryMenuItems: MenuItem[] = primaryMenuItems.map(
+    const lang = detectLang(foundMenuElements);
+
+    const mandatoryPrimaryMenuItems: MenuItem[] = primaryMenuItems[lang].map(
       (str) => ({
         name: str,
         regExp: new RegExp(`^${str}$`, "i"),
