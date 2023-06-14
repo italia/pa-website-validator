@@ -105,6 +105,10 @@ class LoadAudit extends Audit {
       };
     }
 
+    const bookingAppointmentPageUrl = new URL(bookingAppointmentPage);
+    const bookingAppointmentPageUrlString =
+      bookingAppointmentPageUrl.origin + bookingAppointmentPageUrl.pathname;
+
     const correctItems = [];
     const wrongItems = [];
 
@@ -152,8 +156,17 @@ class LoadAudit extends Audit {
         "appointment-booking"
       );
 
+      let bookingAppointmentServicePageUrlString = "";
+
       if (bookingAppointmentServicePage === "") {
         item.component_exist = "No";
+      } else {
+        const bookingAppointmentServicePageUrl = new URL(
+          bookingAppointmentServicePage
+        );
+        bookingAppointmentServicePageUrlString =
+          bookingAppointmentServicePageUrl.origin +
+          bookingAppointmentServicePageUrl.pathname;
       }
 
       const inPageButton = $('[data-element="service-booking-access"]');
@@ -162,7 +175,8 @@ class LoadAudit extends Audit {
       }
 
       if (
-        bookingAppointmentServicePage !== bookingAppointmentPage &&
+        bookingAppointmentServicePageUrlString !==
+          bookingAppointmentPageUrlString &&
         score > 0
       ) {
         score = 0;
@@ -170,7 +184,8 @@ class LoadAudit extends Audit {
 
       if (
         bookingAppointmentServicePage === "" ||
-        bookingAppointmentServicePage !== bookingAppointmentPage
+        bookingAppointmentServicePageUrlString !==
+          bookingAppointmentPageUrlString
       ) {
         wrongItems.push(item);
         continue;
