@@ -190,7 +190,6 @@ const getRandomThirdLevelPagesUrl = async (
         );
         await element.click();
         await xhrCatcher;
-        break;
         // eslint-disable-next-line no-empty
       } catch (e) {
         clickButton = false;
