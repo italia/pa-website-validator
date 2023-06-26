@@ -115,7 +115,7 @@ async function getArgumentsElements(url: string): Promise<string[]> {
   let elements: string[] = [];
   const browser = await puppeteer.launch({
     headless: "new",
-    args: ["--single-process", "--no-zygote", "--no-sandbox"],
+    args: ["--no-zygote", "--no-sandbox"],
   });
   const browserWSEndpoint = browser.wsEndpoint();
 
@@ -133,9 +133,7 @@ async function getArgumentsElements(url: string): Promise<string[]> {
     });
     console.log(res?.url(), res?.status());
 
-    await page.waitForSelector('[data-element="search-modal-button"]', {
-      visible: true,
-    });
+    await page.waitForSelector('[data-element="search-modal-button"]');
 
     await page.$eval(
       '[data-element="search-modal-button"]',
