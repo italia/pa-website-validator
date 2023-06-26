@@ -5,7 +5,7 @@
 import lighthouse from "lighthouse";
 import semver from "semver";
 import { auditDictionary } from "../../storage/auditDictionary";
-import { checkCSSClassesOnPage, requestTimeout } from "../../utils/utils";
+import { requestTimeout } from "../../utils/utils";
 import {
   getRandomFirstLevelPagesUrl,
   getRandomSecondLevelPagesUrl,
@@ -150,7 +150,7 @@ class LoadAudit extends Audit {
 
     const browser = await puppeteer.launch({
       headless: "new",
-      args: ["--single-process", "--no-zygote", "--no-sandbox"],
+      args: ["--no-zygote", "--no-sandbox"],
     });
     const browserWSEndpoint = browser.wsEndpoint();
 
@@ -163,6 +163,7 @@ class LoadAudit extends Audit {
         classes_found: "",
       };
 
+      const foundClasses = [];
       try {
         const browser2 = await puppeteer.connect({ browserWSEndpoint });
         const page = await browser2.newPage();
@@ -228,17 +229,23 @@ class LoadAudit extends Audit {
           }
         }
 
+        for (const cssClass of cssClasses) {
+          const elementCount = await page.evaluate(async (cssClass) => {
+            const cssElements = document.querySelectorAll(`.${cssClass}`);
+            return cssElements.length;
+          }, cssClass);
+
+          if (elementCount > 0) {
+            foundClasses.push(cssClass);
+          }
+        }
+
         await page.goto("about:blank");
         await page.close();
         browser2.disconnect();
       } catch (e) {
         console.error(`ERROR ${pageToBeAnalyzed}: ${e}`);
       }
-
-      const foundClasses = await checkCSSClassesOnPage(
-        pageToBeAnalyzed,
-        cssClasses
-      );
 
       if (foundClasses.length === 0) {
         singleResult = 0;

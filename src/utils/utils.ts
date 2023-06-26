@@ -20,7 +20,7 @@ const loadPageData = async (url: string): Promise<CheerioAPI> => {
   let data = "";
   const browser = await puppeteer.launch({
     headless: "new",
-    args: ["--single-process", "--no-zygote", "--no-sandbox"],
+    args: ["--no-zygote", "--no-sandbox"],
   });
   const browserWSEndpoint = browser.wsEndpoint();
   try {
@@ -142,20 +142,6 @@ const getHREFValuesDataAttribute = async (
   }
 
   return serviceUrls;
-};
-
-const checkCSSClassesOnPage = async (url: string, cssClasses: string[]) => {
-  const $ = await loadPageData(url);
-  const foundClasses: string[] = [];
-
-  for (const cssClass of cssClasses) {
-    const elements = $(`.${cssClass}`);
-    if (elements.length > 0) {
-      foundClasses.push(cssClass);
-    }
-  }
-
-  return foundClasses;
 };
 
 const buildUrl = async (url: string, path: string): Promise<string> => {
@@ -366,7 +352,6 @@ export {
   checkOrder,
   missingMenuItems,
   loadPageData,
-  checkCSSClassesOnPage,
   getRandomNString,
   getPageElementDataAttribute,
   getHREFValuesDataAttribute,
