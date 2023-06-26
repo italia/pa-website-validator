@@ -1,12 +1,13 @@
 "use strict";
 import * as cheerio from "cheerio";
-import puppeteer, { ElementHandle, Page } from "puppeteer";
+import { CheerioAPI } from "cheerio";
+import puppeteer from "puppeteer";
 import {
+  customPrimaryMenuItemsDataElement,
   customSecondaryMenuItemsDataElement,
   primaryMenuItems,
 } from "../../storage/municipality/menuItems";
 import {
-  areAllElementsInVocabulary,
   buildUrl,
   getHREFValuesDataAttribute,
   getRandomNString,
@@ -14,9 +15,7 @@ import {
   loadPageData,
   requestTimeout,
 } from "../utils";
-import { CheerioAPI } from "cheerio";
 import { feedbackComponentStructure } from "../../storage/municipality/feedbackComponentStructure";
-import { customPrimaryMenuItemsDataElement } from "../../storage/municipality/menuItems";
 
 const getRandomFirstLevelPagesUrl = async (
   url: string,
@@ -182,14 +181,9 @@ const getRandomThirdLevelPagesUrl = async (
           clickButton = false;
           continue;
         }
-        const xhrCatcher = page.waitForResponse(
-          (r) => r.request().method() != "OPTIONS",
-          {
-            timeout: 5000,
-          }
-        );
-        await element.click();
-        await xhrCatcher;
+        await element.click({
+          delay: 500,
+        });
         // eslint-disable-next-line no-empty
       } catch (e) {
         clickButton = false;
@@ -237,45 +231,13 @@ const getPrimaryPageUrl = async (url: string, dataElement: string) => {
 };
 
 const checkFeedbackComponent = async (url: string) => {
-  let score = 1;
+  const score = 1;
   const errors: string[] = [];
 
-  const $: CheerioAPI = await loadPageData(url);
-
-  const feedbackComponent = $(
-    `[data-element="${feedbackComponentStructure.component.dataElement}"]`
-  );
-  if (feedbackComponent.length !== 1) {
-    errors.push(feedbackComponentStructure.component.missingError);
-    score = 0;
-    return {
-      score: score,
-      errors: errors,
-    };
-  }
-
-  const feedbackTitleElement = $(feedbackComponent).find(
-    `[data-element="${feedbackComponentStructure.title.dataElement}"]`
-  );
-  if (feedbackTitleElement.length !== 1) {
-    if (score > 0.5) score = 0.5;
-    errors.push(feedbackComponentStructure.title.missingError);
-  }
-
-  if (
-    feedbackTitleElement.length === 1 &&
-    feedbackTitleElement.text().trim().toLocaleLowerCase() !==
-      feedbackComponentStructure.title.text.toLowerCase()
-  ) {
-    if (score > 0) score = 0;
-    errors.push(feedbackComponentStructure.title.error);
-  }
-
-  let existsRateComponents = false; //true if there is at least one rating inputs
-  let checkRateComponent = true; //false if there are not the right amount of rating inputs
-  let existsRatingQAComponents = true; //false if there is not a rating component (positive or negative)
-  let checkRateComponentAssociation = true; //false if the association between rating input and rating components is incorrect
-
+  let returnValues = {
+    score: score,
+    errors: errors,
+  };
   const browser = await puppeteer.launch({
     headless: "new",
     args: ["--single-process", "--no-zygote", "--no-sandbox"],
@@ -296,52 +258,283 @@ const checkFeedbackComponent = async (url: string) => {
     });
     console.log(res?.url(), res?.status());
 
-    const feedbackRatingPositiveElement = await page.$(
-      `[data-element="${feedbackComponentStructure.positive_rating.dataElement}"]`
-    );
-    const feedbackRatingNegativeElement = await page.$(
-      `[data-element="${feedbackComponentStructure.negative_rating.dataElement}"]`
-    );
+    returnValues = await page.evaluate(async (feedbackComponentStructure) => {
+      let score = 1;
+      const errors: string[] = [];
 
-    for (
-      let i = 1;
-      i <= feedbackComponentStructure.rate.numberOfComponents;
-      i++
-    ) {
-      const feedbackRateElement = await page.$(
-        `[data-element="${feedbackComponentStructure.rate.dataElement + i}"]`
+      const feedbackComponent = document.querySelector(
+        `[data-element="${feedbackComponentStructure.component.dataElement}"]`
       );
-      if (feedbackRateElement && !existsRateComponents) {
-        existsRateComponents = true;
+      if (!feedbackComponent) {
+        errors.push(feedbackComponentStructure.component.missingError);
+        score = 0;
+        return {
+          score: score,
+          errors: errors,
+        };
       }
 
-      if (!feedbackRateElement) {
-        checkRateComponent = false;
-        continue;
-      }
-
-      await feedbackRateElement.click({ delay: 100 });
-      if (!feedbackRatingPositiveElement || !feedbackRatingNegativeElement) {
-        existsRatingQAComponents = false;
-        break;
-      }
-
-      if (
-        i <= feedbackComponentStructure.rate.positiveThreshold &&
-        ((await isLocatorReady(feedbackRatingPositiveElement, page)) ||
-          !(await isLocatorReady(feedbackRatingNegativeElement, page)))
-      ) {
-        checkRateComponentAssociation = false;
+      const feedbackTitleElement = feedbackComponent.querySelector(
+        `[data-element="${feedbackComponentStructure.title.dataElement}"]`
+      );
+      if (!feedbackTitleElement) {
+        if (score > 0.5) score = 0.5;
+        errors.push(feedbackComponentStructure.title.missingError);
       }
 
       if (
-        i > feedbackComponentStructure.rate.positiveThreshold &&
-        (!(await isLocatorReady(feedbackRatingPositiveElement, page)) ||
-          (await isLocatorReady(feedbackRatingNegativeElement, page)))
+        feedbackTitleElement &&
+        feedbackTitleElement.textContent &&
+        feedbackTitleElement.textContent.trim().toLocaleLowerCase() !==
+          feedbackComponentStructure.title.text.toLowerCase()
       ) {
-        checkRateComponentAssociation = false;
+        if (score > 0) score = 0;
+        errors.push(feedbackComponentStructure.title.error);
       }
-    }
+      let existsRateComponents = false; //true if there is at least one rating inputs
+      let checkRateComponent = true; //false if there are not the right amount of rating inputs
+      let existsRatingQAComponents = true; //false if there is not a rating component (positive or negative)
+      let checkRateComponentAssociation = true; //false if the association between rating input and rating components is incorrect
+
+      const feedbackRatingPositiveElement = document.querySelector(
+        `[data-element="${feedbackComponentStructure.positive_rating.dataElement}"]`
+      ) as HTMLElement;
+      const feedbackRatingNegativeElement = document.querySelector(
+        `[data-element="${feedbackComponentStructure.negative_rating.dataElement}"]`
+      ) as HTMLElement;
+
+      for (
+        let i = 1;
+        i <= feedbackComponentStructure.rate.numberOfComponents;
+        i++
+      ) {
+        const feedbackRateElement = document.querySelector(
+          `[data-element="${feedbackComponentStructure.rate.dataElement + i}"]`
+        ) as HTMLElement;
+        if (feedbackRateElement && !existsRateComponents) {
+          existsRateComponents = true;
+        }
+
+        if (!feedbackRateElement) {
+          checkRateComponent = false;
+          continue;
+        }
+
+        if (!feedbackRatingPositiveElement || !feedbackRatingNegativeElement) {
+          existsRatingQAComponents = false;
+          checkRateComponentAssociation = false;
+          continue;
+        }
+
+        feedbackRateElement.click();
+
+        if (
+          i <= feedbackComponentStructure.rate.positiveThreshold &&
+          (feedbackRatingPositiveElement.offsetParent ||
+            !feedbackRatingNegativeElement.offsetParent)
+        ) {
+          checkRateComponentAssociation = false;
+        }
+
+        if (
+          i > feedbackComponentStructure.rate.positiveThreshold &&
+          (!feedbackRatingPositiveElement.offsetParent ||
+            feedbackRatingNegativeElement.offsetParent)
+        ) {
+          checkRateComponentAssociation = false;
+        }
+      }
+
+      if (!existsRateComponents) {
+        if (score > 0.5) score = 0.5;
+        errors.push(feedbackComponentStructure.rate.missingError);
+      }
+
+      if (existsRateComponents && !checkRateComponent) {
+        if (score > 0) score = 0;
+        errors.push(feedbackComponentStructure.rate.error);
+      }
+
+      if (!existsRatingQAComponents) {
+        if (score > 0.5) score = 0.5;
+      }
+
+      if (existsRatingQAComponents && !checkRateComponentAssociation) {
+        if (score > 0) score = 0;
+        errors.push(feedbackComponentStructure.rate.errorAssociation);
+      }
+
+      if (!feedbackRatingPositiveElement) {
+        if (score > 0.5) score = 0.5;
+        errors.push(feedbackComponentStructure.positive_rating.missingError);
+      } else {
+        const feedbackRatingPositiveQuestionElement =
+          feedbackRatingPositiveElement.querySelector(
+            `[data-element="${feedbackComponentStructure.positive_rating.question.dataElement}"]`
+          );
+
+        if (!feedbackRatingPositiveQuestionElement) {
+          if (score > 0.5) score = 0.5;
+          errors.push(
+            feedbackComponentStructure.positive_rating.question.missingError
+          );
+        }
+
+        if (
+          feedbackRatingPositiveQuestionElement &&
+          feedbackRatingPositiveQuestionElement.textContent &&
+          feedbackRatingPositiveQuestionElement.textContent
+            .trim()
+            .toLowerCase() !==
+            feedbackComponentStructure.positive_rating.question.text.toLowerCase()
+        ) {
+          if (score > 0) score = 0;
+          errors.push(
+            feedbackComponentStructure.positive_rating.question.error
+          );
+        }
+
+        const feedbackRatingPositiveAnswersElements =
+          feedbackRatingPositiveElement.querySelectorAll(
+            `[data-element="${feedbackComponentStructure.positive_rating.answers.dataElement}"]`
+          );
+
+        if (feedbackRatingPositiveAnswersElements) {
+          const feedbackRatingPositiveAnswers: string[] = [];
+
+          for (const feedbackRatingPositiveAnswersElement of feedbackRatingPositiveAnswersElements) {
+            const feedbackAnswer =
+              feedbackRatingPositiveAnswersElement.textContent?.trim() ?? "";
+            feedbackRatingPositiveAnswers.push(feedbackAnswer);
+          }
+
+          const lowerCasedVocabulary =
+            feedbackComponentStructure.positive_rating.answers.texts.map(
+              (vocabularyElements) => vocabularyElements.toLowerCase()
+            );
+
+          let allCorrectAnswers = true;
+          for (const feedbackRatingPositiveAnswer of feedbackRatingPositiveAnswers) {
+            if (
+              lowerCasedVocabulary.indexOf(
+                feedbackRatingPositiveAnswer.toLowerCase()
+              ) === -1
+            ) {
+              allCorrectAnswers = false;
+            }
+          }
+
+          if (!feedbackRatingPositiveAnswersElements) {
+            if (score > 0.5) score = 0.5;
+            errors.push(
+              feedbackComponentStructure.positive_rating.answers.missingError
+            );
+          }
+
+          if (
+            feedbackRatingPositiveAnswersElements.length > 0 &&
+            !allCorrectAnswers
+          ) {
+            if (score > 0) score = 0;
+            errors.push(
+              feedbackComponentStructure.positive_rating.answers.error
+            );
+          }
+        }
+      }
+      if (!feedbackRatingNegativeElement) {
+        if (score > 0.5) score = 0.5;
+        errors.push(feedbackComponentStructure.negative_rating.missingError);
+      } else {
+        const feedbackRatingNegativeQuestionElement =
+          feedbackRatingNegativeElement.querySelector(
+            `[data-element="${feedbackComponentStructure.negative_rating.question.dataElement}"]`
+          );
+
+        if (!feedbackRatingNegativeQuestionElement) {
+          if (score > 0.5) score = 0.5;
+          errors.push(
+            feedbackComponentStructure.negative_rating.question.missingError
+          );
+        }
+
+        if (
+          feedbackRatingNegativeQuestionElement &&
+          feedbackRatingNegativeQuestionElement.textContent &&
+          feedbackRatingNegativeQuestionElement.textContent
+            .trim()
+            .toLowerCase() !==
+            feedbackComponentStructure.negative_rating.question.text.toLowerCase()
+        ) {
+          if (score > 0) score = 0;
+          errors.push(
+            feedbackComponentStructure.negative_rating.question.error
+          );
+        }
+
+        const feedbackRatingNegativeAnswersElements =
+          feedbackRatingNegativeElement.querySelectorAll(
+            `[data-element="${feedbackComponentStructure.negative_rating.answers.dataElement}"]`
+          );
+
+        if (feedbackRatingNegativeAnswersElements) {
+          const feedbackRatingNegativeAnswers: string[] = [];
+
+          for (const feedbackRatingNegativeAnswersElement of feedbackRatingNegativeAnswersElements) {
+            const feedbackAnswer =
+              feedbackRatingNegativeAnswersElement.textContent?.trim() ?? "";
+            feedbackRatingNegativeAnswers.push(feedbackAnswer);
+          }
+
+          const lowerCasedVocabulary =
+            feedbackComponentStructure.negative_rating.answers.texts.map(
+              (vocabularyElements) => vocabularyElements.toLowerCase()
+            );
+
+          let allCorrectAnswers = true;
+          for (const feedbackRatingNegativeAnswer of feedbackRatingNegativeAnswers) {
+            if (
+              lowerCasedVocabulary.indexOf(
+                feedbackRatingNegativeAnswer.toLowerCase()
+              ) === -1
+            ) {
+              allCorrectAnswers = false;
+            }
+          }
+
+          if (!feedbackRatingNegativeAnswersElements) {
+            if (score > 0.5) score = 0.5;
+            errors.push(
+              feedbackComponentStructure.negative_rating.answers.missingError
+            );
+          }
+
+          if (
+            feedbackRatingNegativeAnswersElements.length > 0 &&
+            !allCorrectAnswers
+          ) {
+            if (score > 0) score = 0;
+            errors.push(
+              feedbackComponentStructure.negative_rating.answers.error
+            );
+          }
+        }
+      }
+
+      const feedbackInputText = feedbackComponent.querySelector(
+        `[data-element="${feedbackComponentStructure.input_text.dataElement}"]`
+      );
+      if (!feedbackInputText) {
+        if (score > 0.5) score = 0.5;
+        errors.push(feedbackComponentStructure.input_text.missingError);
+      }
+
+      return {
+        score: score,
+        errors: errors,
+      };
+    }, feedbackComponentStructure);
+
     await page.goto("about:blank");
     await page.close();
     browser2.disconnect();
@@ -351,174 +544,8 @@ const checkFeedbackComponent = async (url: string) => {
 
   await browser.close();
 
-  if (!existsRateComponents) {
-    if (score > 0.5) score = 0.5;
-    errors.push(feedbackComponentStructure.rate.missingError);
-  }
-
-  if (existsRateComponents && !checkRateComponent) {
-    if (score > 0) score = 0;
-    errors.push(feedbackComponentStructure.rate.error);
-  }
-
-  if (!existsRatingQAComponents) {
-    if (score > 0.5) score = 0.5;
-  }
-
-  if (existsRatingQAComponents && !checkRateComponentAssociation) {
-    if (score > 0) score = 0;
-    errors.push(feedbackComponentStructure.rate.errorAssociation);
-  }
-
-  const feedbackRatingPositiveElement = $(feedbackComponent).find(
-    `[data-element="${feedbackComponentStructure.positive_rating.dataElement}"]`
-  );
-  if (feedbackRatingPositiveElement.length !== 1) {
-    if (score > 0.5) score = 0.5;
-    errors.push(feedbackComponentStructure.positive_rating.missingError);
-  }
-  if (feedbackRatingPositiveElement.length === 1) {
-    const feedbackRatingPositiveQuestionElement = $(
-      feedbackRatingPositiveElement
-    ).find(
-      `[data-element="${feedbackComponentStructure.positive_rating.question.dataElement}"]`
-    );
-    if (feedbackRatingPositiveQuestionElement.length === 0) {
-      if (score > 0.5) score = 0.5;
-      errors.push(
-        feedbackComponentStructure.positive_rating.question.missingError
-      );
-    }
-    if (
-      feedbackRatingPositiveQuestionElement.length === 1 &&
-      feedbackRatingPositiveQuestionElement.text().trim().toLowerCase() !==
-        feedbackComponentStructure.positive_rating.question.text.toLowerCase()
-    ) {
-      if (score > 0) score = 0;
-      errors.push(feedbackComponentStructure.positive_rating.question.error);
-    }
-
-    const feedbackRatingPositiveAnswersElements = $(
-      feedbackRatingPositiveElement
-    ).find(
-      `[data-element="${feedbackComponentStructure.positive_rating.answers.dataElement}"]`
-    );
-    const feedbackRatingPositiveAnswers: string[] = [];
-    for (const feedbackRatingPositiveAnswersElement of feedbackRatingPositiveAnswersElements) {
-      feedbackRatingPositiveAnswers.push(
-        $(feedbackRatingPositiveAnswersElement).text().trim()
-      );
-    }
-
-    const allCorrectAnswers = await areAllElementsInVocabulary(
-      feedbackRatingPositiveAnswers,
-      feedbackComponentStructure.positive_rating.answers.texts
-    );
-
-    if (feedbackRatingPositiveAnswersElements.length === 0) {
-      if (score > 0.5) score = 0.5;
-      errors.push(
-        feedbackComponentStructure.positive_rating.answers.missingError
-      );
-    }
-    if (
-      feedbackRatingPositiveAnswersElements.length > 0 &&
-      !allCorrectAnswers.allArgumentsInVocabulary
-    ) {
-      if (score > 0) score = 0;
-      errors.push(feedbackComponentStructure.positive_rating.answers.error);
-    }
-  }
-
-  const feedbackRatingNegativeElement = $(feedbackComponent).find(
-    `[data-element="${feedbackComponentStructure.negative_rating.dataElement}"]`
-  );
-  if (feedbackRatingNegativeElement.length !== 1) {
-    if (score > 0.5) score = 0.5;
-    errors.push(feedbackComponentStructure.negative_rating.missingError);
-  }
-  if (feedbackRatingNegativeElement.length === 1) {
-    const feedbackRatingNegativeQuestionElement = $(
-      feedbackRatingNegativeElement
-    ).find(
-      `[data-element="${feedbackComponentStructure.negative_rating.question.dataElement}"]`
-    );
-    if (feedbackRatingNegativeQuestionElement.length === 0) {
-      if (score > 0.5) score = 0.5;
-      errors.push(
-        feedbackComponentStructure.negative_rating.question.missingError
-      );
-    }
-    if (
-      feedbackRatingNegativeQuestionElement.length === 1 &&
-      feedbackRatingNegativeQuestionElement.text().trim().toLowerCase() !==
-        feedbackComponentStructure.negative_rating.question.text.toLowerCase()
-    ) {
-      if (score > 0) score = 0;
-      errors.push(feedbackComponentStructure.negative_rating.question.error);
-    }
-
-    const feedbackRatingNegativeAnswersElements = $(
-      feedbackRatingNegativeElement
-    ).find(
-      `[data-element="${feedbackComponentStructure.negative_rating.answers.dataElement}"]`
-    );
-    const feedbackRatingNegativeAnswers: string[] = [];
-    for (const feedbackRatingNegativeAnswersElement of feedbackRatingNegativeAnswersElements) {
-      feedbackRatingNegativeAnswers.push(
-        $(feedbackRatingNegativeAnswersElement).text().trim()
-      );
-    }
-
-    const allCorrectAnswers = await areAllElementsInVocabulary(
-      feedbackRatingNegativeAnswers,
-      feedbackComponentStructure.negative_rating.answers.texts
-    );
-
-    if (feedbackRatingNegativeAnswersElements.length === 0) {
-      if (score > 0.5) score = 0.5;
-      errors.push(
-        feedbackComponentStructure.negative_rating.answers.missingError
-      );
-    }
-    if (
-      feedbackRatingNegativeAnswersElements.length > 0 &&
-      !allCorrectAnswers.allArgumentsInVocabulary
-    ) {
-      if (score > 0) score = 0;
-      errors.push(feedbackComponentStructure.negative_rating.answers.error);
-    }
-  }
-
-  const feedbackInputText = $(feedbackComponent).find(
-    `[data-element="${feedbackComponentStructure.input_text.dataElement}"]`
-  );
-  if (feedbackInputText.length !== 1) {
-    if (score > 0.5) score = 0.5;
-    errors.push(feedbackComponentStructure.input_text.missingError);
-  }
-
-  return {
-    score: score,
-    errors: errors,
-  };
+  return returnValues;
 };
-
-async function isLocatorReady(element: ElementHandle<Element>, page: Page) {
-  const isVisibleHandle = await page.evaluateHandle((e) => {
-    const style = window.getComputedStyle(e);
-    return (
-      style &&
-      style.display !== "none" &&
-      style.visibility !== "hidden" &&
-      style.opacity !== "0"
-    );
-  }, element);
-
-  const visible = await isVisibleHandle.jsonValue();
-  const box = await element.boxModel();
-  return !!(visible && box);
-}
 
 const getButtonUrl = async (
   $: CheerioAPI,
