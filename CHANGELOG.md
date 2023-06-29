@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.4.0](https://github.com/italia/pa-website-validator/compare/v2.3.4...v2.4.0) (2023-06-29)
+
+
+### Features
+
+* allow subdomain in cookies ([d5f68a1](https://github.com/italia/pa-website-validator/commit/d5f68a1071325ef471890f671021d49181e0bc27))
+* **scuole:** add support for German and Ladin language ([5090932](https://github.com/italia/pa-website-validator/commit/50909326d8718d52aca2b8ba27e66a4772f40c22))
+
+
+### Bug Fixes
+
+* check subdomain ([926aad7](https://github.com/italia/pa-website-validator/commit/926aad7593cf9a4f48447f7a964fd5f7c66c4535))
+* improve error logging ([937f277](https://github.com/italia/pa-website-validator/commit/937f27751337026b60eba1e7547bb77fcf975cf2))
+* increase HTTP response logs ([78e1723](https://github.com/italia/pa-website-validator/commit/78e17239aaa0d13bd9bdd876492e2568aec80069))
+* remove break in click loop ([ec87d2b](https://github.com/italia/pa-website-validator/commit/ec87d2ba0d031bcb0834f4f8f1b39e519ed642e1))
+* remove single process on puppeteer, remove visible from modal button search, merge logics in bootstrap audit ([1550be0](https://github.com/italia/pa-website-validator/commit/1550be0726ce42bbf685e4f834e272a54bc21cb7))
+* remove wait for ajax response in load other cards, refactory feedback component check ([3aec60c](https://github.com/italia/pa-website-validator/commit/3aec60ca99cf062a74188e94cb9babbd05127dc4))
+* removing get parameters during URL check ([d95d4a6](https://github.com/italia/pa-website-validator/commit/d95d4a68c3877ba3d45304bee4ff854efe8357ce))
+* show correct URL in error message ([28ae46d](https://github.com/italia/pa-website-validator/commit/28ae46df7fbaad45f6c9bc83cff111789fb88fe4))
+
 ## [2.3.4](https://github.com/italia/pa-website-validator/compare/v2.3.3...v2.3.4) (2023-06-05)
 
 
