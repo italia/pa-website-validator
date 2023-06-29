@@ -78,7 +78,9 @@ async function checkCookieDomain(
       is_correct: false,
     };
 
-    if (url.includes(cookie.domain)) {
+    const pageUrl = new URL(url).hostname;
+
+    if (pageUrl === cookie.domain || cookie.domain.endsWith(pageUrl)) {
       cookieValues.is_correct = true;
     }
 
