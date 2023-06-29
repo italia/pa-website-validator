@@ -80,7 +80,7 @@ async function checkCookieDomain(
 
     const pageUrl = new URL(url).hostname;
 
-    if (pageUrl === cookie.domain || cookie.domain.endsWith(pageUrl)) {
+    if (pageUrl === cookie.domain || cookie.domain.endsWith("." + pageUrl)) {
       cookieValues.is_correct = true;
     }
 
