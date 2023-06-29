@@ -328,18 +328,44 @@ const checkFeedbackComponent = async (url: string) => {
 
         feedbackRateElement.click();
 
+        const feedbackPositiveRect =
+          feedbackRatingPositiveElement.getBoundingClientRect();
+        const feedbackPositiveStyle = window.getComputedStyle(
+          feedbackRatingPositiveElement
+        );
+        const feedbackPositiveVisible =
+          feedbackRatingPositiveElement.offsetParent &&
+          feedbackPositiveStyle.display !== "none" &&
+          feedbackPositiveStyle.visibility !== "hidden" &&
+          feedbackPositiveRect.bottom > 0 &&
+          feedbackPositiveRect.top > 0 &&
+          feedbackPositiveRect.height > 0 &&
+          feedbackPositiveRect.width > 0;
+
+        const feedbackNegativeRect =
+          feedbackRatingNegativeElement.getBoundingClientRect();
+        const feedbackNegativeStyle = window.getComputedStyle(
+          feedbackRatingNegativeElement
+        );
+        const feedbackNegativeVisible =
+          feedbackRatingNegativeElement.offsetParent &&
+          feedbackNegativeStyle.display !== "none" &&
+          feedbackNegativeStyle.visibility !== "hidden" &&
+          feedbackNegativeRect.bottom > 0 &&
+          feedbackNegativeRect.top > 0 &&
+          feedbackNegativeRect.height > 0 &&
+          feedbackNegativeRect.width > 0;
+
         if (
           i <= feedbackComponentStructure.rate.positiveThreshold &&
-          (feedbackRatingPositiveElement.offsetParent ||
-            !feedbackRatingNegativeElement.offsetParent)
+          (feedbackPositiveVisible || !feedbackNegativeVisible)
         ) {
           checkRateComponentAssociation = false;
         }
 
         if (
           i > feedbackComponentStructure.rate.positiveThreshold &&
-          (!feedbackRatingPositiveElement.offsetParent ||
-            feedbackRatingNegativeElement.offsetParent)
+          (!feedbackPositiveVisible || feedbackNegativeVisible)
         ) {
           checkRateComponentAssociation = false;
         }
