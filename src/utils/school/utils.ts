@@ -209,6 +209,7 @@ const detectLang = (entries: string[]): "it" | "de" | "lld_ga" | "lld_ba" => {
     if (comp(entry, primaryMenuItems.de)) return "de";
     else if (comp(entry, primaryMenuItems.lld_ba)) return "lld_ba";
     else if (comp(entry, primaryMenuItems.lld_ga)) return "lld_ga";
+    else if (comp(entry, primaryMenuItems.it)) return "it";
   }
   return "it";
 };
