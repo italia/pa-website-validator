@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.4.1](https://github.com/italia/pa-website-validator/compare/v2.4.0...v2.4.1) (2023-06-30)
+
+
+### Bug Fixes
+
+* **app:** set Puppeteer cache dir ([46b5f61](https://github.com/italia/pa-website-validator/commit/46b5f61bcafd002673c33862fb521afe1f5a6fc2))
+* visibility check on display, visibility, boundingClientRect, offsetParent ([8b0e330](https://github.com/italia/pa-website-validator/commit/8b0e330d13321040f0a50ce735b86448ecd59f27))
+
 ## [2.4.0](https://github.com/italia/pa-website-validator/compare/v2.3.4...v2.4.0) (2023-06-29)
 
 
