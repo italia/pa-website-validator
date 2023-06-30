@@ -2,6 +2,9 @@ import dateFormat from "dateformat";
 import inquirer from "inquirer";
 import { homedir } from "os";
 
+// This module needs to be imported before importing Puppeteer
+import "./setPuppeteerCacheDir.js";
+
 import { run, logLevels } from "./controller/launchLighthouse.js";
 
 const type = process.argv[2];
