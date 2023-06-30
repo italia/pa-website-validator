@@ -363,11 +363,181 @@ const checkFeedbackComponent = async (url: string) => {
           checkRateComponentAssociation = false;
         }
 
+        if (i <= feedbackComponentStructure.rate.positiveThreshold) {
+          if (!feedbackRatingNegativeElement) {
+            if (score > 0.5) score = 0.5;
+            errors.push(
+              feedbackComponentStructure.negative_rating.missingError
+            );
+          } else {
+            const feedbackRatingNegativeQuestionElement =
+              feedbackRatingNegativeElement.querySelector(
+                `[data-element="${feedbackComponentStructure.negative_rating.question.dataElement}"]`
+              );
+
+            if (!feedbackRatingNegativeQuestionElement) {
+              if (score > 0.5) score = 0.5;
+              errors.push(
+                feedbackComponentStructure.negative_rating.question.missingError
+              );
+            }
+
+            if (
+              feedbackRatingNegativeQuestionElement &&
+              feedbackRatingNegativeQuestionElement.textContent &&
+              feedbackRatingNegativeQuestionElement.textContent
+                .trim()
+                .toLowerCase() !==
+                feedbackComponentStructure.negative_rating.question.text.toLowerCase()
+            ) {
+              if (score > 0) score = 0;
+              errors.push(
+                feedbackComponentStructure.negative_rating.question.error
+              );
+            }
+
+            const feedbackRatingNegativeAnswersElements =
+              feedbackRatingNegativeElement.querySelectorAll(
+                `[data-element="${feedbackComponentStructure.negative_rating.answers.dataElement}"]`
+              );
+
+            if (feedbackRatingNegativeAnswersElements) {
+              const feedbackRatingNegativeAnswers: string[] = [];
+
+              for (const feedbackRatingNegativeAnswersElement of feedbackRatingNegativeAnswersElements) {
+                const feedbackAnswer =
+                  feedbackRatingNegativeAnswersElement.textContent?.trim() ??
+                  "";
+                feedbackRatingNegativeAnswers.push(feedbackAnswer);
+              }
+
+              const lowerCasedVocabulary =
+                feedbackComponentStructure.negative_rating.answers.texts.map(
+                  (vocabularyElements) => vocabularyElements.toLowerCase()
+                );
+
+              let allCorrectAnswers = true;
+              for (const feedbackRatingNegativeAnswer of feedbackRatingNegativeAnswers) {
+                if (
+                  lowerCasedVocabulary.indexOf(
+                    feedbackRatingNegativeAnswer.toLowerCase()
+                  ) === -1
+                ) {
+                  allCorrectAnswers = false;
+                }
+              }
+
+              if (!feedbackRatingNegativeAnswersElements) {
+                if (score > 0.5) score = 0.5;
+                errors.push(
+                  feedbackComponentStructure.negative_rating.answers
+                    .missingError
+                );
+              }
+
+              if (
+                feedbackRatingNegativeAnswersElements.length > 0 &&
+                !allCorrectAnswers
+              ) {
+                if (score > 0) score = 0;
+                errors.push(
+                  feedbackComponentStructure.negative_rating.answers.error
+                );
+              }
+            }
+          }
+        }
+
         if (
           i > feedbackComponentStructure.rate.positiveThreshold &&
           (!feedbackPositiveVisible || feedbackNegativeVisible)
         ) {
           checkRateComponentAssociation = false;
+        }
+
+        if (i > feedbackComponentStructure.rate.positiveThreshold) {
+          if (!feedbackRatingPositiveElement) {
+            if (score > 0.5) score = 0.5;
+            errors.push(
+              feedbackComponentStructure.positive_rating.missingError
+            );
+          } else {
+            const feedbackRatingPositiveQuestionElement =
+              feedbackRatingPositiveElement.querySelector(
+                `[data-element="${feedbackComponentStructure.positive_rating.question.dataElement}"]`
+              );
+
+            if (!feedbackRatingPositiveQuestionElement) {
+              if (score > 0.5) score = 0.5;
+              errors.push(
+                feedbackComponentStructure.positive_rating.question.missingError
+              );
+            }
+
+            if (
+              feedbackRatingPositiveQuestionElement &&
+              feedbackRatingPositiveQuestionElement.textContent &&
+              feedbackRatingPositiveQuestionElement.textContent
+                .trim()
+                .toLowerCase() !==
+                feedbackComponentStructure.positive_rating.question.text.toLowerCase()
+            ) {
+              if (score > 0) score = 0;
+              errors.push(
+                feedbackComponentStructure.positive_rating.question.error
+              );
+            }
+
+            const feedbackRatingPositiveAnswersElements =
+              feedbackRatingPositiveElement.querySelectorAll(
+                `[data-element="${feedbackComponentStructure.positive_rating.answers.dataElement}"]`
+              );
+
+            if (feedbackRatingPositiveAnswersElements) {
+              const feedbackRatingPositiveAnswers: string[] = [];
+
+              for (const feedbackRatingPositiveAnswersElement of feedbackRatingPositiveAnswersElements) {
+                const feedbackAnswer =
+                  feedbackRatingPositiveAnswersElement.textContent?.trim() ??
+                  "";
+                feedbackRatingPositiveAnswers.push(feedbackAnswer);
+              }
+
+              const lowerCasedVocabulary =
+                feedbackComponentStructure.positive_rating.answers.texts.map(
+                  (vocabularyElements) => vocabularyElements.toLowerCase()
+                );
+
+              let allCorrectAnswers = true;
+              for (const feedbackRatingPositiveAnswer of feedbackRatingPositiveAnswers) {
+                if (
+                  lowerCasedVocabulary.indexOf(
+                    feedbackRatingPositiveAnswer.toLowerCase()
+                  ) === -1
+                ) {
+                  allCorrectAnswers = false;
+                }
+              }
+
+              if (!feedbackRatingPositiveAnswersElements) {
+                if (score > 0.5) score = 0.5;
+                errors.push(
+                  feedbackComponentStructure.positive_rating.answers
+                    .missingError
+                );
+              }
+
+              if (
+                feedbackRatingPositiveAnswersElements.length > 0 &&
+                !allCorrectAnswers
+              ) {
+                if (score > 0) score = 0;
+                errors.push(
+                  feedbackComponentStructure.positive_rating.answers.error
+                );
+              }
+            }
+          }
         }
       }
 
@@ -388,163 +558,6 @@ const checkFeedbackComponent = async (url: string) => {
       if (existsRatingQAComponents && !checkRateComponentAssociation) {
         if (score > 0) score = 0;
         errors.push(feedbackComponentStructure.rate.errorAssociation);
-      }
-
-      if (!feedbackRatingPositiveElement) {
-        if (score > 0.5) score = 0.5;
-        errors.push(feedbackComponentStructure.positive_rating.missingError);
-      } else {
-        const feedbackRatingPositiveQuestionElement =
-          feedbackRatingPositiveElement.querySelector(
-            `[data-element="${feedbackComponentStructure.positive_rating.question.dataElement}"]`
-          );
-
-        if (!feedbackRatingPositiveQuestionElement) {
-          if (score > 0.5) score = 0.5;
-          errors.push(
-            feedbackComponentStructure.positive_rating.question.missingError
-          );
-        }
-
-        if (
-          feedbackRatingPositiveQuestionElement &&
-          feedbackRatingPositiveQuestionElement.textContent &&
-          feedbackRatingPositiveQuestionElement.textContent
-            .trim()
-            .toLowerCase() !==
-            feedbackComponentStructure.positive_rating.question.text.toLowerCase()
-        ) {
-          if (score > 0) score = 0;
-          errors.push(
-            feedbackComponentStructure.positive_rating.question.error
-          );
-        }
-
-        const feedbackRatingPositiveAnswersElements =
-          feedbackRatingPositiveElement.querySelectorAll(
-            `[data-element="${feedbackComponentStructure.positive_rating.answers.dataElement}"]`
-          );
-
-        if (feedbackRatingPositiveAnswersElements) {
-          const feedbackRatingPositiveAnswers: string[] = [];
-
-          for (const feedbackRatingPositiveAnswersElement of feedbackRatingPositiveAnswersElements) {
-            const feedbackAnswer =
-              feedbackRatingPositiveAnswersElement.textContent?.trim() ?? "";
-            feedbackRatingPositiveAnswers.push(feedbackAnswer);
-          }
-
-          const lowerCasedVocabulary =
-            feedbackComponentStructure.positive_rating.answers.texts.map(
-              (vocabularyElements) => vocabularyElements.toLowerCase()
-            );
-
-          let allCorrectAnswers = true;
-          for (const feedbackRatingPositiveAnswer of feedbackRatingPositiveAnswers) {
-            if (
-              lowerCasedVocabulary.indexOf(
-                feedbackRatingPositiveAnswer.toLowerCase()
-              ) === -1
-            ) {
-              allCorrectAnswers = false;
-            }
-          }
-
-          if (!feedbackRatingPositiveAnswersElements) {
-            if (score > 0.5) score = 0.5;
-            errors.push(
-              feedbackComponentStructure.positive_rating.answers.missingError
-            );
-          }
-
-          if (
-            feedbackRatingPositiveAnswersElements.length > 0 &&
-            !allCorrectAnswers
-          ) {
-            if (score > 0) score = 0;
-            errors.push(
-              feedbackComponentStructure.positive_rating.answers.error
-            );
-          }
-        }
-      }
-      if (!feedbackRatingNegativeElement) {
-        if (score > 0.5) score = 0.5;
-        errors.push(feedbackComponentStructure.negative_rating.missingError);
-      } else {
-        const feedbackRatingNegativeQuestionElement =
-          feedbackRatingNegativeElement.querySelector(
-            `[data-element="${feedbackComponentStructure.negative_rating.question.dataElement}"]`
-          );
-
-        if (!feedbackRatingNegativeQuestionElement) {
-          if (score > 0.5) score = 0.5;
-          errors.push(
-            feedbackComponentStructure.negative_rating.question.missingError
-          );
-        }
-
-        if (
-          feedbackRatingNegativeQuestionElement &&
-          feedbackRatingNegativeQuestionElement.textContent &&
-          feedbackRatingNegativeQuestionElement.textContent
-            .trim()
-            .toLowerCase() !==
-            feedbackComponentStructure.negative_rating.question.text.toLowerCase()
-        ) {
-          if (score > 0) score = 0;
-          errors.push(
-            feedbackComponentStructure.negative_rating.question.error
-          );
-        }
-
-        const feedbackRatingNegativeAnswersElements =
-          feedbackRatingNegativeElement.querySelectorAll(
-            `[data-element="${feedbackComponentStructure.negative_rating.answers.dataElement}"]`
-          );
-
-        if (feedbackRatingNegativeAnswersElements) {
-          const feedbackRatingNegativeAnswers: string[] = [];
-
-          for (const feedbackRatingNegativeAnswersElement of feedbackRatingNegativeAnswersElements) {
-            const feedbackAnswer =
-              feedbackRatingNegativeAnswersElement.textContent?.trim() ?? "";
-            feedbackRatingNegativeAnswers.push(feedbackAnswer);
-          }
-
-          const lowerCasedVocabulary =
-            feedbackComponentStructure.negative_rating.answers.texts.map(
-              (vocabularyElements) => vocabularyElements.toLowerCase()
-            );
-
-          let allCorrectAnswers = true;
-          for (const feedbackRatingNegativeAnswer of feedbackRatingNegativeAnswers) {
-            if (
-              lowerCasedVocabulary.indexOf(
-                feedbackRatingNegativeAnswer.toLowerCase()
-              ) === -1
-            ) {
-              allCorrectAnswers = false;
-            }
-          }
-
-          if (!feedbackRatingNegativeAnswersElements) {
-            if (score > 0.5) score = 0.5;
-            errors.push(
-              feedbackComponentStructure.negative_rating.answers.missingError
-            );
-          }
-
-          if (
-            feedbackRatingNegativeAnswersElements.length > 0 &&
-            !allCorrectAnswers
-          ) {
-            if (score > 0) score = 0;
-            errors.push(
-              feedbackComponentStructure.negative_rating.answers.error
-            );
-          }
-        }
       }
 
       const feedbackInputText = feedbackComponent.querySelector(
@@ -569,6 +582,8 @@ const checkFeedbackComponent = async (url: string) => {
   }
 
   await browser.close();
+
+  returnValues.errors = [...new Set(returnValues.errors)];
 
   return returnValues;
 };
