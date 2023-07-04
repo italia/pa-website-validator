@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.5.0](https://github.com/italia/pa-website-validator/compare/v2.4.1...v2.5.0) (2023-07-04)
+
+
+### Features
+
+* check feedback component questions and answers at each click ([878c673](https://github.com/italia/pa-website-validator/commit/878c67368f2a3d8a6df1c7f76a16cb2ff53f49b4))
+* check load cards when button clicked ([afc9563](https://github.com/italia/pa-website-validator/commit/afc95636cde2080f58a9fd87aac8d18f8600481b))
+
+
+### Bug Fixes
+
+* **scuole:** language detection ([cf11d10](https://github.com/italia/pa-website-validator/commit/cf11d10dd2726dfc57802b29a87c8d80bb989b18))
+
 ## [2.4.1](https://github.com/italia/pa-website-validator/compare/v2.4.0...v2.4.1) (2023-06-30)
 
 
