@@ -173,17 +173,36 @@ const getRandomThirdLevelPagesUrl = async (
     });
     console.log(res?.url(), res?.status());
 
+    let maxCountPages = (await page.$$(linkDataElement)).length;
     let clickButton = true;
     while (clickButton) {
       try {
-        const element = await page.$('[data-element="load-other-cards"]');
-        if (!element) {
+        clickButton = await page.evaluate(async () => {
+          const button = document.querySelector(
+            '[data-element="load-other-cards"]'
+          ) as HTMLElement;
+          if (!button) {
+            return false;
+          }
+          button.click();
+          return true;
+        });
+
+        if (!clickButton) {
+          continue;
+        }
+
+        await page.waitForNetworkIdle({
+          idleTime: 1000,
+        });
+
+        const currentCountPages = (await page.$$(linkDataElement)).length;
+        if (currentCountPages === maxCountPages) {
           clickButton = false;
           continue;
         }
-        await element.click({
-          delay: 500,
-        });
+        maxCountPages = currentCountPages;
+
         // eslint-disable-next-line no-empty
       } catch (e) {
         clickButton = false;
