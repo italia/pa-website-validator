@@ -78,9 +78,12 @@ async function checkCookieDomain(
       is_correct: false,
     };
 
-    const pageUrl = new URL(url).hostname;
+    const pageUrl = new URL(url).hostname.replaceAll("www.", "");
 
-    if (pageUrl === cookie.domain || cookie.domain.endsWith("." + pageUrl)) {
+    if (
+      pageUrl === cookie.domain.replaceAll("www.", "") ||
+      cookie.domain.endsWith("." + pageUrl)
+    ) {
       cookieValues.is_correct = true;
     }
 
