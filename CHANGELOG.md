@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.5.1](https://github.com/italia/pa-website-validator/compare/v2.5.0...v2.5.1) (2023-07-11)
+
+
+### Bug Fixes
+
+* allow cookie domains starting with dot ([fa299e9](https://github.com/italia/pa-website-validator/commit/fa299e9b044a5e7bcd0362d791fd89a7e245a41a))
+* **school:** do not check external pages ([f1161f6](https://github.com/italia/pa-website-validator/commit/f1161f60cdeed51be764e9ef8bc8fcec8357adfa))
+* **scuole:** do not check external service pages ([a9ffa5a](https://github.com/italia/pa-website-validator/commit/a9ffa5a4282f14aadd6bee8921e985ec8cdf5d87))
+
 ## [2.5.0](https://github.com/italia/pa-website-validator/compare/v2.4.1...v2.5.0) (2023-07-04)
 
 
