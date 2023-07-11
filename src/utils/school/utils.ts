@@ -168,7 +168,11 @@ const getRandomServicesUrl = async (
     }
   }
 
-  return getRandomNString(servicesUrls, numberOfServices);
+  // Exclude external services
+  const host = new URL(url).hostname.replace("www.", "");
+  const internalServiceUrls = servicesUrls.filter((s) => s.includes(host));
+
+  return getRandomNString(internalServiceUrls, numberOfServices);
 };
 
 const getRandomLocationsUrl = async (
