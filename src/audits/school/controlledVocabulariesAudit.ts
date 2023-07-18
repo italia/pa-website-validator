@@ -122,11 +122,18 @@ async function getArgumentsElements(url: string): Promise<string[]> {
   try {
     const browser2 = await puppeteer.connect({ browserWSEndpoint });
     const page = await browser2.newPage();
-    page.on("request", (e) => {
-      const res = e.response();
-      if (res !== null && !res.ok())
-        console.log(`Failed to load ${res.url()}: ${res.status()}`);
+
+    await page.setRequestInterception(true);
+    page.on("request", (request) => {
+      if (
+        ["image", "imageset", "media"].indexOf(request.resourceType()) !== -1
+      ) {
+        request.abort();
+      } else {
+        request.continue();
+      }
     });
+
     const res = await page.goto(url, {
       waitUntil: ["load", "networkidle0"],
       timeout: requestTimeout,
