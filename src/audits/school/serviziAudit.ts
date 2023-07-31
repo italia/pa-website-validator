@@ -25,6 +25,7 @@ import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
 import { auditScanVariables } from "../../storage/school/auditScanVariables";
 import { convert } from "html-to-text";
+import { errorHandling } from "../../config/commonAuditsParts";
 
 const Audit = lighthouse.Audit;
 
@@ -50,7 +51,7 @@ class LoadAudit extends Audit {
 
   static async audit(
     artifacts: LH.Artifacts & { origin: string }
-  ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
+  ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
 
     const titleSubHeadings = [
@@ -117,6 +118,8 @@ class LoadAudit extends Audit {
 
     let score = 1;
 
+    const pagesInError = [];
+    let $: CheerioAPI = await loadPageData(url);
     for (const randomService of randomServices) {
       const item = {
         missing_elements: "",
@@ -126,7 +129,25 @@ class LoadAudit extends Audit {
 
       item.inspected_page = randomService;
 
-      const $: CheerioAPI = await loadPageData(randomService);
+      try {
+        $ = await loadPageData(randomService);
+      } catch (ex) {
+        if (!(ex instanceof Error)) {
+          throw ex;
+        }
+
+        let errorMessage = ex.message;
+        errorMessage = errorMessage.substring(
+          errorMessage.indexOf('"') + 1,
+          errorMessage.lastIndexOf('"')
+        );
+
+        pagesInError.push({
+          inspected_page: randomService,
+          wrong_order_elements: errorMessage,
+        });
+        continue;
+      }
 
       let indexElements = await getServicesFromIndex($, mandatoryVoices);
 
@@ -251,22 +272,43 @@ class LoadAudit extends Audit {
     }
 
     const results = [];
-    switch (score) {
-      case 1:
+    if (pagesInError.length > 0) {
+      results.push({
+        result: errorHandling.errorMessage,
+      });
+
+      results.push({
+        result: errorHandling.errorColumnTitles[0],
+        title_missing_elements: errorHandling.errorColumnTitles[1],
+        title_wrong_order_elements: "",
+      });
+
+      for (const item of pagesInError) {
         results.push({
-          result: auditData.greenResult,
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
         });
-        break;
-      case 0.5:
-        results.push({
-          result: auditData.yellowResult,
-        });
-        break;
-      case 0:
-        results.push({
-          result: auditData.redResult,
-        });
-        break;
+      }
+    } else {
+      switch (score) {
+        case 1:
+          results.push({
+            result: auditData.greenResult,
+          });
+          break;
+        case 0.5:
+          results.push({
+            result: auditData.yellowResult,
+          });
+          break;
+        case 0:
+          results.push({
+            result: auditData.redResult,
+          });
+          break;
+      }
     }
 
     results.push({});
@@ -331,6 +373,7 @@ class LoadAudit extends Audit {
     return {
       score: score,
       details: Audit.makeTableDetails(headings, results),
+      errorMessage: pagesInError.length > 0 ? errorHandling.popupMessage : "",
     };
   }
 }

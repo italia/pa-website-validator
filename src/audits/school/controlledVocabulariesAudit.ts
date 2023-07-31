@@ -7,11 +7,12 @@ import { schoolModelVocabulary } from "../../storage/school/controlledVocabulary
 import {
   getPageElementDataAttribute,
   areAllElementsInVocabulary,
-  requestTimeout,
+  gotoRetry,
 } from "../../utils/utils";
 import puppeteer from "puppeteer";
 import * as cheerio from "cheerio";
 import { auditDictionary } from "../../storage/auditDictionary";
+import { errorHandling } from "../../config/commonAuditsParts";
 
 const Audit = lighthouse.Audit;
 
@@ -134,10 +135,7 @@ async function getArgumentsElements(url: string): Promise<string[]> {
       }
     });
 
-    const res = await page.goto(url, {
-      waitUntil: ["load", "networkidle0"],
-      timeout: requestTimeout,
-    });
+    const res = await gotoRetry(page, url, errorHandling.gotoRetryTentative);
     console.log(res?.url(), res?.status());
 
     await page.waitForSelector('[data-element="search-modal-button"]');
@@ -182,7 +180,8 @@ async function getArgumentsElements(url: string): Promise<string[]> {
   } catch (ex) {
     console.error(`ERROR ${url}: ${ex}`);
     await browser.close();
-
-    return [];
+    throw new Error(
+      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`
+    );
   }
 }

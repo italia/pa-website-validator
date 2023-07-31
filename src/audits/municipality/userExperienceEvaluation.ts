@@ -11,6 +11,7 @@ import {
   checkFeedbackComponent,
 } from "../../utils/municipality/utils";
 import { primaryMenuItems } from "../../storage/municipality/menuItems";
+import { errorHandling } from "../../config/commonAuditsParts";
 
 const Audit = lighthouse.Audit;
 
@@ -36,7 +37,7 @@ class LoadAudit extends Audit {
 
   static async audit(
     artifacts: LH.Artifacts & { origin: string }
-  ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
+  ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
 
     const titleSubHeadings = ["Elementi errati o non trovati"];
@@ -83,53 +84,91 @@ class LoadAudit extends Audit {
         ),
       };
     }
+    const pagesInError = [];
 
     for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
       const item = {
         inspected_page: pageToBeAnalyzed,
         errors_found: "",
       };
-      const feedbackComponentAnalysis = await checkFeedbackComponent(
-        pageToBeAnalyzed
-      );
+      try {
+        const feedbackComponentAnalysis = await checkFeedbackComponent(
+          pageToBeAnalyzed
+        );
 
-      if (score > feedbackComponentAnalysis.score) {
-        score = feedbackComponentAnalysis.score;
-      }
+        if (score > feedbackComponentAnalysis.score) {
+          score = feedbackComponentAnalysis.score;
+        }
 
-      if (feedbackComponentAnalysis.errors.length > 0) {
-        item.errors_found = feedbackComponentAnalysis.errors.join("; ");
-      }
-      switch (feedbackComponentAnalysis.score) {
-        case 0:
-          wrongItems.push(item);
-          break;
-        case 0.5:
-          toleranceItems.push(item);
-          break;
-        case 1:
-          correctItems.push(item);
-          break;
+        if (feedbackComponentAnalysis.errors.length > 0) {
+          item.errors_found = feedbackComponentAnalysis.errors.join("; ");
+        }
+        switch (feedbackComponentAnalysis.score) {
+          case 0:
+            wrongItems.push(item);
+            break;
+          case 0.5:
+            toleranceItems.push(item);
+            break;
+          case 1:
+            correctItems.push(item);
+            break;
+        }
+      } catch (ex) {
+        if (!(ex instanceof Error)) {
+          throw ex;
+        }
+
+        let errorMessage = ex.message;
+        errorMessage = errorMessage.substring(
+          errorMessage.indexOf('"') + 1,
+          errorMessage.lastIndexOf('"')
+        );
+
+        pagesInError.push({
+          inspected_page: pageToBeAnalyzed,
+          errors_found: errorMessage,
+        });
       }
     }
 
     const results = [];
-    switch (score) {
-      case 1:
+    if (pagesInError.length > 0) {
+      results.push({
+        result: errorHandling.errorMessage,
+      });
+
+      results.push({
+        result: errorHandling.errorColumnTitles[0],
+        title_errors_found: errorHandling.errorColumnTitles[1],
+      });
+
+      for (const item of pagesInError) {
         results.push({
-          result: auditData.greenResult,
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
         });
-        break;
-      case 0.5:
-        results.push({
-          result: auditData.yellowResult,
-        });
-        break;
-      case 0:
-        results.push({
-          result: auditData.redResult,
-        });
-        break;
+      }
+    } else {
+      switch (score) {
+        case 1:
+          results.push({
+            result: auditData.greenResult,
+          });
+          break;
+        case 0.5:
+          results.push({
+            result: auditData.yellowResult,
+          });
+          break;
+        case 0:
+          results.push({
+            result: auditData.redResult,
+          });
+          break;
+      }
     }
 
     results.push({});
@@ -187,6 +226,7 @@ class LoadAudit extends Audit {
     return {
       score: score > 0 ? 1 : 0,
       details: Audit.makeTableDetails(headings, results),
+      errorMessage: pagesInError.length > 0 ? errorHandling.popupMessage : "",
     };
   }
 }

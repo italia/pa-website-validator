@@ -2,15 +2,16 @@
 import crawlerTypes from "../types/crawler-types";
 import orderType = crawlerTypes.orderResult;
 import * as cheerio from "cheerio";
-import puppeteer from "puppeteer";
+import puppeteer, { HTTPResponse, Page } from "puppeteer";
 import { CheerioAPI } from "cheerio";
 import axios from "axios";
 import vocabularyResult = crawlerTypes.vocabularyResult;
 import { LRUCache } from "lru-cache";
 import { MenuItem } from "../types/menuItem";
+import { errorHandling } from "../config/commonAuditsParts";
 
 const cache = new LRUCache<string, CheerioAPI>({ max: 128 });
-const requestTimeout = parseInt(process.env["requestTimeout"] ?? "10000");
+const requestTimeout = parseInt(process.env["requestTimeout"] ?? "30000");
 
 const loadPageData = async (url: string): Promise<CheerioAPI> => {
   const data_from_cache = cache.get(url);
@@ -26,15 +27,19 @@ const loadPageData = async (url: string): Promise<CheerioAPI> => {
   try {
     const browser2 = await puppeteer.connect({ browserWSEndpoint });
     const page = await browser2.newPage();
-    page.on("request", (e) => {
-      const res = e.response();
-      if (res !== null && !res.ok())
-        console.log(`Failed to load ${res.url()}: ${res.status()}`);
+
+    await page.setRequestInterception(true);
+    page.on("request", (request) => {
+      if (
+        ["image", "imageset", "media"].indexOf(request.resourceType()) !== -1
+      ) {
+        request.abort();
+      } else {
+        request.continue();
+      }
     });
-    const res = await page.goto(url, {
-      waitUntil: ["load", "networkidle0"],
-      timeout: requestTimeout,
-    });
+
+    const res = await gotoRetry(page, url, errorHandling.gotoRetryTentative);
 
     console.log(res?.url(), res?.status());
 
@@ -51,7 +56,30 @@ const loadPageData = async (url: string): Promise<CheerioAPI> => {
   } catch (ex) {
     console.error(`ERROR ${url}: ${ex}`);
     await browser.close();
-    return cheerio.load(data);
+    throw new Error(
+      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`
+    );
+  }
+};
+
+const gotoRetry = async (
+  page: Page,
+  url: string,
+  retryCount: number
+): Promise<HTTPResponse | null> => {
+  try {
+    return await page.goto(url, {
+      waitUntil: ["load", "networkidle0"],
+      timeout: requestTimeout,
+    });
+  } catch (error) {
+    if (retryCount <= 0) {
+      throw error;
+    }
+    console.log(
+      `${url} goto tentative: ${errorHandling.gotoRetryTentative - retryCount}`
+    );
+    return await gotoRetry(page, url, retryCount - 1);
   }
 };
 
@@ -352,6 +380,7 @@ export {
   checkOrder,
   missingMenuItems,
   loadPageData,
+  gotoRetry,
   getRandomNString,
   getPageElementDataAttribute,
   getHREFValuesDataAttribute,

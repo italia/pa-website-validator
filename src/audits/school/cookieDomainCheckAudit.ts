@@ -14,6 +14,7 @@ import cookie = crawlerTypes.cookie;
 import { auditDictionary } from "../../storage/auditDictionary";
 import { run as cookieAudit } from "../../utils/cookieAuditLogic";
 import { auditScanVariables } from "../../storage/school/auditScanVariables";
+import { errorHandling } from "../../config/commonAuditsParts";
 
 const Audit = lighthouse.Audit;
 
@@ -37,7 +38,9 @@ class LoadAudit extends Audit {
     };
   }
 
-  static async audit(artifacts: LH.Artifacts & { origin: string }) {
+  static async audit(
+    artifacts: LH.Artifacts & { origin: string }
+  ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
     const titleSubHeadings = [
       "Dominio del cookie",
@@ -120,8 +123,32 @@ class LoadAudit extends Audit {
     let score = 1;
     let items: cookie[] = [];
 
+    const pagesInError = [];
     for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
-      const pageResult = await cookieAudit(pageToBeAnalyzed);
+      let pageResult = {
+        score: 0,
+        items: items,
+      };
+      try {
+        pageResult = await cookieAudit(pageToBeAnalyzed);
+      } catch (ex) {
+        if (!(ex instanceof Error)) {
+          throw ex;
+        }
+
+        let errorMessage = ex.message;
+        errorMessage = errorMessage.substring(
+          errorMessage.indexOf('"') + 1,
+          errorMessage.lastIndexOf('"')
+        );
+
+        pagesInError.push({
+          inspected_page: pageToBeAnalyzed,
+          cookie_domain: errorMessage,
+        });
+        continue;
+      }
+
       if (pageResult.score < score) {
         score = pageResult.score;
       }
@@ -141,17 +168,39 @@ class LoadAudit extends Audit {
     }
 
     const results = [];
-    switch (score) {
-      case 1:
+    if (pagesInError.length > 0) {
+      results.push({
+        result: errorHandling.errorMessage,
+      });
+
+      results.push({
+        result: errorHandling.errorColumnTitles[0],
+        title_cookie_domain: errorHandling.errorColumnTitles[1],
+        title_cookie_name: "",
+        title_cookie_value: "",
+      });
+
+      for (const item of pagesInError) {
         results.push({
-          result: auditData.greenResult,
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
         });
-        break;
-      case 0:
-        results.push({
-          result: auditData.redResult,
-        });
-        break;
+      }
+    } else {
+      switch (score) {
+        case 1:
+          results.push({
+            result: auditData.greenResult,
+          });
+          break;
+        case 0:
+          results.push({
+            result: auditData.redResult,
+          });
+          break;
+      }
     }
 
     results.push({});
@@ -199,6 +248,7 @@ class LoadAudit extends Audit {
     return {
       score: score,
       details: Audit.makeTableDetails(headings, results),
+      errorMessage: pagesInError.length > 0 ? errorHandling.popupMessage : "",
     };
   }
 }

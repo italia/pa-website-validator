@@ -11,6 +11,7 @@ import { CheerioAPI } from "cheerio";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import { primaryMenuItems } from "../../storage/municipality/menuItems";
+import { errorHandling } from "../../config/commonAuditsParts";
 
 const auditId = "municipality-contacts-assistency";
 const auditData = auditDictionary[auditId];
@@ -36,7 +37,7 @@ class LoadAudit extends Audit {
 
   static async audit(
     artifacts: LH.Artifacts & { origin: string }
-  ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
+  ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
 
     const titleSubHeadings = [
@@ -99,14 +100,34 @@ class LoadAudit extends Audit {
 
     let score = 1;
 
+    const pagesInError = [];
+    let $: CheerioAPI = await loadPageData(url);
     for (const randomService of randomServices) {
+      try {
+        $ = await loadPageData(randomService);
+      } catch (ex) {
+        if (!(ex instanceof Error)) {
+          throw ex;
+        }
+
+        let errorMessage = ex.message;
+        errorMessage = errorMessage.substring(
+          errorMessage.indexOf('"') + 1,
+          errorMessage.lastIndexOf('"')
+        );
+
+        pagesInError.push({
+          inspected_page: randomService,
+          in_index: errorMessage,
+        });
+        continue;
+      }
+
       const item = {
         inspected_page: randomService,
         in_index: "No",
         component_exists: "No",
       };
-
-      const $: CheerioAPI = await loadPageData(randomService);
 
       const indexList = await getPageElementDataAttribute(
         $,
@@ -138,17 +159,38 @@ class LoadAudit extends Audit {
     }
 
     const results = [];
-    switch (score) {
-      case 1:
+    if (pagesInError.length > 0) {
+      results.push({
+        result: errorHandling.errorMessage,
+      });
+
+      results.push({
+        result: errorHandling.errorColumnTitles[0],
+        title_in_index: errorHandling.errorColumnTitles[1],
+        title_component_exists: "",
+      });
+
+      for (const item of pagesInError) {
         results.push({
-          result: auditData.greenResult,
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
         });
-        break;
-      case 0:
-        results.push({
-          result: auditData.redResult,
-        });
-        break;
+      }
+    } else {
+      switch (score) {
+        case 1:
+          results.push({
+            result: auditData.greenResult,
+          });
+          break;
+        case 0:
+          results.push({
+            result: auditData.redResult,
+          });
+          break;
+      }
     }
 
     results.push({});
@@ -194,6 +236,7 @@ class LoadAudit extends Audit {
     return {
       score: score,
       details: Audit.makeTableDetails(headings, results),
+      errorMessage: pagesInError.length > 0 ? errorHandling.popupMessage : "",
     };
   }
 }

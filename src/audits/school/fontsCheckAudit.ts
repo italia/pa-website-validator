@@ -12,6 +12,7 @@ import { requestTimeout } from "../../utils/utils";
 import puppeteer from "puppeteer";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/school/auditScanVariables";
+import { errorHandling } from "../../config/commonAuditsParts";
 
 const Audit = lighthouse.Audit;
 
@@ -118,6 +119,8 @@ class LoadAudit extends Audit {
       args: ["--no-zygote", "--no-sandbox"],
     });
     const browserWSEndpoint = browser.wsEndpoint();
+
+    const pagesInError = [];
 
     for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
       const item = {
@@ -228,34 +231,65 @@ class LoadAudit extends Audit {
         await page.goto("about:blank");
         await page.close();
         browser2.disconnect();
-      } catch (e) {
-        console.error(`ERROR ${pageToBeAnalyzed}: ${e}`);
+      } catch (ex) {
+        console.error(`ERROR ${pageToBeAnalyzed}: ${ex}`);
         await browser.close();
-        return {
-          errorMessage: e instanceof Error ? e.message : "",
-          score: 0,
-        };
+        if (!(ex instanceof Error)) {
+          throw ex;
+        }
+
+        let errorMessage = ex.message;
+        errorMessage = errorMessage.substring(
+          errorMessage.indexOf('"') + 1,
+          errorMessage.lastIndexOf('"')
+        );
+
+        pagesInError.push({
+          inspected_page: pageToBeAnalyzed,
+          wrong_fonts: errorMessage,
+        });
       }
     }
     await browser.close();
 
     const results = [];
-    switch (score) {
-      case 1:
+    if (pagesInError.length > 0) {
+      results.push({
+        result: errorHandling.errorMessage,
+      });
+
+      results.push({
+        result: errorHandling.errorColumnTitles[0],
+        title_wrong_number_elements: errorHandling.errorColumnTitles[1],
+        title_wrong_fonts: "",
+      });
+
+      for (const item of pagesInError) {
         results.push({
-          result: auditData.greenResult,
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
         });
-        break;
-      case 0.5:
-        results.push({
-          result: auditData.yellowResult,
-        });
-        break;
-      case 0:
-        results.push({
-          result: auditData.redResult,
-        });
-        break;
+      }
+    } else {
+      switch (score) {
+        case 1:
+          results.push({
+            result: auditData.greenResult,
+          });
+          break;
+        case 0.5:
+          results.push({
+            result: auditData.yellowResult,
+          });
+          break;
+        case 0:
+          results.push({
+            result: auditData.redResult,
+          });
+          break;
+      }
     }
 
     results.push({});

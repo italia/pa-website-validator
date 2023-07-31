@@ -11,11 +11,13 @@ import {
   buildUrl,
   getHREFValuesDataAttribute,
   getRandomNString,
+  gotoRetry,
   isInternalUrl,
   loadPageData,
   requestTimeout,
 } from "../utils";
 import { feedbackComponentStructure } from "../../storage/municipality/feedbackComponentStructure";
+import { errorHandling } from "../../config/commonAuditsParts";
 
 const getRandomFirstLevelPagesUrl = async (
   url: string,
@@ -162,10 +164,15 @@ const getRandomThirdLevelPagesUrl = async (
   try {
     const browser2 = await puppeteer.connect({ browserWSEndpoint });
     const page = await browser2.newPage();
-    page.on("request", (e) => {
-      const res = e.response();
-      if (res !== null && !res.ok())
-        console.log(`Failed to load ${res.url()}: ${res.status()}`);
+    await page.setRequestInterception(true);
+    page.on("request", (request) => {
+      if (
+        ["image", "imageset", "media"].indexOf(request.resourceType()) !== -1
+      ) {
+        request.abort();
+      } else {
+        request.continue();
+      }
     });
     const res = await page.goto(pageUrl, {
       waitUntil: ["load", "networkidle0"],
@@ -214,11 +221,15 @@ const getRandomThirdLevelPagesUrl = async (
     await page.goto("about:blank");
     await page.close();
     browser2.disconnect();
-  } catch (e) {
-    console.error(`ERROR ${pageUrl}: ${e}`);
+    await browser.close();
+  } catch (ex) {
+    console.error(`ERROR ${pageUrl}: ${ex}`);
+    await browser.close();
+    throw new Error(
+      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`
+    );
   }
 
-  await browser.close();
   const pagesUrls = await getHREFValuesDataAttribute($, linkDataElement);
 
   for (let i = 0; i < pagesUrls.length; i++) {
@@ -266,15 +277,17 @@ const checkFeedbackComponent = async (url: string) => {
   try {
     const browser2 = await puppeteer.connect({ browserWSEndpoint });
     const page = await browser2.newPage();
-    page.on("request", (e) => {
-      const res = e.response();
-      if (res !== null && !res.ok())
-        console.log(`Failed to load ${res.url()}: ${res.status()}`);
+    await page.setRequestInterception(true);
+    page.on("request", (request) => {
+      if (
+        ["image", "imageset", "media"].indexOf(request.resourceType()) !== -1
+      ) {
+        request.abort();
+      } else {
+        request.continue();
+      }
     });
-    const res = await page.goto(url, {
-      waitUntil: ["load", "networkidle0"],
-      timeout: requestTimeout,
-    });
+    const res = await gotoRetry(page, url, errorHandling.gotoRetryTentative);
     console.log(res?.url(), res?.status());
 
     returnValues = await page.evaluate(async (feedbackComponentStructure) => {
@@ -596,8 +609,12 @@ const checkFeedbackComponent = async (url: string) => {
     await page.goto("about:blank");
     await page.close();
     browser2.disconnect();
-  } catch (e) {
-    console.error(`ERROR ${url}: ${e}`);
+  } catch (ex) {
+    console.error(`ERROR ${url}: ${ex}`);
+    await browser.close();
+    throw new Error(
+      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`
+    );
   }
 
   await browser.close();

@@ -10,6 +10,7 @@ import {
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import { primaryMenuItems } from "../../storage/municipality/menuItems";
+import { errorHandling } from "../../config/commonAuditsParts";
 
 const Audit = lighthouse.Audit;
 
@@ -143,8 +144,27 @@ class LoadAudit extends Audit {
       };
     }
 
+    const pagesInError = [];
+
     for (const randomService of randomServices) {
-      $ = await loadPageData(randomService);
+      try {
+        $ = await loadPageData(randomService);
+      } catch (ex) {
+        if (!(ex instanceof Error)) {
+          throw ex;
+        }
+        let errorMessage = ex.message;
+        errorMessage = errorMessage.substring(
+          errorMessage.indexOf('"') + 1,
+          errorMessage.lastIndexOf('"')
+        );
+        pagesInError.push({
+          inspected_page: randomService,
+          component_exist: errorMessage,
+        });
+        continue;
+      }
+
       const item = {
         inspected_page: randomService,
         component_exist: "Sì",
@@ -195,17 +215,38 @@ class LoadAudit extends Audit {
     }
 
     const results = [];
-    switch (score) {
-      case 1:
+    if (pagesInError.length > 0) {
+      results.push({
+        result: errorHandling.errorMessage,
+      });
+
+      results.push({
+        result: errorHandling.errorColumnTitles[0],
+        title_component_exist: errorHandling.errorColumnTitles[1],
+        title_in_page_url: "",
+      });
+
+      for (const item of pagesInError) {
         results.push({
-          result: auditData.greenResult,
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
         });
-        break;
-      case 0:
-        results.push({
-          result: auditData.redResult,
-        });
-        break;
+      }
+    } else {
+      switch (score) {
+        case 1:
+          results.push({
+            result: auditData.greenResult,
+          });
+          break;
+        case 0:
+          results.push({
+            result: auditData.redResult,
+          });
+          break;
+      }
     }
 
     results.push({});
@@ -251,6 +292,7 @@ class LoadAudit extends Audit {
     return {
       score: score,
       details: Audit.makeTableDetails(headings, results),
+      errorMessage: pagesInError.length > 0 ? errorHandling.popupMessage : "",
     };
   }
 }

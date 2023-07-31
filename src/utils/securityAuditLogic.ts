@@ -166,10 +166,15 @@ const run = async (
     const urlNoProtocol = url.replace(/(^\w+:|^)\/\//, "");
     const browser2 = await puppeteer.connect({ browserWSEndpoint });
     const page = await browser2.newPage();
-    page.on("request", (e) => {
-      const res = e.response();
-      if (res !== null && !res.ok())
-        console.log(`Failed to load ${res.url()}: ${res.status()}`);
+    await page.setRequestInterception(true);
+    page.on("request", (request) => {
+      if (
+        ["image", "imageset", "media"].indexOf(request.resourceType()) !== -1
+      ) {
+        request.abort();
+      } else {
+        request.continue();
+      }
     });
     const res = await page.goto("http://" + urlNoProtocol, {
       waitUntil: ["load", "networkidle0"],
@@ -188,8 +193,12 @@ const run = async (
     browser2.disconnect();
 
     item[0].redirect_to_https = protocolInPage === "https:" ? "Sì" : "No";
-  } catch (e) {
-    console.error(`ERROR ${url}: ${e}`);
+  } catch (ex) {
+    console.error(`ERROR ${url}: ${ex}`);
+    await browser.close();
+    throw new Error(
+      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`
+    );
   }
 
   await browser.close();

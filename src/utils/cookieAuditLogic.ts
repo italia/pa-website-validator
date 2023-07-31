@@ -6,7 +6,8 @@ import cookie = crawlerTypes.cookie;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import puppeteer from "puppeteer";
-import { requestTimeout } from "./utils";
+import { gotoRetry } from "./utils";
+import { errorHandling } from "../config/commonAuditsParts";
 
 const run = async (
   url: string
@@ -25,15 +26,18 @@ const run = async (
     const browser2 = await puppeteer.connect({ browserWSEndpoint });
     const page = await browser2.newPage();
 
-    page.on("request", (e) => {
-      const res = e.response();
-      if (res !== null && !res.ok())
-        console.log(`Failed to load ${res.url()}: ${res.status()}`);
+    await page.setRequestInterception(true);
+    page.on("request", (request) => {
+      if (
+        ["image", "imageset", "media"].indexOf(request.resourceType()) !== -1
+      ) {
+        request.abort();
+      } else {
+        request.continue();
+      }
     });
-    const res = await page.goto(url, {
-      waitUntil: ["load", "networkidle0"],
-      timeout: requestTimeout,
-    });
+
+    const res = await gotoRetry(page, url, errorHandling.gotoRetryTentative);
     console.log(res?.url(), res?.status());
 
     cookies = await page.cookies();
@@ -41,8 +45,13 @@ const run = async (
     await page.goto("about:blank");
     await page.close();
     browser2.disconnect();
-  } catch (e) {
-    console.error(`ERROR ${url}: ${e}`);
+  } catch (ex) {
+    console.error(`ERROR ${url}: ${ex}`);
+    await browser.close();
+
+    throw new Error(
+      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`
+    );
   }
 
   await browser.close();

@@ -16,6 +16,7 @@ import { auditScanVariables } from "../../storage/municipality/auditScanVariable
 import { cssClasses } from "../../storage/municipality/cssClasses";
 import puppeteer from "puppeteer";
 import { primaryMenuItems } from "../../storage/municipality/menuItems";
+import { errorHandling } from "../../config/commonAuditsParts";
 
 const Audit = lighthouse.Audit;
 
@@ -34,7 +35,7 @@ class LoadAudit extends Audit {
       title: auditData.title,
       failureTitle: auditData.failureTitle,
       description: auditData.description,
-      scoreDisplayMode: Audit.SCORING_MODES.BINARY,
+      scoreDisplayMode: Audit.SCORING_MODES.NUMERIC,
       requiredArtifacts: ["origin"],
     };
   }
@@ -43,7 +44,7 @@ class LoadAudit extends Audit {
     artifacts: LH.Artifacts & {
       origin: string;
     }
-  ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
+  ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
 
     const titleSubHeadings = [
@@ -154,6 +155,8 @@ class LoadAudit extends Audit {
     });
     const browserWSEndpoint = browser.wsEndpoint();
 
+    const pagesInError = [];
+
     for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
       let singleResult = 0;
       const item = {
@@ -251,8 +254,21 @@ class LoadAudit extends Audit {
         await page.goto("about:blank");
         await page.close();
         browser2.disconnect();
-      } catch (e) {
-        console.error(`ERROR ${pageToBeAnalyzed}: ${e}`);
+      } catch (ex) {
+        console.error(`ERROR ${pageToBeAnalyzed}: ${ex}`);
+        if (!(ex instanceof Error)) {
+          throw ex;
+        }
+        let errorMessage = ex.message;
+        errorMessage = errorMessage.substring(
+          errorMessage.indexOf('"') + 1,
+          errorMessage.lastIndexOf('"')
+        );
+        pagesInError.push({
+          inspected_page: pageToBeAnalyzed,
+          library_name: errorMessage,
+        });
+        continue;
       }
 
       if (foundClasses.length === 0) {
@@ -273,17 +289,39 @@ class LoadAudit extends Audit {
     await browser.close();
 
     const results = [];
-    switch (score) {
-      case 1:
+    if (pagesInError.length > 0) {
+      results.push({
+        result: errorHandling.errorMessage,
+      });
+
+      results.push({
+        result: errorHandling.errorColumnTitles[0],
+        title_library_name: errorHandling.errorColumnTitles[1],
+        title_library_version: "",
+        title_classes_found: "",
+      });
+
+      for (const item of pagesInError) {
         results.push({
-          result: auditData.greenResult,
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
         });
-        break;
-      case 0:
-        results.push({
-          result: auditData.redResult,
-        });
-        break;
+      }
+    } else {
+      switch (score) {
+        case 1:
+          results.push({
+            result: auditData.greenResult,
+          });
+          break;
+        case 0:
+          results.push({
+            result: auditData.redResult,
+          });
+          break;
+      }
     }
 
     results.push({});
@@ -329,6 +367,7 @@ class LoadAudit extends Audit {
     return {
       score: score,
       details: Audit.makeTableDetails(headings, results),
+      errorMessage: pagesInError.length > 0 ? errorHandling.popupMessage : "",
     };
   }
 }

@@ -139,3 +139,15 @@ export const pwaAudits = [
   { id: "pwa-page-transitions", weight: 0, group: "pwa" },
   { id: "pwa-each-page-has-url", weight: 0, group: "pwa" },
 ];
+
+export const errorHandling = {
+  errorColumnTitles: [
+    "Pagine nelle quali si sono verificati errori:",
+    "Errori:",
+  ],
+  errorMessage:
+    "In almeno una delle pagine analizzate si sono verificati degli errori.",
+  popupMessage:
+    "Si sono verificati degli errori. Controlla la tabella sottostante per maggiori dettagli.",
+  gotoRetryTentative: 3,
+};

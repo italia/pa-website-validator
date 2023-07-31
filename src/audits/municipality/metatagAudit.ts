@@ -13,6 +13,7 @@ import * as jsonschema from "jsonschema";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import { primaryMenuItems } from "../../storage/municipality/menuItems";
+import { errorHandling } from "../../config/commonAuditsParts";
 
 const Audit = lighthouse.Audit;
 
@@ -40,7 +41,7 @@ class LoadAudit extends Audit {
 
   static async audit(
     artifacts: LH.Artifacts & { origin: string }
-  ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
+  ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
 
     const titleSubHeadings = ["JSON valido", "Metatag non presenti o errati"];
@@ -98,6 +99,9 @@ class LoadAudit extends Audit {
 
     let score = 1;
 
+    const pagesInError = [];
+    let $: CheerioAPI = await loadPageData(url);
+
     for (const randomService of randomServices) {
       const item = {
         inspected_page: randomService,
@@ -105,7 +109,25 @@ class LoadAudit extends Audit {
         missing_keys: "",
       };
 
-      const $: CheerioAPI = await loadPageData(randomService);
+      try {
+        $ = await loadPageData(randomService);
+      } catch (ex) {
+        if (!(ex instanceof Error)) {
+          throw ex;
+        }
+
+        let errorMessage = ex.message;
+        errorMessage = errorMessage.substring(
+          errorMessage.indexOf('"') + 1,
+          errorMessage.lastIndexOf('"')
+        );
+
+        pagesInError.push({
+          inspected_page: randomService,
+          in_index: errorMessage,
+        });
+        continue;
+      }
       const metatagElement = $('[data-element="metatag"]');
       const metatagJSON = metatagElement.html() ?? "";
 
@@ -165,24 +187,44 @@ class LoadAudit extends Audit {
     }
 
     const results = [];
-    switch (score) {
-      case 1:
-        results.push({
-          result: auditData.greenResult,
-        });
-        break;
-      case 0.5:
-        results.push({
-          result: auditData.yellowResult,
-        });
-        break;
-      case 0:
-        results.push({
-          result: auditData.redResult,
-        });
-        break;
-    }
+    if (pagesInError.length > 0) {
+      results.push({
+        result: errorHandling.errorMessage,
+      });
 
+      results.push({
+        result: errorHandling.errorColumnTitles[0],
+        title_valid_json: errorHandling.errorColumnTitles[1],
+        title_missing_keys: "",
+      });
+
+      for (const item of pagesInError) {
+        results.push({
+          subItems: {
+            type: "subitems",
+            items: [item],
+          },
+        });
+      }
+    } else {
+      switch (score) {
+        case 1:
+          results.push({
+            result: auditData.greenResult,
+          });
+          break;
+        case 0.5:
+          results.push({
+            result: auditData.yellowResult,
+          });
+          break;
+        case 0:
+          results.push({
+            result: auditData.redResult,
+          });
+          break;
+      }
+    }
     results.push({});
 
     if (wrongItems.length > 0) {
@@ -245,6 +287,7 @@ class LoadAudit extends Audit {
     return {
       score: score,
       details: Audit.makeTableDetails(headings, results),
+      errorMessage: pagesInError.length > 0 ? errorHandling.popupMessage : "",
     };
   }
 }
