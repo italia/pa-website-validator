@@ -136,11 +136,8 @@ const additionalTestsAudit = [
 export default {
   extends: "lighthouse:default",
   settings: {
-    onlyCategories: [
-      "performance",
-      "modelComplianceInformation",
-      "reccomandationsAndAdditionalTests",
-      "additionalTests",
+    onlyAudits: [
+      "municipality-second-level-pages"
     ],
   },
 
