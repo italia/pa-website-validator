@@ -8,7 +8,7 @@ import { auditDictionary } from "../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
 
-import { requestTimeout } from "../../utils/utils";
+import { gotoRetry } from "../../utils/utils";
 import {
   getRandomFirstLevelPagesUrl,
   getRandomSecondLevelPagesUrl,
@@ -160,10 +160,11 @@ class LoadAudit extends Audit {
           }
         });
 
-        const res = await page.goto(pageToBeAnalyzed, {
-          waitUntil: ["load", "networkidle0"],
-          timeout: requestTimeout,
-        });
+        const res = await gotoRetry(
+          page,
+          pageToBeAnalyzed,
+          errorHandling.gotoRetryTentative
+        );
         console.log(res?.url(), res?.status());
 
         let bootstrapItaliaVariableVersion = await page.evaluate(
@@ -237,15 +238,9 @@ class LoadAudit extends Audit {
           throw ex;
         }
 
-        let errorMessage = ex.message;
-        errorMessage = errorMessage.substring(
-          errorMessage.indexOf('"') + 1,
-          errorMessage.lastIndexOf('"')
-        );
-
         pagesInError.push({
           inspected_page: pageToBeAnalyzed,
-          library_name: errorMessage,
+          library_name: ex.message,
         });
         continue;
       }

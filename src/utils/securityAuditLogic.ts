@@ -11,7 +11,8 @@ import crawlerTypes from "../types/crawler-types";
 import cipher = crawlerTypes.cipher;
 import cipherInfo = crawlerTypes.cipherInfo;
 import puppeteer from "puppeteer";
-import { requestTimeout } from "./utils";
+import { gotoRetry } from "./utils";
+import { errorHandling } from "../config/commonAuditsParts";
 
 const Audit = lighthouse.Audit;
 const allowedTlsVersions = ["TLSv1.2", "TLSv1.3"];
@@ -176,10 +177,12 @@ const run = async (
         request.continue();
       }
     });
-    const res = await page.goto("http://" + urlNoProtocol, {
-      waitUntil: ["load", "networkidle0"],
-      timeout: requestTimeout,
-    });
+
+    const res = await gotoRetry(
+      page,
+      "http://" + urlNoProtocol,
+      errorHandling.gotoRetryTentative
+    );
     console.log(res?.url(), res?.status());
 
     const protocolInPage = await page.evaluate(async function () {

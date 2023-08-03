@@ -14,7 +14,6 @@ import {
   gotoRetry,
   isInternalUrl,
   loadPageData,
-  requestTimeout,
 } from "../utils";
 import { feedbackComponentStructure } from "../../storage/municipality/feedbackComponentStructure";
 import { errorHandling } from "../../config/commonAuditsParts";
@@ -174,10 +173,12 @@ const getRandomThirdLevelPagesUrl = async (
         request.continue();
       }
     });
-    const res = await page.goto(pageUrl, {
-      waitUntil: ["load", "networkidle0"],
-      timeout: requestTimeout,
-    });
+
+    const res = await gotoRetry(
+      page,
+      pageUrl,
+      errorHandling.gotoRetryTentative
+    );
     console.log(res?.url(), res?.status());
 
     let maxCountPages = (await page.$$(linkDataElement)).length;

@@ -9,7 +9,7 @@ import {
   getRandomThirdLevelPagesUrl,
   getPrimaryPageUrl,
 } from "../../utils/municipality/utils";
-import { requestTimeout } from "../../utils/utils";
+import { gotoRetry } from "../../utils/utils";
 import puppeteer from "puppeteer";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
@@ -155,10 +155,11 @@ class LoadAudit extends Audit {
           }
         });
 
-        const res = await page.goto(pageToBeAnalyzed, {
-          waitUntil: ["load", "networkidle0"],
-          timeout: requestTimeout,
-        });
+        const res = await gotoRetry(
+          page,
+          pageToBeAnalyzed,
+          errorHandling.gotoRetryTentative
+        );
         console.log(res?.url(), res?.status());
 
         const badElements: Array<BadElement> = await page.evaluate(
@@ -249,15 +250,9 @@ class LoadAudit extends Audit {
           throw ex;
         }
 
-        let errorMessage = ex.message;
-        errorMessage = errorMessage.substring(
-          errorMessage.indexOf('"') + 1,
-          errorMessage.lastIndexOf('"')
-        );
-
         pagesInError.push({
           inspected_page: pageToBeAnalyzed,
-          wrong_fonts: errorMessage,
+          wrong_fonts: ex.message,
         });
       }
     }
