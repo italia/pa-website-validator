@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.6.0](https://github.com/italia/pa-website-validator/compare/v2.5.1...v2.6.0) (2023-08-04)
+
+
+### Features
+
+* add request interception for media requests ([d5d0c1f](https://github.com/italia/pa-website-validator/commit/d5d0c1f561b898c886a7e8e8e846a4cc4a13f3cf))
+* add timeout error handling and goto retry tentative ([deeee0f](https://github.com/italia/pa-website-validator/commit/deeee0fcf73b68ead928bd2633fbd0ef5b123c7a))
+
+
+### Bug Fixes
+
+* change audience.name in audience.audienceType ([1dffa8b](https://github.com/italia/pa-website-validator/commit/1dffa8b969b663f002c185c71418eb470b67cb8a))
+* error message for audit with page.goto ([71910b4](https://github.com/italia/pa-website-validator/commit/71910b4db89bcfa908815fddb9ad3e5161b67498))
+* Update allowedDomains.ts ([422acdb](https://github.com/italia/pa-website-validator/commit/422acdbac13a48e145b71bc8e8fc53a4fdf55731))
+
 ## [2.5.1](https://github.com/italia/pa-website-validator/compare/v2.5.0...v2.5.1) (2023-07-11)
 
 
