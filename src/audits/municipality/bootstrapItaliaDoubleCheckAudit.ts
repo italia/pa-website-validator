@@ -50,7 +50,7 @@ class LoadAudit extends Audit {
     const titleSubHeadings = [
       "La libreria Bootstrap Italia è presente",
       "Versione in uso",
-      "Classi CSS trovate",
+      "Classi CSS uniche appartenenti a BI",
     ];
 
     const subResults = ["Nessuna classe CSS trovata"];

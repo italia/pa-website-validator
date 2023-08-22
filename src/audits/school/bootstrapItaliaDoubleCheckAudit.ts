@@ -18,7 +18,6 @@ import { auditScanVariables } from "../../storage/school/auditScanVariables";
 import { cssClasses } from "../../storage/school/cssClasses";
 import puppeteer from "puppeteer";
 import { errorHandling } from "../../config/commonAuditsParts";
-import * as fs from "fs";
 
 const auditId = "school-ux-ui-consistency-bootstrap-italia-double-check";
 const auditData = auditDictionary[auditId];
@@ -50,10 +49,10 @@ class LoadAudit extends Audit {
     const titleSubHeadings = [
       "La libreria Bootstrap Italia è presente",
       "Versione in uso",
-      "Classi CSS trovate",
+      "Classi CSS uniche appartenenti a BI",
     ];
 
-    const subResults = ["Nessuna", "Almeno una"];
+    const subResults = ["Nessuna classe CSS trovata"];
 
     const headings = [
       {
@@ -238,28 +237,6 @@ class LoadAudit extends Audit {
           const bootstrapClasses = foundClasses.filter((value) =>
             cssClasses.includes(value)
           );
-
-          const notBootstrapClasses = foundClasses.filter((value) =>
-              !cssClasses.includes(value)
-          );
-
-          const data = {
-            'bootstrap': bootstrapClasses,
-            'not_bootstrap': notBootstrapClasses
-          };
-
-          fs.writeFile("data.json", JSON.stringify(data), (error) => {
-            // throwing the error
-            // in case of a writing problem
-            if (error) {
-              // logging the error
-              console.error(error);
-
-              throw error;
-            }
-
-            console.log("data.json written correctly");
-          });
 
           const percentage =
             (bootstrapClasses.length / foundClasses.length) * 100;
