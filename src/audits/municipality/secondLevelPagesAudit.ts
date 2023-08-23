@@ -183,11 +183,12 @@ class LoadAudit extends lighthouse.Audit {
       ) {
         customSecondLevelPageUrl = await buildUrl(
           url,
-          customSecondLevelPageHref[0]
+          customSecondLevelPageUrl
         );
       }
 
       $ = await loadPageData(customSecondLevelPageUrl);
+
       const customSecondaryMenuDataElement = `[data-element="${customSecondaryMenuItemsDataElement}"]`;
       const customSecondLevelPagesNames = await getPageElementDataAttribute(
         $,
