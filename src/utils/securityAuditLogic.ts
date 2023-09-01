@@ -11,7 +11,7 @@ import crawlerTypes from "../types/crawler-types";
 import cipher = crawlerTypes.cipher;
 import cipherInfo = crawlerTypes.cipherInfo;
 import puppeteer from "puppeteer";
-import { gotoRetry } from "./utils";
+import { gotoRetry, requestTimeout } from "./utils";
 import { errorHandling } from "../config/commonAuditsParts";
 
 const Audit = lighthouse.Audit;
@@ -160,6 +160,7 @@ const run = async (
 
   const browser = await puppeteer.launch({
     headless: "new",
+    protocolTimeout: requestTimeout,
     args: ["--no-zygote", "--no-sandbox"],
   });
   const browserWSEndpoint = browser.wsEndpoint();

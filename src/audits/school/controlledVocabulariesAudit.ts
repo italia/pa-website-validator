@@ -8,6 +8,7 @@ import {
   getPageElementDataAttribute,
   areAllElementsInVocabulary,
   gotoRetry,
+  requestTimeout,
 } from "../../utils/utils";
 import puppeteer from "puppeteer";
 import * as cheerio from "cheerio";
@@ -116,6 +117,7 @@ async function getArgumentsElements(url: string): Promise<string[]> {
   let elements: string[] = [];
   const browser = await puppeteer.launch({
     headless: "new",
+    protocolTimeout: requestTimeout,
     args: ["--no-zygote", "--no-sandbox"],
   });
   const browserWSEndpoint = browser.wsEndpoint();

@@ -6,7 +6,7 @@ import cookie = crawlerTypes.cookie;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import puppeteer from "puppeteer";
-import { gotoRetry } from "./utils";
+import { gotoRetry, requestTimeout } from "./utils";
 import { errorHandling } from "../config/commonAuditsParts";
 
 const run = async (
@@ -19,6 +19,7 @@ const run = async (
 
   const browser = await puppeteer.launch({
     headless: "new",
+    protocolTimeout: requestTimeout,
     args: ["--no-zygote", "--no-sandbox"],
   });
   const browserWSEndpoint = browser.wsEndpoint();

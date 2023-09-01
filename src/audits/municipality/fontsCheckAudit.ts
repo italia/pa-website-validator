@@ -9,7 +9,7 @@ import {
   getRandomThirdLevelPagesUrl,
   getPrimaryPageUrl,
 } from "../../utils/municipality/utils";
-import { gotoRetry } from "../../utils/utils";
+import { gotoRetry, requestTimeout } from "../../utils/utils";
 import puppeteer from "puppeteer";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
@@ -128,6 +128,7 @@ class LoadAudit extends Audit {
 
     const browser = await puppeteer.launch({
       headless: "new",
+      protocolTimeout: requestTimeout,
       args: ["--no-zygote", "--no-sandbox"],
     });
     const browserWSEndpoint = browser.wsEndpoint();

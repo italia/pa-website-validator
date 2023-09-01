@@ -14,6 +14,7 @@ import {
   gotoRetry,
   isInternalUrl,
   loadPageData,
+  requestTimeout,
 } from "../utils";
 import { feedbackComponentStructure } from "../../storage/municipality/feedbackComponentStructure";
 import { errorHandling } from "../../config/commonAuditsParts";
@@ -157,6 +158,7 @@ const getRandomThirdLevelPagesUrl = async (
 
   const browser = await puppeteer.launch({
     headless: "new",
+    protocolTimeout: requestTimeout,
     args: ["--no-zygote", "--no-sandbox"],
   });
   const browserWSEndpoint = browser.wsEndpoint();
@@ -271,6 +273,7 @@ const checkFeedbackComponent = async (url: string) => {
   };
   const browser = await puppeteer.launch({
     headless: "new",
+    protocolTimeout: requestTimeout,
     args: ["--no-zygote", "--no-sandbox"],
   });
   const browserWSEndpoint = browser.wsEndpoint();
