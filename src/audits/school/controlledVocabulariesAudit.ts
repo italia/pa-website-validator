@@ -160,7 +160,7 @@ async function getArgumentsElements(url: string): Promise<string[]> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await button?.evaluate((b: any) => b.click());
 
-    await page.waitForNavigation();
+    await page.waitForSelector('[data-element="all-topics"]');
 
     const $ = cheerio.load(await page.content());
     if ($.length <= 0) {
