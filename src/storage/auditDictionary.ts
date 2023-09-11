@@ -60,16 +60,16 @@ export const auditDictionary = {
   },
   "municipality-ux-ui-consistency-bootstrap-italia-double-check": {
     greenResult:
-      "In tutte le pagine analizzate la libreria Bootstrap Italia è presente e in uso in una versione idonea.",
+      "In tutte le pagine analizzate la libreria Bootstrap Italia è presente in una versione idonea ed è in uso come richiesto.",
     yellowResult: "",
     redResult:
-      "In almeno una delle pagine analizzate la libreria Bootstrap Italia non è presente, o non è in uso o ne viene utilizzata una versione datata.",
+      "In almeno una delle pagine analizzate la libreria Bootstrap Italia non è presente, o non è in uso come richiesto o ne viene utilizzata una versione datata.",
     subItem: {
       greenResult:
-        "Pagine che utilizzano la libreria Bootstrap Italia in una versione idonea e utilizzano almeno una delle classi CSS indicate: ",
+        "Pagine che utilizzano la libreria in una versione idonea e nelle quali almeno il 50% delle classi CSS uniche appartiene a Bootstrap Italia:",
       yellowResult: "",
       redResult:
-        "Pagine che non utilizzano la libreria Bootstrap Italia in una versione idonea o non utilizzano nessuna delle classi CSS indicate: ",
+        "Pagine che non utilizzano la libreria in una versione idonea o nelle quali meno del 50% delle classi CSS uniche appartiene a Bootstrap Italia:",
     },
     nonExecuted:
       "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
@@ -78,7 +78,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.1.2 - LIBRERIA DI ELEMENTI DI INTERFACCIA - Il sito comunale deve utilizzare la libreria Bootstrap Italia.",
     description:
-      "CONDIZIONI DI SUCCESSO: la libreria Bootstrap Italia è presente e in uso in una versione uguale o superiore alla 2.0; MODALITÀ DI VERIFICA: in ogni pagina analizzata viene verificata la presenza della libreria Bootstrap Italia e la versione in uso, individuando la proprietà CSS --bootstrap-italia-version all’interno del selettore :root o la variabile globale window.BOOTSTRAP_ITALIA_VERSION. Inoltre deve utilizzare almeno una tra le classi CSS di Bootstrap Italia indicate nella Documentazione dell'App di valutazione; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/).",
+      "CONDIZIONI DI SUCCESSO: almeno il 50% delle classi CSS usate in ogni pagina appartiene alla libreria Bootstrap Italia e questa è presente e in uso in una versione uguale o superiore alla 2.0; MODALITÀ DI VERIFICA: in ogni pagina analizzata viene verificata la presenza della libreria Bootstrap Italia e la versione in uso, individuando la proprietà CSS --bootstrap-italia-version all’interno del selettore :root o la variabile globale window.BOOTSTRAP_ITALIA_VERSION. Inoltre almeno il 50% delle classi CSS uniche trovate nella pagina deve appartenere all'elenco delle classi CSS di Bootstrap Italia; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/it/versione-corrente/index.html), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
   },
   "municipality-contacts-assistency": {
     greenResult:

@@ -50,10 +50,10 @@ class LoadAudit extends Audit {
     const titleSubHeadings = [
       "La libreria Bootstrap Italia è presente",
       "Versione in uso",
-      "Classi CSS trovate",
+      "Classi CSS uniche appartenenti a BI",
     ];
 
-    const subResults = ["Nessuna", "Almeno una"];
+    const subResults = ["Nessuna classe CSS trovata"];
 
     const headings = [
       {
@@ -166,7 +166,6 @@ class LoadAudit extends Audit {
         classes_found: "",
       };
 
-      const foundClasses = [];
       try {
         const browser2 = await puppeteer.connect({ browserWSEndpoint });
         const page = await browser2.newPage();
@@ -241,14 +240,33 @@ class LoadAudit extends Audit {
           }
         }
 
-        for (const cssClass of cssClasses) {
-          const elementCount = await page.evaluate(async (cssClass) => {
-            const cssElements = document.querySelectorAll(`.${cssClass}`);
-            return cssElements.length;
-          }, cssClass);
+        const foundClasses = await page.evaluate(async () => {
+          const used = new Set<string>();
+          const elements = document.getElementsByTagName("*");
+          for (const element of elements) {
+            const elementClasses = element.getAttribute("class") ?? "";
+            for (const cssClass of elementClasses.split(" ")) {
+              if (cssClass) {
+                used.add(cssClass);
+              }
+            }
+          }
+          return [...used];
+        });
 
-          if (elementCount > 0) {
-            foundClasses.push(cssClass);
+        if (foundClasses.length === 0) {
+          singleResult = 0;
+          item.classes_found = subResults[0];
+        } else {
+          const bootstrapClasses = foundClasses.filter((value) =>
+            cssClasses.includes(value)
+          );
+
+          const percentage =
+            (bootstrapClasses.length / foundClasses.length) * 100;
+          item.classes_found = Math.round(percentage) + "%";
+          if (percentage < 50) {
+            singleResult = 0;
           }
         }
 
@@ -266,13 +284,6 @@ class LoadAudit extends Audit {
           library_name: ex.message,
         });
         continue;
-      }
-
-      if (foundClasses.length === 0) {
-        singleResult = 0;
-        item.classes_found = subResults[0];
-      } else {
-        item.classes_found = subResults[1];
       }
 
       if (singleResult === 1) {
