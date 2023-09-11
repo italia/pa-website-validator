@@ -8,7 +8,7 @@ import { auditDictionary } from "../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
 
-import { gotoRetry } from "../../utils/utils";
+import { gotoRetry, requestTimeout } from "../../utils/utils";
 import {
   getRandomFirstLevelPagesUrl,
   getRandomSecondLevelPagesUrl,
@@ -128,6 +128,7 @@ class LoadAudit extends Audit {
 
     const browser = await puppeteer.launch({
       headless: "new",
+      protocolTimeout: requestTimeout,
       args: ["--no-zygote", "--no-sandbox"],
     });
     const browserWSEndpoint = browser.wsEndpoint();

@@ -33,13 +33,14 @@ const run = async (
   reportName: string,
   view = false,
   accuracy = "suggested",
-  requestTimeout = 20000
+  requestTimeout = 30000
 ) => {
   process.env["accuracy"] = accuracy;
   process.env["requestTimeout"] = requestTimeout.toString();
   //L'oggetto chrome non è incluso nel try-catch in modo tale che la sua istanza venga killata anche in caso di eccezione lanciata da altri processi
   const browser = await puppeteer.launch({
     args: ["--no-sandbox"],
+    protocolTimeout: requestTimeout,
     headless: "new",
   });
 

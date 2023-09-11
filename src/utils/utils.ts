@@ -21,6 +21,7 @@ const loadPageData = async (url: string): Promise<CheerioAPI> => {
   let data = "";
   const browser = await puppeteer.launch({
     headless: "new",
+    protocolTimeout: requestTimeout,
     args: ["--no-zygote", "--no-sandbox"],
   });
   const browserWSEndpoint = browser.wsEndpoint();
