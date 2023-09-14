@@ -26,7 +26,11 @@ import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import { primaryMenuItems } from "../../storage/municipality/menuItems";
 import { convert } from "html-to-text";
-import { errorHandling } from "../../config/commonAuditsParts";
+import {
+  errorHandling,
+  errorNotEnoughServices,
+  minNumberOfServices,
+} from "../../config/commonAuditsParts";
 
 const Audit = lighthouse.Audit;
 
@@ -273,22 +277,29 @@ class LoadAudit extends Audit {
         });
       }
     } else {
-      switch (score) {
-        case 1:
-          results.push({
-            result: auditData.greenResult,
-          });
-          break;
-        case 0.5:
-          results.push({
-            result: auditData.yellowResult,
-          });
-          break;
-        case 0:
-          results.push({
-            result: auditData.redResult,
-          });
-          break;
+      if (randomServices.length < minNumberOfServices) {
+        results.push({
+          result: errorNotEnoughServices,
+        });
+        score = 0;
+      } else {
+        switch (score) {
+          case 1:
+            results.push({
+              result: auditData.greenResult,
+            });
+            break;
+          case 0.5:
+            results.push({
+              result: auditData.yellowResult,
+            });
+            break;
+          case 0:
+            results.push({
+              result: auditData.redResult,
+            });
+            break;
+        }
       }
     }
 

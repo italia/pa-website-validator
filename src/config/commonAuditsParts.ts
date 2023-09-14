@@ -151,3 +151,7 @@ export const errorHandling = {
     "Si sono verificati degli errori. Controlla la tabella sottostante per maggiori dettagli.",
   gotoRetryTentative: 3,
 };
+
+export const errorNotEnoughServices =
+  "Impossibile eseguire l'audit in quanto non stati individuati almeno 10 servizi";
+export const minNumberOfServices = 10;
