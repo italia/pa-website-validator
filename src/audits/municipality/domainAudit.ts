@@ -8,10 +8,11 @@ import { urlExists } from "../../utils/utils";
 import {
   getPrimaryPageUrl,
   getRandomFirstLevelPagesUrl,
-  getRandomSecondLevelPagesUrl, getRandomThirdLevelPagesUrl
+  getRandomSecondLevelPagesUrl,
+  getRandomThirdLevelPagesUrl,
 } from "../../utils/municipality/utils";
-import {primaryMenuItems} from "../../storage/municipality/menuItems";
-import {auditScanVariables} from "../../storage/municipality/auditScanVariables";
+import { primaryMenuItems } from "../../storage/municipality/menuItems";
+import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 
 const Audit = lighthouse.Audit;
 
@@ -82,36 +83,36 @@ class LoadAudit extends Audit {
     ];
 
     const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
-        url,
-        auditVariables.numberOfFirstLevelPageToBeScanned
+      url,
+      auditVariables.numberOfFirstLevelPageToBeScanned
     );
 
     const randomSecondLevelPagesUrl = await getRandomSecondLevelPagesUrl(
-        url,
-        auditVariables.numberOfSecondLevelPageToBeScanned
+      url,
+      auditVariables.numberOfSecondLevelPageToBeScanned
     );
 
     const randomServicesUrl = await getRandomThirdLevelPagesUrl(
-        url,
-        await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
-        `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
-        auditVariables.numberOfServicesToBeScanned
+      url,
+      await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
+      `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
+      auditVariables.numberOfServicesToBeScanned
     );
 
     if (
-        randomFirstLevelPagesUrl.length === 0 ||
-        randomSecondLevelPagesUrl.length === 0 ||
-        randomServicesUrl.length === 0
+      randomFirstLevelPagesUrl.length === 0 ||
+      randomSecondLevelPagesUrl.length === 0 ||
+      randomServicesUrl.length === 0
     ) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
-            [{ key: "result", itemType: "text", text: "Risultato" }],
-            [
-              {
-                result: auditData.nonExecuted,
-              },
-            ]
+          [{ key: "result", itemType: "text", text: "Risultato" }],
+          [
+            {
+              result: auditData.nonExecuted,
+            },
+          ]
         ),
       };
     }
