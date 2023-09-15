@@ -138,6 +138,8 @@ class LoadAudit extends Audit {
         result: errorHandling.errorMessage,
       });
 
+      results.push({});
+
       results.push({
         result: errorHandling.errorColumnTitles[0],
         title_errors_found: errorHandling.errorColumnTitles[1],

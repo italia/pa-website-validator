@@ -265,6 +265,8 @@ class LoadAudit extends Audit {
         result: errorHandling.errorMessage,
       });
 
+      results.push({});
+
       results.push({
         result: errorHandling.errorColumnTitles[0],
         title_wrong_number_elements: errorHandling.errorColumnTitles[1],
