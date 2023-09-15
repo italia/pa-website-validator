@@ -145,7 +145,8 @@ class LoadAudit extends Audit {
         );
         pagesInError.push({
           inspected_page: randomService,
-          wrong_order_elements: errorMessage,
+          wrong_order_elements: "",
+          missing_elements: errorMessage,
         });
         continue;
       }
