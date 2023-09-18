@@ -37,37 +37,57 @@ class LoadAudit extends lighthouse.Audit {
 
   static async audit(
     artifacts: LH.Artifacts & { origin: string }
-  ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
+  ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
 
     let score = 0;
+
     const headings = [
-      { key: "result", itemType: "text", text: "Risultato" },
+      {
+        key: "result",
+        itemType: "text",
+        text: "Risultato",
+        subItemsHeading: {
+          key: "menu_voice",
+          itemType: "text",
+        },
+      },
       {
         key: "found_menu_voices",
         itemType: "text",
         text: "Voci del menù identificate",
+        subItemsHeading: {
+          key: "inspected_page",
+          itemType: "url",
+        },
       },
       {
         key: "missing_menu_voices",
         itemType: "text",
         text: "Voci del menù mancanti",
+        subItemsHeading: {
+          key: "correct_associated_page",
+          itemType: "text",
+        },
       },
       {
         key: "wrong_order_menu_voices",
         itemType: "text",
         text: "Voci del menù in ordine errato",
+        subItemsHeading: {
+          key: "external",
+          itemType: "text",
+        },
       },
     ];
 
-    const items = [
-      {
-        result: redResult,
-        found_menu_voices: "",
-        missing_menu_voices: "",
-        wrong_order_menu_voices: "",
-      },
-    ];
+    const results = [];
+    results.push({
+      result: redResult,
+      found_menu_voices: "",
+      missing_menu_voices: "",
+      wrong_order_menu_voices: "",
+    });
 
     const $: CheerioAPI = await loadPageData(url);
 
@@ -77,7 +97,7 @@ class LoadAudit extends lighthouse.Audit {
       "> li > a"
     );
 
-    items[0].found_menu_voices = foundMenuElements.join(", ");
+    results[0].found_menu_voices = foundMenuElements.join(", ");
 
     const menuItem: MenuItem[] = [];
 
@@ -92,10 +112,10 @@ class LoadAudit extends lighthouse.Audit {
       foundMenuElements,
       menuItem
     );
-    items[0].missing_menu_voices = missingMandatoryElements.join(", ");
+    results[0].missing_menu_voices = missingMandatoryElements.join(", ");
 
     const orderResult = checkOrder(menuItem, foundMenuElements);
-    items[0].wrong_order_menu_voices =
+    results[0].wrong_order_menu_voices =
       orderResult.elementsNotInSequence.join(", ");
 
     const containsMandatoryElementsResult =
@@ -107,7 +127,7 @@ class LoadAudit extends lighthouse.Audit {
       orderResult.numberOfElementsNotInSequence === 0
     ) {
       score = 1;
-      items[0].result = greenResult;
+      results[0].result = greenResult;
     } else if (
       foundMenuElements.length > 4 &&
       foundMenuElements.length < 8 &&
@@ -115,12 +135,35 @@ class LoadAudit extends lighthouse.Audit {
       orderResult.numberOfElementsNotInSequence === 0
     ) {
       score = 0.5;
-      items[0].result = yellowResult;
+      results[0].result = yellowResult;
     }
+
+    results.push({});
+
+    results.push({
+      result: "Voce di menù",
+      found_menu_voices: "Link trovato",
+      missing_menu_voices: "Pagina associata corretta",
+      wrong_order_menu_voices: "Pagina esterna",
+    });
+
+    results.push({
+      subItems: {
+        type: "subitems",
+        items: [
+          {
+            menu_voice: "Amministrazione",
+            inspected_page: "www.google.com",
+            correct_associated_page: "No",
+            external: "Sì",
+          },
+        ],
+      },
+    });
 
     return {
       score: score,
-      details: Audit.makeTableDetails(headings, items),
+      details: Audit.makeTableDetails(headings, results),
     };
   }
 }

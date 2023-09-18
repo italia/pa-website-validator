@@ -22,13 +22,29 @@ import { errorHandling } from "../../config/commonAuditsParts";
 import { DataElementError } from "../DataElementError";
 import crawlerTypes from "../../types/crawler-types";
 import requestPages = crawlerTypes.requestPages;
+import pageLink = crawlerTypes.pageLink;
 
 const getRandomFirstLevelPagesUrl = async (
   url: string,
   numberOfPages = 1
 ): Promise<string[]> => {
+  const pagesUrls: string[] = [];
+
+  const pages = await getRandomFirstLevelPages(url, true);
+
+  for (const page of pages) {
+    pagesUrls.push(page.linkUrl);
+  }
+
+  return getRandomNString(pagesUrls, numberOfPages);
+};
+
+const getRandomFirstLevelPages = async (
+  url: string,
+  custom: boolean
+): Promise<pageLink[]> => {
   const $ = await loadPageData(url);
-  let pagesUrls: string[] = [];
+  let pagesUrls: pageLink[] = [];
 
   const menuDataElements = [];
 
@@ -36,7 +52,9 @@ const getRandomFirstLevelPagesUrl = async (
     menuDataElements.push(value.data_element);
   }
 
-  menuDataElements.push(customPrimaryMenuItemsDataElement);
+  if (custom) {
+    menuDataElements.push(customPrimaryMenuItemsDataElement);
+  }
 
   for (const value of menuDataElements) {
     const dataElement = `[data-element="${value}"]`;
@@ -57,7 +75,10 @@ const getRandomFirstLevelPagesUrl = async (
         ) {
           primaryLevelPageUrl = await buildUrl(url, primaryLevelPageUrl);
         }
-        primaryLevelPageUrls.push(primaryLevelPageUrl);
+        primaryLevelPageUrls.push({
+          linkName: $(element).text().trim() ?? null,
+          linkUrl: primaryLevelPageUrl,
+        });
       }
     }
 
@@ -71,7 +92,7 @@ const getRandomFirstLevelPagesUrl = async (
     pagesUrls = [...pagesUrls, ...new Set(primaryLevelPageUrls)];
   }
 
-  return getRandomNString(pagesUrls, numberOfPages);
+  return pagesUrls;
 };
 
 const getRandomSecondLevelPagesUrl = async (
