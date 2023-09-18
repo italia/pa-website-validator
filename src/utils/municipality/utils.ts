@@ -12,6 +12,7 @@ import {
   getHREFValuesDataAttribute,
   getRandomNString,
   gotoRetry,
+  isInternalRedirectUrl,
   isInternalUrl,
   loadPageData,
   requestTimeout,
@@ -674,7 +675,8 @@ const getButtonUrl = async (
 
 const getPages = async (
   url: string,
-  requests: requestPages[]
+  requests: requestPages[],
+  removeExternal = true
 ): Promise<string[]> => {
   let pagesUrl: string[] = [];
   const missingDataElements: string[] = [];
@@ -795,6 +797,17 @@ const getPages = async (
 
   if (missingDataElements.length > 0) {
     throw new DataElementError(missingDataElements.join(", "));
+  }
+
+  if (removeExternal) {
+    const internalPages: string[] = [];
+    for (const pageUrl of pagesUrl) {
+      if (await isInternalRedirectUrl(url, pageUrl)) {
+        internalPages.push(pageUrl);
+      }
+    }
+
+    return internalPages;
   }
 
   return pagesUrl;

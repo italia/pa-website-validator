@@ -87,12 +87,16 @@ class LoadAudit extends Audit {
             numberOfPages: auditVariables.numberOfFirstLevelPageToBeScanned,
           },
           {
-            type: "second_level_pages",
-            numberOfPages: auditVariables.numberOfSecondLevelPageToBeScanned,
-          },
-          {
             type: "services",
             numberOfPages: auditVariables.numberOfServicesToBeScanned,
+          },
+          {
+            type: "events",
+            numberOfPages: auditVariables.numberOfEventsToBeScanned,
+          },
+          {
+            type: "booking_appointment",
+            numberOfPages: 1,
           },
           {
             type: "personal_area_login",
