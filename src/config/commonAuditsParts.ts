@@ -143,7 +143,7 @@ export const pwaAudits = [
 export const errorHandling = {
   errorColumnTitles: [
     "Pagine nelle quali si sono verificati errori:",
-    "Errori:",
+    "Errori",
   ],
   errorMessage:
     "In almeno una delle pagine analizzate si sono verificati degli errori.",
@@ -151,3 +151,5 @@ export const errorHandling = {
     "Si sono verificati degli errori. Controlla la tabella sottostante per maggiori dettagli.",
   gotoRetryTentative: 3,
 };
+
+export const minNumberOfServices = 10;

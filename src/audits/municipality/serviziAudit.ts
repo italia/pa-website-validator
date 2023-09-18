@@ -22,7 +22,10 @@ import {
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import { convert } from "html-to-text";
-import { errorHandling } from "../../config/commonAuditsParts";
+import {
+  errorHandling,
+  minNumberOfServices,
+} from "../../config/commonAuditsParts";
 import { DataElementError } from "../../utils/DataElementError";
 
 const Audit = lighthouse.Audit;
@@ -144,7 +147,8 @@ class LoadAudit extends Audit {
         );
         pagesInError.push({
           inspected_page: pageToBeAnalyzed,
-          wrong_order_elements: errorMessage,
+          wrong_order_elements: "",
+          missing_elements: errorMessage,
         });
         continue;
       }
@@ -255,10 +259,34 @@ class LoadAudit extends Audit {
     }
 
     const results = [];
+    if (pagesToBeAnalyzed.length < minNumberOfServices) {
+      score = 0;
+    }
+
+    switch (score) {
+      case 1:
+        results.push({
+          result: auditData.greenResult,
+        });
+        break;
+      case 0.5:
+        results.push({
+          result: auditData.yellowResult,
+        });
+        break;
+      case 0:
+        results.push({
+          result: auditData.redResult,
+        });
+        break;
+    }
+
     if (pagesInError.length > 0) {
       results.push({
         result: errorHandling.errorMessage,
       });
+
+      results.push({});
 
       results.push({
         result: errorHandling.errorColumnTitles[0],
@@ -273,24 +301,6 @@ class LoadAudit extends Audit {
             items: [item],
           },
         });
-      }
-    } else {
-      switch (score) {
-        case 1:
-          results.push({
-            result: auditData.greenResult,
-          });
-          break;
-        case 0.5:
-          results.push({
-            result: auditData.yellowResult,
-          });
-          break;
-        case 0:
-          results.push({
-            result: auditData.redResult,
-          });
-          break;
       }
     }
 

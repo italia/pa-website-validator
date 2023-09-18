@@ -197,6 +197,8 @@ class LoadAudit extends Audit {
         result: errorHandling.errorMessage,
       });
 
+      results.push({});
+
       results.push({
         result: errorHandling.errorColumnTitles[0],
         title_component_exist: errorHandling.errorColumnTitles[1],
