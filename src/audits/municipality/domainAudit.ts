@@ -5,14 +5,9 @@ import lighthouse from "lighthouse";
 import { domains } from "../../storage/municipality/allowedDomains";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { urlExists } from "../../utils/utils";
-import {
-  getPrimaryPageUrl,
-  getRandomFirstLevelPagesUrl,
-  getRandomSecondLevelPagesUrl,
-  getRandomThirdLevelPagesUrl,
-} from "../../utils/municipality/utils";
-import { primaryMenuItems } from "../../storage/municipality/menuItems";
+import { getPages } from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
+import { DataElementError } from "../../utils/DataElementError";
 
 const Audit = lighthouse.Audit;
 
@@ -82,54 +77,45 @@ class LoadAudit extends Audit {
       },
     ];
 
-    const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
-      url,
-      auditVariables.numberOfFirstLevelPageToBeScanned
-    );
+    let pagesToBeAnalyzed = [];
+    try {
+      pagesToBeAnalyzed = [
+        url,
+        ...(await getPages(url, [
+          {
+            type: "first_level_pages",
+            numberOfPages: auditVariables.numberOfFirstLevelPageToBeScanned,
+          },
+          {
+            type: "second_level_pages",
+            numberOfPages: auditVariables.numberOfSecondLevelPageToBeScanned,
+          },
+          {
+            type: "services",
+            numberOfPages: auditVariables.numberOfServicesToBeScanned,
+          },
+          {
+            type: "personal_area_login",
+            numberOfPages: 1,
+          },
+        ])),
+      ];
+    } catch (ex) {
+      if (!(ex instanceof DataElementError)) {
+        throw ex;
+      }
 
-    const randomSecondLevelPagesUrl = await getRandomSecondLevelPagesUrl(
-      url,
-      auditVariables.numberOfSecondLevelPageToBeScanned
-    );
-
-    const randomServicesUrl = await getRandomThirdLevelPagesUrl(
-      url,
-      await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
-      `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
-      auditVariables.numberOfServicesToBeScanned
-    );
-
-    if (
-      randomFirstLevelPagesUrl.length === 0 ||
-      randomSecondLevelPagesUrl.length === 0 ||
-      randomServicesUrl.length === 0
-    ) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: auditData.nonExecuted,
+              result: auditData.nonExecuted + ex.message,
             },
           ]
         ),
       };
-    }
-
-    const pagesToBeAnalyzed = [
-      url,
-      ...randomFirstLevelPagesUrl,
-      ...randomSecondLevelPagesUrl,
-      ...randomServicesUrl,
-    ];
-
-    const personalAreaLoginPage = await getPrimaryPageUrl(
-      url,
-      "personal-area-login"
-    );
-    if (personalAreaLoginPage !== "") {
-      pagesToBeAnalyzed.push(personalAreaLoginPage);
     }
 
     const correctItems = [];

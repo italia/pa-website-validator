@@ -140,7 +140,7 @@ class LoadAudit extends Audit {
             [{ key: "result", itemType: "text", text: "Risultato" }],
             [
               {
-                result: auditData.nonExecuted,
+                result: auditData.nonExecuted + "metatag",
               },
             ]
           ),

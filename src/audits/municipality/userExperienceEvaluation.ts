@@ -6,12 +6,11 @@ import lighthouse from "lighthouse";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import {
-  getRandomThirdLevelPagesUrl,
-  getPrimaryPageUrl,
   checkFeedbackComponent,
+  getPages,
 } from "../../utils/municipality/utils";
-import { primaryMenuItems } from "../../storage/municipality/menuItems";
 import { errorHandling } from "../../config/commonAuditsParts";
+import { DataElementError } from "../../utils/DataElementError";
 
 const Audit = lighthouse.Audit;
 
@@ -62,23 +61,26 @@ class LoadAudit extends Audit {
 
     let score = 1;
 
-    const pagesToBeAnalyzed = [
-      ...(await getRandomThirdLevelPagesUrl(
-        url,
-        await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
-        `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
-        auditVariables.numberOfServicesToBeScanned
-      )),
-    ];
+    let pagesToBeAnalyzed = [];
+    try {
+      pagesToBeAnalyzed = await getPages(url, [
+        {
+          type: "services",
+          numberOfPages: auditVariables.numberOfServicesToBeScanned,
+        },
+      ]);
+    } catch (ex) {
+      if (!(ex instanceof DataElementError)) {
+        throw ex;
+      }
 
-    if (pagesToBeAnalyzed.length === 0) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: auditData.nonExecuted,
+              result: auditData.nonExecuted + ex.message,
             },
           ]
         ),

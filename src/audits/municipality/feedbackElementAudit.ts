@@ -5,12 +5,12 @@
 import lighthouse from "lighthouse";
 import { auditDictionary } from "../../storage/auditDictionary";
 import {
-  getRandomFirstLevelPagesUrl,
-  getRandomSecondLevelPagesUrl,
   checkFeedbackComponent,
+  getPages,
 } from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import { errorHandling } from "../../config/commonAuditsParts";
+import { DataElementError } from "../../utils/DataElementError";
 
 const Audit = lighthouse.Audit;
 
@@ -61,37 +61,38 @@ class LoadAudit extends lighthouse.Audit {
 
     let score = 1;
 
-    const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
-      url,
-      auditVariables.numberOfFirstLevelPageToBeScanned
-    );
+    let pagesToBeAnalyzed = [];
+    try {
+      pagesToBeAnalyzed = [
+        url,
+        ...(await getPages(url, [
+          {
+            type: "first_level_pages",
+            numberOfPages: auditVariables.numberOfFirstLevelPageToBeScanned,
+          },
+          {
+            type: "second_level_pages",
+            numberOfPages: auditVariables.numberOfSecondLevelPageToBeScanned,
+          },
+        ])),
+      ];
+    } catch (ex) {
+      if (!(ex instanceof DataElementError)) {
+        throw ex;
+      }
 
-    const randomSecondLevelPagesUrl = await getRandomSecondLevelPagesUrl(
-      url,
-      auditVariables.numberOfSecondLevelPageToBeScanned
-    );
-
-    if (
-      randomFirstLevelPagesUrl.length === 0 ||
-      randomSecondLevelPagesUrl.length === 0
-    ) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: auditData.nonExecuted,
+              result: auditData.nonExecuted + ex.message,
             },
           ]
         ),
       };
     }
-
-    const pagesToBeAnalyzed = [
-      ...randomFirstLevelPagesUrl,
-      ...randomSecondLevelPagesUrl,
-    ];
 
     const pagesInError = [];
 
