@@ -59,6 +59,11 @@ declare namespace crawlerTypes {
     type: string;
     numberOfPages: number;
   }
+
+  interface pageLink {
+    linkName: string;
+    linkUrl: string;
+  }
 }
 
 export default crawlerTypes;
