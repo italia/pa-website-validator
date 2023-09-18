@@ -3,17 +3,14 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { loadPageData } from "../../utils/utils";
-import {
-  getRandomThirdLevelPagesUrl,
-  getPrimaryPageUrl,
-} from "../../utils/municipality/utils";
+import { getPages } from "../../utils/municipality/utils";
 import { CheerioAPI } from "cheerio";
 import { ValidatorResult } from "jsonschema";
 import * as jsonschema from "jsonschema";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
-import { primaryMenuItems } from "../../storage/municipality/menuItems";
 import { errorHandling } from "../../config/commonAuditsParts";
+import { DataElementError } from "../../utils/DataElementError";
 
 const Audit = lighthouse.Audit;
 
@@ -72,21 +69,26 @@ class LoadAudit extends Audit {
       },
     ];
 
-    const randomServices: string[] = await getRandomThirdLevelPagesUrl(
-      url,
-      await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
-      `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
-      auditVariables.numberOfServicesToBeScanned
-    );
+    let pagesToBeAnalyzed = [];
+    try {
+      pagesToBeAnalyzed = await getPages(url, [
+        {
+          type: "services",
+          numberOfPages: auditVariables.numberOfServicesToBeScanned,
+        },
+      ]);
+    } catch (ex) {
+      if (!(ex instanceof DataElementError)) {
+        throw ex;
+      }
 
-    if (randomServices.length === 0) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: auditData.nonExecuted,
+              result: auditData.nonExecuted + ex.message,
             },
           ]
         ),
@@ -102,15 +104,15 @@ class LoadAudit extends Audit {
     const pagesInError = [];
     let $: CheerioAPI = await loadPageData(url);
 
-    for (const randomService of randomServices) {
+    for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
       const item = {
-        inspected_page: randomService,
+        inspected_page: pageToBeAnalyzed,
         valid_json: "No",
         missing_keys: "",
       };
 
       try {
-        $ = await loadPageData(randomService);
+        $ = await loadPageData(pageToBeAnalyzed);
       } catch (ex) {
         if (!(ex instanceof Error)) {
           throw ex;
@@ -123,7 +125,7 @@ class LoadAudit extends Audit {
         );
 
         pagesInError.push({
-          inspected_page: randomService,
+          inspected_page: pageToBeAnalyzed,
           in_index: errorMessage,
         });
         continue;

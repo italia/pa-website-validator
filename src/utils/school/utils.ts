@@ -12,6 +12,9 @@ import {
   isInternalUrl,
   loadPageData,
 } from "../utils";
+import { DataElementError } from "../DataElementError";
+import crawlerTypes from "../../types/crawler-types";
+import requestPages = crawlerTypes.requestPages;
 
 const getRandomFirstLevelPagesUrl = async (
   url: string,
@@ -29,7 +32,7 @@ const getRandomFirstLevelPagesUrl = async (
   ];
 
   if (pagesUrls.length < primaryMenuItems.it.length) {
-    return [];
+    throw new DataElementError(primaryMenuDataElement);
   }
 
   for (let i = 0; i < pagesUrls.length; i++) {
@@ -87,16 +90,16 @@ const getRandomSecondLevelPagesUrl = async (
           }
         }
       }
-
-      if (
-        secondLevelPagesUrls.length === 0 &&
-        value !== customPrimaryMenuItemsDataElement
-      ) {
-        return [];
-      }
-
-      pagesUrls = [...pagesUrls, ...new Set(secondLevelPagesUrls)];
     }
+
+    if (
+      secondLevelPagesUrls.length === 0 &&
+      value !== customPrimaryMenuItemsDataElement
+    ) {
+      throw new DataElementError(value);
+    }
+
+    pagesUrls = [...pagesUrls, ...new Set(secondLevelPagesUrls)];
   }
 
   return getRandomNString(pagesUrls, numberOfPages);
@@ -113,7 +116,7 @@ const getRandomServicesUrl = async (
     '[data-element="service-type"]'
   );
   if (serviceTypeUrls.length <= 0) {
-    return [];
+    throw new DataElementError("service-type");
   }
 
   serviceTypeUrls = [...new Set(serviceTypeUrls)];
@@ -157,6 +160,10 @@ const getRandomServicesUrl = async (
         }
       }
     }
+  }
+
+  if (servicesUrls.length === 0) {
+    throw new DataElementError("service-link");
   }
 
   for (let i = 0; i < servicesUrls.length; i++) {
@@ -227,10 +234,70 @@ const detectLang = (entries: string[]): "it" | "de" | "lld_ga" | "lld_ba" => {
   return "it";
 };
 
+const getPages = async (
+  url: string,
+  requests: requestPages[]
+): Promise<string[]> => {
+  let pagesUrl: string[] = [];
+  const missingDataElements: string[] = [];
+
+  for (const request of requests) {
+    try {
+      switch (request.type) {
+        case "first_level_pages": {
+          const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
+            url,
+            request.numberOfPages
+          );
+          pagesUrl = [...pagesUrl, ...randomFirstLevelPagesUrl];
+          break;
+        }
+        case "second_level_pages": {
+          const randomSecondLevelPageUrl = await getRandomSecondLevelPagesUrl(
+            url,
+            request.numberOfPages
+          );
+          pagesUrl = [...pagesUrl, ...randomSecondLevelPageUrl];
+          break;
+        }
+        case "services": {
+          const randomServicesUrl = await getRandomServicesUrl(
+            url,
+            request.numberOfPages
+          );
+          pagesUrl = [...pagesUrl, ...randomServicesUrl];
+          break;
+        }
+        case "locations": {
+          const randomLocationsUrl = await getRandomLocationsUrl(
+            url,
+            request.numberOfPages
+          );
+          pagesUrl = [...pagesUrl, ...randomLocationsUrl];
+          break;
+        }
+      }
+    } catch (ex) {
+      if (!(ex instanceof DataElementError)) {
+        throw ex;
+      }
+
+      missingDataElements.push(ex.message);
+    }
+  }
+
+  if (missingDataElements.length > 0) {
+    throw new DataElementError(missingDataElements.join(", "));
+  }
+
+  return pagesUrl;
+};
+
 export {
   getRandomServicesUrl,
   getRandomFirstLevelPagesUrl,
   getRandomSecondLevelPagesUrl,
   getRandomLocationsUrl,
   detectLang,
+  getPages,
 };
