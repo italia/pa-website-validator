@@ -9,6 +9,7 @@ import {
   buildUrl,
   getHREFValuesDataAttribute,
   getRandomNString,
+  isInternalRedirectUrl,
   isInternalUrl,
   loadPageData,
 } from "../utils";
@@ -236,7 +237,8 @@ const detectLang = (entries: string[]): "it" | "de" | "lld_ga" | "lld_ba" => {
 
 const getPages = async (
   url: string,
-  requests: requestPages[]
+  requests: requestPages[],
+  removeExternal = true
 ): Promise<string[]> => {
   let pagesUrl: string[] = [];
   const missingDataElements: string[] = [];
@@ -288,6 +290,17 @@ const getPages = async (
 
   if (missingDataElements.length > 0) {
     throw new DataElementError(missingDataElements.join(", "));
+  }
+
+  if (removeExternal) {
+    const internalPages: string[] = [];
+    for (const pageUrl of pagesUrl) {
+      if (await isInternalRedirectUrl(url, pageUrl)) {
+        internalPages.push(pageUrl);
+      }
+    }
+
+    return internalPages;
   }
 
   return pagesUrl;

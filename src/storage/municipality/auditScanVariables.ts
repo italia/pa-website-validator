@@ -39,6 +39,7 @@ export const auditScanVariables = {
       numberOfFirstLevelPageToBeScanned: 1,
       numberOfSecondLevelPageToBeScanned: 1,
       numberOfServicesToBeScanned: 1,
+      numberOfEventsToBeScanned: 1,
     },
   },
   suggested: {
@@ -81,6 +82,7 @@ export const auditScanVariables = {
       numberOfFirstLevelPageToBeScanned: 5,
       numberOfSecondLevelPageToBeScanned: 5,
       numberOfServicesToBeScanned: 5,
+      numberOfEventsToBeScanned: 5,
     },
   },
   high: {
@@ -121,8 +123,8 @@ export const auditScanVariables = {
     },
     "municipality-domain": {
       numberOfFirstLevelPageToBeScanned: 10,
-      numberOfSecondLevelPageToBeScanned: 10,
       numberOfServicesToBeScanned: 10,
+      numberOfEventsToBeScanned: 10,
     },
   },
   all: {
@@ -163,8 +165,8 @@ export const auditScanVariables = {
     },
     "municipality-domain": {
       numberOfFirstLevelPageToBeScanned: -1,
-      numberOfSecondLevelPageToBeScanned: -1,
       numberOfServicesToBeScanned: -1,
+      numberOfEventsToBeScanned: -1,
     },
   },
 };
