@@ -5,12 +5,24 @@ import lighthouse from "lighthouse";
 import { domains } from "../../storage/municipality/allowedDomains";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { urlExists } from "../../utils/utils";
-import { getPrimaryPageUrl } from "../../utils/municipality/utils";
+import {
+  getPrimaryPageUrl,
+  getRandomFirstLevelPagesUrl,
+  getRandomSecondLevelPagesUrl,
+  getRandomThirdLevelPagesUrl,
+} from "../../utils/municipality/utils";
+import { primaryMenuItems } from "../../storage/municipality/menuItems";
+import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 
 const Audit = lighthouse.Audit;
 
 const auditId = "municipality-domain";
 const auditData = auditDictionary[auditId];
+
+const accuracy = process.env["accuracy"] ?? "suggested";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const auditVariables = auditScanVariables[accuracy][auditId];
 
 class LoadAudit extends Audit {
   static get meta() {
@@ -70,7 +82,47 @@ class LoadAudit extends Audit {
       },
     ];
 
-    const pagesToBeAnalyzed = [url];
+    const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
+      url,
+      auditVariables.numberOfFirstLevelPageToBeScanned
+    );
+
+    const randomSecondLevelPagesUrl = await getRandomSecondLevelPagesUrl(
+      url,
+      auditVariables.numberOfSecondLevelPageToBeScanned
+    );
+
+    const randomServicesUrl = await getRandomThirdLevelPagesUrl(
+      url,
+      await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
+      `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
+      auditVariables.numberOfServicesToBeScanned
+    );
+
+    if (
+      randomFirstLevelPagesUrl.length === 0 ||
+      randomSecondLevelPagesUrl.length === 0 ||
+      randomServicesUrl.length === 0
+    ) {
+      return {
+        score: 0,
+        details: Audit.makeTableDetails(
+          [{ key: "result", itemType: "text", text: "Risultato" }],
+          [
+            {
+              result: auditData.nonExecuted,
+            },
+          ]
+        ),
+      };
+    }
+
+    const pagesToBeAnalyzed = [
+      url,
+      ...randomFirstLevelPagesUrl,
+      ...randomSecondLevelPagesUrl,
+      ...randomServicesUrl,
+    ];
 
     const personalAreaLoginPage = await getPrimaryPageUrl(
       url,

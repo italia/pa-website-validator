@@ -35,6 +35,11 @@ export const auditScanVariables = {
     "municipality-booking-appointment-check": {
       numberOfServicesToBeScanned: 1,
     },
+    "municipality-domain": {
+      numberOfFirstLevelPageToBeScanned: 1,
+      numberOfSecondLevelPageToBeScanned: 1,
+      numberOfServicesToBeScanned: 1,
+    },
   },
   suggested: {
     "municipality-ux-ui-consistency-bootstrap-italia-double-check": {
@@ -70,6 +75,11 @@ export const auditScanVariables = {
       numberOfServicesToBeScanned: 5,
     },
     "municipality-metatag": {
+      numberOfServicesToBeScanned: 5,
+    },
+    "municipality-domain": {
+      numberOfFirstLevelPageToBeScanned: 5,
+      numberOfSecondLevelPageToBeScanned: 5,
       numberOfServicesToBeScanned: 5,
     },
   },
@@ -109,6 +119,11 @@ export const auditScanVariables = {
     "municipality-booking-appointment-check": {
       numberOfServicesToBeScanned: 10,
     },
+    "municipality-domain": {
+      numberOfFirstLevelPageToBeScanned: 10,
+      numberOfSecondLevelPageToBeScanned: 10,
+      numberOfServicesToBeScanned: 10,
+    },
   },
   all: {
     "municipality-ux-ui-consistency-bootstrap-italia-double-check": {
@@ -144,6 +159,11 @@ export const auditScanVariables = {
       numberOfServicesToBeScanned: -1,
     },
     "municipality-metatag": {
+      numberOfServicesToBeScanned: -1,
+    },
+    "municipality-domain": {
+      numberOfFirstLevelPageToBeScanned: -1,
+      numberOfSecondLevelPageToBeScanned: -1,
       numberOfServicesToBeScanned: -1,
     },
   },
