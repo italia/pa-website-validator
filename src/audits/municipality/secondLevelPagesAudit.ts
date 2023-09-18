@@ -101,7 +101,7 @@ class LoadAudit extends lighthouse.Audit {
             [{ key: "result", itemType: "text", text: "Risultato" }],
             [
               {
-                result: auditData.nonExecuted,
+                result: auditData.nonExecuted + primaryMenuItem.data_element,
               },
             ]
           ),
