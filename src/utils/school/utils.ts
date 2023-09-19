@@ -16,6 +16,7 @@ import {
 import { DataElementError } from "../DataElementError";
 import crawlerTypes from "../../types/crawler-types";
 import requestPages = crawlerTypes.requestPages;
+import pageLink = crawlerTypes.pageLink;
 
 const getRandomFirstLevelPagesUrl = async (
   url: string,
@@ -43,6 +44,39 @@ const getRandomFirstLevelPagesUrl = async (
   }
 
   return getRandomNString(pagesUrls, numberOfPages);
+};
+
+const getFirstLevelPages = async (url: string): Promise<pageLink[]> => {
+  const pages: pageLink[] = [];
+  const $ = await loadPageData(url);
+
+  for (const [, menuStructure] of Object.entries(menuItems)) {
+    const menu = $(`[data-element="${menuStructure.data_element}"]`);
+    const overviewLink = menu
+      .find(`[data-element="${primaryMenuDataElement}"]`)
+      .attr();
+    if (
+      overviewLink &&
+      "href" in overviewLink &&
+      overviewLink.href !== "#" &&
+      overviewLink.href !== ""
+    ) {
+      let firstLevelPageUrl = overviewLink.href;
+      if (
+        (await isInternalUrl(firstLevelPageUrl)) &&
+        !firstLevelPageUrl.includes(url)
+      ) {
+        firstLevelPageUrl = await buildUrl(url, firstLevelPageUrl);
+      }
+
+      pages.push({
+        linkName: menuStructure.label.it,
+        linkUrl: firstLevelPageUrl,
+      });
+    }
+  }
+
+  return pages;
 };
 
 const getRandomSecondLevelPagesUrl = async (
@@ -309,6 +343,7 @@ const getPages = async (
 export {
   getRandomServicesUrl,
   getRandomFirstLevelPagesUrl,
+  getFirstLevelPages,
   getRandomSecondLevelPagesUrl,
   getRandomLocationsUrl,
   detectLang,
