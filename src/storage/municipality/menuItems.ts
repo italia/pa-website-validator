@@ -46,6 +46,10 @@ export const primaryMenuItems = {
       "autorizzazioni",
       "appalti pubblici",
       "agricoltura e pesca",
+      "cimiteriali",
+      "elettorali",
+      "edilizia e urbanistica",
+      "patrimonio e demanio",
     ],
   },
   live: {
