@@ -245,7 +245,44 @@ const getRandomThirdLevelPagesUrl = async (
     );
   }
 
-  const pagesUrls = await getHREFValuesDataAttribute($, linkDataElement);
+  let pagesUrls = await getHREFValuesDataAttribute($, linkDataElement);
+
+  const pagesToBeAnalyzed = [pageUrl];
+  const pagesAnalyzed = [];
+
+  while (pagesToBeAnalyzed.length > 0) {
+    let pageToBeAnalyzed: string = pagesToBeAnalyzed.pop() ?? "";
+    if (
+      (await isInternalUrl(pageToBeAnalyzed)) &&
+      !pageToBeAnalyzed.includes(url)
+    ) {
+      pageToBeAnalyzed = await buildUrl(url, pageToBeAnalyzed);
+    }
+
+    $ = await loadPageData(pageToBeAnalyzed);
+    pagesUrls = [
+      ...pagesUrls,
+      ...(await getHREFValuesDataAttribute($, linkDataElement)),
+    ];
+
+    pagesAnalyzed.push(pageToBeAnalyzed);
+
+    const pagerPagesUrls = [
+      ...new Set(
+        await getHREFValuesDataAttribute($, '[data-element="pager-link"]')
+      ),
+    ];
+    for (const pagerPageUrl of pagerPagesUrls) {
+      if (
+        !pagesAnalyzed.includes(pagerPageUrl) &&
+        !pagesToBeAnalyzed.includes(pagerPageUrl)
+      ) {
+        pagesToBeAnalyzed.push(pagerPageUrl);
+      }
+    }
+  }
+
+  pagesUrls = [...new Set(pagesUrls)];
 
   for (let i = 0; i < pagesUrls.length; i++) {
     if ((await isInternalUrl(pagesUrls[i])) && !pagesUrls[i].includes(url)) {
