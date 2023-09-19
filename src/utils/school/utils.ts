@@ -140,6 +140,49 @@ const getRandomSecondLevelPagesUrl = async (
   return getRandomNString(pagesUrls, numberOfPages);
 };
 
+const getSecondLevelPages = async (url: string): Promise<pageLink[]> => {
+  const pagesUrls: pageLink[] = [];
+  const $ = await loadPageData(url);
+
+  const menuDataElements = [];
+  for (const [, value] of Object.entries(menuItems)) {
+    menuDataElements.push(value.data_element);
+  }
+
+  menuDataElements.push(customPrimaryMenuItemsDataElement);
+
+  for (const value of menuDataElements) {
+    const dataElement = `[data-element="${value}"]`;
+
+    let elements = $(dataElement);
+    if (Object.keys(elements).length > 0) {
+      elements = elements.find("li > a");
+      for (const element of elements) {
+        let secondLevelPageUrl = $(element).attr()?.href;
+        if (
+          secondLevelPageUrl &&
+          secondLevelPageUrl !== "#" &&
+          secondLevelPageUrl !== ""
+        ) {
+          if (
+            (await isInternalUrl(secondLevelPageUrl)) &&
+            !secondLevelPageUrl.includes(url)
+          ) {
+            secondLevelPageUrl = await buildUrl(url, secondLevelPageUrl);
+          }
+
+          pagesUrls.push({
+            linkName: $(element).text().trim() ?? null,
+            linkUrl: secondLevelPageUrl,
+          });
+        }
+      }
+    }
+  }
+
+  return pagesUrls;
+};
+
 const getRandomServicesUrl = async (
   url: string,
   numberOfServices = 1
@@ -344,6 +387,7 @@ export {
   getRandomServicesUrl,
   getRandomFirstLevelPagesUrl,
   getFirstLevelPages,
+  getSecondLevelPages,
   getRandomSecondLevelPagesUrl,
   getRandomLocationsUrl,
   detectLang,
