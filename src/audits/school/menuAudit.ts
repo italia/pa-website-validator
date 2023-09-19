@@ -188,13 +188,13 @@ class LoadAudit extends lighthouse.Audit {
         breadcrumbElements = breadcrumbElements.map((x) =>
           x
             .toLowerCase()
-            .replaceAll(/[^a-zA-Z0-9à ]/g, "")
+            .replaceAll(/[^a-zA-Z0-9àèìòù ]/g, "")
             .trim()
         );
 
         const pageName =
           breadcrumbElements[breadcrumbElements.length - 1] ?? "";
-        console.log(pageName.toLowerCase(), page.linkName.toLowerCase());
+
         if (
           pageName.length > 0 &&
           pageName.toLowerCase() === page.linkName.toLowerCase()
