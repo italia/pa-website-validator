@@ -10,7 +10,7 @@ import {
   isInternalUrl,
   loadPageData,
 } from "../../utils/utils";
-import { getButtonUrl } from "../../utils/municipality/utils";
+import {getButtonUrl, getRandomSecondLevelPages} from "../../utils/municipality/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
 import {
@@ -75,6 +75,8 @@ class LoadAudit extends lighthouse.Audit {
         wrong_title_found: "",
       },
     ];
+
+    console.log(await getRandomSecondLevelPages(url, true));
 
     let $: CheerioAPI = await loadPageData(url);
 
