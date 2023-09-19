@@ -136,7 +136,10 @@ const additionalTestsAudit = [
 export default {
   extends: "lighthouse:default",
   settings: {
-    onlyAudits: ["municipality-menu-structure-match-model","municipality-second-level-pages"],
+    onlyAudits: [
+      "municipality-menu-structure-match-model",
+      "municipality-second-level-pages",
+    ],
   },
 
   passes: [
