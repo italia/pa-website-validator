@@ -412,8 +412,6 @@ const isInternalRedirectUrl = async (
       return false;
     }
 
-    console.log(res?.url(), baseUrl);
-
     const data = await page.content();
 
     await page.goto("about:blank");

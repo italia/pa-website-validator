@@ -7,12 +7,13 @@ import lighthouse from "lighthouse";
 import { primaryMenuItems } from "../../storage/municipality/menuItems";
 import {
   checkOrder,
-  getPageElementDataAttribute,
+  getPageElementDataAttribute, isInternalRedirectUrl,
   loadPageData,
   missingMenuItems,
 } from "../../utils/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { MenuItem } from "../../types/menuItem";
+import { getRandomFirstLevelPages } from "../../utils/municipality/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -89,13 +90,11 @@ class LoadAudit extends lighthouse.Audit {
       wrong_order_menu_voices: "",
     });
 
-    const $: CheerioAPI = await loadPageData(url);
+    const firstLevelPages = await getRandomFirstLevelPages(url, false);
 
-    const foundMenuElements = await getPageElementDataAttribute(
-      $,
-      '[data-element="main-navigation"]',
-      "> li > a"
-    );
+    const foundMenuElements = firstLevelPages.map((page) => {
+      return page.linkName;
+    });
 
     results[0].found_menu_voices = foundMenuElements.join(", ");
 
@@ -144,22 +143,39 @@ class LoadAudit extends lighthouse.Audit {
       result: "Voce di menù",
       found_menu_voices: "Link trovato",
       missing_menu_voices: "Pagina associata corretta",
-      wrong_order_menu_voices: "Pagina esterna",
+      wrong_order_menu_voices: "Pagina interna al dominio",
     });
 
-    results.push({
-      subItems: {
-        type: "subitems",
-        items: [
-          {
-            menu_voice: "Amministrazione",
-            inspected_page: "www.google.com",
-            correct_associated_page: "No",
-            external: "Sì",
-          },
-        ],
-      },
-    });
+    for(const page of firstLevelPages){
+      const isInternal = await isInternalRedirectUrl(url, page.linkUrl)
+      let isCorrectlyAssociated = false;
+
+      if(isInternal){
+        const $ = await loadPageData(page.linkUrl);
+        const pageName = $('[data-element="page-name"]').text().trim() ?? "";
+        if(pageName.length > 0 && pageName.toLowerCase() === page.linkName.toLowerCase()){
+          isCorrectlyAssociated = true;
+        }
+      }
+
+      if(!isInternal || !isCorrectlyAssociated){
+        score = 0;
+      }
+
+      const item = {
+        menu_voice: page.linkName,
+        inspected_page: page.linkUrl,
+        correct_associated_page: isCorrectlyAssociated ? 'Sì' : 'No',
+        external: isInternal ? 'Sì' : 'No',
+      };
+
+      results.push({
+        subItems: {
+          type: "subitems",
+          items: [item]
+        },
+      });
+    }
 
     return {
       score: score,
