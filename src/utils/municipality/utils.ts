@@ -30,13 +30,11 @@ const getRandomFirstLevelPagesUrl = async (
   url: string,
   numberOfPages = 1
 ): Promise<string[]> => {
-  const pagesUrls: string[] = [];
-
   const pages = await getRandomFirstLevelPages(url, true);
 
-  for (const page of pages) {
-    pagesUrls.push(page.linkUrl);
-  }
+  const pagesUrls = pages.map((page) => {
+    return page.linkUrl;
+  });
 
   return getRandomNString(pagesUrls, numberOfPages);
 };
@@ -884,4 +882,5 @@ export {
   getButtonUrl,
   isDrupal,
   getPages,
+  getRandomFirstLevelPages,
 };
