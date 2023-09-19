@@ -64,6 +64,14 @@ declare namespace crawlerTypes {
     linkName: string;
     linkUrl: string;
   }
+
+  interface municipalitySecondLevelPages {
+    management: pageLink[];
+    news: pageLink[];
+    services: pageLink[];
+    live: pageLink[];
+    custom: pageLink[];
+  }
 }
 
 export default crawlerTypes;
