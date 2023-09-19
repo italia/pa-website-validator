@@ -1,20 +1,18 @@
 "use strict";
 
-import { CheerioAPI } from "cheerio";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { primaryMenuItems } from "../../storage/municipality/menuItems";
 import {
   checkOrder,
-  getPageElementDataAttribute,
   isInternalRedirectUrl,
   loadPageData,
   missingMenuItems,
 } from "../../utils/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { MenuItem } from "../../types/menuItem";
-import { getRandomFirstLevelPages } from "../../utils/municipality/utils";
+import { getFirstLevelPages } from "../../utils/municipality/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -91,7 +89,7 @@ class LoadAudit extends lighthouse.Audit {
       wrong_order_menu_voices: "",
     });
 
-    const firstLevelPages = await getRandomFirstLevelPages(url, false);
+    const firstLevelPages = await getFirstLevelPages(url, false);
 
     const foundMenuElements = firstLevelPages.map((page) => {
       return page.linkName;
