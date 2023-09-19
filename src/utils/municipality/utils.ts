@@ -25,6 +25,7 @@ import { DataElementError } from "../DataElementError";
 import crawlerTypes from "../../types/crawler-types";
 import requestPages = crawlerTypes.requestPages;
 import pageLink = crawlerTypes.pageLink;
+import { MunicipalitySecondLevelPages } from "../../types/menuItem";
 
 const getRandomFirstLevelPagesUrl = async (
   url: string,
@@ -177,6 +178,107 @@ const getRandomSecondLevelPagesUrl = async (
   }
 
   return getRandomNString(pagesUrls, numberOfPages);
+};
+
+const getRandomSecondLevelPages = async (
+  url: string,
+  custom: boolean
+): Promise<MunicipalitySecondLevelPages> => {
+  const $ = await loadPageData(url);
+  const pages: MunicipalitySecondLevelPages = {
+    management: [],
+    news: [],
+    services: [],
+    live: [],
+    custom: []
+  };
+
+  let menuItems = Object.assign({}, primaryMenuItems);
+
+  if (custom) {
+    const customMenuElement = {
+      custom: {
+        data_element: customPrimaryMenuItemsDataElement,
+        secondary_item_data_element: customSecondaryMenuItemsDataElement,
+      },
+    };
+
+    menuItems = Object.assign({}, primaryMenuItems, customMenuElement);
+  }
+
+  for (const [key, primaryMenuItem] of Object.entries(menuItems)) {
+    const dataElement = `[data-element="${primaryMenuItem.data_element}"]`;
+
+    const elements = $(dataElement);
+    for (const element of elements) {
+      let primaryLevelPageUrl = $(element).attr()?.href;
+      if (
+        primaryLevelPageUrl &&
+        primaryLevelPageUrl !== "#" &&
+        primaryLevelPageUrl !== ""
+      ) {
+        if (
+          (await isInternalUrl(primaryLevelPageUrl)) &&
+          !primaryLevelPageUrl.includes(url)
+        ) {
+          primaryLevelPageUrl = await buildUrl(url, primaryLevelPageUrl);
+        }
+
+        const $2 = await loadPageData(primaryLevelPageUrl);
+        let secondPageUrls = [];
+
+        let dataElementSecondary = "";
+
+        if (key !== "live") {
+          dataElementSecondary = primaryMenuItem.secondary_item_data_element[0];
+          const dataElementSecondaryItem = `[data-element="${dataElementSecondary}"]`;
+          secondPageUrls = await getHREFValuesDataAttribute(
+            $2,
+            dataElementSecondaryItem
+          );
+        } else {
+          for (const secondaryItemDataElement of primaryMenuItem.secondary_item_data_element) {
+            dataElementSecondary = secondaryItemDataElement;
+            const dataElementSecondaryItem = `[data-element="${secondaryItemDataElement}"]`;
+            const buttonUrl = await getButtonUrl(
+              $2,
+              url,
+              dataElementSecondaryItem
+            );
+            if (buttonUrl !== "") {
+              secondPageUrls.push(buttonUrl);
+            }
+          }
+        }
+
+        for (let i = 0; i < secondPageUrls.length; i++) {
+          if (
+            (await isInternalUrl(secondPageUrls[i])) &&
+            !secondPageUrls[i].includes(primaryLevelPageUrl)
+          ) {
+            secondPageUrls[i] = await buildUrl(
+              primaryLevelPageUrl,
+              secondPageUrls[i]
+            );
+          }
+        }
+
+        if (secondPageUrls.length === 0 && key !== "custom") {
+          throw new DataElementError(dataElementSecondary);
+        }
+
+        if (
+          key === "management" ||
+          key === "news" ||
+          key === "services" ||
+          key === "live" ||
+          key === "custom"
+        )
+          pages[key] = secondPageUrls;
+      }
+    }
+  }
+  return pages;
 };
 
 const getRandomThirdLevelPagesUrl = async (
@@ -883,4 +985,5 @@ export {
   isDrupal,
   getPages,
   getRandomFirstLevelPages,
+  getRandomSecondLevelPages
 };

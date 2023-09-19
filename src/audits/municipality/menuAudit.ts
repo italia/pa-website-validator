@@ -7,7 +7,8 @@ import lighthouse from "lighthouse";
 import { primaryMenuItems } from "../../storage/municipality/menuItems";
 import {
   checkOrder,
-  getPageElementDataAttribute, isInternalRedirectUrl,
+  getPageElementDataAttribute,
+  isInternalRedirectUrl,
   loadPageData,
   missingMenuItems,
 } from "../../utils/utils";
@@ -146,33 +147,36 @@ class LoadAudit extends lighthouse.Audit {
       wrong_order_menu_voices: "Pagina interna al dominio",
     });
 
-    for(const page of firstLevelPages){
-      const isInternal = await isInternalRedirectUrl(url, page.linkUrl)
+    for (const page of firstLevelPages) {
+      const isInternal = await isInternalRedirectUrl(url, page.linkUrl);
       let isCorrectlyAssociated = false;
 
-      if(isInternal){
+      if (isInternal) {
         const $ = await loadPageData(page.linkUrl);
         const pageName = $('[data-element="page-name"]').text().trim() ?? "";
-        if(pageName.length > 0 && pageName.toLowerCase() === page.linkName.toLowerCase()){
+        if (
+          pageName.length > 0 &&
+          pageName.toLowerCase() === page.linkName.toLowerCase()
+        ) {
           isCorrectlyAssociated = true;
         }
       }
 
-      if(!isInternal || !isCorrectlyAssociated){
+      if (!isInternal || !isCorrectlyAssociated) {
         score = 0;
       }
 
       const item = {
         menu_voice: page.linkName,
         inspected_page: page.linkUrl,
-        correct_associated_page: isCorrectlyAssociated ? 'Sì' : 'No',
-        external: isInternal ? 'Sì' : 'No',
+        correct_associated_page: isCorrectlyAssociated ? "Sì" : "No",
+        external: isInternal ? "Sì" : "No",
       };
 
       results.push({
         subItems: {
           type: "subitems",
-          items: [item]
+          items: [item],
         },
       });
     }
