@@ -11,9 +11,13 @@ import {
   getRandomSecondLevelPagesUrl,
   getRandomThirdLevelPagesUrl,
   getPrimaryPageUrl,
+  isDrupal,
 } from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
-import { cssClasses } from "../../storage/municipality/cssClasses";
+import {
+  cssClasses,
+  drupalCoreClasses,
+} from "../../storage/municipality/cssClasses";
 import puppeteer from "puppeteer";
 import { primaryMenuItems } from "../../storage/municipality/menuItems";
 import { errorHandling } from "../../config/commonAuditsParts";
@@ -158,6 +162,8 @@ class LoadAudit extends Audit {
 
     const pagesInError = [];
 
+    const drupalClassesCheck = await isDrupal(url);
+
     for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
       let singleResult = 0;
       const item = {
@@ -259,12 +265,20 @@ class LoadAudit extends Audit {
           singleResult = 0;
           item.classes_found = subResults[0];
         } else {
-          const bootstrapClasses = foundClasses.filter((value) =>
-            cssClasses.includes(value)
-          );
+          const correctClasses = [];
+          for (const cssClass of foundClasses) {
+            if (cssClasses.includes(cssClass)) {
+              correctClasses.push(cssClass);
+            } else if (
+              drupalClassesCheck &&
+              drupalCoreClasses.some((rx) => rx.test(cssClass))
+            ) {
+              correctClasses.push(cssClass);
+            }
+          }
 
           const percentage =
-            (bootstrapClasses.length / foundClasses.length) * 100;
+            (correctClasses.length / foundClasses.length) * 100;
           item.classes_found = Math.round(percentage) + "%";
           if (percentage < 50) {
             singleResult = 0;
