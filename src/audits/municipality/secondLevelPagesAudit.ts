@@ -73,7 +73,7 @@ class LoadAudit extends lighthouse.Audit {
         itemType: "text",
         text: "Titoli corretti identificati",
         subItemsHeading: {
-          key: "correct_associated_page",
+          key: "external",
           itemType: "text",
         },
       },
@@ -81,10 +81,6 @@ class LoadAudit extends lighthouse.Audit {
         key: "wrong_title_found",
         itemType: "text",
         text: "Titoli aggiuntivi trovati",
-        subItemsHeading: {
-          key: "external",
-          itemType: "text",
-        },
       },
     ];
 
@@ -97,6 +93,7 @@ class LoadAudit extends lighthouse.Audit {
     });
 
     const secondLevelPages = await getSecondLevelPages(url, true);
+    const correctPages = [];
 
     let totalNumberOfTitleFound = 0;
     const itemsPage: itemPage[] = [];
@@ -114,6 +111,7 @@ class LoadAudit extends lighthouse.Audit {
       for (const page of secondLevelPagesSection) {
         if (primaryMenuItem.dictionary.includes(page.linkName.toLowerCase())) {
           item.pagesInVocabulary.push(page.linkName);
+          correctPages.push(page);
         } else {
           item.pagesNotInVocabulary.push(page.linkName);
         }
@@ -210,44 +208,28 @@ class LoadAudit extends lighthouse.Audit {
     results.push({
       result: "Voce di menù",
       correct_title_percentage: "Link trovato",
-      correct_title_found: "Pagina associata corretta",
-      wrong_title_found: "Pagina interna al dominio",
+      correct_title_found: "Pagina interna al dominio",
     });
 
-    for (const [, pages] of Object.entries(secondLevelPages)) {
-      for (const page of pages) {
-        const isInternal = await isInternalRedirectUrl(url, page.linkUrl);
-        let isCorrectlyAssociated = false;
+    for (const page of correctPages) {
+      const isInternal = await isInternalRedirectUrl(url, page.linkUrl);
 
-        if (isInternal) {
-          const $ = await loadPageData(page.linkUrl);
-          const pageName = $('[data-element="page-name"]').text().trim() ?? "";
-          if (
-            pageName.length > 0 &&
-            pageName.toLowerCase() === page.linkName.toLowerCase()
-          ) {
-            isCorrectlyAssociated = true;
-          }
-        }
-
-        if (!isInternal || !isCorrectlyAssociated) {
-          score = 0;
-        }
-
-        const item = {
-          menu_voice: page.linkName,
-          inspected_page: page.linkUrl,
-          correct_associated_page: isCorrectlyAssociated ? "Sì" : "No",
-          external: isInternal ? "Sì" : "No",
-        };
-
-        results.push({
-          subItems: {
-            type: "subitems",
-            items: [item],
-          },
-        });
+      if (!isInternal) {
+        score = 0;
       }
+
+      const item = {
+        menu_voice: page.linkName,
+        inspected_page: page.linkUrl,
+        external: isInternal ? "Sì" : "No",
+      };
+
+      results.push({
+        subItems: {
+          type: "subitems",
+          items: [item],
+        },
+      });
     }
 
     return {
