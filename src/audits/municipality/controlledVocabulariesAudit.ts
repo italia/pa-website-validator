@@ -16,6 +16,7 @@ import {
   loadPageData,
 } from "../../utils/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
+import { notExecutedErrorMessage } from "../../config/commonAuditsParts";
 
 const Audit = lighthouse.Audit;
 
@@ -25,7 +26,6 @@ const auditData = auditDictionary[auditId];
 const greenResult = auditData.greenResult;
 const yellowResult = auditData.yellowResult;
 const redResult = auditData.redResult;
-const notExecuted = auditData.nonExecuted;
 
 class LoadAudit extends lighthouse.Audit {
   static get meta() {
@@ -85,7 +85,7 @@ class LoadAudit extends lighthouse.Audit {
       '[data-element="all-topics"]'
     );
     if (allArgumentsHREF.length <= 0) {
-      item[0].result = notExecuted;
+      item[0].result = notExecutedErrorMessage.replace("<LIST>", "`all-topics");
       return {
         score: 0,
         details: Audit.makeTableDetails(headings, item),

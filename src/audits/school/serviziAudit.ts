@@ -25,7 +25,10 @@ import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
 import { auditScanVariables } from "../../storage/school/auditScanVariables";
 import { convert } from "html-to-text";
-import { errorHandling } from "../../config/commonAuditsParts";
+import {
+  errorHandling,
+  notExecutedErrorMessage,
+} from "../../config/commonAuditsParts";
 import { DataElementError } from "../../utils/DataElementError";
 
 const Audit = lighthouse.Audit;
@@ -116,7 +119,7 @@ class LoadAudit extends Audit {
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: auditData.nonExecuted + ex.message,
+              result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
           ]
         ),

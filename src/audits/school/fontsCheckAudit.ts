@@ -8,7 +8,10 @@ import { gotoRetry, requestTimeout } from "../../utils/utils";
 import puppeteer from "puppeteer";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/school/auditScanVariables";
-import { errorHandling } from "../../config/commonAuditsParts";
+import {
+  errorHandling,
+  notExecutedErrorMessage,
+} from "../../config/commonAuditsParts";
 import { DataElementError } from "../../utils/DataElementError";
 
 const Audit = lighthouse.Audit;
@@ -95,7 +98,7 @@ class LoadAudit extends Audit {
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: auditData.nonExecuted + ex.message,
+              result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
           ]
         ),

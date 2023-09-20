@@ -287,7 +287,9 @@ const getPages = async (
   }
 
   if (missingDataElements.length > 0) {
-    throw new DataElementError(missingDataElements.join(", "));
+    throw new DataElementError(
+      missingDataElements.map((el) => "`" + el).join(", ")
+    );
   }
 
   return pagesUrl;

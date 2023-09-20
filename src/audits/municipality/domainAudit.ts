@@ -8,6 +8,7 @@ import { urlExists } from "../../utils/utils";
 import { getPages } from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import { DataElementError } from "../../utils/DataElementError";
+import { notExecutedErrorMessage } from "../../config/commonAuditsParts";
 
 const Audit = lighthouse.Audit;
 
@@ -111,7 +112,7 @@ class LoadAudit extends Audit {
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: auditData.nonExecuted + ex.message,
+              result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
           ]
         ),
