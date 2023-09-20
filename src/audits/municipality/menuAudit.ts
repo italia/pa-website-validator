@@ -7,7 +7,6 @@ import { primaryMenuItems } from "../../storage/municipality/menuItems";
 import {
   checkOrder,
   isInternalRedirectUrl,
-  loadPageData,
   missingMenuItems,
 } from "../../utils/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
