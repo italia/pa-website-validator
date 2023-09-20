@@ -7,7 +7,10 @@ import { getPages } from "../../utils/municipality/utils";
 import { CheerioAPI } from "cheerio";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
-import { errorHandling } from "../../config/commonAuditsParts";
+import {
+  errorHandling,
+  notExecutedErrorMessage,
+} from "../../config/commonAuditsParts";
 import { DataElementError } from "../../utils/DataElementError";
 
 const auditId = "municipality-contacts-assistency";
@@ -90,7 +93,7 @@ class LoadAudit extends Audit {
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: auditData.nonExecuted + ex.message,
+              result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
           ]
         ),

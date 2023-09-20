@@ -9,7 +9,10 @@ import crawlerTypes from "../../types/crawler-types";
 import cookie = crawlerTypes.cookie;
 import { getPages } from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
-import { errorHandling } from "../../config/commonAuditsParts";
+import {
+  errorHandling,
+  notExecutedErrorMessage,
+} from "../../config/commonAuditsParts";
 import { DataElementError } from "../../utils/DataElementError";
 
 const Audit = lighthouse.Audit;
@@ -112,7 +115,7 @@ class LoadAudit extends Audit {
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: auditData.nonExecuted + ex.message,
+              result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
           ]
         ),

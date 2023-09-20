@@ -12,7 +12,10 @@ import { gotoRetry, requestTimeout } from "../../utils/utils";
 import { auditScanVariables } from "../../storage/school/auditScanVariables";
 import { cssClasses } from "../../storage/school/cssClasses";
 import puppeteer from "puppeteer";
-import { errorHandling } from "../../config/commonAuditsParts";
+import {
+  errorHandling,
+  notExecutedErrorMessage,
+} from "../../config/commonAuditsParts";
 import { getPages } from "../../utils/school/utils";
 import { DataElementError } from "../../utils/DataElementError";
 
@@ -112,7 +115,7 @@ class LoadAudit extends Audit {
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: auditData.nonExecuted + ex.message,
+              result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
           ]
         ),
