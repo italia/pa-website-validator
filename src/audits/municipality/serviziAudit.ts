@@ -25,6 +25,7 @@ import { convert } from "html-to-text";
 import {
   errorHandling,
   minNumberOfServices,
+  notExecutedErrorMessage,
 } from "../../config/commonAuditsParts";
 import { DataElementError } from "../../utils/DataElementError";
 
@@ -110,7 +111,7 @@ class LoadAudit extends Audit {
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: auditData.nonExecuted + ex.message,
+              result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
           ]
         ),

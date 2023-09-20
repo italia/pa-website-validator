@@ -9,12 +9,14 @@ import {
   buildUrl,
   getHREFValuesDataAttribute,
   getRandomNString,
+  isInternalRedirectUrl,
   isInternalUrl,
   loadPageData,
 } from "../utils";
 import { DataElementError } from "../DataElementError";
 import crawlerTypes from "../../types/crawler-types";
 import requestPages = crawlerTypes.requestPages;
+import pageLink = crawlerTypes.pageLink;
 
 const getRandomFirstLevelPagesUrl = async (
   url: string,
@@ -42,6 +44,39 @@ const getRandomFirstLevelPagesUrl = async (
   }
 
   return getRandomNString(pagesUrls, numberOfPages);
+};
+
+const getFirstLevelPages = async (url: string): Promise<pageLink[]> => {
+  const pages: pageLink[] = [];
+  const $ = await loadPageData(url);
+
+  for (const [, menuStructure] of Object.entries(menuItems)) {
+    const menu = $(`[data-element="${menuStructure.data_element}"]`);
+    const overviewLink = menu
+      .find(`[data-element="${primaryMenuDataElement}"]`)
+      .attr();
+    if (
+      overviewLink &&
+      "href" in overviewLink &&
+      overviewLink.href !== "#" &&
+      overviewLink.href !== ""
+    ) {
+      let firstLevelPageUrl = overviewLink.href;
+      if (
+        (await isInternalUrl(firstLevelPageUrl)) &&
+        !firstLevelPageUrl.includes(url)
+      ) {
+        firstLevelPageUrl = await buildUrl(url, firstLevelPageUrl);
+      }
+
+      pages.push({
+        linkName: menuStructure.label.it,
+        linkUrl: firstLevelPageUrl,
+      });
+    }
+  }
+
+  return pages;
 };
 
 const getRandomSecondLevelPagesUrl = async (
@@ -103,6 +138,49 @@ const getRandomSecondLevelPagesUrl = async (
   }
 
   return getRandomNString(pagesUrls, numberOfPages);
+};
+
+const getSecondLevelPages = async (url: string): Promise<pageLink[]> => {
+  const pagesUrls: pageLink[] = [];
+  const $ = await loadPageData(url);
+
+  const menuDataElements = [];
+  for (const [, value] of Object.entries(menuItems)) {
+    menuDataElements.push(value.data_element);
+  }
+
+  menuDataElements.push(customPrimaryMenuItemsDataElement);
+
+  for (const value of menuDataElements) {
+    const dataElement = `[data-element="${value}"]`;
+
+    let elements = $(dataElement);
+    if (Object.keys(elements).length > 0) {
+      elements = elements.find("li > a");
+      for (const element of elements) {
+        let secondLevelPageUrl = $(element).attr()?.href;
+        if (
+          secondLevelPageUrl &&
+          secondLevelPageUrl !== "#" &&
+          secondLevelPageUrl !== ""
+        ) {
+          if (
+            (await isInternalUrl(secondLevelPageUrl)) &&
+            !secondLevelPageUrl.includes(url)
+          ) {
+            secondLevelPageUrl = await buildUrl(url, secondLevelPageUrl);
+          }
+
+          pagesUrls.push({
+            linkName: $(element).text().trim() ?? null,
+            linkUrl: secondLevelPageUrl,
+          });
+        }
+      }
+    }
+  }
+
+  return pagesUrls;
 };
 
 const getRandomServicesUrl = async (
@@ -236,7 +314,8 @@ const detectLang = (entries: string[]): "it" | "de" | "lld_ga" | "lld_ba" => {
 
 const getPages = async (
   url: string,
-  requests: requestPages[]
+  requests: requestPages[],
+  removeExternal = true
 ): Promise<string[]> => {
   let pagesUrl: string[] = [];
   const missingDataElements: string[] = [];
@@ -290,12 +369,25 @@ const getPages = async (
     throw new DataElementError(missingDataElements.join(", "));
   }
 
+  if (removeExternal) {
+    const internalPages: string[] = [];
+    for (const pageUrl of pagesUrl) {
+      if (await isInternalRedirectUrl(url, pageUrl)) {
+        internalPages.push(pageUrl);
+      }
+    }
+
+    return internalPages;
+  }
+
   return pagesUrl;
 };
 
 export {
   getRandomServicesUrl,
   getRandomFirstLevelPagesUrl,
+  getFirstLevelPages,
+  getSecondLevelPages,
   getRandomSecondLevelPagesUrl,
   getRandomLocationsUrl,
   detectLang,

@@ -152,4 +152,7 @@ export const errorHandling = {
   gotoRetryTentative: 3,
 };
 
+export const notExecutedErrorMessage =
+  "I seguenti data-element necessari per condurre il test non sono stati trovati: <LIST>. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.";
+
 export const minNumberOfServices = 10;

@@ -376,6 +376,61 @@ const getAllPageHTML = async (url: string): Promise<string> => {
   return $("html").text() ?? "";
 };
 
+const isInternalRedirectUrl = async (
+  baseUrl: string,
+  url: string
+): Promise<boolean> => {
+  const data_from_cache = cache.get(url);
+  if (data_from_cache !== undefined) {
+    return true;
+  }
+  const browser = await puppeteer.launch({
+    headless: "new",
+    protocolTimeout: requestTimeout,
+    args: ["--no-zygote", "--no-sandbox"],
+  });
+  const browserWSEndpoint = browser.wsEndpoint();
+  try {
+    const browser2 = await puppeteer.connect({ browserWSEndpoint });
+    const page = await browser2.newPage();
+
+    await page.setRequestInterception(true);
+    page.on("request", (request) => {
+      if (
+        ["image", "imageset", "media"].indexOf(request.resourceType()) !== -1
+      ) {
+        request.abort();
+      } else {
+        request.continue();
+      }
+    });
+
+    const res = await gotoRetry(page, url, errorHandling.gotoRetryTentative);
+
+    const host = new URL(url).hostname.replace("www.", "");
+    if (!res?.url().includes(host)) {
+      return false;
+    }
+
+    const data = await page.content();
+
+    await page.goto("about:blank");
+    await page.close();
+    browser2.disconnect();
+
+    await browser.close();
+    const c = cheerio.load(data);
+    cache.set(url, c);
+    return true;
+  } catch (ex) {
+    console.error(`ERROR ${url}: ${ex}`);
+    await browser.close();
+    throw new Error(
+      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`
+    );
+  }
+};
+
 export {
   toMenuItem,
   checkOrder,
@@ -394,4 +449,5 @@ export {
   cmsThemeRx,
   getAllPageHTML,
   requestTimeout,
+  isInternalRedirectUrl,
 };

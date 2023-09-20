@@ -8,6 +8,7 @@ import { urlExists } from "../../utils/utils";
 import { getPages } from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import { DataElementError } from "../../utils/DataElementError";
+import { notExecutedErrorMessage } from "../../config/commonAuditsParts";
 
 const Audit = lighthouse.Audit;
 
@@ -87,12 +88,16 @@ class LoadAudit extends Audit {
             numberOfPages: auditVariables.numberOfFirstLevelPageToBeScanned,
           },
           {
-            type: "second_level_pages",
-            numberOfPages: auditVariables.numberOfSecondLevelPageToBeScanned,
-          },
-          {
             type: "services",
             numberOfPages: auditVariables.numberOfServicesToBeScanned,
+          },
+          {
+            type: "events",
+            numberOfPages: auditVariables.numberOfEventsToBeScanned,
+          },
+          {
+            type: "booking_appointment",
+            numberOfPages: 1,
           },
           {
             type: "personal_area_login",
@@ -111,7 +116,7 @@ class LoadAudit extends Audit {
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: auditData.nonExecuted + ex.message,
+              result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
           ]
         ),
