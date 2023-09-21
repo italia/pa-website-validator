@@ -7,13 +7,14 @@ import { primaryMenuItems } from "../../storage/school/menuItems";
 import {
   checkOrder,
   getPageElementDataAttribute,
+  isInternalRedirectUrl,
   loadPageData,
   missingMenuItems,
 } from "../../utils/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
 import { MenuItem } from "../../types/menuItem";
-import { detectLang } from "../../utils/school/utils";
+import { detectLang, getFirstLevelPages } from "../../utils/school/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -43,16 +44,32 @@ class LoadAudit extends lighthouse.Audit {
 
     let score = 0;
     const headings = [
-      { key: "result", itemType: "text", text: "Risultato" },
+      {
+        key: "result",
+        itemType: "text",
+        text: "Risultato",
+        subItemsHeading: {
+          key: "menu_voice",
+          itemType: "text",
+        },
+      },
       {
         key: "found_menu_voices",
         itemType: "text",
         text: "Voci del menù identificate",
+        subItemsHeading: {
+          key: "inspected_page",
+          itemType: "url",
+        },
       },
       {
         key: "missing_menu_voices",
         itemType: "text",
         text: "Voci obbligatorie del menù mancanti",
+        subItemsHeading: {
+          key: "external",
+          itemType: "text",
+        },
       },
       {
         key: "wrong_order_menu_voices",
@@ -61,14 +78,13 @@ class LoadAudit extends lighthouse.Audit {
       },
     ];
 
-    const items = [
-      {
-        result: redResult,
-        found_menu_voices: "",
-        missing_menu_voices: "",
-        wrong_order_menu_voices: "",
-      },
-    ];
+    const results = [];
+    results.push({
+      result: redResult,
+      found_menu_voices: "",
+      missing_menu_voices: "",
+      wrong_order_menu_voices: "",
+    });
 
     const $: CheerioAPI = await loadPageData(url);
 
@@ -94,7 +110,7 @@ class LoadAudit extends lighthouse.Audit {
       "> li > a"
     );
 
-    items[0].found_menu_voices = foundMenuElements.join(", ");
+    results[0].found_menu_voices = foundMenuElements.join(", ");
 
     const lang = detectLang(foundMenuElements);
 
@@ -109,13 +125,13 @@ class LoadAudit extends lighthouse.Audit {
       foundMenuElements,
       mandatoryPrimaryMenuItems
     );
-    items[0].missing_menu_voices = missingMandatoryElements.join(", ");
+    results[0].missing_menu_voices = missingMandatoryElements.join(", ");
 
     const orderResult = checkOrder(
       mandatoryPrimaryMenuItems,
       foundMenuElements
     );
-    items[0].wrong_order_menu_voices =
+    results[0].wrong_order_menu_voices =
       orderResult.elementsNotInSequence.join(", ");
 
     const containsMandatoryElementsResult =
@@ -131,7 +147,7 @@ class LoadAudit extends lighthouse.Audit {
       mandatoryElementsCorrectOrder
     ) {
       score = 1;
-      items[0].result = greenResult;
+      results[0].result = greenResult;
     } else if (
       foundMenuElements.length > 4 &&
       foundMenuElements.length < 8 &&
@@ -139,12 +155,43 @@ class LoadAudit extends lighthouse.Audit {
       mandatoryElementsCorrectOrder
     ) {
       score = 0.5;
-      items[0].result = yellowResult;
+      results[0].result = yellowResult;
+    }
+
+    const firstLevelPages = await getFirstLevelPages(url);
+
+    results.push({});
+
+    results.push({
+      result: "Voce di menù",
+      found_menu_voices: "Link trovato",
+      missing_menu_voices: "Pagina interna al dominio",
+    });
+
+    for (const page of firstLevelPages) {
+      const isInternal = await isInternalRedirectUrl(url, page.linkUrl);
+
+      if (!isInternal) {
+        score = 0;
+      }
+
+      const item = {
+        menu_voice: page.linkName,
+        inspected_page: page.linkUrl,
+        external: isInternal ? "Sì" : "No",
+      };
+
+      results.push({
+        subItems: {
+          type: "subitems",
+          items: [item],
+        },
+      });
     }
 
     return {
       score: score,
-      details: Audit.makeTableDetails(headings, items),
+      details: Audit.makeTableDetails(headings, results),
     };
   }
 }

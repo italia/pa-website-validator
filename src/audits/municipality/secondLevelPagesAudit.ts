@@ -7,10 +7,11 @@ import {
   buildUrl,
   getHREFValuesDataAttribute,
   getPageElementDataAttribute,
+  isInternalRedirectUrl,
   isInternalUrl,
   loadPageData,
 } from "../../utils/utils";
-import { getButtonUrl } from "../../utils/municipality/utils";
+import { getSecondLevelPages } from "../../utils/municipality/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
 import {
@@ -49,16 +50,32 @@ class LoadAudit extends lighthouse.Audit {
 
     let score = 0;
     const headings = [
-      { key: "result", itemType: "text", text: "Risultato" },
+      {
+        key: "result",
+        itemType: "text",
+        text: "Risultato",
+        subItemsHeading: {
+          key: "menu_voice",
+          itemType: "text",
+        },
+      },
       {
         key: "correct_title_percentage",
         itemType: "text",
         text: "% di titoli corretti tra quelli usati",
+        subItemsHeading: {
+          key: "inspected_page",
+          itemType: "url",
+        },
       },
       {
         key: "correct_title_found",
         itemType: "text",
         text: "Titoli corretti identificati",
+        subItemsHeading: {
+          key: "external",
+          itemType: "text",
+        },
       },
       {
         key: "wrong_title_found",
@@ -67,16 +84,16 @@ class LoadAudit extends lighthouse.Audit {
       },
     ];
 
-    const items = [
-      {
-        result: auditData.redResult,
-        correct_title_percentage: "",
-        correct_title_found: "",
-        wrong_title_found: "",
-      },
-    ];
+    const results = [];
+    results.push({
+      result: auditData.redResult,
+      correct_title_percentage: "",
+      correct_title_found: "",
+      wrong_title_found: "",
+    });
 
-    let $: CheerioAPI = await loadPageData(url);
+    const secondLevelPages = await getSecondLevelPages(url, true);
+    const correctPages = [];
 
     let totalNumberOfTitleFound = 0;
     const itemsPage: itemPage[] = [];
@@ -88,87 +105,26 @@ class LoadAudit extends lighthouse.Audit {
         pagesNotInVocabulary: [],
       };
 
-      const primaryMenuDataElement = `[data-element="${primaryMenuItem.data_element}"]`;
-      const secondLevelPageHref = await getHREFValuesDataAttribute(
-        $,
-        primaryMenuDataElement
-      );
-
-      if (secondLevelPageHref.length === 0) {
-        return {
-          score: 0,
-          details: Audit.makeTableDetails(
-            [{ key: "result", itemType: "text", text: "Risultato" }],
-            [
-              {
-                result: auditData.nonExecuted,
-              },
-            ]
-          ),
-        };
-      }
-
-      let secondLevelPagesNames: string[] = [];
-      let secondLevelPageUrl = secondLevelPageHref[0];
-      if (
-        (await isInternalUrl(secondLevelPageUrl)) &&
-        !secondLevelPageUrl.includes(url)
-      ) {
-        secondLevelPageUrl = await buildUrl(url, secondLevelPageHref[0]);
-      }
-
-      $ = await loadPageData(secondLevelPageUrl);
-      const secondaryMenuDataElement = `[data-element="${primaryMenuItem.secondary_item_data_element[0]}"]`;
-
-      if (key !== "live" && primaryMenuItem.dictionary.length > 0) {
-        secondLevelPagesNames = await getPageElementDataAttribute(
-          $,
-          secondaryMenuDataElement
-        );
-      } else {
-        for (const dataElement of primaryMenuItem.secondary_item_data_element) {
-          const buttonDataElement = `[data-element="${dataElement}"]`;
-          const pageLinkUrl = await getButtonUrl($, url, buttonDataElement);
-
-          if (pageLinkUrl.length > 0) {
-            const $2 = await loadPageData(pageLinkUrl);
-            const pageName =
-              $2('[data-element="page-name"]').text().trim() ?? "";
-            if (pageName.length > 0) {
-              secondLevelPagesNames.push(pageName);
-            }
-          }
-        }
-      }
-
-      if (secondLevelPagesNames.length === 0) {
-        return {
-          score: 0,
-          details: Audit.makeTableDetails(
-            [{ key: "result", itemType: "text", text: "Risultato" }],
-            [
-              {
-                result: auditData.nonExecuted,
-              },
-            ]
-          ),
-        };
-      }
-
-      for (const pageTitle of secondLevelPagesNames) {
-        if (primaryMenuItem.dictionary.includes(pageTitle.toLowerCase())) {
-          item.pagesInVocabulary.push(pageTitle);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const secondLevelPagesSection = secondLevelPages[key];
+      for (const page of secondLevelPagesSection) {
+        if (primaryMenuItem.dictionary.includes(page.linkName.toLowerCase())) {
+          item.pagesInVocabulary.push(page.linkName);
+          correctPages.push(page);
         } else {
-          item.pagesNotInVocabulary.push(pageTitle);
+          item.pagesNotInVocabulary.push(page.linkName);
         }
       }
 
-      totalNumberOfTitleFound += secondLevelPagesNames.length;
+      totalNumberOfTitleFound += secondLevelPagesSection.length;
 
       itemsPage.push(item);
     }
 
     let errorVoices: string[] = [];
+
+    let $: CheerioAPI = await loadPageData(url);
 
     const customPrimaryMenuDataElement = `[data-element="${customPrimaryMenuItemsDataElement}"]`;
     const customSecondLevelPageHref = await getHREFValuesDataAttribute(
@@ -232,23 +188,53 @@ class LoadAudit extends lighthouse.Audit {
     );
 
     if (pagesFoundInVocabularyPercentage === 100) {
-      items[0].result = auditData.greenResult;
+      results[0].result = auditData.greenResult;
       score = 1;
     } else if (
       pagesFoundInVocabularyPercentage > 50 &&
       pagesFoundInVocabularyPercentage < 100
     ) {
-      items[0].result = auditData.yellowResult;
+      results[0].result = auditData.yellowResult;
       score = 0.5;
     }
 
-    items[0].correct_title_percentage = pagesFoundInVocabularyPercentage + "%";
-    items[0].correct_title_found = correctTitleFound;
-    items[0].wrong_title_found = wrongTitleFound;
+    results[0].correct_title_percentage =
+      pagesFoundInVocabularyPercentage + "%";
+    results[0].correct_title_found = correctTitleFound;
+    results[0].wrong_title_found = wrongTitleFound;
+
+    results.push({});
+
+    results.push({
+      result: "Voce di menù",
+      correct_title_percentage: "Link trovato",
+      correct_title_found: "Pagina interna al dominio",
+    });
+
+    for (const page of correctPages) {
+      const isInternal = await isInternalRedirectUrl(url, page.linkUrl);
+
+      if (!isInternal) {
+        score = 0;
+      }
+
+      const item = {
+        menu_voice: page.linkName,
+        inspected_page: page.linkUrl,
+        external: isInternal ? "Sì" : "No",
+      };
+
+      results.push({
+        subItems: {
+          type: "subitems",
+          items: [item],
+        },
+      });
+    }
 
     return {
       score: score,
-      details: Audit.makeTableDetails(headings, items),
+      details: Audit.makeTableDetails(headings, results),
     };
   }
 }

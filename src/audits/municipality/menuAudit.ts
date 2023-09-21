@@ -1,18 +1,17 @@
 "use strict";
 
-import { CheerioAPI } from "cheerio";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { primaryMenuItems } from "../../storage/municipality/menuItems";
 import {
   checkOrder,
-  getPageElementDataAttribute,
-  loadPageData,
+  isInternalRedirectUrl,
   missingMenuItems,
 } from "../../utils/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { MenuItem } from "../../types/menuItem";
+import { getFirstLevelPages } from "../../utils/municipality/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -37,21 +36,38 @@ class LoadAudit extends lighthouse.Audit {
 
   static async audit(
     artifacts: LH.Artifacts & { origin: string }
-  ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
+  ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
 
     let score = 0;
+
     const headings = [
-      { key: "result", itemType: "text", text: "Risultato" },
+      {
+        key: "result",
+        itemType: "text",
+        text: "Risultato",
+        subItemsHeading: {
+          key: "menu_voice",
+          itemType: "text",
+        },
+      },
       {
         key: "found_menu_voices",
         itemType: "text",
         text: "Voci del menù identificate",
+        subItemsHeading: {
+          key: "inspected_page",
+          itemType: "url",
+        },
       },
       {
         key: "missing_menu_voices",
         itemType: "text",
         text: "Voci del menù mancanti",
+        subItemsHeading: {
+          key: "external",
+          itemType: "text",
+        },
       },
       {
         key: "wrong_order_menu_voices",
@@ -60,24 +76,21 @@ class LoadAudit extends lighthouse.Audit {
       },
     ];
 
-    const items = [
-      {
-        result: redResult,
-        found_menu_voices: "",
-        missing_menu_voices: "",
-        wrong_order_menu_voices: "",
-      },
-    ];
+    const results = [];
+    results.push({
+      result: redResult,
+      found_menu_voices: "",
+      missing_menu_voices: "",
+      wrong_order_menu_voices: "",
+    });
 
-    const $: CheerioAPI = await loadPageData(url);
+    const firstLevelPages = await getFirstLevelPages(url, false);
 
-    const foundMenuElements = await getPageElementDataAttribute(
-      $,
-      '[data-element="main-navigation"]',
-      "> li > a"
-    );
+    const foundMenuElements = firstLevelPages.map((page) => {
+      return page.linkName;
+    });
 
-    items[0].found_menu_voices = foundMenuElements.join(", ");
+    results[0].found_menu_voices = foundMenuElements.join(", ");
 
     const menuItem: MenuItem[] = [];
 
@@ -92,10 +105,10 @@ class LoadAudit extends lighthouse.Audit {
       foundMenuElements,
       menuItem
     );
-    items[0].missing_menu_voices = missingMandatoryElements.join(", ");
+    results[0].missing_menu_voices = missingMandatoryElements.join(", ");
 
     const orderResult = checkOrder(menuItem, foundMenuElements);
-    items[0].wrong_order_menu_voices =
+    results[0].wrong_order_menu_voices =
       orderResult.elementsNotInSequence.join(", ");
 
     const containsMandatoryElementsResult =
@@ -107,7 +120,7 @@ class LoadAudit extends lighthouse.Audit {
       orderResult.numberOfElementsNotInSequence === 0
     ) {
       score = 1;
-      items[0].result = greenResult;
+      results[0].result = greenResult;
     } else if (
       foundMenuElements.length > 4 &&
       foundMenuElements.length < 8 &&
@@ -115,12 +128,41 @@ class LoadAudit extends lighthouse.Audit {
       orderResult.numberOfElementsNotInSequence === 0
     ) {
       score = 0.5;
-      items[0].result = yellowResult;
+      results[0].result = yellowResult;
+    }
+
+    results.push({});
+
+    results.push({
+      result: "Voce di menù",
+      found_menu_voices: "Link trovato",
+      missing_menu_voices: "Pagina interna al dominio",
+    });
+
+    for (const page of firstLevelPages) {
+      const isInternal = await isInternalRedirectUrl(url, page.linkUrl);
+
+      if (!isInternal) {
+        score = 0;
+      }
+
+      const item = {
+        menu_voice: page.linkName,
+        inspected_page: page.linkUrl,
+        external: isInternal ? "Sì" : "No",
+      };
+
+      results.push({
+        subItems: {
+          type: "subitems",
+          items: [item],
+        },
+      });
     }
 
     return {
       score: score,
-      details: Audit.makeTableDetails(headings, items),
+      details: Audit.makeTableDetails(headings, results),
     };
   }
 }

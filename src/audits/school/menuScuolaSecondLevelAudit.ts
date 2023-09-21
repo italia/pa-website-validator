@@ -3,7 +3,11 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import { getPageElementDataAttribute, loadPageData } from "../../utils/utils";
+import {
+  getPageElementDataAttribute,
+  isInternalRedirectUrl,
+  loadPageData,
+} from "../../utils/utils";
 import {
   menuItems,
   customPrimaryMenuItemsDataElement,
@@ -11,7 +15,7 @@ import {
 } from "../../storage/school/menuItems";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
-import { detectLang } from "../../utils/school/utils";
+import { detectLang, getSecondLevelPages } from "../../utils/school/utils";
 
 const Audit = lighthouse.Audit;
 
@@ -44,16 +48,32 @@ class LoadAudit extends Audit {
     const url = artifacts.origin;
 
     const headings = [
-      { key: "result", itemType: "text", text: "Risultato" },
+      {
+        key: "result",
+        itemType: "text",
+        text: "Risultato",
+        subItemsHeading: {
+          key: "menu_voice",
+          itemType: "text",
+        },
+      },
       {
         key: "correct_voices_percentage",
         itemType: "text",
         text: "% di voci corrette tra quelle usate",
+        subItemsHeading: {
+          key: "inspected_page",
+          itemType: "url",
+        },
       },
       {
         key: "correct_voices",
         itemType: "text",
         text: "Voci corrette identificate",
+        subItemsHeading: {
+          key: "external",
+          itemType: "text",
+        },
       },
       {
         key: "wrong_voices",
@@ -62,14 +82,13 @@ class LoadAudit extends Audit {
       },
     ];
 
-    const items = [
-      {
-        result: auditData.redResult,
-        correct_voices_percentage: "",
-        correct_voices: "",
-        wrong_voices: "",
-      },
-    ];
+    const results = [];
+    results.push({
+      result: auditData.redResult,
+      correct_voices_percentage: "",
+      correct_voices: "",
+      wrong_voices: "",
+    });
 
     let totalNumberOfTitleFound = 0;
     const itemsPage: itemPage[] = [];
@@ -188,20 +207,50 @@ class LoadAudit extends Audit {
     let score = 0;
     if (presentVoicesPercentage >= 30 && presentVoicesPercentage < 100) {
       score = 0.5;
-      items[0].result = auditData.yellowResult;
+      results[0].result = auditData.yellowResult;
     } else if (presentVoicesPercentage === 100) {
       score = 1;
-      items[0].result = auditData.greenResult;
+      results[0].result = auditData.greenResult;
     }
 
-    items[0].correct_voices = correctTitleFound;
-    items[0].correct_voices_percentage =
+    results[0].correct_voices = correctTitleFound;
+    results[0].correct_voices_percentage =
       presentVoicesPercentage.toString() + "%";
-    items[0].wrong_voices = wrongTitleFound;
+    results[0].wrong_voices = wrongTitleFound;
 
+    const secondLevelPages = await getSecondLevelPages(url);
+
+    results.push({});
+
+    results.push({
+      result: "Voce di menù",
+      correct_voices: "Pagina interna al dominio",
+      correct_voices_percentage: "Link trovato",
+    });
+
+    for (const page of secondLevelPages) {
+      const isInternal = await isInternalRedirectUrl(url, page.linkUrl);
+
+      if (!isInternal) {
+        score = 0;
+      }
+
+      const item = {
+        menu_voice: page.linkName,
+        inspected_page: page.linkUrl,
+        external: isInternal ? "Sì" : "No",
+      };
+
+      results.push({
+        subItems: {
+          type: "subitems",
+          items: [item],
+        },
+      });
+    }
     return {
       score: score,
-      details: Audit.makeTableDetails(headings, items),
+      details: Audit.makeTableDetails(headings, results),
     };
   }
 }
