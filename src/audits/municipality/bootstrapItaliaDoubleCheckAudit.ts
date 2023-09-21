@@ -6,10 +6,7 @@ import lighthouse from "lighthouse";
 import semver from "semver";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { gotoRetry, requestTimeout } from "../../utils/utils";
-import { 
-  getPages,
-  isDrupal
-} from "../../utils/municipality/utils";
+import { getPages, isDrupal } from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import {
   cssClasses,
@@ -249,19 +246,22 @@ class LoadAudit extends Audit {
           item.classes_found = subResults[0];
         } else {
           const correctClasses = [];
+          const baseClasses = [];
           for (const cssClass of foundClasses) {
             if (cssClasses.includes(cssClass)) {
               correctClasses.push(cssClass);
-            } else if (
-              drupalClassesCheck &&
-              drupalCoreClasses.some((rx) => rx.test(cssClass))
-            ) {
-              correctClasses.push(cssClass);
+            }
+
+            if (!drupalClassesCheck) {
+              baseClasses.push(cssClass);
+            } else {
+              if (!drupalCoreClasses.some((rx) => rx.test(cssClass))) {
+                baseClasses.push(cssClass);
+              }
             }
           }
 
-          const percentage =
-            (correctClasses.length / foundClasses.length) * 100;
+          const percentage = (correctClasses.length / baseClasses.length) * 100;
           item.classes_found = Math.round(percentage) + "%";
           if (percentage < 50) {
             singleResult = 0;

@@ -674,7 +674,6 @@ const getButtonUrl = async (
   return "";
 };
 
-
 const isDrupal = async (url: string): Promise<boolean> => {
   const $: CheerioAPI = await loadPageData(url);
   const linkTags = $("link");
@@ -712,6 +711,7 @@ const isDrupal = async (url: string): Promise<boolean> => {
   }
 
   return false;
+};
 
 const getPages = async (
   url: string,
@@ -849,5 +849,5 @@ export {
   getPrimaryPageUrl,
   getButtonUrl,
   isDrupal,
-  getPages
+  getPages,
 };
