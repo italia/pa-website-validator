@@ -9,6 +9,7 @@ import {
 } from "../../storage/municipality/menuItems";
 import {
   buildUrl,
+  cmsThemeRx,
   getHREFValuesDataAttribute,
   getRandomNString,
   gotoRetry,
@@ -18,6 +19,7 @@ import {
 } from "../utils";
 import { feedbackComponentStructure } from "../../storage/municipality/feedbackComponentStructure";
 import { errorHandling } from "../../config/commonAuditsParts";
+import axios from "axios";
 import { DataElementError } from "../DataElementError";
 import crawlerTypes from "../../types/crawler-types";
 import requestPages = crawlerTypes.requestPages;
@@ -672,6 +674,45 @@ const getButtonUrl = async (
   return "";
 };
 
+const isDrupal = async (url: string): Promise<boolean> => {
+  const $: CheerioAPI = await loadPageData(url);
+  const linkTags = $("link");
+
+  let styleCSSUrl = "";
+  for (const linkTag of linkTags) {
+    if (!linkTag.attribs || !("href" in linkTag.attribs)) {
+      continue;
+    }
+
+    if (linkTag.attribs.href.includes(".css")) {
+      styleCSSUrl = linkTag.attribs.href;
+      if ((await isInternalUrl(styleCSSUrl)) && !styleCSSUrl.includes(url)) {
+        styleCSSUrl = await buildUrl(url, styleCSSUrl);
+      }
+
+      let CSScontent = "";
+      try {
+        const response = await axios.get(styleCSSUrl);
+        CSScontent = response.data;
+      } catch (e) {
+        CSScontent = "";
+      }
+
+      const match = CSScontent.match(cmsThemeRx);
+
+      if (match === null || !match.groups) {
+        continue;
+      }
+
+      if (match?.groups?.name?.toLowerCase() === "drupal") {
+        return true;
+      }
+    }
+  }
+
+  return false;
+};
+
 const getPages = async (
   url: string,
   requests: requestPages[]
@@ -807,5 +848,6 @@ export {
   checkFeedbackComponent,
   getPrimaryPageUrl,
   getButtonUrl,
+  isDrupal,
   getPages,
 };
