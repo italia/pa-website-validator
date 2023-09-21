@@ -6,9 +6,12 @@ import lighthouse from "lighthouse";
 import semver from "semver";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { gotoRetry, requestTimeout } from "../../utils/utils";
-import { getPages } from "../../utils/municipality/utils";
+import { getPages, isDrupal } from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
-import { cssClasses } from "../../storage/municipality/cssClasses";
+import {
+  cssClasses,
+  drupalCoreClasses,
+} from "../../storage/municipality/cssClasses";
 import puppeteer from "puppeteer";
 import {
   errorHandling,
@@ -139,6 +142,8 @@ class LoadAudit extends Audit {
 
     const pagesInError = [];
 
+    const drupalClassesCheck = await isDrupal(url);
+
     for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
       let singleResult = 0;
       const item = {
@@ -240,12 +245,23 @@ class LoadAudit extends Audit {
           singleResult = 0;
           item.classes_found = subResults[0];
         } else {
-          const bootstrapClasses = foundClasses.filter((value) =>
-            cssClasses.includes(value)
-          );
+          const correctClasses = [];
+          const baseClasses = [];
+          for (const cssClass of foundClasses) {
+            if (cssClasses.includes(cssClass)) {
+              correctClasses.push(cssClass);
+            }
 
-          const percentage =
-            (bootstrapClasses.length / foundClasses.length) * 100;
+            if (!drupalClassesCheck) {
+              baseClasses.push(cssClass);
+            } else {
+              if (!drupalCoreClasses.some((rx) => rx.test(cssClass))) {
+                baseClasses.push(cssClass);
+              }
+            }
+          }
+
+          const percentage = (correctClasses.length / baseClasses.length) * 100;
           item.classes_found = Math.round(percentage) + "%";
           if (percentage < 50) {
             singleResult = 0;
