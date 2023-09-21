@@ -143,7 +143,7 @@ export const pwaAudits = [
 export const errorHandling = {
   errorColumnTitles: [
     "Pagine nelle quali si sono verificati errori:",
-    "Errori:",
+    "Errori",
   ],
   errorMessage:
     "In almeno una delle pagine analizzate si sono verificati degli errori.",
@@ -151,3 +151,8 @@ export const errorHandling = {
     "Si sono verificati degli errori. Controlla la tabella sottostante per maggiori dettagli.",
   gotoRetryTentative: 3,
 };
+
+export const notExecutedErrorMessage =
+  "I seguenti data-element necessari per condurre il test non sono stati trovati: <LIST>. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.";
+
+export const minNumberOfServices = 10;

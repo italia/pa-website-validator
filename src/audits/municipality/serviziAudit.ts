@@ -12,10 +12,7 @@ import {
   missingMenuItems,
   toMenuItem,
 } from "../../utils/utils";
-import {
-  getRandomThirdLevelPagesUrl,
-  getPrimaryPageUrl,
-} from "../../utils/municipality/utils";
+import { getPages } from "../../utils/municipality/utils";
 import {
   contentTypeItemsBody,
   contentTypeItemsHeaders,
@@ -24,9 +21,13 @@ import {
 } from "../../storage/municipality/contentTypeItems";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
-import { primaryMenuItems } from "../../storage/municipality/menuItems";
 import { convert } from "html-to-text";
-import { errorHandling } from "../../config/commonAuditsParts";
+import {
+  errorHandling,
+  minNumberOfServices,
+  notExecutedErrorMessage,
+} from "../../config/commonAuditsParts";
+import { DataElementError } from "../../utils/DataElementError";
 
 const Audit = lighthouse.Audit;
 
@@ -91,21 +92,26 @@ class LoadAudit extends Audit {
     const mandatoryHeaderVoices = contentTypeItemsHeaders;
     const mandatoryBodyVoices = contentTypeItemsBody;
 
-    const randomServices: string[] = await getRandomThirdLevelPagesUrl(
-      url,
-      await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
-      `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
-      auditVariables.numberOfServicesToBeScanned
-    );
+    let pagesToBeAnalyzed = [];
+    try {
+      pagesToBeAnalyzed = await getPages(url, [
+        {
+          type: "services",
+          numberOfPages: auditVariables.numberOfServicesToBeScanned,
+        },
+      ]);
+    } catch (ex) {
+      if (!(ex instanceof DataElementError)) {
+        throw ex;
+      }
 
-    if (randomServices.length === 0) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: auditData.nonExecuted,
+              result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
           ]
         ),
@@ -120,17 +126,17 @@ class LoadAudit extends Audit {
 
     const pagesInError = [];
     let $: CheerioAPI = await loadPageData(url);
-    for (const randomService of randomServices) {
+    for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
       const item = {
         missing_elements: "",
         wrong_order_elements: "",
         inspected_page: "",
       };
 
-      item.inspected_page = randomService;
+      item.inspected_page = pageToBeAnalyzed;
 
       try {
-        $ = await loadPageData(randomService);
+        $ = await loadPageData(pageToBeAnalyzed);
       } catch (ex) {
         if (!(ex instanceof Error)) {
           throw ex;
@@ -141,8 +147,9 @@ class LoadAudit extends Audit {
           errorMessage.lastIndexOf('"')
         );
         pagesInError.push({
-          inspected_page: randomService,
-          wrong_order_elements: errorMessage,
+          inspected_page: pageToBeAnalyzed,
+          wrong_order_elements: "",
+          missing_elements: errorMessage,
         });
         continue;
       }
@@ -253,10 +260,34 @@ class LoadAudit extends Audit {
     }
 
     const results = [];
+    if (pagesToBeAnalyzed.length < minNumberOfServices) {
+      score = 0;
+    }
+
+    switch (score) {
+      case 1:
+        results.push({
+          result: auditData.greenResult,
+        });
+        break;
+      case 0.5:
+        results.push({
+          result: auditData.yellowResult,
+        });
+        break;
+      case 0:
+        results.push({
+          result: auditData.redResult,
+        });
+        break;
+    }
+
     if (pagesInError.length > 0) {
       results.push({
         result: errorHandling.errorMessage,
       });
+
+      results.push({});
 
       results.push({
         result: errorHandling.errorColumnTitles[0],
@@ -271,24 +302,6 @@ class LoadAudit extends Audit {
             items: [item],
           },
         });
-      }
-    } else {
-      switch (score) {
-        case 1:
-          results.push({
-            result: auditData.greenResult,
-          });
-          break;
-        case 0.5:
-          results.push({
-            result: auditData.yellowResult,
-          });
-          break;
-        case 0:
-          results.push({
-            result: auditData.redResult,
-          });
-          break;
       }
     }
 

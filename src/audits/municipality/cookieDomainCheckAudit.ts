@@ -7,17 +7,13 @@ import { auditDictionary } from "../../storage/auditDictionary";
 import { run as cookieAudit } from "../../utils/cookieAuditLogic";
 import crawlerTypes from "../../types/crawler-types";
 import cookie = crawlerTypes.cookie;
-import {
-  getRandomFirstLevelPagesUrl,
-  getRandomSecondLevelPagesUrl,
-  getRandomThirdLevelPagesUrl,
-  getPrimaryPageUrl,
-  getButtonUrl,
-} from "../../utils/municipality/utils";
+import { getPages } from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
-import { loadPageData } from "../../utils/utils";
-import { primaryMenuItems } from "../../storage/municipality/menuItems";
-import { errorHandling } from "../../config/commonAuditsParts";
+import {
+  errorHandling,
+  notExecutedErrorMessage,
+} from "../../config/commonAuditsParts";
+import { DataElementError } from "../../utils/DataElementError";
 
 const Audit = lighthouse.Audit;
 
@@ -77,80 +73,53 @@ class LoadAudit extends Audit {
       },
     ];
 
-    const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
-      url,
-      auditVariables.numberOfFirstLevelPageToBeScanned
-    );
-
-    const randomSecondLevelPagesUrl = await getRandomSecondLevelPagesUrl(
-      url,
-      auditVariables.numberOfSecondLevelPageToBeScanned
-    );
-
-    const randomServicesUrl = await getRandomThirdLevelPagesUrl(
-      url,
-      await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
-      `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
-      auditVariables.numberOfServicesToBeScanned
-    );
-
-    const randomEventsUrl = await getRandomThirdLevelPagesUrl(
-      url,
-      await getButtonUrl(
-        await loadPageData(
-          await getPrimaryPageUrl(url, primaryMenuItems.live.data_element)
-        ),
+    let pagesToBeAnalyzed = [];
+    try {
+      pagesToBeAnalyzed = [
         url,
-        `[data-element="${primaryMenuItems.live.secondary_item_data_element[1]}"]`
-      ),
-      `[data-element="${primaryMenuItems.live.third_item_data_element}"]`,
-      auditVariables.numberOfEventsToBeScanned
-    );
+        ...(await getPages(url, [
+          {
+            type: "first_level_pages",
+            numberOfPages: auditVariables.numberOfFirstLevelPageToBeScanned,
+          },
+          {
+            type: "second_level_pages",
+            numberOfPages: auditVariables.numberOfSecondLevelPageToBeScanned,
+          },
+          {
+            type: "services",
+            numberOfPages: auditVariables.numberOfServicesToBeScanned,
+          },
+          {
+            type: "events",
+            numberOfPages: auditVariables.numberOfEventsToBeScanned,
+          },
+          {
+            type: "booking_appointment",
+            numberOfPages: 1,
+          },
+          {
+            type: "personal_area_login",
+            numberOfPages: 1,
+          },
+        ])),
+      ];
+    } catch (ex) {
+      if (!(ex instanceof DataElementError)) {
+        throw ex;
+      }
 
-    if (
-      randomFirstLevelPagesUrl.length === 0 ||
-      randomSecondLevelPagesUrl.length === 0 ||
-      randomServicesUrl.length === 0
-    ) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: auditData.nonExecuted,
+              result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
           ]
         ),
       };
-    }
-
-    const pagesToBeAnalyzed = [
-      url,
-      ...randomFirstLevelPagesUrl,
-      ...randomSecondLevelPagesUrl,
-      ...randomServicesUrl,
-      ...randomEventsUrl,
-    ];
-
-    const personalAreaLoginPage = await getPrimaryPageUrl(
-      url,
-      "personal-area-login"
-    );
-    if (personalAreaLoginPage !== "") {
-      pagesToBeAnalyzed.push(personalAreaLoginPage);
-    }
-
-    const servicesPage = await getPrimaryPageUrl(url, "all-services");
-
-    if (servicesPage !== "") {
-      const bookingAppointmentPage = await getPrimaryPageUrl(
-        servicesPage,
-        "appointment-booking"
-      );
-      if (bookingAppointmentPage !== "") {
-        pagesToBeAnalyzed.push(bookingAppointmentPage);
-      }
     }
 
     let score = 1;
@@ -205,6 +174,8 @@ class LoadAudit extends Audit {
       results.push({
         result: errorHandling.errorMessage,
       });
+
+      results.push({});
 
       results.push({
         result: errorHandling.errorColumnTitles[0],

@@ -3,18 +3,17 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import {
-  getRandomFirstLevelPagesUrl,
-  getRandomSecondLevelPagesUrl,
-  getRandomServicesUrl,
-  getRandomLocationsUrl,
-} from "../../utils/school/utils";
+import { getPages } from "../../utils/school/utils";
 import crawlerTypes from "../../types/crawler-types";
 import cookie = crawlerTypes.cookie;
 import { auditDictionary } from "../../storage/auditDictionary";
 import { run as cookieAudit } from "../../utils/cookieAuditLogic";
 import { auditScanVariables } from "../../storage/school/auditScanVariables";
-import { errorHandling } from "../../config/commonAuditsParts";
+import {
+  errorHandling,
+  notExecutedErrorMessage,
+} from "../../config/commonAuditsParts";
+import { DataElementError } from "../../utils/DataElementError";
 
 const Audit = lighthouse.Audit;
 
@@ -74,53 +73,49 @@ class LoadAudit extends Audit {
       },
     ];
 
-    const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
-      url,
-      auditVariables.numberOfFirstLevelPageToBeScanned
-    );
+    let score = 1;
 
-    const randomSecondLevelPageUrl = await getRandomSecondLevelPagesUrl(
-      url,
-      auditVariables.numberOfSecondLevelPageToBeScanned
-    );
+    let pagesToBeAnalyzed = [];
+    try {
+      pagesToBeAnalyzed = [
+        url,
+        ...(await getPages(url, [
+          {
+            type: "first_level_pages",
+            numberOfPages: auditVariables.numberOfFirstLevelPageToBeScanned,
+          },
+          {
+            type: "second_level_pages",
+            numberOfPages: auditVariables.numberOfSecondLevelPageToBeScanned,
+          },
+          {
+            type: "services",
+            numberOfPages: auditVariables.numberOfServicesToBeScanned,
+          },
+          {
+            type: "locations",
+            numberOfPages: auditVariables.numberOfLocationsToBeScanned,
+          },
+        ])),
+      ];
+    } catch (ex) {
+      if (!(ex instanceof DataElementError)) {
+        throw ex;
+      }
 
-    const randomServiceUrl = await getRandomServicesUrl(
-      url,
-      auditVariables.numberOfServicesToBeScanned
-    );
-
-    const randomLocationsUrl = await getRandomLocationsUrl(
-      url,
-      auditVariables.numberOfLocationsToBeScanned
-    );
-
-    if (
-      randomFirstLevelPagesUrl.length === 0 ||
-      randomSecondLevelPageUrl.length === 0 ||
-      randomServiceUrl.length === 0
-    ) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: auditData.nonExecuted,
+              result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
           ]
         ),
       };
     }
 
-    const pagesToBeAnalyzed = [
-      url,
-      ...randomFirstLevelPagesUrl,
-      ...randomSecondLevelPageUrl,
-      ...randomServiceUrl,
-      ...randomLocationsUrl,
-    ];
-
-    let score = 1;
     let items: cookie[] = [];
 
     const pagesInError = [];
@@ -172,6 +167,8 @@ class LoadAudit extends Audit {
       results.push({
         result: errorHandling.errorMessage,
       });
+
+      results.push({});
 
       results.push({
         result: errorHandling.errorColumnTitles[0],

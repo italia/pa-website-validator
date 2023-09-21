@@ -3,14 +3,14 @@
 // @ts-ignore
 import lighthouse from "lighthouse";
 import { loadPageData } from "../../utils/utils";
-import {
-  getRandomThirdLevelPagesUrl,
-  getPrimaryPageUrl,
-} from "../../utils/municipality/utils";
+import { getPrimaryPageUrl, getPages } from "../../utils/municipality/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
-import { primaryMenuItems } from "../../storage/municipality/menuItems";
-import { errorHandling } from "../../config/commonAuditsParts";
+import {
+  errorHandling,
+  notExecutedErrorMessage,
+} from "../../config/commonAuditsParts";
+import { DataElementError } from "../../utils/DataElementError";
 
 const Audit = lighthouse.Audit;
 
@@ -71,84 +71,64 @@ class LoadAudit extends Audit {
     ];
 
     let $ = await loadPageData(url);
-    const servicesPage = await getPrimaryPageUrl(url, "all-services");
 
-    if (servicesPage === "") {
+    let pagesToBeAnalyzed = [];
+    try {
+      pagesToBeAnalyzed = await getPages(url, [
+        {
+          type: "services_page",
+          numberOfPages: 1,
+        },
+        {
+          type: "booking_appointment",
+          numberOfPages: 1,
+        },
+        {
+          type: "services",
+          numberOfPages: auditVariables.numberOfServicesToBeScanned,
+        },
+      ]);
+    } catch (ex) {
+      if (!(ex instanceof DataElementError)) {
+        throw ex;
+      }
+
       return {
         score: 0,
         details: Audit.makeTableDetails(
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: auditData.nonExecuted,
+              result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
           ]
         ),
       };
     }
-
-    const bookingAppointmentPage = await getPrimaryPageUrl(
-      servicesPage,
-      "appointment-booking"
-    );
-
-    if (bookingAppointmentPage === "") {
-      return {
-        score: 0,
-        details: Audit.makeTableDetails(
-          [{ key: "result", itemType: "text", text: "Risultato" }],
-          [
-            {
-              result: auditData.nonExecuted,
-            },
-          ]
-        ),
-      };
-    }
-
-    const bookingAppointmentPageUrl = new URL(bookingAppointmentPage);
-    const bookingAppointmentPageUrlString =
-      bookingAppointmentPageUrl.origin + bookingAppointmentPageUrl.pathname;
 
     const correctItems = [];
     const wrongItems = [];
+    let score = 1;
 
     const item = {
-      inspected_page: servicesPage,
+      inspected_page: pagesToBeAnalyzed.shift(),
       component_exist: "Sì",
       in_page_url: "Non si applica",
     };
 
-    let score = 1;
-
     correctItems.push(item);
 
-    const randomServices = await getRandomThirdLevelPagesUrl(
-      url,
-      await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
-      `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
-      auditVariables.numberOfServicesToBeScanned
-    );
-
-    if (randomServices.length === 0) {
-      return {
-        score: 0,
-        details: Audit.makeTableDetails(
-          [{ key: "result", itemType: "text", text: "Risultato" }],
-          [
-            {
-              result: auditData.nonExecuted,
-            },
-          ]
-        ),
-      };
-    }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const bookingAppointmentPageUrl = new URL(pagesToBeAnalyzed.shift());
+    const bookingAppointmentPageUrlString =
+      bookingAppointmentPageUrl.origin + bookingAppointmentPageUrl.pathname;
 
     const pagesInError = [];
 
-    for (const randomService of randomServices) {
+    for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
       try {
-        $ = await loadPageData(randomService);
+        $ = await loadPageData(pageToBeAnalyzed);
       } catch (ex) {
         if (!(ex instanceof Error)) {
           throw ex;
@@ -159,20 +139,20 @@ class LoadAudit extends Audit {
           errorMessage.lastIndexOf('"')
         );
         pagesInError.push({
-          inspected_page: randomService,
+          inspected_page: pageToBeAnalyzed,
           component_exist: errorMessage,
         });
         continue;
       }
 
       const item = {
-        inspected_page: randomService,
+        inspected_page: pageToBeAnalyzed,
         component_exist: "Sì",
         in_page_url: "No",
       };
 
       const bookingAppointmentServicePage = await getPrimaryPageUrl(
-        randomService,
+        pageToBeAnalyzed,
         "appointment-booking"
       );
 
@@ -219,6 +199,8 @@ class LoadAudit extends Audit {
       results.push({
         result: errorHandling.errorMessage,
       });
+
+      results.push({});
 
       results.push({
         result: errorHandling.errorColumnTitles[0],

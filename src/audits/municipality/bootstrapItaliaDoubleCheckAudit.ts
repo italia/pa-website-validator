@@ -6,12 +6,9 @@ import lighthouse from "lighthouse";
 import semver from "semver";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { gotoRetry, requestTimeout } from "../../utils/utils";
-import {
-  getRandomFirstLevelPagesUrl,
-  getRandomSecondLevelPagesUrl,
-  getRandomThirdLevelPagesUrl,
-  getPrimaryPageUrl,
-  isDrupal,
+import { 
+  getPages,
+  isDrupal
 } from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import {
@@ -19,8 +16,11 @@ import {
   drupalCoreClasses,
 } from "../../storage/municipality/cssClasses";
 import puppeteer from "puppeteer";
-import { primaryMenuItems } from "../../storage/municipality/menuItems";
-import { errorHandling } from "../../config/commonAuditsParts";
+import {
+  errorHandling,
+  notExecutedErrorMessage,
+} from "../../config/commonAuditsParts";
+import { DataElementError } from "../../utils/DataElementError";
 
 const Audit = lighthouse.Audit;
 
@@ -91,66 +91,49 @@ class LoadAudit extends Audit {
 
     let score = 1;
 
-    const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
-      url,
-      auditVariables.numberOfFirstLevelPageToBeScanned
-    );
+    let pagesToBeAnalyzed = [];
+    try {
+      pagesToBeAnalyzed = [
+        url,
+        ...(await getPages(url, [
+          {
+            type: "first_level_pages",
+            numberOfPages: auditVariables.numberOfFirstLevelPageToBeScanned,
+          },
+          {
+            type: "second_level_pages",
+            numberOfPages: auditVariables.numberOfSecondLevelPageToBeScanned,
+          },
+          {
+            type: "services",
+            numberOfPages: auditVariables.numberOfServicesToBeScanned,
+          },
+          {
+            type: "booking_appointment",
+            numberOfPages: 1,
+          },
+          {
+            type: "personal_area_login",
+            numberOfPages: 1,
+          },
+        ])),
+      ];
+    } catch (ex) {
+      if (!(ex instanceof DataElementError)) {
+        throw ex;
+      }
 
-    const randomSecondLevelPagesUrl = await getRandomSecondLevelPagesUrl(
-      url,
-      auditVariables.numberOfSecondLevelPageToBeScanned
-    );
-
-    const randomServicesUrl = await getRandomThirdLevelPagesUrl(
-      url,
-      await getPrimaryPageUrl(url, primaryMenuItems.services.data_element),
-      `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
-      auditVariables.numberOfServicesToBeScanned
-    );
-
-    if (
-      randomFirstLevelPagesUrl.length === 0 ||
-      randomSecondLevelPagesUrl.length === 0 ||
-      randomServicesUrl.length === 0
-    ) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: auditData.nonExecuted,
+              result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
           ]
         ),
       };
-    }
-
-    const pagesToBeAnalyzed = [
-      url,
-      ...randomFirstLevelPagesUrl,
-      ...randomSecondLevelPagesUrl,
-      ...randomServicesUrl,
-    ];
-
-    const personalAreaLoginPage = await getPrimaryPageUrl(
-      url,
-      "personal-area-login"
-    );
-    if (personalAreaLoginPage !== "") {
-      pagesToBeAnalyzed.push(personalAreaLoginPage);
-    }
-
-    const servicesPage = await getPrimaryPageUrl(url, "all-services");
-
-    if (servicesPage !== "") {
-      const bookingAppointmentPage = await getPrimaryPageUrl(
-        servicesPage,
-        "appointment-booking"
-      );
-      if (bookingAppointmentPage !== "") {
-        pagesToBeAnalyzed.push(bookingAppointmentPage);
-      }
     }
 
     const browser = await puppeteer.launch({
@@ -316,6 +299,8 @@ class LoadAudit extends Audit {
       results.push({
         result: errorHandling.errorMessage,
       });
+
+      results.push({});
 
       results.push({
         result: errorHandling.errorColumnTitles[0],

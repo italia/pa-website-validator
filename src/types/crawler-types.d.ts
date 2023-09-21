@@ -54,6 +54,11 @@ declare namespace crawlerTypes {
     elementNotIncluded: string[];
     elementIncluded: string[];
   }
+
+  interface requestPages {
+    type: string;
+    numberOfPages: number;
+  }
 }
 
 export default crawlerTypes;

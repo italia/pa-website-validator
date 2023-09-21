@@ -9,15 +9,15 @@ import { auditDictionary } from "../../storage/auditDictionary";
 const Audit = lighthouse.Audit;
 
 import { gotoRetry, requestTimeout } from "../../utils/utils";
-import {
-  getRandomFirstLevelPagesUrl,
-  getRandomSecondLevelPagesUrl,
-  getRandomServicesUrl,
-} from "../../utils/school/utils";
 import { auditScanVariables } from "../../storage/school/auditScanVariables";
 import { cssClasses } from "../../storage/school/cssClasses";
 import puppeteer from "puppeteer";
-import { errorHandling } from "../../config/commonAuditsParts";
+import {
+  errorHandling,
+  notExecutedErrorMessage,
+} from "../../config/commonAuditsParts";
+import { getPages } from "../../utils/school/utils";
+import { DataElementError } from "../../utils/DataElementError";
 
 const auditId = "school-ux-ui-consistency-bootstrap-italia-double-check";
 const auditData = auditDictionary[auditId];
@@ -85,46 +85,42 @@ class LoadAudit extends Audit {
     const wrongItems = [];
 
     let score = 1;
+    let pagesToBeAnalyzed = [];
+    try {
+      pagesToBeAnalyzed = [
+        url,
+        ...(await getPages(url, [
+          {
+            type: "first_level_pages",
+            numberOfPages: auditVariables.numberOfFirstLevelPageToBeScanned,
+          },
+          {
+            type: "second_level_pages",
+            numberOfPages: auditVariables.numberOfSecondLevelPageToBeScanned,
+          },
+          {
+            type: "services",
+            numberOfPages: auditVariables.numberOfServicesToBeScanned,
+          },
+        ])),
+      ];
+    } catch (ex) {
+      if (!(ex instanceof DataElementError)) {
+        throw ex;
+      }
 
-    const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
-      url,
-      auditVariables.numberOfFirstLevelPageToBeScanned
-    );
-
-    const randomSecondLevelPageUrl = await getRandomSecondLevelPagesUrl(
-      url,
-      auditVariables.numberOfSecondLevelPageToBeScanned
-    );
-
-    const randomServiceUrl = await getRandomServicesUrl(
-      url,
-      auditVariables.numberOfServicesToBeScanned
-    );
-
-    if (
-      randomFirstLevelPagesUrl.length === 0 ||
-      randomSecondLevelPageUrl.length === 0 ||
-      randomServiceUrl.length === 0
-    ) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: auditData.nonExecuted,
+              result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
           ]
         ),
       };
     }
-
-    const pagesToBeAnalyzed = [
-      url,
-      ...randomFirstLevelPagesUrl,
-      ...randomSecondLevelPageUrl,
-      ...randomServiceUrl,
-    ];
 
     const browser = await puppeteer.launch({
       headless: "new",
@@ -268,6 +264,8 @@ class LoadAudit extends Audit {
       results.push({
         result: errorHandling.errorMessage,
       });
+
+      results.push({});
 
       results.push({
         result: errorHandling.errorColumnTitles[0],

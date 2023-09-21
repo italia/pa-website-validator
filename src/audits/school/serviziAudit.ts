@@ -12,7 +12,7 @@ import {
   missingMenuItems,
   toMenuItem,
 } from "../../utils/utils";
-import { getRandomServicesUrl } from "../../utils/school/utils";
+import { getPages } from "../../utils/school/utils";
 import {
   contentTypeItemsBody,
   contentTypeItemsHeaders,
@@ -25,7 +25,11 @@ import { auditDictionary } from "../../storage/auditDictionary";
 import { CheerioAPI } from "cheerio";
 import { auditScanVariables } from "../../storage/school/auditScanVariables";
 import { convert } from "html-to-text";
-import { errorHandling } from "../../config/commonAuditsParts";
+import {
+  errorHandling,
+  notExecutedErrorMessage,
+} from "../../config/commonAuditsParts";
+import { DataElementError } from "../../utils/DataElementError";
 
 const Audit = lighthouse.Audit;
 
@@ -93,19 +97,29 @@ class LoadAudit extends Audit {
 
     const mandatoryMetadata = contentTypeItemsMetadata;
 
-    const randomServices: string[] = await getRandomServicesUrl(
-      url,
-      auditVariables.numberOfServicesToBeScanned
-    );
+    let pagesToBeAnalyzed = [];
+    try {
+      pagesToBeAnalyzed = [
+        url,
+        ...(await getPages(url, [
+          {
+            type: "services",
+            numberOfPages: auditVariables.numberOfServicesToBeScanned,
+          },
+        ])),
+      ];
+    } catch (ex) {
+      if (!(ex instanceof DataElementError)) {
+        throw ex;
+      }
 
-    if (randomServices.length === 0) {
       return {
         score: 0,
         details: Audit.makeTableDetails(
           [{ key: "result", itemType: "text", text: "Risultato" }],
           [
             {
-              result: auditData.nonExecuted,
+              result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
           ]
         ),
@@ -120,17 +134,17 @@ class LoadAudit extends Audit {
 
     const pagesInError = [];
     let $: CheerioAPI = await loadPageData(url);
-    for (const randomService of randomServices) {
+    for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
       const item = {
         missing_elements: "",
         wrong_order_elements: "",
         inspected_page: "",
       };
 
-      item.inspected_page = randomService;
+      item.inspected_page = pageToBeAnalyzed;
 
       try {
-        $ = await loadPageData(randomService);
+        $ = await loadPageData(pageToBeAnalyzed);
       } catch (ex) {
         if (!(ex instanceof Error)) {
           throw ex;
@@ -143,7 +157,7 @@ class LoadAudit extends Audit {
         );
 
         pagesInError.push({
-          inspected_page: randomService,
+          inspected_page: pageToBeAnalyzed,
           wrong_order_elements: errorMessage,
         });
         continue;
@@ -276,6 +290,8 @@ class LoadAudit extends Audit {
       results.push({
         result: errorHandling.errorMessage,
       });
+
+      results.push({});
 
       results.push({
         result: errorHandling.errorColumnTitles[0],
