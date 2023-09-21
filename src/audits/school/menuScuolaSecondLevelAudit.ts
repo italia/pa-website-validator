@@ -71,7 +71,7 @@ class LoadAudit extends Audit {
         itemType: "text",
         text: "Voci corrette identificate",
         subItemsHeading: {
-          key: "correct_associated_page",
+          key: "external",
           itemType: "text",
         },
       },
@@ -79,10 +79,6 @@ class LoadAudit extends Audit {
         key: "wrong_voices",
         itemType: "text",
         text: "Voci aggiuntive trovate",
-        subItemsHeading: {
-          key: "external",
-          itemType: "text",
-        },
       },
     ];
 
@@ -228,49 +224,20 @@ class LoadAudit extends Audit {
 
     results.push({
       result: "Voce di menù",
-      correct_voices: "Link trovato",
-      correct_voices_percentage: "Pagina associata corretta",
-      wrong_voices: "Pagina interna al dominio",
+      correct_voices: "Pagina interna al dominio",
+      correct_voices_percentage: "Link trovato",
     });
 
     for (const page of secondLevelPages) {
       const isInternal = await isInternalRedirectUrl(url, page.linkUrl);
-      let isCorrectlyAssociated = false;
 
-      if (isInternal) {
-        const $ = await loadPageData(page.linkUrl);
-
-        let breadcrumbElements = await getPageElementDataAttribute(
-          $,
-          '[data-element="breadcrumb"]',
-          "li"
-        );
-        breadcrumbElements = breadcrumbElements.map((x) =>
-          x
-            .toLowerCase()
-            .replaceAll(/[^a-zA-Z0-9àèìòù ]/g, "")
-            .trim()
-        );
-
-        const pageName =
-          breadcrumbElements[breadcrumbElements.length - 1] ?? "";
-
-        if (
-          pageName.length > 0 &&
-          pageName.toLowerCase() === page.linkName.toLowerCase()
-        ) {
-          isCorrectlyAssociated = true;
-        }
-      }
-
-      if (!isInternal || !isCorrectlyAssociated) {
+      if (!isInternal) {
         score = 0;
       }
 
       const item = {
         menu_voice: page.linkName,
         inspected_page: page.linkUrl,
-        correct_associated_page: isCorrectlyAssociated ? "Sì" : "No",
         external: isInternal ? "Sì" : "No",
       };
 
