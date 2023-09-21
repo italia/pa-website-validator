@@ -6,10 +6,7 @@ import lighthouse from "lighthouse";
 import semver from "semver";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { gotoRetry, requestTimeout } from "../../utils/utils";
-import {
-  getPages,
-  isDrupal
-} from "../../utils/municipality/utils";
+import { getPages, isDrupal } from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import {
   cssClasses,
