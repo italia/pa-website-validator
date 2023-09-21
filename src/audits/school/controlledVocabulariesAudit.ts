@@ -66,7 +66,19 @@ class LoadAudit extends lighthouse.Audit {
       },
     ];
 
-    const argumentsElements: string[] = await getArgumentsElements(url);
+    let argumentsElements: string[] = [];
+    try {
+      argumentsElements = await getArgumentsElements(url);
+    } catch (e) {
+      return {
+        score: 0,
+        details: Audit.makeTableDetails(
+          [{ key: "result", itemType: "text", text: "Risultato" }],
+          [{ result: notExecutedErrorMessage.replace("<LIST>", "`all-topics") }]
+        ),
+      };
+    }
+
     if (argumentsElements.length <= 0) {
       return {
         score: 0,
@@ -162,7 +174,7 @@ async function getArgumentsElements(url: string): Promise<string[]> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await button?.evaluate((b: any) => b.click());
 
-    await page.waitForNavigation();
+    await page.waitForSelector('[data-element="all-topics"]');
 
     const $ = cheerio.load(await page.content());
     if ($.length <= 0) {
