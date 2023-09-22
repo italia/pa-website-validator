@@ -336,7 +336,7 @@ const getRandomThirdLevelPagesUrl = async (
     );
     console.log(res?.url(), res?.status());
 
-    let maxCountPages = (await page.$$(linkDataElement)).length;
+    let maxCountPages = 0;
     let clickButton = true;
     while (clickButton) {
       try {
