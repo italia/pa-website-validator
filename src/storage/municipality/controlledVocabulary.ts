@@ -19789,4 +19789,5 @@ export const eurovocVocabulary = [
   "industrie varie",
   "produzione",
   "prodotto animale",
+  "spazio pubblico",
 ];
