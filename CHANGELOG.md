@@ -1,5 +1,57 @@
 # Changelog
 
+## [2.7.0](https://github.com/italia/pa-website-validator/compare/v2.6.0...v2.7.0) (2023-09-22)
+
+
+### Features
+
+* add check number of services in audit municipality services ([be0238c](https://github.com/italia/pa-website-validator/commit/be0238c32bdc47487fefcd78b66d9bb53ea86fb8))
+* add check number of services in audit municipality services ([58d19e0](https://github.com/italia/pa-website-validator/commit/58d19e00ffb26822e3f4f809fa0d8e2440a3bb94))
+* add check on page url and name in first and second level pages ([a99548e](https://github.com/italia/pa-website-validator/commit/a99548e18daac75468cc2719102a37048b777de4))
+* add check on page url and name in first and second level pages ([4fb3077](https://github.com/italia/pa-website-validator/commit/4fb30778978246bad6c1f522c3f83970a2ed7b65))
+* add check pages in school ([f99236d](https://github.com/italia/pa-website-validator/commit/f99236d4c374113da03c064a7a57495ed69430a1))
+* add check pages in school ([c6d78c0](https://github.com/italia/pa-website-validator/commit/c6d78c0e4b7daff09bae4d37d0d9b8f46443589b))
+* add error handling in domain and feedback audit ([d3a1524](https://github.com/italia/pa-website-validator/commit/d3a1524982ae83d4586fad295d4d00509458df37))
+* add link name and url for get first level page ([236a702](https://github.com/italia/pa-website-validator/commit/236a702995fb34ec5acc48514d0e17845ec0fcb6))
+* add link name and url for get first level page ([53901e5](https://github.com/italia/pa-website-validator/commit/53901e5bc22a88ec0b0a6b3e33c8bc93bafcab69))
+* add pager loading in municipality services ([eb1b17f](https://github.com/italia/pa-website-validator/commit/eb1b17f4fa7bf03fa3e8c5985ca5acbd040bf045))
+* add primary page domain checks ([fa41bce](https://github.com/italia/pa-website-validator/commit/fa41bce5c8e948617313ac2ec098f31a05d8d74c))
+* add primary page domain checks ([c5da288](https://github.com/italia/pa-website-validator/commit/c5da2887627eadd74b2b7dec0903fcc731b2749f))
+* add primary, secondary and service pages in domain audit ([df82b3f](https://github.com/italia/pa-website-validator/commit/df82b3f3fb860562a177928ae1a4551227b0949f))
+* add protocol timeout ([56b3b50](https://github.com/italia/pa-website-validator/commit/56b3b507c1c3fc6ed4d3184632b08fb018d963be))
+* audit school first level page, check page redirect and page name ([40fcb92](https://github.com/italia/pa-website-validator/commit/40fcb920e44fb32af4d559a97f4888db8e0fe610))
+* audit school first level page, check page redirect and page name ([f15b059](https://github.com/italia/pa-website-validator/commit/f15b05984e8f0d6b7fdb3faab42122d7008b691b))
+* change error message ([339e692](https://github.com/italia/pa-website-validator/commit/339e692893f84327b4d02d6c4e71c8283f8a1f59))
+* change municipality bootstrap check ([59c0066](https://github.com/italia/pa-website-validator/commit/59c0066481d6a04823e8d5bcf8c08c7ef7adfc87))
+* refactory pages loading and data element error handling ([b5e09f9](https://github.com/italia/pa-website-validator/commit/b5e09f9d56428558714907c424f03f30e56e22cd))
+* remove external link redirect from page retrieve ([0f44278](https://github.com/italia/pa-website-validator/commit/0f44278a5b74e77fec6a50d6fa0431805fb4ab90))
+* remove external link redirect from page retrieve ([5093a14](https://github.com/italia/pa-website-validator/commit/5093a14822000448aebce8145038b4d973a5986a))
+* second level pages load ([655c111](https://github.com/italia/pa-website-validator/commit/655c111f9fc3a08bfd0bd52982be686066c0fe78))
+* second level pages load ([67991ea](https://github.com/italia/pa-website-validator/commit/67991ea2f80002366cdf7c81c3b5d6ecba3cfe2f))
+
+
+### Bug Fixes
+
+* add regular expression for drupal classes ([#370](https://github.com/italia/pa-website-validator/issues/370)) ([f69f01a](https://github.com/italia/pa-website-validator/commit/f69f01a18dc931624cb748be8ca6f024f393c14c))
+* add vocabularies ([#371](https://github.com/italia/pa-website-validator/issues/371)) ([dd52af9](https://github.com/italia/pa-website-validator/commit/dd52af977de4054bbf7d8e9a39f3c06c1a477b81))
+* audit configs ([ea04942](https://github.com/italia/pa-website-validator/commit/ea04942313a8db9bc70db19c175fdd0bbc929477))
+* audit configs ([973f0a1](https://github.com/italia/pa-website-validator/commit/973f0a12e51225f9b79984bd6d6aa08fb0daf8f6))
+* bootstrap audit description ([fdb63b4](https://github.com/italia/pa-website-validator/commit/fdb63b43a4b8804b41853c936ea2654a58cff0e3))
+* change audit messages: municipality-domain, municipality-services ([8811b37](https://github.com/italia/pa-website-validator/commit/8811b37cd59948f4b4cc2d2464ecc4a3d78865bd))
+* change check logic school and municipality ([d494bb5](https://github.com/italia/pa-website-validator/commit/d494bb5ee8797d4f45deccc9c680173bc44c12ee))
+* change check logic school and municipality ([c1fb622](https://github.com/italia/pa-website-validator/commit/c1fb622e2849b2a77f31b777a81d78af6fb36c18))
+* error column order ([5e574d1](https://github.com/italia/pa-website-validator/commit/5e574d1120bbb969b186c406730023cff5db5cc7))
+* error column order ([7ef8c74](https://github.com/italia/pa-website-validator/commit/7ef8c748e8cdcab1466ce251ed25ff5f1f4ce904))
+* error on link build ([3e27156](https://github.com/italia/pa-website-validator/commit/3e2715678eacb070bae9ed4ba09c1764b3486a17))
+* merge conflicts ([3493eca](https://github.com/italia/pa-website-validator/commit/3493ecaecf500bd82f9e399f8c8391825a5ce148))
+* remove backtick ([601c757](https://github.com/italia/pa-website-validator/commit/601c757aa53b2ec5a772ac072c7eb644ea267e56))
+* replace waitForNavigation with waitForSelector all-topic ([2492ccc](https://github.com/italia/pa-website-validator/commit/2492ccc6bb5b4839698dd3b10e3412c85ba17f57))
+* start from zero, min 2 clicks ([70e40a3](https://github.com/italia/pa-website-validator/commit/70e40a334998ba954986e6bfc7d8b51814506675))
+* static checks ([127b19a](https://github.com/italia/pa-website-validator/commit/127b19a6944af7ef214898aea3ca55e5b81fc4b6))
+* static checks ([b1abf41](https://github.com/italia/pa-website-validator/commit/b1abf4148c918db9d9e51aa8a70622e7a33c3b7c))
+* static checks ([dfbd56b](https://github.com/italia/pa-website-validator/commit/dfbd56badba46b82b224d0f0b0171398fef01e51))
+* Update allowedDomains.ts ([06a16b4](https://github.com/italia/pa-website-validator/commit/06a16b4cae3ad19deb488ec64b85ef0bf278386d))
+
 ## [2.6.0](https://github.com/italia/pa-website-validator/compare/v2.5.1...v2.6.0) (2023-08-04)
 
 
