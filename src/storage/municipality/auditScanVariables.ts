@@ -44,45 +44,45 @@ export const auditScanVariables = {
   },
   suggested: {
     "municipality-ux-ui-consistency-bootstrap-italia-double-check": {
-      numberOfFirstLevelPageToBeScanned: 10,
-      numberOfSecondLevelPageToBeScanned: 10,
-      numberOfServicesToBeScanned: 10,
+      numberOfFirstLevelPageToBeScanned: 5,
+      numberOfSecondLevelPageToBeScanned: 5,
+      numberOfServicesToBeScanned: 5,
     },
     "municipality-ux-ui-consistency-fonts-check": {
-      numberOfFirstLevelPageToBeScanned: 10,
-      numberOfSecondLevelPageToBeScanned: 10,
-      numberOfServicesToBeScanned: 10,
+      numberOfFirstLevelPageToBeScanned: 5,
+      numberOfSecondLevelPageToBeScanned: 5,
+      numberOfServicesToBeScanned: 5,
     },
     "municipality-feedback-element": {
-      numberOfFirstLevelPageToBeScanned: 10,
-      numberOfSecondLevelPageToBeScanned: 10,
+      numberOfFirstLevelPageToBeScanned: 5,
+      numberOfSecondLevelPageToBeScanned: 5,
     },
     "municipality-user-experience-evaluation": {
-      numberOfServicesToBeScanned: 10,
+      numberOfServicesToBeScanned: 5,
     },
     "municipality-legislation-cookie-domain-check": {
-      numberOfFirstLevelPageToBeScanned: 10,
-      numberOfSecondLevelPageToBeScanned: 10,
-      numberOfServicesToBeScanned: 10,
-      numberOfEventsToBeScanned: 10,
+      numberOfFirstLevelPageToBeScanned: 5,
+      numberOfSecondLevelPageToBeScanned: 5,
+      numberOfServicesToBeScanned: 5,
+      numberOfEventsToBeScanned: 5,
     },
     "municipality-contacts-assistency": {
-      numberOfServicesToBeScanned: 10,
+      numberOfServicesToBeScanned: 5,
     },
     "municipality-servizi-structure-match-model": {
       numberOfServicesToBeScanned: 10,
     },
     "municipality-booking-appointment-check": {
-      numberOfServicesToBeScanned: 10,
+      numberOfServicesToBeScanned: 5,
     },
     "municipality-metatag": {
-      numberOfServicesToBeScanned: 10,
+      numberOfServicesToBeScanned: 5,
     },
     "municipality-domain": {
-      numberOfFirstLevelPageToBeScanned: 10,
-      numberOfSecondLevelPageToBeScanned: 10,
-      numberOfServicesToBeScanned: 10,
-      numberOfEventsToBeScanned: 10,
+      numberOfFirstLevelPageToBeScanned: 5,
+      numberOfSecondLevelPageToBeScanned: 5,
+      numberOfServicesToBeScanned: 5,
+      numberOfEventsToBeScanned: 5,
     },
   },
   high: {
