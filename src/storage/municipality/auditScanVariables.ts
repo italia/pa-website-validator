@@ -44,45 +44,45 @@ export const auditScanVariables = {
   },
   suggested: {
     "municipality-ux-ui-consistency-bootstrap-italia-double-check": {
-      numberOfFirstLevelPageToBeScanned: 5,
-      numberOfSecondLevelPageToBeScanned: 5,
-      numberOfServicesToBeScanned: 5,
+      numberOfFirstLevelPageToBeScanned: 10,
+      numberOfSecondLevelPageToBeScanned: 10,
+      numberOfServicesToBeScanned: 10,
     },
     "municipality-ux-ui-consistency-fonts-check": {
-      numberOfFirstLevelPageToBeScanned: 5,
-      numberOfSecondLevelPageToBeScanned: 5,
-      numberOfServicesToBeScanned: 5,
+      numberOfFirstLevelPageToBeScanned: 10,
+      numberOfSecondLevelPageToBeScanned: 10,
+      numberOfServicesToBeScanned: 10,
     },
     "municipality-feedback-element": {
-      numberOfFirstLevelPageToBeScanned: 5,
-      numberOfSecondLevelPageToBeScanned: 5,
+      numberOfFirstLevelPageToBeScanned: 10,
+      numberOfSecondLevelPageToBeScanned: 10,
     },
     "municipality-user-experience-evaluation": {
-      numberOfServicesToBeScanned: 5,
+      numberOfServicesToBeScanned: 10,
     },
     "municipality-legislation-cookie-domain-check": {
-      numberOfFirstLevelPageToBeScanned: 5,
-      numberOfSecondLevelPageToBeScanned: 5,
-      numberOfServicesToBeScanned: 5,
-      numberOfEventsToBeScanned: 5,
+      numberOfFirstLevelPageToBeScanned: 10,
+      numberOfSecondLevelPageToBeScanned: 10,
+      numberOfServicesToBeScanned: 10,
+      numberOfEventsToBeScanned: 10,
     },
     "municipality-contacts-assistency": {
-      numberOfServicesToBeScanned: 5,
+      numberOfServicesToBeScanned: 10,
     },
     "municipality-servizi-structure-match-model": {
-      numberOfServicesToBeScanned: 5,
+      numberOfServicesToBeScanned: 10,
     },
     "municipality-booking-appointment-check": {
-      numberOfServicesToBeScanned: 5,
+      numberOfServicesToBeScanned: 10,
     },
     "municipality-metatag": {
-      numberOfServicesToBeScanned: 5,
+      numberOfServicesToBeScanned: 10,
     },
     "municipality-domain": {
-      numberOfFirstLevelPageToBeScanned: 5,
-      numberOfSecondLevelPageToBeScanned: 5,
-      numberOfServicesToBeScanned: 5,
-      numberOfEventsToBeScanned: 5,
+      numberOfFirstLevelPageToBeScanned: 10,
+      numberOfSecondLevelPageToBeScanned: 10,
+      numberOfServicesToBeScanned: 10,
+      numberOfEventsToBeScanned: 10,
     },
   },
   high: {

@@ -8,6 +8,7 @@ import {
   checkBreadcrumb,
   checkOrder,
   getPageElementDataAttribute,
+  getRandomNString,
   loadPageData,
   missingMenuItems,
   toMenuItem,
@@ -92,12 +93,12 @@ class LoadAudit extends Audit {
     const mandatoryHeaderVoices = contentTypeItemsHeaders;
     const mandatoryBodyVoices = contentTypeItemsBody;
 
-    let pagesToBeAnalyzed = [];
+    let totalServices = [];
     try {
-      pagesToBeAnalyzed = await getPages(url, [
+      totalServices = await getPages(url, [
         {
           type: "services",
-          numberOfPages: auditVariables.numberOfServicesToBeScanned,
+          numberOfPages: -1,
         },
       ]);
     } catch (ex) {
@@ -117,6 +118,11 @@ class LoadAudit extends Audit {
         ),
       };
     }
+
+    const pagesToBeAnalyzed = await getRandomNString(
+      totalServices,
+      auditVariables.numberOfServicesToBeScanned
+    );
 
     const correctItems = [];
     const toleranceItems = [];
@@ -260,7 +266,7 @@ class LoadAudit extends Audit {
     }
 
     const results = [];
-    if (pagesToBeAnalyzed.length < minNumberOfServices) {
+    if (totalServices.length < minNumberOfServices) {
       score = 0;
     }
 
