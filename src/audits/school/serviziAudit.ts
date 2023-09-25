@@ -99,15 +99,12 @@ class LoadAudit extends Audit {
 
     let pagesToBeAnalyzed = [];
     try {
-      pagesToBeAnalyzed = [
-        url,
-        ...(await getPages(url, [
-          {
-            type: "services",
-            numberOfPages: auditVariables.numberOfServicesToBeScanned,
-          },
-        ])),
-      ];
+      pagesToBeAnalyzed = await getPages(url, [
+        {
+          type: "services",
+          numberOfPages: auditVariables.numberOfServicesToBeScanned,
+        },
+      ]);
     } catch (ex) {
       if (!(ex instanceof DataElementError)) {
         throw ex;
