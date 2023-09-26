@@ -275,7 +275,9 @@ const urlExists = async (
 
     let statusCode = undefined;
     try {
-      const response = await axios.get(inspectUrl);
+      const response = await axios.get(inspectUrl, {
+        headers: { Accept: "text/html,application/xhtml+xml" },
+      });
       statusCode = response.status;
     } catch (e) {
       return {
