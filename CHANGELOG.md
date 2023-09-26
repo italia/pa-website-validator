@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.7.1](https://github.com/italia/pa-website-validator/compare/v2.7.0...v2.7.1) (2023-09-26)
+
+
+### Bug Fixes
+
+* audit descriptions ([fc24d35](https://github.com/italia/pa-website-validator/commit/fc24d35fd5bc8cd09b03b62b5a7e6e6417a5be69))
+* axios get headers ([bff95a9](https://github.com/italia/pa-website-validator/commit/bff95a95f36e1fff3e49e19a2c33279e1e5e7ac7))
+* **C.SI.5.2:** audit description ([1b02c2e](https://github.com/italia/pa-website-validator/commit/1b02c2e9790f00c7f8b860a5836b7c957f11f136))
+* move check number of services after load instead of after select pages ([b554c18](https://github.com/italia/pa-website-validator/commit/b554c18ce94956b4b468c7fae58ff2b294719158))
+* remove homepage ([4af1641](https://github.com/italia/pa-website-validator/commit/4af1641d723c7c24f9eb4869f5417fbb739f736d))
+* scan variables ([bb192eb](https://github.com/italia/pa-website-validator/commit/bb192eb231f0432e3e905b8172a16013380abb6a))
+
 ## [2.7.0](https://github.com/italia/pa-website-validator/compare/v2.6.0...v2.7.0) (2023-09-22)
 
 
