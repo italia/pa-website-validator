@@ -13,7 +13,7 @@ import {
   getHREFValuesDataAttribute,
   getRandomNString,
   gotoRetry,
-  isInternalRedirectUrl,
+  getRedirectedUrl,
   isInternalUrl,
   loadPageData,
   requestTimeout,
@@ -1102,18 +1102,18 @@ const getPages = async (
     throw new DataElementError(missingDataElements.join(", "));
   }
 
-  if (removeExternal) {
-    const internalPages: string[] = [];
-    for (const pageUrl of pagesUrl) {
-      if (await isInternalRedirectUrl(url, pageUrl)) {
-        internalPages.push(pageUrl);
-      }
-    }
+  const host = new URL(url).hostname.replace("www.", "");
 
-    return internalPages;
+  const redirectedPages: string[] = [];
+  for (const pageUrl of pagesUrl) {
+    const redirectedUrl = await getRedirectedUrl(pageUrl);
+
+    if (!removeExternal || redirectedUrl.includes(host)) {
+      redirectedPages.push(redirectedUrl);
+    }
   }
 
-  return pagesUrl;
+  return redirectedPages;
 };
 
 export {

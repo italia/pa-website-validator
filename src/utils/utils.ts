@@ -11,6 +11,7 @@ import { MenuItem } from "../types/menuItem";
 import { errorHandling } from "../config/commonAuditsParts";
 
 const cache = new LRUCache<string, CheerioAPI>({ max: 128 });
+const redirectUrlCache = new LRUCache<string, string>({ max: 128 });
 const requestTimeout = parseInt(process.env["requestTimeout"] ?? "30000");
 
 const loadPageData = async (url: string): Promise<CheerioAPI> => {
@@ -41,6 +42,10 @@ const loadPageData = async (url: string): Promise<CheerioAPI> => {
     });
 
     const res = await gotoRetry(page, url, errorHandling.gotoRetryTentative);
+
+    if (redirectUrlCache.get(url) === undefined) {
+      redirectUrlCache.set(url, res?.url());
+    }
 
     console.log(res?.url(), res?.status());
 
@@ -378,14 +383,13 @@ const getAllPageHTML = async (url: string): Promise<string> => {
   return $("html").text() ?? "";
 };
 
-const isInternalRedirectUrl = async (
-  baseUrl: string,
-  url: string
-): Promise<boolean> => {
-  const data_from_cache = cache.get(url);
-  if (data_from_cache !== undefined) {
-    return true;
+const getRedirectedUrl = async (url: string): Promise<string> => {
+  const url_from_cache = redirectUrlCache.get(url);
+  if (url_from_cache !== undefined) {
+    return url_from_cache;
   }
+
+  let redirectedUrl = "";
   const browser = await puppeteer.launch({
     headless: "new",
     protocolTimeout: requestTimeout,
@@ -409,21 +413,14 @@ const isInternalRedirectUrl = async (
 
     const res = await gotoRetry(page, url, errorHandling.gotoRetryTentative);
 
-    const host = new URL(url).hostname.replace("www.", "");
-    if (!res?.url().includes(host)) {
-      return false;
-    }
+    redirectedUrl = res?.url() ?? "";
 
-    const data = await page.content();
+    redirectUrlCache.set(url, redirectedUrl);
 
     await page.goto("about:blank");
     await page.close();
     browser2.disconnect();
-
     await browser.close();
-    const c = cheerio.load(data);
-    cache.set(url, c);
-    return true;
   } catch (ex) {
     console.error(`ERROR ${url}: ${ex}`);
     await browser.close();
@@ -431,6 +428,8 @@ const isInternalRedirectUrl = async (
       `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`
     );
   }
+
+  return redirectedUrl;
 };
 
 export {
@@ -451,5 +450,5 @@ export {
   cmsThemeRx,
   getAllPageHTML,
   requestTimeout,
-  isInternalRedirectUrl,
+  getRedirectedUrl,
 };
