@@ -142,6 +142,8 @@ class LoadAudit extends Audit {
       };
     }
 
+    pagesToBeAnalyzed = [...new Set(pagesToBeAnalyzed)];
+
     const correctItems = [];
     const wrongItems = [];
 

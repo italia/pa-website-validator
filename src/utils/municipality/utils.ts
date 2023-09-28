@@ -1104,6 +1104,8 @@ const getPages = async (
 
   const host = new URL(url).hostname.replace("www.", "");
 
+  pagesUrl = [...new Set(pagesUrl)];
+
   const redirectedPages: string[] = [];
   for (const pageUrl of pagesUrl) {
     const redirectedUrl = await getRedirectedUrl(pageUrl);
