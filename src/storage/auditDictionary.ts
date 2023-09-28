@@ -183,7 +183,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.5.2 - DOMINIO ISTITUZIONALE - Il sito comunale utilizza un dominio istituzionale secondo le modalità indicate nella documentazione del modello di sito comunale.",
     description:
-      "CONDIZIONI DI SUCCESSO: il sito comunale è raggiungibile senza necessità di inserimento del sottodominio “www.” e le pagine utilizzano il sottodominio “comune.” immediatamente seguito da uno dei domini utilizzabili presenti in [questa pagina](https://raw.githubusercontent.com/italia/pa-website-validator/main/src/storage/municipality/allowedDomains.ts) secondo la struttura indicata nel criterio di conformità; MODALITÀ DI VERIFICA: ricercando specifici attributi “data-element” come spiegato nella Documentazione delle App di valutazione, viene verificato che il dominio utilizzato nelle pagine analizzate rispetti la struttura richiesta dal criterio di conformità e che le pagine siano raggiungibili senza necessità di inserimento del sottodominio “www.”; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Elenco Nomi a Dominio Riservati Per i Comuni Italiani](https://www.nic.it/sites/default/files/docs/comuni_list.html); [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
+      'CONDIZIONI DI SUCCESSO: il sito comunale è raggiungibile senza necessità di inserimento del sottodominio “www.” e le pagine utilizzano il sottodominio "comune." immediatamente seguito da uno dei domini utilizzabili presenti in [questa pagina](https://raw.githubusercontent.com/italia/pa-website-validator/main/src/storage/municipality/allowedDomains.ts) secondo la struttura indicata nel criterio di conformità; MODALITÀ DI VERIFICA: ricercando specifici attributi "data-element" come spiegato nella Documentazione delle App di valutazione, viene verificato che il dominio utilizzato nelle pagine analizzate rispetti la struttura richiesta dal criterio di conformità e che le pagine siano raggiungibili senza necessità di inserimento del sottodominio "www."; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Elenco Nomi a Dominio Riservati Per i Comuni Italiani](https://www.nic.it/sites/default/files/docs/comuni_list.html); [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "municipality-faq-is-present": {
     greenResult:
@@ -267,11 +267,11 @@ export const auditDictionary = {
   },
   "municipality-menu-structure-match-model": {
     greenResult:
-      "Le voci del menù obbligatorie sono corrette e nell'ordine giusto.",
+      "Le voci del menù obbligatorie sono corrette, nell'ordine giusto e inviano a pagine interne al dominio del Comune.",
     yellowResult:
-      "Le voci del menù obbligatorie e il loro ordine è corretto ma sono presenti fino a 3 voci aggiuntive.",
+      "Le voci del menù obbligatorie e il loro ordine è corretto ma sono presenti fino a 3 voci aggiuntive. Tutte le voci inviano a pagine interne al dominio del Comune.",
     redResult:
-      "Almeno una delle voci obbligatorie è assente o inesatta e/o le voci obbligatorie sono in ordine errato e/o sono presenti 8 o più voci nel menù del sito.",
+      "Almeno una delle voci obbligatorie è assente o inesatta e/o le voci obbligatorie sono in ordine errato e/o sono presenti 8 o più voci nel menù del sito e/o sono presenti voci che inviano a pagine esterne al dominio del Comune.",
     nonExecuted:
       "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
@@ -279,7 +279,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SI.1.6 - VOCI DI MENÙ DI PRIMO LIVELLO - Il sito comunale deve presentare tutte le voci di menù di primo livello, nell'esatto ordine descritto dalla documentazione del modello di sito comunale.",
     description:
-      "CONDIZIONI DI SUCCESSO: le voci del menù di primo livello del sito sono esattamente quelle indicate nel documento di architettura dell’informazione e sono nell’ordine indicato (ovvero “Amministrazione”, “Novità”, “Servizi”, “Vivere il Comune” oppure “Vivere [nome del Comune]”) e tutte le pagine raggiungibili dal menu di primo livello portano a pagine interne al dominio del Comune; MODALITÀ DI VERIFICA: ricercando uno specifico attributo “data-element” come spiegato nella Documentazione delle App di valutazione, vengono identificate le voci presenti nel menù del sito e il loro ordine, confrontandole con quanto indicato nel documento di architettura dell'informazione. Viene inoltre verificato che tutte le pagine raggiungibili dal menu di primo livello portino a pagine interne al dominio del Comune; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
+      'CONDIZIONI DI SUCCESSO: le voci del menù di primo livello del sito sono esattamente quelle indicate nel documento di architettura dell’informazione e sono nell’ordine indicato (ovvero «Amministrazione», «Novità», «Servizi», «Vivere il Comune» oppure «Vivere [nome del Comune]») e tutte le pagine raggiungibili dal menu di primo livello portano a pagine interne al dominio del Comune; MODALITÀ DI VERIFICA: ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione, vengono identificate le voci presenti nel menù del sito e il loro ordine, confrontandole con quanto indicato nel documento di architettura dell\'informazione. Viene inoltre verificato che tutte le pagine raggiungibili dal menu di primo livello portino a pagine interne al dominio del Comune; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "municipality-metatag": {
     greenResult:
@@ -599,11 +599,12 @@ export const auditDictionary = {
       'CONDIZIONI DI SUCCESSO: tutti i titoli (heading) e tutti i paragrafi delle pagine del sito in lingua italiana utilizzano esclusivamente i font Titillium Web, Lora o Roboto Mono come font di default; MODALITÀ DI VERIFICA: ricercando specifici attributi "data-element" come spiegato nella Documentazione delle App di valutazione, nelle pagine analizzate viene verificato che i font di default siano quelli richiesti all\'interno di tutti gli <h> e <p>; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "school-menu-structure-match-model": {
-    greenResult: "Le voci del menù sono corrette e nell'ordine giusto.",
+    greenResult:
+      "Le voci del menù sono corrett, nell'ordine giusto e inviano a pagine interne al dominio della scuola.",
     yellowResult:
-      "L'ordine delle voci del menu è corretto ma sono presenti fino a 3 voci aggiuntive.",
+      "L'ordine delle voci del menu è corretto ma sono presenti fino a 3 voci aggiuntive. Tutte le voci inviano a pagine interne al dominio della scuola.",
     redResult:
-      "Almeno una delle voci obbligatorie è assente o inesatta e/o le voci obbligatorie sono in ordine errato e/o sono presenti 8 o più voci nel menù del sito.",
+      "Almeno una delle voci obbligatorie è assente o inesatta e/o le voci obbligatorie sono in ordine errato e/o sono presenti 8 o più voci nel menù del sito e/o sono presenti voci che inviano a pagine esterne al dominio della scuola.",
     nonExecuted:
       "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
@@ -611,12 +612,15 @@ export const auditDictionary = {
     failureTitle:
       "C.SC.1.4 - VOCI DI MENÙ DI PRIMO LIVELLO - Il sito della scuola deve presentare tutte le voci di menù di primo livello, nell'esatto ordine descritto dalla documentazione del modello di sito scolastico.",
     description:
-      "CONDIZIONI DI SUCCESSO: le voci del menù di primo livello del sito sono esattamente quelle indicate nel documento di architettura dell’informazione e sono nell’ordine indicato (ovvero Scuola, Servizi, Novità, Didattica) e tutte le pagine raggiungibili dal menu di primo livello appartengono al dominio della scuola; MODALITÀ DI VERIFICA: ricercando uno specifico attributo “data-element” come spiegato nella Documentazione delle App di valutazione, vengono identificate le voci presenti nel menù del sito, il loro ordine e confrontate con quanto indicato nel documento di architettura dell'informazione, applicando una tolleranza di massimo 3 voci aggiuntive. Inoltre, viene verificato che tutte le pagine raggiungibili dal menu di primo livello portino a pagine interne al dominio del sito della scuola; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
+      'CONDIZIONI DI SUCCESSO: le voci del menù di primo livello del sito sono esattamente quelle indicate nel documento di architettura dell’informazione e sono nell’ordine indicato (ovvero Scuola, Servizi, Novità, Didattica) e tutte le pagine raggiungibili dal menu di primo livello appartengono al dominio della scuola; MODALITÀ DI VERIFICA: ricercando uno specifico attributo "data-element" come spiegato nella Documentazione delle App di valutazione, vengono identificate le voci presenti nel menù del sito, il loro ordine e confrontate con quanto indicato nel documento di architettura dell\'informazione, applicando una tolleranza di massimo 3 voci aggiuntive. Inoltre, viene verificato che tutte le pagine raggiungibili dal menu di primo livello portino a pagine interne al dominio del sito della scuola; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "school-menu-scuola-second-level-structure-match-model": {
-    greenResult: "Tutte le voci usate sono corrette.",
-    yellowResult: "Almeno il 30% delle voci usate sono corrette.",
-    redResult: "Meno del 30% delle voci sono corrette.",
+    greenResult:
+      "Tutte le voci usate sono corrette e inviano a pagine interne al dominio della scuola.",
+    yellowResult:
+      "Almeno il 30% delle voci usate sono corrette e tutte le voci inviano a pagine interne al dominio della scuola.",
+    redResult:
+      "Meno del 30% delle voci sono corrette o sono presenti voci che inviano a pagine esterne al dominio della scuola.",
     nonExecuted:
       "Uno o più data-element necessari per condurre il test non sono stati trovati. Verifica il capitolo sui Requisiti tecnici nella Documentazione delle App di valutazione per risolvere il problema.",
     title:
@@ -624,7 +628,7 @@ export const auditDictionary = {
     failureTitle:
       "C.SC.1.5 - VOCI DI MENÙ DI SECONDO LIVELLO - Il sito presenta le voci di menù di secondo livello come descritto nella documentazione del modello di sito della scuola.",
     description:
-      "CONDIZIONI DI SUCCESSO: tutte le voci del menù di secondo livello usate fanno riferimento alla voce di primo livello corrispondente secondo quanto indicato nel documento di architettura dell’informazione del modello scuole; MODALITÀ DI VERIFICA: ricercando specifici attributi “data-element” come spiegato nella Documentazione delle App di valutazione, vengono verificate le voci di secondo livello usate rispetto ad ognuna delle voci di primo livello del menù e che tutte le pagine raggiungibili dal menu di secondo livello appartengano al dominio della scuola. Nel conteggio vengono incluse anche le voci di secondo livello riferite a voci di primo livello non indicate nella documentazione. Inoltre, viene verificato che tutte le pagine raggiungibili dal menu di secondo livello portino a pagine interne al dominio del sito della scuola; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).",
+      'CONDIZIONI DI SUCCESSO: tutte le voci del menù di secondo livello usate fanno riferimento alla voce di primo livello corrispondente secondo quanto indicato nel documento di architettura dell\'informazione del modello scuole; MODALITÀ DI VERIFICA: ricercando specifici attributi "data-element" come spiegato nella Documentazione delle App di valutazione, vengono verificate le voci di secondo livello usate rispetto ad ognuna delle voci di primo livello del menù e che tutte le pagine raggiungibili dal menu di secondo livello appartengano al dominio della scuola. Nel conteggio vengono incluse anche le voci di secondo livello riferite a voci di primo livello non indicate nella documentazione. Inoltre, viene verificato che tutte le pagine raggiungibili dal menu di secondo livello portino a pagine interne al dominio del sito della scuola; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello scuole](https://docs.italia.it/italia/designers-italia/design-scuole-docs), [Documentazione delle App di valutazione](https://docs.italia.it/italia/designers-italia/app-valutazione-modelli-docs/).',
   },
   "school-legislation-privacy-is-present": {
     greenResult:
