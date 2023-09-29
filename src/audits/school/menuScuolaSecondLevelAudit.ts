@@ -5,7 +5,7 @@
 import lighthouse from "lighthouse";
 import {
   getPageElementDataAttribute,
-  isInternalRedirectUrl,
+  getRedirectedUrl,
   loadPageData,
 } from "../../utils/utils";
 import {
@@ -228,8 +228,9 @@ class LoadAudit extends Audit {
       correct_voices_percentage: "Link trovato",
     });
 
+    const host = new URL(url).hostname.replace("www.", "");
     for (const page of secondLevelPages) {
-      const isInternal = await isInternalRedirectUrl(url, page.linkUrl);
+      const isInternal = (await getRedirectedUrl(page.linkUrl)).includes(host);
 
       if (!isInternal) {
         score = 0;

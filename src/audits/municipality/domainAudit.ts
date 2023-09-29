@@ -5,10 +5,11 @@ import lighthouse from "lighthouse";
 import { domains } from "../../storage/municipality/allowedDomains";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { urlExists } from "../../utils/utils";
-import { getPages } from "../../utils/municipality/utils";
+import { getPages, getSecondLevelPages } from "../../utils/municipality/utils";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
 import { DataElementError } from "../../utils/DataElementError";
 import { notExecutedErrorMessage } from "../../config/commonAuditsParts";
+import { primaryMenuItems } from "../../storage/municipality/menuItems";
 
 const Audit = lighthouse.Audit;
 
@@ -82,29 +83,47 @@ class LoadAudit extends Audit {
     try {
       pagesToBeAnalyzed = [
         url,
-        ...(await getPages(url, [
-          {
-            type: "first_level_pages",
-            numberOfPages: auditVariables.numberOfFirstLevelPageToBeScanned,
-          },
-          {
-            type: "services",
-            numberOfPages: auditVariables.numberOfServicesToBeScanned,
-          },
-          {
-            type: "events",
-            numberOfPages: auditVariables.numberOfEventsToBeScanned,
-          },
-          {
-            type: "booking_appointment",
-            numberOfPages: 1,
-          },
-          {
-            type: "personal_area_login",
-            numberOfPages: 1,
-          },
-        ])),
+        ...(await getPages(
+          url,
+          [
+            {
+              type: "first_level_pages",
+              numberOfPages: auditVariables.numberOfFirstLevelPageToBeScanned,
+            },
+            {
+              type: "services",
+              numberOfPages: auditVariables.numberOfServicesToBeScanned,
+            },
+            {
+              type: "events",
+              numberOfPages: auditVariables.numberOfEventsToBeScanned,
+            },
+            {
+              type: "booking_appointment",
+              numberOfPages: 1,
+            },
+            {
+              type: "personal_area_login",
+              numberOfPages: 1,
+            },
+          ],
+          false
+        )),
       ];
+
+      const secondLevelPages = await getSecondLevelPages(url, false);
+      for (const [key, primaryMenuItem] of Object.entries(primaryMenuItems)) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const secondLevelPagesSection = secondLevelPages[key];
+        for (const page of secondLevelPagesSection) {
+          if (
+            primaryMenuItem.dictionary.includes(page.linkName.toLowerCase())
+          ) {
+            pagesToBeAnalyzed.push(page.linkUrl);
+          }
+        }
+      }
     } catch (ex) {
       if (!(ex instanceof DataElementError)) {
         throw ex;
@@ -122,6 +141,8 @@ class LoadAudit extends Audit {
         ),
       };
     }
+
+    pagesToBeAnalyzed = [...new Set(pagesToBeAnalyzed)];
 
     const correctItems = [];
     const wrongItems = [];

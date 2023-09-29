@@ -7,7 +7,7 @@ import { primaryMenuItems } from "../../storage/school/menuItems";
 import {
   checkOrder,
   getPageElementDataAttribute,
-  isInternalRedirectUrl,
+  getRedirectedUrl,
   loadPageData,
   missingMenuItems,
 } from "../../utils/utils";
@@ -168,8 +168,9 @@ class LoadAudit extends lighthouse.Audit {
       missing_menu_voices: "Pagina interna al dominio",
     });
 
+    const host = new URL(url).hostname.replace("www.", "");
     for (const page of firstLevelPages) {
-      const isInternal = await isInternalRedirectUrl(url, page.linkUrl);
+      const isInternal = (await getRedirectedUrl(page.linkUrl)).includes(host);
 
       if (!isInternal) {
         score = 0;

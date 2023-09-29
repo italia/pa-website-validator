@@ -7,7 +7,6 @@ import {
   buildUrl,
   getHREFValuesDataAttribute,
   getPageElementDataAttribute,
-  isInternalRedirectUrl,
   isInternalUrl,
   loadPageData,
 } from "../../utils/utils";
@@ -93,7 +92,6 @@ class LoadAudit extends lighthouse.Audit {
     });
 
     const secondLevelPages = await getSecondLevelPages(url, true);
-    const correctPages = [];
 
     let totalNumberOfTitleFound = 0;
     const itemsPage: itemPage[] = [];
@@ -111,7 +109,6 @@ class LoadAudit extends lighthouse.Audit {
       for (const page of secondLevelPagesSection) {
         if (primaryMenuItem.dictionary.includes(page.linkName.toLowerCase())) {
           item.pagesInVocabulary.push(page.linkName);
-          correctPages.push(page);
         } else {
           item.pagesNotInVocabulary.push(page.linkName);
         }
@@ -202,35 +199,6 @@ class LoadAudit extends lighthouse.Audit {
       pagesFoundInVocabularyPercentage + "%";
     results[0].correct_title_found = correctTitleFound;
     results[0].wrong_title_found = wrongTitleFound;
-
-    results.push({});
-
-    results.push({
-      result: "Voce di menù",
-      correct_title_percentage: "Link trovato",
-      correct_title_found: "Pagina interna al dominio",
-    });
-
-    for (const page of correctPages) {
-      const isInternal = await isInternalRedirectUrl(url, page.linkUrl);
-
-      if (!isInternal) {
-        score = 0;
-      }
-
-      const item = {
-        menu_voice: page.linkName,
-        inspected_page: page.linkUrl,
-        external: isInternal ? "Sì" : "No",
-      };
-
-      results.push({
-        subItems: {
-          type: "subitems",
-          items: [item],
-        },
-      });
-    }
 
     return {
       score: score,
