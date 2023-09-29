@@ -541,15 +541,19 @@ const checkFeedbackComponent = async (url: string) => {
       i <= feedbackComponentStructure.rate.numberOfComponents;
       i++
     ) {
-      const feedbackComponentRate = await page.$(
-        `[data-element="${feedbackComponentStructure.rate.dataElement + i}"]`
-      );
-      await feedbackComponentRate?.click({
-        delay: 1000,
-      });
-      await page.waitForNetworkIdle({
-        idleTime: 1000,
-      });
+      try {
+        const feedbackComponentRate = await page.$(
+          `[data-element="${feedbackComponentStructure.rate.dataElement + i}"]`
+        );
+        await feedbackComponentRate?.click({
+          delay: 1000,
+        });
+        await page.waitForNetworkIdle({
+          idleTime: 1000,
+        });
+      } catch (e) {
+        /* empty */
+      }
 
       const feedbackReturnValue = await page.evaluate(
         async (feedbackComponentStructure, i) => {
