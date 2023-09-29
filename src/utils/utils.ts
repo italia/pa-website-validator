@@ -43,8 +43,12 @@ const loadPageData = async (url: string): Promise<CheerioAPI> => {
 
     const res = await gotoRetry(page, url, errorHandling.gotoRetryTentative);
 
+    const redirectedUrl = await page.evaluate(async () => {
+      return window.location.href;
+    });
+
     if (redirectUrlCache.get(url) === undefined) {
-      redirectUrlCache.set(url, res?.url());
+      redirectUrlCache.set(url, redirectedUrl);
     }
 
     console.log(res?.url(), res?.status());
@@ -411,9 +415,11 @@ const getRedirectedUrl = async (url: string): Promise<string> => {
       }
     });
 
-    const res = await gotoRetry(page, url, errorHandling.gotoRetryTentative);
+    await gotoRetry(page, url, errorHandling.gotoRetryTentative);
 
-    redirectedUrl = res?.url() ?? "";
+    redirectedUrl = await page.evaluate(async () => {
+      return window.location.href;
+    });
 
     redirectUrlCache.set(url, redirectedUrl);
 
