@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.7.2](https://github.com/italia/pa-website-validator/compare/v2.7.1...v2.7.2) (2023-09-29)
+
+
+### Bug Fixes
+
+* change audit domain, first and second pages ([58143a9](https://github.com/italia/pa-website-validator/commit/58143a9cd35f2c4c495a09e97999d912e5b094dd))
+* check domain after page load ([#389](https://github.com/italia/pa-website-validator/issues/389)) ([3855ddf](https://github.com/italia/pa-website-validator/commit/3855ddf0d4ac6b989e94846b4cdf985b2b69bf03))
+* click exception ([8bda399](https://github.com/italia/pa-website-validator/commit/8bda3997cb520d7b47377884037efb489e741b15))
+* wait for networkIdle after click ([1d64a6e](https://github.com/italia/pa-website-validator/commit/1d64a6ef183fd8b8972533e98a689fcaa2b8f97b))
+
 ## [2.7.1](https://github.com/italia/pa-website-validator/compare/v2.7.0...v2.7.1) (2023-09-26)
 
 
