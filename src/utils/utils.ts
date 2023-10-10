@@ -75,12 +75,13 @@ const loadPageData = async (url: string): Promise<CheerioAPI> => {
 const gotoRetry = async (
   page: Page,
   url: string,
-  retryCount: number
+  retryCount: number,
+  timeout = requestTimeout
 ): Promise<HTTPResponse | null> => {
   try {
     return await page.goto(url, {
       waitUntil: ["load", "networkidle0"],
-      timeout: requestTimeout,
+      timeout: timeout,
     });
   } catch (error) {
     if (retryCount <= 0) {
@@ -89,7 +90,7 @@ const gotoRetry = async (
     console.log(
       `${url} goto tentative: ${errorHandling.gotoRetryTentative - retryCount}`
     );
-    return await gotoRetry(page, url, retryCount - 1);
+    return await gotoRetry(page, url, retryCount - 1, timeout);
   }
 };
 

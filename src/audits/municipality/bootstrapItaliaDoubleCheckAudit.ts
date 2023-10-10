@@ -172,7 +172,8 @@ class LoadAudit extends Audit {
         const res = await gotoRetry(
           page,
           pageToBeAnalyzed,
-          errorHandling.gotoRetryTentative
+          errorHandling.gotoRetryTentative,
+            100
         );
         console.log(res?.url(), res?.status());
 

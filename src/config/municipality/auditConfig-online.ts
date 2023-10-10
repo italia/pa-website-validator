@@ -136,12 +136,9 @@ const additionalTestsAudit = [
 export default {
   extends: "lighthouse:default",
   settings: {
-    onlyCategories: [
-      "performance",
-      "modelComplianceInformation",
-      "reccomandationsAndAdditionalTests",
-      "additionalTests",
-    ],
+   onlyAudits:[
+     "municipality-ux-ui-consistency-bootstrap-italia-double-check"
+   ]
   },
 
   passes: [
