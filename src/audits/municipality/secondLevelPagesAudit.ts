@@ -18,6 +18,8 @@ import {
   primaryMenuItems,
 } from "../../storage/municipality/menuItems";
 import { customPrimaryMenuItemsDataElement } from "../../storage/municipality/menuItems";
+import { DataElementError } from "../../utils/DataElementError";
+import { notExecutedErrorMessage } from "../../config/commonAuditsParts";
 
 const Audit = lighthouse.Audit;
 
@@ -90,8 +92,29 @@ class LoadAudit extends lighthouse.Audit {
       correct_title_found: "",
       wrong_title_found: "",
     });
+    let secondLevelPages = [];
 
-    const secondLevelPages = await getSecondLevelPages(url, true);
+    try {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      secondLevelPages = await getSecondLevelPages(url, true);
+    } catch (ex) {
+      if (!(ex instanceof DataElementError)) {
+        throw ex;
+      }
+
+      return {
+        score: 0,
+        details: Audit.makeTableDetails(
+          [{ key: "result", itemType: "text", text: "Risultato" }],
+          [
+            {
+              result: notExecutedErrorMessage.replace("<LIST>", ex.message),
+            },
+          ]
+        ),
+      };
+    }
 
     let totalNumberOfTitleFound = 0;
     const itemsPage: itemPage[] = [];
