@@ -329,7 +329,7 @@ const metatadaJSONStructure = {
         audienceType: { type: "string", minLength: 1 },
       },
 
-      required: ["name"],
+      required: ["audienceType"],
     },
     availableChannel: {
       type: "object",
