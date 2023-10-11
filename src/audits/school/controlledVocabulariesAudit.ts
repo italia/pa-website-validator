@@ -74,7 +74,7 @@ class LoadAudit extends lighthouse.Audit {
         score: 0,
         details: Audit.makeTableDetails(
           [{ key: "result", itemType: "text", text: "Risultato" }],
-          [{ result: notExecutedErrorMessage.replace("<LIST>", "`all-topics") }]
+          [{ result: notExecutedErrorMessage.replace("<LIST>", "all-topics") }]
         ),
       };
     }
@@ -84,7 +84,7 @@ class LoadAudit extends lighthouse.Audit {
         score: 0,
         details: Audit.makeTableDetails(
           [{ key: "result", itemType: "text", text: "Risultato" }],
-          [{ result: notExecutedErrorMessage.replace("<LIST>", "`all-topics") }]
+          [{ result: notExecutedErrorMessage.replace("<LIST>", "all-topics") }]
         ),
       };
     }
