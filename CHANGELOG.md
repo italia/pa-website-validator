@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.7.3](https://github.com/italia/pa-website-validator/compare/v2.7.2...v2.7.3) (2023-10-16)
+
+
+### Bug Fixes
+
+* add error message dataelement ([d7f7270](https://github.com/italia/pa-website-validator/commit/d7f7270e55728c3624f7cf9826771f1225203e41))
+* change required from name to audienceType ([72cca61](https://github.com/italia/pa-website-validator/commit/72cca611bd58cae2307014c1379f286ee1dd5fc3))
+* get redirected url ([14d032c](https://github.com/italia/pa-website-validator/commit/14d032ccdf958c829348f143cb75cf444fb1752c))
+* remove extra backtick ([1e05e8f](https://github.com/italia/pa-website-validator/commit/1e05e8f8d3f5eee92864b3594784e92ec9264309))
+
 ## [2.7.2](https://github.com/italia/pa-website-validator/compare/v2.7.1...v2.7.2) (2023-09-29)
 
 
