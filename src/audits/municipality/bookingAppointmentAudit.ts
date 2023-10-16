@@ -2,7 +2,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import { loadPageData } from "../../utils/utils";
+import { getRedirectedUrl, loadPageData } from "../../utils/utils";
 import { getPrimaryPageUrl, getPages } from "../../utils/municipality/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
@@ -80,10 +80,6 @@ class LoadAudit extends Audit {
           numberOfPages: 1,
         },
         {
-          type: "booking_appointment",
-          numberOfPages: 1,
-        },
-        {
           type: "services",
           numberOfPages: auditVariables.numberOfServicesToBeScanned,
         },
@@ -118,11 +114,39 @@ class LoadAudit extends Audit {
 
     correctItems.push(item);
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const bookingAppointmentPageUrl = new URL(pagesToBeAnalyzed.shift());
-    const bookingAppointmentPageUrlString =
-      bookingAppointmentPageUrl.origin + bookingAppointmentPageUrl.pathname;
+    let bookingAppointmentPageUrlString = "";
+
+    try {
+      const bookingAppointmentPage = await getPages(url, [
+        {
+          type: "booking_appointment",
+          numberOfPages: 1,
+        },
+      ]);
+
+      if (bookingAppointmentPage.length === 0) {
+        throw new DataElementError("booking_appointment");
+      }
+      const bookingAppointmentPageUrl = new URL(bookingAppointmentPage[0]);
+      bookingAppointmentPageUrlString =
+        bookingAppointmentPageUrl.origin + bookingAppointmentPageUrl.pathname;
+    } catch (ex) {
+      if (!(ex instanceof DataElementError)) {
+        throw ex;
+      }
+
+      return {
+        score: 0,
+        details: Audit.makeTableDetails(
+          [{ key: "result", itemType: "text", text: "Risultato" }],
+          [
+            {
+              result: notExecutedErrorMessage.replace("<LIST>", ex.message),
+            },
+          ]
+        ),
+      };
+    }
 
     const pagesInError = [];
 
@@ -167,6 +191,10 @@ class LoadAudit extends Audit {
         bookingAppointmentServicePageUrlString =
           bookingAppointmentServicePageUrl.origin +
           bookingAppointmentServicePageUrl.pathname;
+
+        bookingAppointmentServicePageUrlString = await getRedirectedUrl(
+          bookingAppointmentServicePageUrlString
+        );
       }
 
       const inPageButton = $('[data-element="service-booking-access"]');
