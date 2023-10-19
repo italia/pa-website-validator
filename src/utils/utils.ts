@@ -62,6 +62,7 @@ const loadPageData = async (url: string): Promise<CheerioAPI> => {
     await browser.close();
     const c = cheerio.load(data);
     cache.set(url, c);
+    cache.set(redirectedUrl, c);
     return c;
   } catch (ex) {
     console.error(`ERROR ${url}: ${ex}`);
@@ -423,8 +424,19 @@ const getRedirectedUrl = async (url: string): Promise<string> => {
 
     redirectUrlCache.set(url, redirectedUrl);
 
+    const data = await page.content();
+    const c = cheerio.load(data);
+    if (cache.get(url) === undefined) {
+      cache.set(url, c);
+    }
+
+    if (cache.get(redirectedUrl) === undefined) {
+      cache.set(redirectedUrl, c);
+    }
+
     await page.goto("about:blank");
     await page.close();
+
     browser2.disconnect();
     await browser.close();
   } catch (ex) {

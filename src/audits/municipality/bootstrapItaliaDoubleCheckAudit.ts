@@ -261,8 +261,10 @@ class LoadAudit extends Audit {
             }
           }
 
-          const percentage = (correctClasses.length / baseClasses.length) * 100;
-          item.classes_found = Math.round(percentage) + "%";
+          const percentage = Math.round(
+            (correctClasses.length / baseClasses.length) * 100
+          );
+          item.classes_found = percentage + "%";
           if (percentage < 50) {
             singleResult = 0;
           }
