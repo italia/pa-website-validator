@@ -255,7 +255,9 @@ const getRandomServicesUrl = async (
 
   // Exclude external services
   const host = new URL(url).hostname.replace("www.", "");
-  const internalServiceUrls = servicesUrls.filter((s) => s.includes(host));
+  const internalServiceUrls = servicesUrls.filter((s) =>
+    new URL(s).hostname.replace("www.", "").includes(host)
+  );
 
   return getRandomNString(internalServiceUrls, numberOfServices);
 };
@@ -375,8 +377,9 @@ const getPages = async (
   const redirectedPages: string[] = [];
   for (const pageUrl of pagesUrl) {
     const redirectedUrl = await getRedirectedUrl(pageUrl);
+    const redirectedHost = new URL(redirectedUrl).hostname.replace("www.", "");
 
-    if (!removeExternal || redirectedUrl.includes(host)) {
+    if (!removeExternal || redirectedHost.includes(host)) {
       redirectedPages.push(redirectedUrl);
     }
   }

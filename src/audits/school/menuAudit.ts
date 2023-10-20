@@ -170,7 +170,9 @@ class LoadAudit extends lighthouse.Audit {
 
     const host = new URL(url).hostname.replace("www.", "");
     for (const page of firstLevelPages) {
-      const isInternal = (await getRedirectedUrl(page.linkUrl)).includes(host);
+      const redirectedUrl = await getRedirectedUrl(page.linkUrl);
+      const pageHost = new URL(redirectedUrl).hostname.replace("www.", "");
+      const isInternal = pageHost.includes(host);
 
       if (!isInternal) {
         score = 0;
