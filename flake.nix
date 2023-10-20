@@ -12,12 +12,16 @@
       {
         devShells.default = pkgs.mkShell {
           packages = [
+            pkgs.chromium
             pkgs.cocogitto
             pkgs.jq
             pkgs.nodejs-18_x
             pkgs.pandoc
             pkgs.shellcheck
           ];
+
+          PUPPETEER_EXECUTABLE_PATH = "${pkgs.chromium.outPath}/bin/chromium";
+          PUPPETEER_SKIP_DOWNLOAD = "true";
         };
         formatter = pkgs.nixpkgs-fmt;
       }
