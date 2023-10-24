@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.7.4](https://github.com/italia/pa-website-validator/compare/v2.7.3...v2.7.4) (2023-10-24)
+
+
+### Bug Fixes
+
+* browser2 close instead of disconnect ([3607db8](https://github.com/italia/pa-website-validator/commit/3607db875e3bf9c24fe14d1c127c59586f8da270))
+* load host from redirected url ([71662bd](https://github.com/italia/pa-website-validator/commit/71662bd652d27762ddd953d3686ca1af9a0419d4))
+* percentage round before the check and caching redirected page ([d9007bd](https://github.com/italia/pa-website-validator/commit/d9007bdf135ccfb2e8d5f803505e077511de1a15))
+
 ## [2.7.3](https://github.com/italia/pa-website-validator/compare/v2.7.2...v2.7.3) (2023-10-16)
 
 
