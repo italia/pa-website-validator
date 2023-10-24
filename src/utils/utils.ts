@@ -57,7 +57,7 @@ const loadPageData = async (url: string): Promise<CheerioAPI> => {
 
     await page.goto("about:blank");
     await page.close();
-    browser2.disconnect();
+    await browser2.close();
 
     await browser.close();
     const c = cheerio.load(data);
@@ -437,7 +437,7 @@ const getRedirectedUrl = async (url: string): Promise<string> => {
     await page.goto("about:blank");
     await page.close();
 
-    browser2.disconnect();
+    await browser2.close();
     await browser.close();
   } catch (ex) {
     console.error(`ERROR ${url}: ${ex}`);
