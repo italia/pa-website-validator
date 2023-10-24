@@ -190,7 +190,7 @@ async function getArgumentsElements(url: string): Promise<string[]> {
 
     await page.goto("about:blank");
     await page.close();
-    browser2.disconnect();
+    await browser2.close();
 
     return elements;
   } catch (ex) {

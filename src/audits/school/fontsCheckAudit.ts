@@ -229,7 +229,7 @@ class LoadAudit extends Audit {
 
         await page.goto("about:blank");
         await page.close();
-        browser2.disconnect();
+        await browser2.close();
       } catch (ex) {
         console.error(`ERROR ${pageToBeAnalyzed}: ${ex}`);
         await browser.close();
