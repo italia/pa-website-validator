@@ -194,7 +194,7 @@ const run = async (
 
     await page.goto("about:blank");
     await page.close();
-    await browser2.close();
+    browser2.disconnect();
 
     item[0].redirect_to_https = protocolInPage === "https:" ? "Sì" : "No";
   } catch (ex) {

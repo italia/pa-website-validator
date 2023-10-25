@@ -376,7 +376,7 @@ const getRandomThirdLevelPagesUrl = async (
 
     await page.goto("about:blank");
     await page.close();
-    await browser2.close();
+    browser2.disconnect();
     await browser.close();
   } catch (ex) {
     console.error(`ERROR ${pageUrl}: ${ex}`);
@@ -893,7 +893,7 @@ const checkFeedbackComponent = async (url: string) => {
 
     await page.goto("about:blank");
     await page.close();
-    await browser2.close();
+    browser2.disconnect();
   } catch (ex) {
     console.error(`ERROR ${url}: ${ex}`);
     await browser.close();
