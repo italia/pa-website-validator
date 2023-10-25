@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.5](https://github.com/italia/pa-website-validator/compare/v2.7.4...v2.7.5) (2023-10-25)
+
+
+### Reverts
+
+* "fix: browser2 close instead of disconnect" ([17dbc03](https://github.com/italia/pa-website-validator/commit/17dbc037fb3f45029a9a21ae5aee5298cf488247))
+
 ## [2.7.4](https://github.com/italia/pa-website-validator/compare/v2.7.3...v2.7.4) (2023-10-24)
 
 
