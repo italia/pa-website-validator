@@ -2,7 +2,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import { getRedirectedUrl, loadPageData } from "../../utils/utils";
+import { loadPageData } from "../../utils/utils";
 import { getPrimaryPageUrl, getPages } from "../../utils/municipality/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
@@ -114,8 +114,6 @@ class LoadAudit extends Audit {
 
     correctItems.push(item);
 
-    let bookingAppointmentPageUrlString = "";
-
     try {
       const bookingAppointmentPage = await getPages(url, [
         {
@@ -127,9 +125,6 @@ class LoadAudit extends Audit {
       if (bookingAppointmentPage.length === 0) {
         throw new DataElementError("booking_appointment");
       }
-      const bookingAppointmentPageUrl = new URL(bookingAppointmentPage[0]);
-      bookingAppointmentPageUrlString =
-        bookingAppointmentPageUrl.origin + bookingAppointmentPageUrl.pathname;
     } catch (ex) {
       if (!(ex instanceof DataElementError)) {
         throw ex;
@@ -180,21 +175,8 @@ class LoadAudit extends Audit {
         "appointment-booking"
       );
 
-      let bookingAppointmentServicePageUrlString = "";
-
       if (bookingAppointmentServicePage === "") {
         item.component_exist = "No";
-      } else {
-        const bookingAppointmentServicePageUrl = new URL(
-          bookingAppointmentServicePage
-        );
-        bookingAppointmentServicePageUrlString =
-          bookingAppointmentServicePageUrl.origin +
-          bookingAppointmentServicePageUrl.pathname;
-
-        bookingAppointmentServicePageUrlString = await getRedirectedUrl(
-          bookingAppointmentServicePageUrlString
-        );
       }
 
       const inPageButton = $('[data-element="service-booking-access"]');
@@ -202,19 +184,8 @@ class LoadAudit extends Audit {
         item.in_page_url = "Sì";
       }
 
-      if (
-        bookingAppointmentServicePageUrlString !==
-          bookingAppointmentPageUrlString &&
-        score > 0
-      ) {
+      if (bookingAppointmentServicePage === "") {
         score = 0;
-      }
-
-      if (
-        bookingAppointmentServicePage === "" ||
-        bookingAppointmentServicePageUrlString !==
-          bookingAppointmentPageUrlString
-      ) {
         wrongItems.push(item);
         continue;
       }
