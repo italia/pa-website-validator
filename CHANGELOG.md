@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.7.6](https://github.com/italia/pa-website-validator/compare/v2.7.5...v2.7.6) (2023-10-27)
+
+
+### Bug Fixes
+
+* **C.SI.1.2:** lower threshold to 30% ([d4b7ec5](https://github.com/italia/pa-website-validator/commit/d4b7ec58ef5531bb6f8acfe6e9417efdfbb4d6e0))
+* **C.SI.2.1:** do not check for links equality ([ef3b73e](https://github.com/italia/pa-website-validator/commit/ef3b73e23ccdc07164d78c10983741a39368012b))
+
 ## [2.7.5](https://github.com/italia/pa-website-validator/compare/v2.7.4...v2.7.5) (2023-10-25)
 
 
