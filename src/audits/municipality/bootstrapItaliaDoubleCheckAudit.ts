@@ -265,7 +265,7 @@ class LoadAudit extends Audit {
             (correctClasses.length / baseClasses.length) * 100
           );
           item.classes_found = percentage + "%";
-          if (percentage < 50) {
+          if (percentage < 30) {
             singleResult = 0;
           }
         }
