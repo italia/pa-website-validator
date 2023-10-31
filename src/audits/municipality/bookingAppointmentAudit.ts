@@ -115,15 +115,19 @@ class LoadAudit extends Audit {
     correctItems.push(item);
 
     try {
-      const bookingAppointmentPage = await getPages(url, [
-        {
-          type: "booking_appointment",
-          numberOfPages: 1,
-        },
-      ]);
+      const bookingAppointmentPage = await getPages(
+        url,
+        [
+          {
+            type: "booking_appointment",
+            numberOfPages: 1,
+          },
+        ],
+        false
+      );
 
       if (bookingAppointmentPage.length === 0) {
-        throw new DataElementError("booking_appointment");
+        throw new DataElementError("appointment-booking");
       }
     } catch (ex) {
       if (!(ex instanceof DataElementError)) {
