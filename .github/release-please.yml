@@ -1,2 +1,4 @@
 handleGHRelease: true
 releaseType: node
+extraFiles:
+  - src/app.ts

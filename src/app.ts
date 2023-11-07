@@ -16,6 +16,8 @@ const urlSchoolMsg =
 const urlMunicipalityMsg =
   "Inserisci la URL della pagina principale (homepage) del sito web del Comune includendo il protocollo (http:// o https://):";
 
+const version = "2.7.6"; // x-release-please-version
+
 console.log();
 console.log();
 
@@ -82,7 +84,10 @@ try {
     logLevels.display_info,
     true,
     dest,
-    `report-${hostname}-${dateFormat(currentDate, "UTC:yyyymmdd'T'HHMMss'Z'")}`,
+    `report-${hostname}-${dateFormat(
+      currentDate,
+      "UTC:yyyymmdd'T'HHMMss'Z'"
+    )}-v${version}`,
     true,
     accuracy
   );
