@@ -25,6 +25,10 @@ const accuracy = process.env["accuracy"] ?? "suggested";
 // @ts-ignore
 const auditVariables = auditScanVariables[accuracy][auditId];
 
+const numberOfServicesToBeScanned = process.env["numberOfServicePages"]
+  ? JSON.parse(process.env["numberOfServicePages"])
+  : auditVariables.numberOfServicesToBeScanned;
+
 class LoadAudit extends Audit {
   static get meta() {
     return {
@@ -88,7 +92,7 @@ class LoadAudit extends Audit {
           },
           {
             type: "services",
-            numberOfPages: auditVariables.numberOfServicesToBeScanned,
+            numberOfPages: numberOfServicesToBeScanned,
           },
           {
             type: "events",

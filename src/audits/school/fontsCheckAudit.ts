@@ -24,6 +24,10 @@ const accuracy = process.env["accuracy"] ?? "suggested";
 // @ts-ignore
 const auditVariables = auditScanVariables[accuracy][auditId];
 
+const numberOfServicesToBeScanned = process.env["numberOfServicePages"]
+  ? JSON.parse(process.env["numberOfServicePages"])
+  : auditVariables.numberOfServicesToBeScanned;
+
 type BadElement = [string[], boolean]; // First value is element snippet, second is whether it is tolerable
 
 class LoadAudit extends Audit {
@@ -83,7 +87,7 @@ class LoadAudit extends Audit {
           },
           {
             type: "services",
-            numberOfPages: auditVariables.numberOfServicesToBeScanned,
+            numberOfPages: numberOfServicesToBeScanned,
           },
         ])),
       ];

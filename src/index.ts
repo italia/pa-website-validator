@@ -57,6 +57,12 @@ const parser = yargs(hideBin(process.argv))
     type: "number",
     demandOption: false,
     default: 30000,
+  })
+  .option("number-of-service-pages", {
+    describe:
+      "Number of service pages to analyze. It overrides the default specified with the `accuracy` option",
+    type: "number",
+    demandOption: false,
   });
 
 try {
@@ -78,7 +84,8 @@ try {
     args.report,
     "view" in args,
     args.accuracy,
-    args.timeout
+    args.timeout,
+    args["number-of-service-pages"]
   );
 
   console.log("[INFO] Status result:", result.status);

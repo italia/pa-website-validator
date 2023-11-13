@@ -54,7 +54,7 @@ try {
 
   console.log();
 
-  const { accuracy }: { accuracy: "min" | "suggested" | "high" | "all" } =
+  const { accuracy }: { accuracy: "all" | "custom" | "suggested" } =
     await inquirer.prompt([
       {
         message: "Seleziona quanto vuoi che sia accurata l'analisi:",
@@ -66,10 +66,24 @@ try {
             value: "all",
           },
           {
-            name: "Veloce",
+            name: "Personalizzata (permette di selezionare quante schede servizio analizzare)",
+            value: "custom",
+          },
+          {
+            name: "Veloce (analizza un numero inferiore di pagine per ogni tipo)",
             value: "suggested",
           },
         ],
+      },
+    ]);
+
+  const { numberOfServicePages }: { numberOfServicePages?: number } =
+    await inquirer.prompt([
+      {
+        message: "Indica il numero di schede servizio da analizzare:",
+        name: "numberOfServicePages",
+        type: "number",
+        when: () => accuracy === "custom",
       },
     ]);
 
@@ -89,7 +103,9 @@ try {
       "UTC:yyyymmdd'T'HHMMss'Z'"
     )}-v${version}`,
     true,
-    accuracy
+    accuracy === "custom" ? "all" : accuracy,
+    undefined,
+    numberOfServicePages
   );
 
   console.log();

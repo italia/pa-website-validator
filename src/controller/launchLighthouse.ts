@@ -33,9 +33,13 @@ const run = async (
   reportName: string,
   view = false,
   accuracy = "suggested",
-  requestTimeout = 30000
+  requestTimeout = 30000,
+  numberOfServicePages?: number
 ) => {
   process.env["accuracy"] = accuracy;
+  if (numberOfServicePages) {
+    process.env["numberOfServicePages"] = JSON.stringify(numberOfServicePages);
+  }
   process.env["requestTimeout"] = requestTimeout.toString();
   //L'oggetto chrome non è incluso nel try-catch in modo tale che la sua istanza venga killata anche in caso di eccezione lanciata da altri processi
   const browser = await puppeteer.launch({
