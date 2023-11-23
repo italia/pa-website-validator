@@ -143,7 +143,8 @@ async function getArgumentsElements(url: string): Promise<string[]> {
     await page.setRequestInterception(true);
     page.on("request", (request) => {
       if (
-        ["image", "imageset", "media"].indexOf(request.resourceType()) !== -1
+        ["image", "imageset", "media"].indexOf(request.resourceType()) !== -1 ||
+        new URL(request.url()).pathname.endsWith(".pdf")
       ) {
         request.abort();
       } else {

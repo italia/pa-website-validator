@@ -321,7 +321,8 @@ const getRandomThirdLevelPagesUrl = async (
     await page.setRequestInterception(true);
     page.on("request", (request) => {
       if (
-        ["image", "imageset", "media"].indexOf(request.resourceType()) !== -1
+        ["image", "imageset", "media"].indexOf(request.resourceType()) !== -1 ||
+        new URL(request.url()).pathname.endsWith(".pdf")
       ) {
         request.abort();
       } else {
@@ -474,7 +475,8 @@ const checkFeedbackComponent = async (url: string) => {
     await page.setRequestInterception(true);
     page.on("request", (request) => {
       if (
-        ["image", "imageset", "media"].indexOf(request.resourceType()) !== -1
+        ["image", "imageset", "media"].indexOf(request.resourceType()) !== -1 ||
+        new URL(request.url()).pathname.endsWith(".pdf")
       ) {
         request.abort();
       } else {

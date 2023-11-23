@@ -141,7 +141,8 @@ class LoadAudit extends Audit {
         page.on("request", (request) => {
           if (
             ["image", "imageset", "media"].indexOf(request.resourceType()) !==
-            -1
+              -1 ||
+            new URL(request.url()).pathname.endsWith(".pdf")
           ) {
             request.abort();
           } else {
