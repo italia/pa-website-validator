@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.8.0](https://github.com/italia/pa-website-validator/compare/v2.7.6...v2.8.0) (2023-11-23)
+
+
+### Features
+
+* allow custom number of services to analyze ([8b6dfd6](https://github.com/italia/pa-website-validator/commit/8b6dfd60ecb13c4f5f151b8bfd8881374552143b))
+* **app:** add version string in report filename ([b184f6a](https://github.com/italia/pa-website-validator/commit/b184f6aa95864113817614263628aa64c5142396))
+
+
+### Bug Fixes
+
+* aggiornati domini ([8d00ce8](https://github.com/italia/pa-website-validator/commit/8d00ce87d6b27d347fc20e9b2b95448aa704f428))
+* **C.SI.2.1:** do not exclude external appointment booking links ([1643c5b](https://github.com/italia/pa-website-validator/commit/1643c5bbe66fe67c57cc79987ac34a463f62772a))
+* do not load PDF files ([0f148e6](https://github.com/italia/pa-website-validator/commit/0f148e6e43d76868e370c0c99108384f1938a5c3))
+
 ## [2.7.6](https://github.com/italia/pa-website-validator/compare/v2.7.5...v2.7.6) (2023-10-27)
 
 
