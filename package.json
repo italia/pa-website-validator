@@ -30,7 +30,6 @@
     "dateformat": "^5.0.3",
     "geoip-lite": "^1.4.4",
     "get-ssl-certificate": "^2.3.3",
-    "html-to-text": "^9.0.5",
     "inquirer": "^9.0.2",
     "jsonschema": "^1.4.1",
     "lighthouse": "^9.5.0",

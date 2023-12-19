@@ -3,7 +3,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import { CheerioAPI } from "cheerio";
+import { CheerioAPI, text } from "cheerio";
 import {
   checkBreadcrumb,
   checkOrder,
@@ -22,7 +22,6 @@ import {
 } from "../../storage/municipality/contentTypeItems";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { auditScanVariables } from "../../storage/municipality/auditScanVariables";
-import { convert } from "html-to-text";
 import {
   errorHandling,
   minNumberOfServices,
@@ -173,8 +172,8 @@ class LoadAudit extends Audit {
 
       for (const mandatoryVoiceDataElement of mandatoryVoicesDataElements.paragraph) {
         const dataElement = `[data-element="${mandatoryVoiceDataElement.data_element}"]`;
-        const content = await getPageElementDataAttribute($, dataElement);
-        if (content && content.length > 0 && convert(content[0]).length >= 3) {
+        const textContent = text($(dataElement));
+        if (textContent.length >= 3) {
           indexElementsWithContent.push(mandatoryVoiceDataElement.key);
         }
       }

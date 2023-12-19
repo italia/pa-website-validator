@@ -22,9 +22,8 @@ import {
   contentTypeItemsMetadata,
 } from "../../storage/school/contentTypeItems";
 import { auditDictionary } from "../../storage/auditDictionary";
-import { CheerioAPI } from "cheerio";
+import { CheerioAPI, text } from "cheerio";
 import { auditScanVariables } from "../../storage/school/auditScanVariables";
-import { convert } from "html-to-text";
 import {
   errorHandling,
   notExecutedErrorMessage,
@@ -174,8 +173,8 @@ class LoadAudit extends Audit {
 
       for (const mandatoryVoiceDataElement of mandatoryVoicesDataElements.paragraph) {
         const dataElement = `[data-element="${mandatoryVoiceDataElement.data_element}"]`;
-        const content = await getPageElementDataAttribute($, dataElement);
-        if (content && content.length > 0 && convert(content[0]).length >= 3) {
+        const textContent = text($(dataElement));
+        if (textContent.length >= 3) {
           indexElementsWithContent.push(mandatoryVoiceDataElement.key);
         }
       }
