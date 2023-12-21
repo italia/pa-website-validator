@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.8.1](https://github.com/italia/pa-website-validator/compare/v2.8.0...v2.8.1) (2023-12-21)
+
+
+### Bug Fixes
+
+* update allowed domains ([d0b7ffd](https://github.com/italia/pa-website-validator/commit/d0b7ffd9302747caad802a90b2f3e2b15b93dc16))
+* use cheerio for html to text conversion ([3b1858c](https://github.com/italia/pa-website-validator/commit/3b1858cd7d6b056d60e626931546e8653a2633d5))
+
 ## [2.8.0](https://github.com/italia/pa-website-validator/compare/v2.7.6...v2.8.0) (2023-11-23)
 
 
