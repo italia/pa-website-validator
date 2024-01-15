@@ -82,7 +82,7 @@ const gotoRetry = async (
   try {
     return await page.goto(url, {
       waitUntil: ["load", "networkidle0"],
-      timeout: requestTimeout,
+      timeout: requestTimeout * 2,
     });
   } catch (error) {
     if (retryCount <= 0) {
