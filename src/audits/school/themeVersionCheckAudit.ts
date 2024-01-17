@@ -3,7 +3,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import semver from "semver";
+import { compareVersions } from "compare-versions";
 import { CheerioAPI } from "cheerio";
 import {
   buildUrl,
@@ -99,7 +99,7 @@ class LoadAudit extends Audit {
         score = 0;
         items[0].result = auditData.redResult;
 
-        if (semver.gte(version, "2.0.0")) {
+        if (compareVersions(version, "2.0.0") >= 0) {
           score = 1;
           items[0].result = auditData.greenResult;
         }

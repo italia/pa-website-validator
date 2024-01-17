@@ -3,7 +3,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import semver from "semver";
+import { compareVersions } from "compare-versions";
 import { auditDictionary } from "../../storage/auditDictionary";
 import { gotoRetry, requestTimeout } from "../../utils/utils";
 import { getPages, isDrupal } from "../../utils/municipality/utils";
@@ -217,7 +217,7 @@ class LoadAudit extends Audit {
           item.library_version = bootstrapItaliaVariableVersion;
           item.library_name = "Sì";
 
-          if (semver.gte(bootstrapItaliaVariableVersion, "2.0.0")) {
+          if (compareVersions(bootstrapItaliaVariableVersion, "2.0.0") >= 0) {
             singleResult = 1;
           }
         } else if (
@@ -227,7 +227,10 @@ class LoadAudit extends Audit {
           item.library_version = bootstrapItaliaSelectorVariableVersion;
           item.library_name = "Sì";
 
-          if (semver.gte(bootstrapItaliaSelectorVariableVersion, "2.0.0")) {
+          if (
+            compareVersions(bootstrapItaliaSelectorVariableVersion, "2.0.0") >=
+            0
+          ) {
             singleResult = 1;
           }
         }
