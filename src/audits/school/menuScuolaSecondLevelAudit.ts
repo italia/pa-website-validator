@@ -141,9 +141,10 @@ class LoadAudit extends Audit {
 
       for (const element of headerUlTest) {
         if (element !== overviewText) {
-          if (
-            secondaryMenuItem.dictionary[lang].includes(element.toLowerCase())
-          ) {
+          const allowed = secondaryMenuItem.dictionary[lang].map((s) =>
+            s.toLowerCase()
+          );
+          if (allowed.includes(element.toLowerCase())) {
             item.pagesInVocabulary.push(element);
           } else {
             item.pagesNotInVocabulary.push(element);
