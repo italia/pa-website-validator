@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.8.2](https://github.com/italia/pa-website-validator/compare/v2.8.1...v2.8.2) (2024-02-05)
+
+
+### Bug Fixes
+
+* **C.SC.1.5:** case insensitive match ([594da46](https://github.com/italia/pa-website-validator/commit/594da46355cd6f7c142e05e148d2817e291f17c0))
+* **C.SI.5.2:** add missing domains ([fe73d2c](https://github.com/italia/pa-website-validator/commit/fe73d2cc2cdd0c05ddb5f9ca0561809a58711e72))
+* **C.SI.5.2:** add missing domains ([6a5a22f](https://github.com/italia/pa-website-validator/commit/6a5a22fc313ed2687d325720187c82d44ec63467))
+* handle non semantic versioning ([53661d5](https://github.com/italia/pa-website-validator/commit/53661d5ccdb0fefc481357dc230bce24a24e7e72))
+
 ## [2.8.1](https://github.com/italia/pa-website-validator/compare/v2.8.0...v2.8.1) (2023-12-21)
 
 
