@@ -312,7 +312,7 @@ const getRandomThirdLevelPagesUrl = async (
   const browser = await puppeteer.launch({
     headless: "new",
     protocolTimeout: requestTimeout,
-    args: ["--no-zygote", "--no-sandbox"],
+    args: ["--no-zygote", "--no-sandbox", "--accept-lang=it"],
   });
   const browserWSEndpoint = browser.wsEndpoint();
   try {
@@ -465,7 +465,7 @@ const checkFeedbackComponent = async (url: string) => {
   const browser = await puppeteer.launch({
     headless: "new",
     protocolTimeout: requestTimeout,
-    args: ["--no-zygote", "--no-sandbox"],
+    args: ["--no-zygote", "--no-sandbox", "--accept-lang=it"],
   });
   const browserWSEndpoint = browser.wsEndpoint();
 

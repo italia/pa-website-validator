@@ -23,7 +23,7 @@ const loadPageData = async (url: string): Promise<CheerioAPI> => {
   const browser = await puppeteer.launch({
     headless: "new",
     protocolTimeout: requestTimeout,
-    args: ["--no-zygote", "--no-sandbox"],
+    args: ["--no-zygote", "--no-sandbox", "--accept-lang=it"],
   });
   const browserWSEndpoint = browser.wsEndpoint();
   try {
@@ -399,7 +399,7 @@ const getRedirectedUrl = async (url: string): Promise<string> => {
   const browser = await puppeteer.launch({
     headless: "new",
     protocolTimeout: requestTimeout,
-    args: ["--no-zygote", "--no-sandbox"],
+    args: ["--no-zygote", "--no-sandbox", "--accept-lang=it"],
   });
   const browserWSEndpoint = browser.wsEndpoint();
   try {
