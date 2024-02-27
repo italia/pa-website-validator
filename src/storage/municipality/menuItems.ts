@@ -46,6 +46,7 @@ export const primaryMenuItems = {
       "autorizzazioni",
       "appalti pubblici",
       "agricoltura e pesca",
+      "agricoltura, caccia e pesca",
     ],
   },
   live: {
