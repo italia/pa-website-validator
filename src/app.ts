@@ -16,7 +16,7 @@ const urlSchoolMsg =
 const urlMunicipalityMsg =
   "Inserisci la URL della pagina principale (homepage) del sito web del Comune includendo il protocollo (http:// o https://):";
 
-const version = "2.8.2"; // x-release-please-version
+const version = "2.8.3"; // x-release-please-version
 
 console.log();
 console.log();

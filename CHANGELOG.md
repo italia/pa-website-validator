@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.8.3](https://github.com/italia/pa-website-validator/compare/v2.8.2...v2.8.3) (2024-03-07)
+
+
+### Bug Fixes
+
+* aggiunti font lowercase ([4157889](https://github.com/italia/pa-website-validator/commit/4157889234055fabbe46bf4d2215fabc67110104))
+* **C.SI.1.7:** add extra allowed title for second level pages ([8c3c93e](https://github.com/italia/pa-website-validator/commit/8c3c93ee20958be8d12500bf08482bde05396137))
+* **C.SI.5.2:** add Pieve di Bono-Prezzo and Predaia domains ([cd7b327](https://github.com/italia/pa-website-validator/commit/cd7b327bc2fd0efbc76e2de51b8cbf91411b7c5b))
+* set Italian as preferred languange in internal browser ([cbbd157](https://github.com/italia/pa-website-validator/commit/cbbd1576210f652c5f097b00ace62ed3d684228e))
+
 ## [2.8.2](https://github.com/italia/pa-website-validator/compare/v2.8.1...v2.8.2) (2024-02-05)
 
 
