@@ -87,6 +87,10 @@ class LoadAudit extends Audit {
     ) {
       const href = elementObj.href;
       const checkUrl = await urlExists(url, href);
+
+      if (checkUrl.exception)
+        throw new Error("Possibile errore del server AGID, verificare.");
+
       if (!checkUrl.result) {
         return {
           score: 0,

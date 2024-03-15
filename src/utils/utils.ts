@@ -267,7 +267,12 @@ const urlExists = async (
   url: string,
   href: string,
   checkHttps = false
-): Promise<{ result: boolean; reason: string; inspectedUrl: string }> => {
+): Promise<{
+  result: boolean;
+  exception?: boolean;
+  reason: string;
+  inspectedUrl: string;
+}> => {
   let inspectUrl = href;
   if ((await isInternalUrl(href)) && !href.includes(url)) {
     inspectUrl = await buildUrl(url, href);
@@ -293,6 +298,7 @@ const urlExists = async (
     } catch (e) {
       return {
         result: false,
+        exception: true,
         reason: " Hostname non valido.",
         inspectedUrl: inspectUrl,
       };
