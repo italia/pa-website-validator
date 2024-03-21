@@ -356,9 +356,12 @@ const getRandomThirdLevelPagesUrl = async (
           continue;
         }
 
-        await page.waitForNetworkIdle({
-          idleTime: 1000,
-        });
+        await Promise.race([
+          new Promise((resolve) => setTimeout(resolve, 10000)),
+          page.waitForNetworkIdle({
+            idleTime: 1000,
+          }),
+        ]);
 
         const currentCountPages = (await page.$$(linkDataElement)).length;
         if (currentCountPages === maxCountPages) {
