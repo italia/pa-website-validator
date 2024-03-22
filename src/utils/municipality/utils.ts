@@ -2,6 +2,8 @@
 import * as cheerio from "cheerio";
 import { CheerioAPI } from "cheerio";
 import puppeteer from "puppeteer";
+import { setTimeout } from "timers/promises";
+
 import {
   customPrimaryMenuItemsDataElement,
   customSecondaryMenuItemsDataElement,
@@ -356,9 +358,12 @@ const getRandomThirdLevelPagesUrl = async (
           continue;
         }
 
-        await page.waitForNetworkIdle({
-          idleTime: 1000,
-        });
+        await Promise.race([
+          setTimeout(10000),
+          page.waitForNetworkIdle({
+            idleTime: 1000,
+          }),
+        ]);
 
         const currentCountPages = (await page.$$(linkDataElement)).length;
         if (currentCountPages === maxCountPages) {
