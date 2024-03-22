@@ -2,6 +2,8 @@
 import * as cheerio from "cheerio";
 import { CheerioAPI } from "cheerio";
 import puppeteer from "puppeteer";
+import { setTimeout } from "timers/promises";
+
 import {
   customPrimaryMenuItemsDataElement,
   customSecondaryMenuItemsDataElement,
@@ -357,7 +359,7 @@ const getRandomThirdLevelPagesUrl = async (
         }
 
         await Promise.race([
-          new Promise((resolve) => setTimeout(resolve, 10000)),
+          setTimeout(10000),
           page.waitForNetworkIdle({
             idleTime: 1000,
           }),
