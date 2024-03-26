@@ -23858,6 +23858,8 @@ export const domains = [
   "romagnano.novara.it",
   "romagnano-sesia.novara.it",
   "romagnanosesia.novara.it",
+  "romentino.no.it",
+  "romentino.novara.it",
   "san-maurizio.novara.it",
   "san-maurizio-d-opaglio.novara.it",
   "sanmaurizio.novara.it",
