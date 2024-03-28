@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.8.4](https://github.com/italia/pa-website-validator/compare/v2.8.3...v2.8.4) (2024-03-28)
+
+
+### Bug Fixes
+
+* accept `'` character in legal notes ([8ffdfa9](https://github.com/italia/pa-website-validator/commit/8ffdfa9d7ef29cd93248aadf8ee5a7d3b32a6744))
+* add timeout in button click wait for navigation ([#470](https://github.com/italia/pa-website-validator/issues/470)) ([793eb5a](https://github.com/italia/pa-website-validator/commit/793eb5ad68211ae3d787ce93ca2f03db93e1d8ce))
+* **C.SI.5.2:** add Romentino domain ([3d03986](https://github.com/italia/pa-website-validator/commit/3d03986e05f9098479bbacada76e8133295b4d5a))
+* check domain name only in accessibility page ([b8533ec](https://github.com/italia/pa-website-validator/commit/b8533ecaeb8c7dbc956e8620bafa0048b1dc4f21))
+* increase heap memory ([ec2d961](https://github.com/italia/pa-website-validator/commit/ec2d9614b3bd8300e95f6b2c3f3a6ad3e571e87b))
+* show error on accessibility audit if AGID is unreachable ([92ccb79](https://github.com/italia/pa-website-validator/commit/92ccb7959189f26bd4640d1dce8dd8f7e1071630))
+
 ## [2.8.3](https://github.com/italia/pa-website-validator/compare/v2.8.2...v2.8.3) (2024-03-07)
 
 
