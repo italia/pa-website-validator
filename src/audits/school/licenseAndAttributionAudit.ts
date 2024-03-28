@@ -115,11 +115,15 @@ class LoadAudit extends Audit {
       const bodyElements = $(bodyDataElement);
       let textBody = "";
       for (const bodyElement of bodyElements) {
-        textBody +=
-          $(bodyElement)?.text().trim().toLowerCase().replaceAll(/\s+/g, " ") ??
-          "";
+        textBody += $(bodyElement).text();
         textBody += " ";
       }
+      textBody = textBody
+        .trim()
+        .toLowerCase()
+        .replaceAll(/\s+/g, " ")
+        .replaceAll("'", "’");
+
       if (textBody === legalNotes.body.text.toLowerCase()) {
         items[0].page_contains_correct_text = "Sì";
       }
