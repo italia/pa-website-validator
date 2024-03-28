@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.8.5](https://github.com/italia/pa-website-validator/compare/v2.8.4...v2.8.5) (2024-03-28)
+
+
+### Bug Fixes
+
+* **R.SC.2.2:** accept `'` character in legal notes ([fa2c268](https://github.com/italia/pa-website-validator/commit/fa2c2681542ade31dd2d35a9fa084cfbf28fd6d2))
+
 ## [2.8.4](https://github.com/italia/pa-website-validator/compare/v2.8.3...v2.8.4) (2024-03-28)
 
 
