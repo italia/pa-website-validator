@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.9.0](https://github.com/italia/pa-website-validator/compare/v2.8.5...v2.9.0) (2024-05-31)
+
+
+### Features
+
+* check WCAG 2.1 compliance ([68c037c](https://github.com/italia/pa-website-validator/commit/68c037c330c167949bafbf0db3c82e744939492c))
+
+
+### Bug Fixes
+
+* **C.SC.2.2:** add AGID unreachable check ([590c279](https://github.com/italia/pa-website-validator/commit/590c2792fef6d5e0baa5297e2fb4ac9c092993e9))
+* **C.SI.1.5:** add “Anagrafe” and “PNRR” ([006bb24](https://github.com/italia/pa-website-validator/commit/006bb2406b4feda4bc9f39da9f71ded5cda10689))
+* make domain check case insensitive ([b9c0b31](https://github.com/italia/pa-website-validator/commit/b9c0b31d1de4b5743ae0f384bcd989460faad7cb))
+
 ## [2.8.5](https://github.com/italia/pa-website-validator/compare/v2.8.4...v2.8.5) (2024-03-28)
 
 
