@@ -1,10 +1,12 @@
 "use strict";
 
+import { CheerioAPI } from "cheerio";
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
+
 import { getAllPageHTML, loadPageData, urlExists } from "../../utils/utils";
-import { CheerioAPI } from "cheerio";
 import { auditDictionary } from "../../storage/auditDictionary";
 
 const Audit = lighthouse.Audit;
@@ -61,6 +63,11 @@ class LoadAudit extends Audit {
         itemType: "text",
         text: "La pagina contiene l'url del sito di origine",
       },
+      {
+        key: "wcag",
+        itemType: "text",
+        text: "È dichiarata la conformità alle specifiche WCAG 2.1",
+      },
     ];
 
     const items = [
@@ -70,6 +77,7 @@ class LoadAudit extends Audit {
         link_destination: "",
         existing_page: "No",
         page_contains_correct_url: "",
+        wcag: "",
       },
     ];
 
@@ -99,6 +107,7 @@ class LoadAudit extends Audit {
 
       items[0].existing_page = "Sì";
       items[0].page_contains_correct_url = "No";
+      items[0].wcag = "No";
 
       if (!href.includes("https://form.agid.gov.it/view/")) {
         return {
@@ -118,6 +127,16 @@ class LoadAudit extends Audit {
       }
 
       items[0].page_contains_correct_url = "Sì";
+
+      if (!privacyPageHTML.match(/wcag 2.1/i)) {
+        return {
+          score: 0,
+          details: Audit.makeTableDetails(headings, items),
+        };
+      } else {
+        items[0].wcag = "Sì";
+      }
+
       items[0].result = greenResult;
       score = 1;
     }
