@@ -5,6 +5,7 @@ import { CheerioAPI } from "cheerio";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
+
 import { getAllPageHTML, loadPageData, urlExists } from "../../utils/utils";
 import { auditDictionary } from "../../storage/auditDictionary";
 
@@ -78,6 +79,7 @@ class LoadAudit extends Audit {
     ];
 
     const $: CheerioAPI = await loadPageData(url);
+
     const accessibilityDeclarationElement = $("footer").find(
       '[data-element="accessibility-link"]'
     );

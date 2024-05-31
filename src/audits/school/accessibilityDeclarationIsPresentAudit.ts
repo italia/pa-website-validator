@@ -14,9 +14,6 @@ const Audit = lighthouse.Audit;
 const auditId = "school-legislation-accessibility-declaration-is-present";
 const auditData = auditDictionary[auditId];
 
-const greenResult = auditData.greenResult;
-const redResult = auditData.redResult;
-
 class LoadAudit extends Audit {
   static get meta() {
     return {
@@ -72,7 +69,7 @@ class LoadAudit extends Audit {
 
     const items = [
       {
-        result: redResult,
+        result: auditData.redResult,
         link_name: "",
         link_destination: "",
         existing_page: "No",
@@ -98,6 +95,10 @@ class LoadAudit extends Audit {
     ) {
       const href = elementObj.href;
       const checkUrl = await urlExists(url, href);
+
+      if (checkUrl.exception)
+        throw new Error("Possibile errore del server AGID, verificare.");
+
       if (!checkUrl.result) {
         return {
           score: 0,
@@ -137,7 +138,7 @@ class LoadAudit extends Audit {
         items[0].wcag = "Sì";
       }
 
-      items[0].result = greenResult;
+      items[0].result = auditData.greenResult;
       score = 1;
     }
 
