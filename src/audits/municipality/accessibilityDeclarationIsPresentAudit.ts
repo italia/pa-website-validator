@@ -118,7 +118,7 @@ class LoadAudit extends Audit {
       const domain = new URL(url).host.replace(/^www./, "");
 
       const privacyPageHTML: string = await getAllPageHTML(href);
-      if (!privacyPageHTML.includes(domain)) {
+      if (!privacyPageHTML.match(new RegExp(domain, "i"))) {
         return {
           score: 0,
           details: Audit.makeTableDetails(headings, items),
