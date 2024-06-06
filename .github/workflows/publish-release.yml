@@ -9,10 +9,10 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
       - run: npm ci
         env:
           PUPPETEER_CACHE_DIR: ${{ github.workspace }}/dist/puppeteer
@@ -22,17 +22,17 @@ jobs:
           LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
       - name: Generate ZIP files for Linux
         run: ./scripts/create-zips.sh Linux x64
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: linux
           path: "*.zip"
   build-mac:
     runs-on: macos-12
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
       - run: npm ci
         env:
           PUPPETEER_CACHE_DIR: ${{ github.workspace }}/dist/puppeteer
@@ -43,17 +43,17 @@ jobs:
       - name: Generate ZIP files for macOS
         run: ./scripts/create-zips.sh macOS intel
         shell: bash
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: mac
           path: "*.zip"
   build-win:
     runs-on: windows-2022
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
       - run: npm ci
         env:
           PUPPETEER_CACHE_DIR: ${{ github.workspace }}/dist/puppeteer
@@ -64,7 +64,7 @@ jobs:
       - name: Generate ZIP files for Windows
         run: ./scripts/create-zips.sh Windows x64
         shell: bash
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: win
           path: "*.zip"
@@ -75,8 +75,8 @@ jobs:
       - build-win
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v3
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
