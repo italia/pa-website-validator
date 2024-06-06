@@ -198,7 +198,7 @@ export default {
         "CONDIZIONI DI SUCCESSO: il sito presenta livelli di prestazioni (media pesata di 6 metriche standard) pari o superiori a 50. Se il punteggio è inferiore a 50, il Comune deve pubblicare sul sito un “Piano di miglioramento del sito” raggiungibile dal footer che mostri, per ciascuna voce che impatta negativamente le prestazioni, le azioni future di miglioramento e le relative tempistiche di realizzazione attese; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/).",
       auditRefs: [
         ...defaultConfig.categories.performance.auditRefs,
-        { id: "municipality-performance-improvement-plan", group: "hidden" },
+        { id: "municipality-performance-improvement-plan" },
       ],
     },
 
