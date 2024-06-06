@@ -1,3 +1,7 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import defaultConfig from "lighthouse/lighthouse-core/config/default-config.js";
+
 import {
   commonGatherersFolder,
   commonAuditsFolder,
@@ -176,6 +180,7 @@ export default {
     municipalityAuditsFolder + "/metatagAudit.js",
     municipalityAuditsFolder + "/licenseAndAttributionAudit.js",
     municipalityAuditsFolder + "/userExperienceEvaluation.js",
+    municipalityAuditsFolder + "/improvementPlan.js",
 
     municipalityInformativeAuditsFolder + "/cloudInfrastructureAudit.js",
     municipalityInformativeAuditsFolder + "/reuseAudit.js",
@@ -191,6 +196,10 @@ export default {
         'Pacchetto Cittadino Informato: criterio "C.SI.4.1 - Velocità e tempi di risposta"',
       description:
         "CONDIZIONI DI SUCCESSO: il sito presenta livelli di prestazioni (media pesata di 6 metriche standard) pari o superiori a 50. Se il punteggio è inferiore a 50, il Comune deve pubblicare sul sito un “Piano di miglioramento del sito” raggiungibile dal footer che mostri, per ciascuna voce che impatta negativamente le prestazioni, le azioni future di miglioramento e le relative tempistiche di realizzazione attese; RIFERIMENTI TECNICI E NORMATIVI: [Documentazione del Modello Comuni](https://docs.italia.it/italia/designers-italia/design-comuni-docs/).",
+      auditRefs: [
+        ...defaultConfig.categories.performance.auditRefs,
+        { id: "municipality-performance-improvement-plan" },
+      ],
     },
 
     modelComplianceInformation: {
