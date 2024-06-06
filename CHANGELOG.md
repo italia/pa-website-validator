@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.10.0](https://github.com/italia/pa-website-validator/compare/v2.9.0...v2.10.0) (2024-06-06)
+
+
+### Features
+
+* check for improvement plan ([#493](https://github.com/italia/pa-website-validator/issues/493)) ([ee1bbc6](https://github.com/italia/pa-website-validator/commit/ee1bbc6d63eab4e0ee52b4a5453cc0096c820279))
+
 ## [2.9.0](https://github.com/italia/pa-website-validator/compare/v2.8.5...v2.9.0) (2024-05-31)
 
 
