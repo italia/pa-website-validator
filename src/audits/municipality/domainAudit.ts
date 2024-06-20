@@ -175,9 +175,9 @@ class LoadAudit extends Audit {
         }
       }
 
-      const wwwAccess = (
-        await urlExists(url, pageToBeAnalyzed.replace("www.", ""))
-      ).result;
+      const pageWithoutWww = new URL(pageToBeAnalyzed);
+      pageWithoutWww.hostname = pageWithoutWww.hostname.replace(/^www\./i, "");
+      const wwwAccess = (await urlExists(url, pageWithoutWww.href)).result;
 
       item.www_access = wwwAccess ? "Sì" : "No";
 
