@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.10.1](https://github.com/italia/pa-website-validator/compare/v2.10.0...v2.10.1) (2024-06-20)
+
+
+### Bug Fixes
+
+* **C.SI.5.2:** remove `www` only at the beginning of a URL ([87dc14d](https://github.com/italia/pa-website-validator/commit/87dc14dcc56755769ee77821023cd55278d95836))
+
 ## [2.10.0](https://github.com/italia/pa-website-validator/compare/v2.9.0...v2.10.0) (2024-06-06)
 
 
