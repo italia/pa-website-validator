@@ -343,7 +343,7 @@ const getRandomThirdLevelPagesUrl = async (
     let clickButton = true;
     while (clickButton) {
       try {
-        clickButton = await page.evaluate(async () => {
+        clickButton = await page.evaluate(() => {
           const button = document.querySelector(
             '[data-element="load-other-cards"]'
           ) as HTMLElement;
@@ -361,7 +361,7 @@ const getRandomThirdLevelPagesUrl = async (
         await Promise.race([
           setTimeout(10000),
           page.waitForNetworkIdle({
-            idleTime: 1000,
+            idleTime: 2000,
           }),
         ]);
 
@@ -374,6 +374,7 @@ const getRandomThirdLevelPagesUrl = async (
 
         // eslint-disable-next-line no-empty
       } catch (e) {
+        console.log("ERROR", e);
         clickButton = false;
       }
     }
