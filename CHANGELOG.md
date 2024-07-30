@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.10.1](https://github.com/italia/pa-website-validator/compare/v2.10.0...v2.10.1) (2024-07-30)
+
+
+### Bug Fixes
+
+* **C.SC.1.3,C.SI.1.4:** ignore non-string contents ([28b5771](https://github.com/italia/pa-website-validator/commit/28b5771ecb24d36015f5538a28fc02f238febaf5))
+* **C.SI.1.3:** increase timeout ([5b6dd80](https://github.com/italia/pa-website-validator/commit/5b6dd8046f64f1d55f708d43fd51ffb1e89c3afd))
+* **C.SI.5.2:** remove `www` only at the beginning of a URL ([87dc14d](https://github.com/italia/pa-website-validator/commit/87dc14dcc56755769ee77821023cd55278d95836))
+
 ## [2.10.0](https://github.com/italia/pa-website-validator/compare/v2.9.0...v2.10.0) (2024-06-06)
 
 
