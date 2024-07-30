@@ -78,15 +78,15 @@ class LoadAudit extends Audit {
           styleCSSUrl = await buildUrl(url, styleCSSUrl);
         }
 
-        let CSScontent = "";
+        let CSSContent = "";
         try {
           const response = await axios.get(styleCSSUrl);
-          CSScontent = response.data;
+          CSSContent = typeof response.data === "string" ? response.data : "";
         } catch (e) {
-          CSScontent = "";
+          CSSContent = "";
         }
 
-        const match = CSScontent.match(cmsThemeRx);
+        const match = CSSContent.match(cmsThemeRx);
 
         if (match === null || !match.groups) {
           continue;

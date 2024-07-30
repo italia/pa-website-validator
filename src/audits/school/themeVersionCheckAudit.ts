@@ -66,22 +66,22 @@ class LoadAudit extends Audit {
     const $: CheerioAPI = await loadPageData(url);
     const linkTags = $("link");
 
-    let styleCSSurl = "";
+    let styleCSSUrl = "";
     for (const linkTag of linkTags) {
       if (!linkTag.attribs || !("href" in linkTag.attribs)) {
         continue;
       }
 
       if (linkTag.attribs.href.includes(".css")) {
-        styleCSSurl = linkTag.attribs.href;
-        if ((await isInternalUrl(styleCSSurl)) && !styleCSSurl.includes(url)) {
-          styleCSSurl = await buildUrl(url, styleCSSurl);
+        styleCSSUrl = linkTag.attribs.href;
+        if ((await isInternalUrl(styleCSSUrl)) && !styleCSSUrl.includes(url)) {
+          styleCSSUrl = await buildUrl(url, styleCSSUrl);
         }
 
         let CSSContent = "";
         try {
-          const response = await axios.get(styleCSSurl);
-          CSSContent = response.data;
+          const response = await axios.get(styleCSSUrl);
+          CSSContent = typeof response.data === "string" ? response.data : "";
         } catch (e) {
           CSSContent = "";
         }
