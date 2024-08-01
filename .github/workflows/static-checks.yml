@@ -16,6 +16,8 @@ jobs:
           node-version: 20
       - name: Install modules
         run: npm ci
+        env:
+          PUPPETEER_DOWNLOAD_BASE_URL: https://storage.googleapis.com/chrome-for-testing-public
       - name: TypeScript
         run: npm run type:check
       - name: ESLint

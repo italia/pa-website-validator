@@ -16,6 +16,7 @@ jobs:
       - run: npm ci
         env:
           PUPPETEER_CACHE_DIR: ${{ github.workspace }}/dist/puppeteer
+          PUPPETEER_DOWNLOAD_BASE_URL: https://storage.googleapis.com/chrome-for-testing-public
       - name: Update GeoIP database
         run: npm run updateGeoIPData
         env:
@@ -36,6 +37,7 @@ jobs:
       - run: npm ci
         env:
           PUPPETEER_CACHE_DIR: ${{ github.workspace }}/dist/puppeteer
+          PUPPETEER_DOWNLOAD_BASE_URL: https://storage.googleapis.com/chrome-for-testing-public
       - name: Update GeoIP database
         run: npm run updateGeoIPData
         env:
@@ -57,6 +59,7 @@ jobs:
       - run: npm ci
         env:
           PUPPETEER_CACHE_DIR: ${{ github.workspace }}/dist/puppeteer
+          PUPPETEER_DOWNLOAD_BASE_URL: https://storage.googleapis.com/chrome-for-testing-public
       - name: Update GeoIP database
         run: npm run updateGeoIPData
         env:
