@@ -149,26 +149,6 @@ Note:
 - `--accuracy` indica la precisione della scansione, definita come il numero di pagina analizzate:
   - `all` la scansione è effettuata su tutte le pagine disponibili.
 
-## Generazione pacchetti MacOS per Apple silicon
-
-I pacchetti delle app per MacOS basati su architettura ARM non possono essere generati automaticamente dalla Action di GitHub come avviene per gli altri. Queste sono le istruzioni per generarli manualmente:
-
-1. Scaricare il binario di NodeJS da [qui](https://nodejs.org/dist/v18.15.0/node-v18.15.0-darwin-arm64.tar.gz) e decompattarlo in una directory, es. `~/Downloads`. (Attenzione: scaricare il binario e non l'Installer o altra distribuzione).
-
-2. Aprire un Terminale e copiare i seguenti comandi:
-
-   ```console
-   export PATH="$HOME/Downloads/node-v18.15.0-darwin-arm64/bin:$PATH"
-   cd pa-website-validator
-   git pull
-   rm -rf dist node_modules
-   PUPPETEER_CACHE_DIR="$PWD/dist/puppeteer" npm install
-   LICENSE_KEY="chiave licenza GeoIP valida" npm run updateGeoIPData
-   ./scripts/create-zips.sh macOS arm64
-   ```
-
-3. Caricare i pacchetti generati nella pagina della release di GitHub.
-
 [lighthouse]: https://www.npmjs.com/package/lighthouse
 [node.js]: http://nodejs.org
 [npm]: https://www.npmjs.com/
