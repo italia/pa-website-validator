@@ -28,7 +28,7 @@ import crawlerTypes from "../../types/crawler-types";
 import requestPages = crawlerTypes.requestPages;
 import pageLink = crawlerTypes.pageLink;
 import municipalitySecondLevelPages = crawlerTypes.municipalitySecondLevelPages;
-import { LRUCache } from "lru-cache/dist/mjs";
+import { LRUCache } from "lru-cache";
 
 const cacheResults = new LRUCache<string, string[]>({ max: 100 });
 
