@@ -192,6 +192,10 @@ class LoadAudit extends Audit {
 
         if (badElements.length === 0) {
           correctItems.push(item);
+
+          await page.goto("about:blank");
+          await page.close();
+          browser2.disconnect();
           continue;
         }
 
@@ -222,6 +226,10 @@ class LoadAudit extends Audit {
           item.wrong_fonts = wrongFontsUnique(reallyBadElements).join(", ");
           item.wrong_number_elements = reallyBadElements.length;
           wrongItems.push(item);
+
+          await page.goto("about:blank");
+          await page.close();
+          browser2.disconnect();
           continue;
         }
 

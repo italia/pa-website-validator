@@ -17,6 +17,9 @@ import { DataElementError } from "../DataElementError";
 import crawlerTypes from "../../types/crawler-types";
 import requestPages = crawlerTypes.requestPages;
 import pageLink = crawlerTypes.pageLink;
+import { LRUCache } from "lru-cache";
+
+const cacheResults = new LRUCache<string, string[]>({ max: 100 });
 
 const getRandomFirstLevelPagesUrl = async (
   url: string,
@@ -324,40 +327,49 @@ const getPages = async (
 
   for (const request of requests) {
     try {
-      switch (request.type) {
-        case "first_level_pages": {
-          const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
-            url,
-            request.numberOfPages
-          );
-          pagesUrl = [...pagesUrl, ...randomFirstLevelPagesUrl];
-          break;
+      let requestedPages = cacheResults.get(
+        request.type + "-" + request.numberOfPages
+      );
+      if (requestedPages === undefined) {
+        switch (request.type) {
+          case "first_level_pages": {
+            requestedPages = await getRandomFirstLevelPagesUrl(
+              url,
+              request.numberOfPages
+            );
+            break;
+          }
+          case "second_level_pages": {
+            requestedPages = await getRandomSecondLevelPagesUrl(
+              url,
+              request.numberOfPages
+            );
+            break;
+          }
+          case "services": {
+            requestedPages = await getRandomServicesUrl(
+              url,
+              request.numberOfPages
+            );
+            break;
+          }
+          case "locations": {
+            requestedPages = await getRandomLocationsUrl(
+              url,
+              request.numberOfPages
+            );
+            break;
+          }
+          default:
+            requestedPages = [];
         }
-        case "second_level_pages": {
-          const randomSecondLevelPageUrl = await getRandomSecondLevelPagesUrl(
-            url,
-            request.numberOfPages
-          );
-          pagesUrl = [...pagesUrl, ...randomSecondLevelPageUrl];
-          break;
-        }
-        case "services": {
-          const randomServicesUrl = await getRandomServicesUrl(
-            url,
-            request.numberOfPages
-          );
-          pagesUrl = [...pagesUrl, ...randomServicesUrl];
-          break;
-        }
-        case "locations": {
-          const randomLocationsUrl = await getRandomLocationsUrl(
-            url,
-            request.numberOfPages
-          );
-          pagesUrl = [...pagesUrl, ...randomLocationsUrl];
-          break;
-        }
+
+        cacheResults.set(
+          request.type + "-" + request.numberOfPages,
+          requestedPages
+        );
       }
+      pagesUrl = [...pagesUrl, ...requestedPages];
     } catch (ex) {
       if (!(ex instanceof DataElementError)) {
         throw ex;

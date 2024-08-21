@@ -28,6 +28,9 @@ import crawlerTypes from "../../types/crawler-types";
 import requestPages = crawlerTypes.requestPages;
 import pageLink = crawlerTypes.pageLink;
 import municipalitySecondLevelPages = crawlerTypes.municipalitySecondLevelPages;
+import { LRUCache } from "lru-cache/dist/mjs";
+
+const cacheResults = new LRUCache<string, string[]>({ max: 100 });
 
 const getRandomFirstLevelPagesUrl = async (
   url: string,
@@ -998,109 +1001,124 @@ const getPages = async (
 
   for (const request of requests) {
     try {
-      switch (request.type) {
-        case "first_level_pages": {
-          const randomFirstLevelPagesUrl = await getRandomFirstLevelPagesUrl(
-            url,
-            request.numberOfPages
-          );
-          pagesUrl = [...pagesUrl, ...randomFirstLevelPagesUrl];
-          break;
-        }
-        case "second_level_pages": {
-          const randomSecondLevelPagesUrl = await getRandomSecondLevelPagesUrl(
-            url,
-            request.numberOfPages
-          );
-          pagesUrl = [...pagesUrl, ...randomSecondLevelPagesUrl];
-          break;
-        }
-        case "services_page": {
-          const servicesPage = await getPrimaryPageUrl(
-            url,
-            primaryMenuItems.services.data_element
-          );
-          if (servicesPage === "") {
-            throw new DataElementError(primaryMenuItems.services.data_element);
-          }
-          pagesUrl.push(servicesPage);
-          break;
-        }
-        case "services": {
-          const allServicePage = await getPrimaryPageUrl(
-            url,
-            primaryMenuItems.services.data_element
-          );
-          if (allServicePage.length === 0) {
-            throw new DataElementError(primaryMenuItems.services.data_element);
-          }
-
-          const randomServicesUrl = await getRandomThirdLevelPagesUrl(
-            url,
-            allServicePage,
-            `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
-            request.numberOfPages
-          );
-          if (randomServicesUrl.length === 0) {
-            throw new DataElementError(
-              primaryMenuItems.services.third_item_data_element
-            );
-          }
-          pagesUrl = [...pagesUrl, ...randomServicesUrl];
-          break;
-        }
-        case "events": {
-          const randomEventsUrl = await getRandomThirdLevelPagesUrl(
-            url,
-            await getButtonUrl(
-              await loadPageData(
-                await getPrimaryPageUrl(url, primaryMenuItems.live.data_element)
-              ),
+      let requestedPages = cacheResults.get(
+        request.type + "-" + request.numberOfPages
+      );
+      if (requestedPages === undefined) {
+        switch (request.type) {
+          case "first_level_pages": {
+            requestedPages = await getRandomFirstLevelPagesUrl(
               url,
-              `[data-element="${primaryMenuItems.live.secondary_item_data_element[1]}"]`
-            ),
-            `[data-element="${primaryMenuItems.live.third_item_data_element}"]`,
-            request.numberOfPages
-          );
+              request.numberOfPages
+            );
+            break;
+          }
+          case "second_level_pages": {
+            requestedPages = await getRandomSecondLevelPagesUrl(
+              url,
+              request.numberOfPages
+            );
+            break;
+          }
+          case "services_page": {
+            const servicesPage = await getPrimaryPageUrl(
+              url,
+              primaryMenuItems.services.data_element
+            );
+            if (servicesPage === "") {
+              throw new DataElementError(
+                primaryMenuItems.services.data_element
+              );
+            }
+            requestedPages = [servicesPage];
+            break;
+          }
+          case "services": {
+            const allServicePage = await getPrimaryPageUrl(
+              url,
+              primaryMenuItems.services.data_element
+            );
+            if (allServicePage.length === 0) {
+              throw new DataElementError(
+                primaryMenuItems.services.data_element
+              );
+            }
 
-          if (randomEventsUrl.length > 0) {
-            pagesUrl = [...pagesUrl, ...randomEventsUrl];
+            const randomServicesUrl = await getRandomThirdLevelPagesUrl(
+              url,
+              allServicePage,
+              `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
+              request.numberOfPages
+            );
+            if (randomServicesUrl.length === 0) {
+              throw new DataElementError(
+                primaryMenuItems.services.third_item_data_element
+              );
+            }
+            requestedPages = randomServicesUrl;
+            break;
           }
-          break;
-        }
-        case "booking_appointment": {
-          const servicesPage = await getPrimaryPageUrl(
-            url,
-            primaryMenuItems.services.data_element
-          );
-          if (servicesPage === "") {
-            throw new DataElementError(primaryMenuItems.services.data_element);
-          }
+          case "events": {
+            requestedPages = await getRandomThirdLevelPagesUrl(
+              url,
+              await getButtonUrl(
+                await loadPageData(
+                  await getPrimaryPageUrl(
+                    url,
+                    primaryMenuItems.live.data_element
+                  )
+                ),
+                url,
+                `[data-element="${primaryMenuItems.live.secondary_item_data_element[1]}"]`
+              ),
+              `[data-element="${primaryMenuItems.live.third_item_data_element}"]`,
+              request.numberOfPages
+            );
 
-          const bookingAppointmentPage = await getPrimaryPageUrl(
-            servicesPage,
-            "appointment-booking"
-          );
-          if (bookingAppointmentPage === "") {
-            throw new DataElementError("appointment-booking");
+            break;
           }
-          pagesUrl.push(bookingAppointmentPage);
-          break;
-        }
-        case "personal_area_login": {
-          const personalAreaLoginPageUrl = await getPrimaryPageUrl(
-            url,
-            "personal-area-login"
-          );
-          if (personalAreaLoginPageUrl !== "") {
-            pagesUrl.push(personalAreaLoginPageUrl);
+          case "booking_appointment": {
+            const servicesPage = await getPrimaryPageUrl(
+              url,
+              primaryMenuItems.services.data_element
+            );
+            if (servicesPage === "") {
+              throw new DataElementError(
+                primaryMenuItems.services.data_element
+              );
+            }
+
+            const bookingAppointmentPage = await getPrimaryPageUrl(
+              servicesPage,
+              "appointment-booking"
+            );
+            if (bookingAppointmentPage === "") {
+              throw new DataElementError("appointment-booking");
+            }
+            requestedPages = [bookingAppointmentPage];
+            break;
           }
-          break;
+          case "personal_area_login": {
+            const personalAreaLoginPageUrl = await getPrimaryPageUrl(
+              url,
+              "personal-area-login"
+            );
+            if (personalAreaLoginPageUrl !== "") {
+              requestedPages = [personalAreaLoginPageUrl];
+            } else {
+              requestedPages = [];
+            }
+            break;
+          }
+          default:
+            requestedPages = [];
         }
-        default: {
-          throw new Error("Request type not found");
-        }
+        cacheResults.set(
+          request.type + "-" + request.numberOfPages,
+          requestedPages
+        );
       }
+      pagesUrl = [...pagesUrl, ...requestedPages];
     } catch (ex) {
       if (!(ex instanceof DataElementError)) {
         throw ex;

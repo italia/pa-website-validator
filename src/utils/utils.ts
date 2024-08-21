@@ -10,8 +10,8 @@ import { LRUCache } from "lru-cache";
 import { MenuItem } from "../types/menuItem";
 import { errorHandling } from "../config/commonAuditsParts";
 
-const cache = new LRUCache<string, CheerioAPI>({ max: 128 });
-const redirectUrlCache = new LRUCache<string, string>({ max: 128 });
+const cache = new LRUCache<string, CheerioAPI>({ max: 1000 });
+const redirectUrlCache = new LRUCache<string, string>({ max: 1000 });
 const requestTimeout = parseInt(process.env["requestTimeout"] ?? "30000");
 
 const loadPageData = async (url: string): Promise<CheerioAPI> => {
@@ -80,7 +80,11 @@ const gotoRetry = async (
   retryCount: number
 ): Promise<HTTPResponse | null> => {
   try {
-    return await page.goto(url, {
+    await page.goto(url, {
+      timeout: requestTimeout,
+    });
+
+    return await page.reload({
       waitUntil: ["load", "networkidle0"],
       timeout: requestTimeout,
     });
