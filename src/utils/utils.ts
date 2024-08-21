@@ -80,14 +80,44 @@ const gotoRetry = async (
   retryCount: number
 ): Promise<HTTPResponse | null> => {
   try {
-    await page.goto(url, {
-      timeout: requestTimeout,
-    });
-
-    return await page.reload({
+    let response = await page.goto(url, {
       waitUntil: ["load", "networkidle0"],
       timeout: requestTimeout,
     });
+
+    try {
+      await page.evaluate(async () => {
+        return window;
+      });
+    } catch (e) {
+      try {
+        response = await page.goto(url, {
+          waitUntil: ["load", "networkidle0"],
+          timeout: requestTimeout,
+        });
+
+        await page.reload( {
+          waitUntil: ["load", "networkidle0"],
+          timeout: requestTimeout,
+        });
+
+        await page.evaluate(async () => {
+          return window;
+        });
+      }catch (e){
+        await page.goto(url, {
+          waitUntil: ["load", "networkidle0"],
+          timeout: requestTimeout,
+        });
+
+        response = await page.waitForNavigation({
+          waitUntil: ["load", "networkidle0"],
+          timeout: requestTimeout,
+        });
+      }
+    }
+
+    return response;
   } catch (error) {
     if (retryCount <= 0) {
       throw error;
