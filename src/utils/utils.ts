@@ -96,7 +96,7 @@ const gotoRetry = async (
           timeout: requestTimeout,
         });
 
-        await page.reload( {
+        await page.reload({
           waitUntil: ["load", "networkidle0"],
           timeout: requestTimeout,
         });
@@ -104,7 +104,7 @@ const gotoRetry = async (
         await page.evaluate(async () => {
           return window;
         });
-      }catch (e){
+      } catch (e) {
         await page.goto(url, {
           waitUntil: ["load", "networkidle0"],
           timeout: requestTimeout,
