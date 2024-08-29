@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.11.0](https://github.com/italia/pa-website-validator/compare/v2.10.1...v2.11.0) (2024-08-29)
+
+
+### Features
+
+* improve performance ([#519](https://github.com/italia/pa-website-validator/issues/519)) ([def50eb](https://github.com/italia/pa-website-validator/commit/def50eb69052fe6b6c4ed7d641e34f86279a59a8))
+
+
+### Bug Fixes
+
+* **C.SI.5.2:** add Santa Caterina d’Este domain ([3138a5d](https://github.com/italia/pa-website-validator/commit/3138a5d660e0ef46303d7cc2e39da2b492a3d9eb))
+
 ## [2.10.1](https://github.com/italia/pa-website-validator/compare/v2.10.0...v2.10.1) (2024-08-01)
 
 
