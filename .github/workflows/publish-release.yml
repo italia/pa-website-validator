@@ -6,8 +6,23 @@ on:
       - "v*"
 
 jobs:
-  build-linux:
-    runs-on: ubuntu-latest
+  build:
+    strategy:
+      matrix:
+        target:
+          - arch: arm64
+            os: macOS
+            runner: macos-latest
+          - arch: intel
+            os: macOS
+            runner: macos-13
+          - arch: x64
+            os: Linux
+            runner: ubuntu-latest
+          - arch: x64
+            os: Windows
+            runner: windows-latest
+    runs-on: ${{ matrix.target.runner }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -21,84 +36,13 @@ jobs:
         run: npm run updateGeoIPData
         env:
           LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
-      - name: Generate ZIP files for Linux
-        run: ./scripts/create-zips.sh Linux x64
+      - name: Generate ZIP files for ${{ matrix.target.os }} ${{ matrix.target.arch }}
+        run: ./scripts/create-zips.sh ${{ matrix.target.os }} ${{ matrix.target.arch }}
       - uses: actions/upload-artifact@v4
         with:
-          name: linux
-          path: "*.zip"
-  build-mac-arm64:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - run: npm ci
-        env:
-          PUPPETEER_CACHE_DIR: ${{ github.workspace }}/dist/puppeteer
-          PUPPETEER_DOWNLOAD_BASE_URL: https://storage.googleapis.com/chrome-for-testing-public
-      - name: Update GeoIP database
-        run: npm run updateGeoIPData
-        env:
-          LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
-      - name: Generate ZIP files for macOS
-        run: ./scripts/create-zips.sh macOS arm64
-        shell: bash
-      - uses: actions/upload-artifact@v4
-        with:
-          name: mac-arm64
-          path: "*.zip"
-  build-mac-intel:
-    runs-on: macos-13
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - run: npm ci
-        env:
-          PUPPETEER_CACHE_DIR: ${{ github.workspace }}/dist/puppeteer
-          PUPPETEER_DOWNLOAD_BASE_URL: https://storage.googleapis.com/chrome-for-testing-public
-      - name: Update GeoIP database
-        run: npm run updateGeoIPData
-        env:
-          LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
-      - name: Generate ZIP files for macOS
-        run: ./scripts/create-zips.sh macOS intel
-        shell: bash
-      - uses: actions/upload-artifact@v4
-        with:
-          name: mac-intel
-          path: "*.zip"
-  build-win:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - run: npm ci
-        env:
-          PUPPETEER_CACHE_DIR: ${{ github.workspace }}/dist/puppeteer
-          PUPPETEER_DOWNLOAD_BASE_URL: https://storage.googleapis.com/chrome-for-testing-public
-      - name: Update GeoIP database
-        run: npm run updateGeoIPData
-        env:
-          LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
-      - name: Generate ZIP files for Windows
-        run: ./scripts/create-zips.sh Windows x64
-        shell: bash
-      - uses: actions/upload-artifact@v4
-        with:
-          name: win
           path: "*.zip"
   publish:
-    needs:
-      - build-linux
-      - build-mac-arm64
-      - build-mac-intel
-      - build-win
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -106,7 +50,7 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          artifacts: "linux/*.zip,mac-arm64/*.zip,mac-intel/*.zip,win/*.zip"
+          artifacts: "*.zip"
           omitBodyDuringUpdate: true
           omitNameDuringUpdate: true
           token: ${{ secrets.GITHUB_TOKEN }}
