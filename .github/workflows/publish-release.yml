@@ -38,8 +38,10 @@ jobs:
           LICENSE_KEY: ${{ secrets.GEOIP_LICENSE_KEY }}
       - name: Generate ZIP files for ${{ matrix.target.os }} ${{ matrix.target.arch }}
         run: ./scripts/create-zips.sh ${{ matrix.target.os }} ${{ matrix.target.arch }}
+        shell: bash
       - uses: actions/upload-artifact@v4
         with:
+          name: ${{ matrix.target.os }}-${{ matrix.target.arch }}
           path: "*.zip"
   publish:
     needs: build
@@ -50,7 +52,7 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          artifacts: "*.zip"
+          artifacts: "*/*.zip"
           omitBodyDuringUpdate: true
           omitNameDuringUpdate: true
           token: ${{ secrets.GITHUB_TOKEN }}
