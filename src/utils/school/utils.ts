@@ -234,7 +234,7 @@ const getRandomServicesUrl = async (
       ];
       for (const pagerPageUrl of pagerPagesUrls) {
 
-        let pargerFullUrl = await buildUrl(url,pagerPageUrl)
+        const pargerFullUrl = await buildUrl(url,pagerPageUrl)
         if (
           !pagesAnalyzed.includes(pargerFullUrl) &&
           !pagesToBeAnalyzed.includes(pargerFullUrl)
