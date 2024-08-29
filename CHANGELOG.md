@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.11.1](https://github.com/italia/pa-website-validator/compare/v2.11.0...v2.11.1) (2024-08-29)
+
+
+### Bug Fixes
+
+* loop in school utils ([#526](https://github.com/italia/pa-website-validator/issues/526)) ([4a10222](https://github.com/italia/pa-website-validator/commit/4a10222e30c6a42afed1a5bebb273e55224f473d))
+
 ## [2.11.0](https://github.com/italia/pa-website-validator/compare/v2.10.1...v2.11.0) (2024-08-29)
 
 
