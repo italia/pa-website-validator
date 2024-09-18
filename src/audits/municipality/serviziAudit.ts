@@ -134,7 +134,7 @@ class LoadAudit extends Audit {
     let score = 1;
 
     const pagesInError = [];
-    let $: CheerioAPI = await loadPageData(url);
+    let $: CheerioAPI = await loadPageData(url, true);
     for (const pageToBeAnalyzed of pagesToBeAnalyzed) {
       const item = {
         missing_elements: "",
@@ -145,7 +145,7 @@ class LoadAudit extends Audit {
       item.inspected_page = pageToBeAnalyzed;
 
       try {
-        $ = await loadPageData(pageToBeAnalyzed);
+        $ = await loadPageData(pageToBeAnalyzed, true);
       } catch (ex) {
         if (!(ex instanceof Error)) {
           throw ex;

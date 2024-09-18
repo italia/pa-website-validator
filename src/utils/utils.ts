@@ -14,7 +14,7 @@ const cache = new LRUCache<string, CheerioAPI>({ max: 1000 });
 const redirectUrlCache = new LRUCache<string, string>({ max: 1000 });
 const requestTimeout = parseInt(process.env["requestTimeout"] ?? "30000");
 
-const loadPageData = async (url: string): Promise<CheerioAPI> => {
+const loadPageData = async (url: string, wait = false): Promise<CheerioAPI> => {
   const data_from_cache = cache.get(url);
   if (data_from_cache !== undefined) {
     return data_from_cache;
@@ -50,6 +50,10 @@ const loadPageData = async (url: string): Promise<CheerioAPI> => {
 
     if (redirectUrlCache.get(url) === undefined) {
       redirectUrlCache.set(url, redirectedUrl);
+    }
+
+    if (wait) {
+      await page.waitForNetworkIdle();
     }
 
     console.log(res?.url(), res?.status());
