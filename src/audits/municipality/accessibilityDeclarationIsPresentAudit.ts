@@ -129,7 +129,10 @@ class LoadAudit extends Audit {
 
       items[0].page_contains_correct_url = "Sì";
 
-      if (!privacyPageHTML.match(/wcag 2.1/i)) {
+      if (
+        !privacyPageHTML.match(/wcag 2.1/i) &&
+        !privacyPageHTML.match(/wcag-21/i)
+      ) {
         return {
           score: 0,
           details: Audit.makeTableDetails(headings, items),
