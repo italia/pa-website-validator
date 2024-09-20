@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.11.2](https://github.com/italia/pa-website-validator/compare/v2.11.1...v2.11.2) (2024-09-20)
+
+
+### Bug Fixes
+
+* add "wcag-21" as valid string ([#530](https://github.com/italia/pa-website-validator/issues/530)) ([6798fcb](https://github.com/italia/pa-website-validator/commit/6798fcb7636a0527b5017836a191c2ac27d6a6bf))
+
 ## [2.11.1](https://github.com/italia/pa-website-validator/compare/v2.11.0...v2.11.1) (2024-08-29)
 
 
