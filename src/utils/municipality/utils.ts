@@ -556,6 +556,7 @@ const checkFeedbackComponent = async (url: string) => {
         const feedbackComponentRate = await page.$(
           `[data-element="${feedbackComponentStructure.rate.dataElement + i}"]`
         );
+        await page.waitForNetworkIdle();
         await feedbackComponentRate?.click({
           delay: 1000,
         });
@@ -659,7 +660,6 @@ const checkFeedbackComponent = async (url: string) => {
           );
           const feedbackPositiveVisible =
             feedbackRatingPositiveElement.offsetParent &&
-            feedbackPositiveStyle.display !== "none" &&
             feedbackPositiveStyle.visibility !== "hidden" &&
             feedbackPositiveRect.bottom > 0 &&
             feedbackPositiveRect.top > 0 &&
@@ -673,7 +673,6 @@ const checkFeedbackComponent = async (url: string) => {
           );
           const feedbackNegativeVisible =
             feedbackRatingNegativeElement.offsetParent &&
-            feedbackNegativeStyle.display !== "none" &&
             feedbackNegativeStyle.visibility !== "hidden" &&
             feedbackNegativeRect.bottom > 0 &&
             feedbackNegativeRect.top > 0 &&
