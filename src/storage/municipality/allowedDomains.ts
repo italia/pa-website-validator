@@ -21689,6 +21689,8 @@ export const domains = [
   "rodì.messina.it",
   "rodìmilici.messina.it",
   "rodi.me.it",
+  "rometta.me.it",
+  "rometta.messina.it",
   "sanfilippo.messina.it",
   "sanfilippodelmela.messina.it",
   "san-filippo.me.it",
