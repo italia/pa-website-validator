@@ -1,7 +1,7 @@
 export const feedbackComponentStructure = {
   component: {
     dataElement: "feedback",
-    missingError: "Componenete di valutazione non trovato",
+    missingError: "Componente di valutazione non trovato",
   },
   title: {
     dataElement: "feedback-title",
