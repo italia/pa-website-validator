@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.11.3](https://github.com/italia/pa-website-validator/compare/v2.11.2...v2.11.3) (2024-10-08)
+
+
+### Bug Fixes
+
+* **C.SI.2.6:** feedback component check ([#533](https://github.com/italia/pa-website-validator/issues/533)) ([c590d5a](https://github.com/italia/pa-website-validator/commit/c590d5ae993fcf62221675ca193848f7030e5b33))
+* **C.SI.5.2:** add Moransengo-Tonengo ([4fd97f3](https://github.com/italia/pa-website-validator/commit/4fd97f3ef0086c802c4ae37f56a11024d7ed7422))
+* **C.SI.5.2:** add Rometta ([319a87d](https://github.com/italia/pa-website-validator/commit/319a87d141e0669b1d1aafd9386963ebbe6ccaec))
+* wait for ajax in services loading ([#534](https://github.com/italia/pa-website-validator/issues/534)) ([2419e72](https://github.com/italia/pa-website-validator/commit/2419e729227b053b24cc7c9f2fc43c92015de25d))
+
 ## [2.11.2](https://github.com/italia/pa-website-validator/compare/v2.11.1...v2.11.2) (2024-09-20)
 
 
