@@ -1058,15 +1058,19 @@ const getPages = async (
             break;
           }
           case "events": {
+            const primaryPageUrl = await getPrimaryPageUrl(
+              url,
+              primaryMenuItems.live.data_element
+            );
+
+            if (!primaryPageUrl) {
+              throw new DataElementError(primaryMenuItems.live.data_element);
+            }
+
             requestedPages = await getRandomThirdLevelPagesUrl(
               url,
               await getButtonUrl(
-                await loadPageData(
-                  await getPrimaryPageUrl(
-                    url,
-                    primaryMenuItems.live.data_element
-                  )
-                ),
+                await loadPageData(primaryPageUrl),
                 url,
                 `[data-element="${primaryMenuItems.live.secondary_item_data_element[1]}"]`
               ),
