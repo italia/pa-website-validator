@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.11.4](https://github.com/italia/pa-website-validator/compare/v2.11.3...v2.11.4) (2024-11-05)
+
+
+### Bug Fixes
+
+* cheerioAPI text(); events missing data-element error handling ([#538](https://github.com/italia/pa-website-validator/issues/538)) ([934d29b](https://github.com/italia/pa-website-validator/commit/934d29bf5e3e12375fc79705542112f85424fcda))
+
 ## [2.11.3](https://github.com/italia/pa-website-validator/compare/v2.11.2...v2.11.3) (2024-10-08)
 
 
