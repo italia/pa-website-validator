@@ -3,7 +3,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import lighthouse from "lighthouse";
-import { CheerioAPI, text } from "cheerio";
+import { CheerioAPI } from "cheerio";
 import {
   checkBreadcrumb,
   checkOrder,
@@ -172,7 +172,7 @@ class LoadAudit extends Audit {
 
       for (const mandatoryVoiceDataElement of mandatoryVoicesDataElements.paragraph) {
         const dataElement = `[data-element="${mandatoryVoiceDataElement.data_element}"]`;
-        const textContent = text($(dataElement));
+        const textContent = $(dataElement).text();
         if (textContent.length >= 3) {
           indexElementsWithContent.push(mandatoryVoiceDataElement.key);
         }

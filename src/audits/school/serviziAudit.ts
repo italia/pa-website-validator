@@ -22,7 +22,7 @@ import {
   contentTypeItemsMetadata,
 } from "../../storage/school/contentTypeItems";
 import { auditDictionary } from "../../storage/auditDictionary";
-import { CheerioAPI, text } from "cheerio";
+import { CheerioAPI } from "cheerio";
 import { auditScanVariables } from "../../storage/school/auditScanVariables";
 import {
   errorHandling,
@@ -173,7 +173,7 @@ class LoadAudit extends Audit {
 
       for (const mandatoryVoiceDataElement of mandatoryVoicesDataElements.paragraph) {
         const dataElement = `[data-element="${mandatoryVoiceDataElement.data_element}"]`;
-        const textContent = text($(dataElement));
+        const textContent = $(dataElement).text();
         if (textContent.length >= 3) {
           indexElementsWithContent.push(mandatoryVoiceDataElement.key);
         }
