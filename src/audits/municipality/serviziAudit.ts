@@ -6,7 +6,7 @@ import lighthouse from "lighthouse";
 import { CheerioAPI } from "cheerio";
 import {
   checkBreadcrumb,
-  checkOrder,
+  checkOrderLoose,
   getPageElementDataAttribute,
   getRandomNString,
   loadPageData,
@@ -166,7 +166,7 @@ class LoadAudit extends Audit {
       let indexElements = await getServicesFromIndex($, mandatoryIndexVoices);
 
       const mandatoryMenuItems = mandatoryIndexVoices.map(toMenuItem);
-      const orderResult = checkOrder(mandatoryMenuItems, indexElements);
+      const orderResult = checkOrderLoose(mandatoryMenuItems, indexElements);
 
       const indexElementsWithContent: string[] = [];
 
