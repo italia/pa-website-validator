@@ -5,7 +5,7 @@
 import lighthouse from "lighthouse";
 import {
   checkBreadcrumb,
-  checkOrder,
+  checkOrderLoose,
   getElementHrefValuesDataAttribute,
   getPageElementDataAttribute,
   loadPageData,
@@ -166,7 +166,7 @@ class LoadAudit extends Audit {
       let indexElements = await getServicesFromIndex($, mandatoryVoices);
 
       const mandatoryMenuItems = mandatoryVoices.map(toMenuItem);
-      const orderResult = checkOrder(mandatoryMenuItems, indexElements);
+      const orderResult = checkOrderLoose(mandatoryMenuItems, indexElements);
 
       //For Contatti we don't check its content
       const indexElementsWithContent: string[] = ["Contatti"];

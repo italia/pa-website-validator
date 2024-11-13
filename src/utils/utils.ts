@@ -293,6 +293,41 @@ const checkOrder = (
   };
 };
 
+const checkOrderLoose = (
+  mandatoryElements: MenuItem[],
+  foundElements: string[]
+): orderType => {
+  const newMandatoryElements = mandatoryElements.filter((e) =>
+    foundElements.some((f) => e.regExp.test(f))
+  );
+  const newFoundElements = foundElements.filter((e) =>
+    newMandatoryElements.some((f) => f.regExp.test(e))
+  );
+
+  const elementsNotInSequence: string[] = [];
+
+  function checkOrderRecursive(correctArray: MenuItem[], checkArray: string[]) {
+    for (let i = 0; i < correctArray.length; i++) {
+      if (!correctArray[i].regExp.test(checkArray[i])) {
+        elementsNotInSequence.push(checkArray[i]);
+
+        checkOrderRecursive(
+          correctArray.filter((el) => el.name !== checkArray[i]),
+          checkArray.filter((el) => el !== checkArray[i])
+        );
+        return;
+      }
+    }
+  }
+
+  checkOrderRecursive(newMandatoryElements, newFoundElements);
+
+  return {
+    numberOfElementsNotInSequence: elementsNotInSequence.length,
+    elementsNotInSequence: elementsNotInSequence,
+  };
+};
+
 const missingMenuItems = (
   menuElements: string[],
   mandatoryElements: MenuItem[]
@@ -499,6 +534,7 @@ const getRedirectedUrl = async (url: string): Promise<string> => {
 export {
   toMenuItem,
   checkOrder,
+  checkOrderLoose,
   missingMenuItems,
   loadPageData,
   gotoRetry,
