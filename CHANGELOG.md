@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.11.5](https://github.com/italia/pa-website-validator/compare/v2.11.4...v2.11.5) (2024-11-14)
+
+
+### Bug Fixes
+
+* modifica controllo ordine voci per criteri C.SI.1.3 e R.SC.1.2 ([#545](https://github.com/italia/pa-website-validator/issues/545)) ([459539e](https://github.com/italia/pa-website-validator/commit/459539ef0c0edaeb32aa839a66c63452ce7f9f03))
+
 ## [2.11.4](https://github.com/italia/pa-website-validator/compare/v2.11.3...v2.11.4) (2024-11-05)
 
 
