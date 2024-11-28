@@ -1,5 +1,8 @@
 # ![developers.italia](https://avatars1.githubusercontent.com/u/15377824?s=36&v=4 "developers.italia") App di valutazione dell'adesione ai modelli
 
+⛔️ DEPRECATO <former description>
+L'attuale pacchetto è deprecato. Qui trovare la nuova versione del validatore: [pa-website-validator-ng](https://github.com/italia/pa-website-validator-ng) & [pa-website-validator-gui](https://github.com/italia/pa-website-validator-gui)
+
 #### Un applicativo desktop a supporto degli sviluppatori che aiuta a valutare la qualità dei siti istituzionali dei Comuni e delle scuole e la corrispondenza a molti dei criteri di conformità della misura 1.4.1 del PNRR Esperienza del cittadino nei servizi pubblici digitali.
 
 Le App di valutazione sono strumenti che integrano la libreria [Lighthouse][lighthouse] ed effettuano test per la verifica della corretta adesione al [modello Comuni][modello-comuni] e al [modello scuole][modello-scuole] di Designers Italia.
