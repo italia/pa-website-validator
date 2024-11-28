@@ -43,7 +43,7 @@ class LoadAudit extends Audit {
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { origin: string },
+    artifacts: LH.Artifacts & { origin: string }
   ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
 
@@ -104,7 +104,7 @@ class LoadAudit extends Audit {
             {
               result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
-          ],
+          ]
         ),
       };
     }
@@ -150,7 +150,7 @@ class LoadAudit extends Audit {
         const res = await gotoRetry(
           page,
           pageToBeAnalyzed,
-          errorHandling.gotoRetryTentative,
+          errorHandling.gotoRetryTentative
         );
         console.log(res?.url(), res?.status());
 
@@ -158,7 +158,7 @@ class LoadAudit extends Audit {
           (requiredFonts) => {
             const badElements: Array<BadElement> = [];
             const outerElems = window.document.body.querySelectorAll(
-              "h1, h2, h3, h4, h5, h6, p",
+              "h1, h2, h3, h4, h5, h6, p"
             );
 
             const wrongFonts = (e: Element) => {
@@ -187,7 +187,7 @@ class LoadAudit extends Audit {
             }
             return badElements;
           },
-          allowedFonts,
+          allowedFonts
         );
 
         if (badElements.length === 0) {

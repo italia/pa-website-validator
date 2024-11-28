@@ -23,7 +23,7 @@ const cacheResults = new LRUCache<string, string[]>({ max: 100 });
 
 const getRandomFirstLevelPagesUrl = async (
   url: string,
-  numberOfPages = 1,
+  numberOfPages = 1
 ): Promise<string[]> => {
   const $ = await loadPageData(url);
 
@@ -31,8 +31,8 @@ const getRandomFirstLevelPagesUrl = async (
     ...new Set(
       await getHREFValuesDataAttribute(
         $,
-        `[data-element="${primaryMenuDataElement}"]`,
-      ),
+        `[data-element="${primaryMenuDataElement}"]`
+      )
     ),
   ];
 
@@ -84,7 +84,7 @@ const getFirstLevelPages = async (url: string): Promise<pageLink[]> => {
 
 const getRandomSecondLevelPagesUrl = async (
   url: string,
-  numberOfPages = 1,
+  numberOfPages = 1
 ): Promise<string[]> => {
   let pagesUrls: string[] = [];
   const $ = await loadPageData(url);
@@ -120,7 +120,7 @@ const getRandomSecondLevelPagesUrl = async (
           }
 
           const secondLevelPageHost = new URL(
-            secondLevelPageUrl,
+            secondLevelPageUrl
           ).hostname.replace("www.", "");
 
           if (secondLevelPageHost.includes(host)) {
@@ -188,13 +188,13 @@ const getSecondLevelPages = async (url: string): Promise<pageLink[]> => {
 
 const getRandomServicesUrl = async (
   url: string,
-  numberOfServices = 1,
+  numberOfServices = 1
 ): Promise<string[]> => {
   let $ = await loadPageData(url);
 
   let serviceTypeUrls = await getHREFValuesDataAttribute(
     $,
-    '[data-element="service-type"]',
+    '[data-element="service-type"]'
   );
   if (serviceTypeUrls.length <= 0) {
     throw new DataElementError("service-type");
@@ -221,7 +221,7 @@ const getRandomServicesUrl = async (
         ...servicesUrls,
         ...(await getHREFValuesDataAttribute(
           $,
-          '[data-element="service-link"]',
+          '[data-element="service-link"]'
         )),
       ];
 
@@ -229,7 +229,7 @@ const getRandomServicesUrl = async (
 
       const pagerPagesUrls = [
         ...new Set(
-          await getHREFValuesDataAttribute($, '[data-element="pager-link"]'),
+          await getHREFValuesDataAttribute($, '[data-element="pager-link"]')
         ),
       ];
       for (const pagerPageUrl of pagerPagesUrls) {
@@ -260,7 +260,7 @@ const getRandomServicesUrl = async (
   // Exclude external services
   const host = new URL(url).hostname.replace("www.", "");
   const internalServiceUrls = servicesUrls.filter((s) =>
-    new URL(s).hostname.replace("www.", "").includes(host),
+    new URL(s).hostname.replace("www.", "").includes(host)
   );
 
   return getRandomNString(internalServiceUrls, numberOfServices);
@@ -268,7 +268,7 @@ const getRandomServicesUrl = async (
 
 const getRandomLocationsUrl = async (
   url: string,
-  numberOfPages = 1,
+  numberOfPages = 1
 ): Promise<string[]> => {
   let $ = await loadPageData(url);
 
@@ -290,7 +290,7 @@ const getRandomLocationsUrl = async (
 
   const pagesUrls = await getHREFValuesDataAttribute(
     $,
-    '[data-element="location-link"]',
+    '[data-element="location-link"]'
   );
 
   for (let i = 0; i < pagesUrls.length; i++) {
@@ -306,7 +306,7 @@ const getRandomLocationsUrl = async (
 const detectLang = (entries: string[]): "it" | "de" | "lld_ga" | "lld_ba" => {
   const comp = (str: string, items: string[]): boolean =>
     items.some(
-      (e) => e.localeCompare(str, "it", { sensitivity: "base" }) === 0,
+      (e) => e.localeCompare(str, "it", { sensitivity: "base" }) === 0
     );
 
   for (const entry of entries) {
@@ -321,7 +321,7 @@ const detectLang = (entries: string[]): "it" | "de" | "lld_ga" | "lld_ba" => {
 const getPages = async (
   url: string,
   requests: requestPages[],
-  removeExternal = true,
+  removeExternal = true
 ): Promise<string[]> => {
   let pagesUrl: string[] = [];
   const missingDataElements: string[] = [];
@@ -329,35 +329,35 @@ const getPages = async (
   for (const request of requests) {
     try {
       let requestedPages = cacheResults.get(
-        request.type + "-" + request.numberOfPages,
+        request.type + "-" + request.numberOfPages
       );
       if (requestedPages === undefined) {
         switch (request.type) {
           case "first_level_pages": {
             requestedPages = await getRandomFirstLevelPagesUrl(
               url,
-              request.numberOfPages,
+              request.numberOfPages
             );
             break;
           }
           case "second_level_pages": {
             requestedPages = await getRandomSecondLevelPagesUrl(
               url,
-              request.numberOfPages,
+              request.numberOfPages
             );
             break;
           }
           case "services": {
             requestedPages = await getRandomServicesUrl(
               url,
-              request.numberOfPages,
+              request.numberOfPages
             );
             break;
           }
           case "locations": {
             requestedPages = await getRandomLocationsUrl(
               url,
-              request.numberOfPages,
+              request.numberOfPages
             );
             break;
           }
@@ -367,7 +367,7 @@ const getPages = async (
 
         cacheResults.set(
           request.type + "-" + request.numberOfPages,
-          requestedPages,
+          requestedPages
         );
       }
       pagesUrl = [...pagesUrl, ...requestedPages];

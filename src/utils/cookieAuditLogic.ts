@@ -10,7 +10,7 @@ import { gotoRetry, requestTimeout } from "./utils";
 import { errorHandling } from "../config/commonAuditsParts";
 
 const run = async (
-  url: string,
+  url: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ) => {
   const items = [];
@@ -52,7 +52,7 @@ const run = async (
     await browser.close();
 
     throw new Error(
-      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`,
+      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`
     );
   }
 
@@ -75,7 +75,7 @@ const run = async (
 
 async function checkCookieDomain(
   url: string,
-  cookies: Protocol.Network.Cookie[],
+  cookies: Protocol.Network.Cookie[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<cookie[]> {
   const returnValue = [];

@@ -30,7 +30,7 @@ class LoadAudit extends Audit {
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { hostname: string },
+    artifacts: LH.Artifacts & { hostname: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const hostname = artifacts.hostname;
 

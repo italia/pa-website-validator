@@ -43,7 +43,7 @@ class LoadAudit extends Audit {
   static async audit(
     artifacts: LH.Artifacts & {
       origin: string;
-    },
+    }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
 
@@ -97,7 +97,7 @@ class LoadAudit extends Audit {
     const foundMenuElements = await getPageElementDataAttribute(
       $,
       '[data-element="menu"]',
-      "> li > a",
+      "> li > a"
     );
 
     const lang = detectLang(foundMenuElements);
@@ -106,7 +106,7 @@ class LoadAudit extends Audit {
     const overviewText = (
       await getPageElementDataAttribute(
         $,
-        `[data-element="${primaryMenuDataElement}"]`,
+        `[data-element="${primaryMenuDataElement}"]`
       )
     )[0];
 
@@ -122,7 +122,7 @@ class LoadAudit extends Audit {
       const headerUlTest = await getPageElementDataAttribute(
         $,
         menuDataElement,
-        "a",
+        "a"
       );
 
       if (headerUlTest.length === 0) {
@@ -134,7 +134,7 @@ class LoadAudit extends Audit {
               {
                 result: auditData.nonExecuted,
               },
-            ],
+            ]
           ),
         };
       }
@@ -142,7 +142,7 @@ class LoadAudit extends Audit {
       for (const element of headerUlTest) {
         if (element !== overviewText) {
           const allowed = secondaryMenuItem.dictionary[lang].map((s) =>
-            s.toLowerCase(),
+            s.toLowerCase()
           );
           if (allowed.includes(element.toLowerCase())) {
             item.pagesInVocabulary.push(element);
@@ -161,7 +161,7 @@ class LoadAudit extends Audit {
     const headerUlTest = await getPageElementDataAttribute(
       $,
       `[data-element="${customPrimaryMenuItemsDataElement}"]`,
-      "a",
+      "a"
     );
 
     if (headerUlTest.length > 0) {
@@ -202,7 +202,7 @@ class LoadAudit extends Audit {
       (
         (pagesInVocabulary / (totalNumberOfTitleFound + errorVoices.length)) *
         100
-      ).toFixed(0),
+      ).toFixed(0)
     );
 
     let score = 0;

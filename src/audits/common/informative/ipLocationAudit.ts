@@ -41,7 +41,7 @@ class LoadAudit extends Audit {
             result:
               "Questo audit produce un risultato solo quando viene effettuato su un sito pubblicato online.",
           },
-        ],
+        ]
       ),
     };
   }

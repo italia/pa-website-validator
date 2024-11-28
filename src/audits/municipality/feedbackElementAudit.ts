@@ -38,7 +38,7 @@ class LoadAudit extends lighthouse.Audit {
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { origin: string },
+    artifacts: LH.Artifacts & { origin: string }
   ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
 
@@ -92,7 +92,7 @@ class LoadAudit extends lighthouse.Audit {
             {
               result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
-          ],
+          ]
         ),
       };
     }
@@ -105,8 +105,9 @@ class LoadAudit extends lighthouse.Audit {
         errors_found: "",
       };
       try {
-        const feedbackComponentAnalysis =
-          await checkFeedbackComponent(pageToBeAnalyzed);
+        const feedbackComponentAnalysis = await checkFeedbackComponent(
+          pageToBeAnalyzed
+        );
 
         if (score > feedbackComponentAnalysis.score) {
           score = feedbackComponentAnalysis.score;
@@ -134,7 +135,7 @@ class LoadAudit extends lighthouse.Audit {
         let errorMessage = ex.message;
         errorMessage = errorMessage.substring(
           errorMessage.indexOf('"') + 1,
-          errorMessage.lastIndexOf('"'),
+          errorMessage.lastIndexOf('"')
         );
 
         pagesInError.push({

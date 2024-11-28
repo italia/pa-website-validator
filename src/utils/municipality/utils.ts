@@ -34,7 +34,7 @@ const cacheResults = new LRUCache<string, string[]>({ max: 100 });
 
 const getRandomFirstLevelPagesUrl = async (
   url: string,
-  numberOfPages = 1,
+  numberOfPages = 1
 ): Promise<string[]> => {
   const pages = await getFirstLevelPages(url, true);
 
@@ -47,7 +47,7 @@ const getRandomFirstLevelPagesUrl = async (
 
 const getFirstLevelPages = async (
   url: string,
-  custom: boolean,
+  custom: boolean
 ): Promise<pageLink[]> => {
   const $ = await loadPageData(url);
   let pagesUrls: pageLink[] = [];
@@ -103,7 +103,7 @@ const getFirstLevelPages = async (
 
 const getRandomSecondLevelPagesUrl = async (
   url: string,
-  numberOfPages = 1,
+  numberOfPages = 1
 ): Promise<string[]> => {
   const $ = await loadPageData(url);
   let pagesUrls: string[] = [];
@@ -145,7 +145,7 @@ const getRandomSecondLevelPagesUrl = async (
           const dataElementSecondaryItem = `[data-element="${dataElementSecondary}"]`;
           secondPageUrls = await getHREFValuesDataAttribute(
             $2,
-            dataElementSecondaryItem,
+            dataElementSecondaryItem
           );
         } else {
           for (const secondaryItemDataElement of primaryMenuItem.secondary_item_data_element) {
@@ -154,7 +154,7 @@ const getRandomSecondLevelPagesUrl = async (
             const buttonUrl = await getButtonUrl(
               $2,
               url,
-              dataElementSecondaryItem,
+              dataElementSecondaryItem
             );
             if (buttonUrl !== "") {
               secondPageUrls.push(buttonUrl);
@@ -169,7 +169,7 @@ const getRandomSecondLevelPagesUrl = async (
           ) {
             secondPageUrls[i] = await buildUrl(
               primaryLevelPageUrl,
-              secondPageUrls[i],
+              secondPageUrls[i]
             );
           }
         }
@@ -187,7 +187,7 @@ const getRandomSecondLevelPagesUrl = async (
 
 const getSecondLevelPages = async (
   url: string,
-  custom: boolean,
+  custom: boolean
 ): Promise<municipalitySecondLevelPages> => {
   const $ = await loadPageData(url);
   const pages: municipalitySecondLevelPages = {
@@ -254,7 +254,7 @@ const getSecondLevelPages = async (
               ) {
                 secondPageUrl = await buildUrl(
                   primaryLevelPageUrl,
-                  secondPageUrl,
+                  secondPageUrl
                 );
               }
 
@@ -274,7 +274,7 @@ const getSecondLevelPages = async (
             let buttonUrl = await getButtonUrl(
               $2,
               url,
-              dataElementSecondaryItem,
+              dataElementSecondaryItem
             );
             if (
               (await isInternalUrl(buttonUrl)) &&
@@ -307,7 +307,7 @@ const getRandomThirdLevelPagesUrl = async (
   url: string,
   pageUrl: string,
   linkDataElement: string,
-  numberOfPages = 1,
+  numberOfPages = 1
 ) => {
   if (pageUrl.length === 0) {
     return [];
@@ -338,7 +338,7 @@ const getRandomThirdLevelPagesUrl = async (
     const res = await gotoRetry(
       page,
       pageUrl,
-      errorHandling.gotoRetryTentative,
+      errorHandling.gotoRetryTentative
     );
     console.log(res?.url(), res?.status());
 
@@ -348,7 +348,7 @@ const getRandomThirdLevelPagesUrl = async (
       try {
         clickButton = await page.evaluate(() => {
           const button = document.querySelector(
-            '[data-element="load-other-cards"]',
+            '[data-element="load-other-cards"]'
           ) as HTMLElement;
           if (!button) {
             return false;
@@ -392,7 +392,7 @@ const getRandomThirdLevelPagesUrl = async (
     console.error(`ERROR ${pageUrl}: ${ex}`);
     await browser.close();
     throw new Error(
-      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`,
+      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`
     );
   }
 
@@ -420,7 +420,7 @@ const getRandomThirdLevelPagesUrl = async (
 
     const pagerPagesUrls = [
       ...new Set(
-        await getHREFValuesDataAttribute($, '[data-element="pager-link"]'),
+        await getHREFValuesDataAttribute($, '[data-element="pager-link"]')
       ),
     ];
     for (const pagerPageUrl of pagerPagesUrls) {
@@ -449,7 +449,7 @@ const getPrimaryPageUrl = async (url: string, dataElement: string) => {
 
   const pageElements = await getHREFValuesDataAttribute(
     $,
-    `[data-element="${dataElement}"]`,
+    `[data-element="${dataElement}"]`
   );
   if (pageElements.length <= 0) {
     return "";
@@ -501,7 +501,7 @@ const checkFeedbackComponent = async (url: string) => {
 
       //Check if component is present
       const feedbackComponent = document.querySelector(
-        `[data-element="${feedbackComponentStructure.component.dataElement}"]`,
+        `[data-element="${feedbackComponentStructure.component.dataElement}"]`
       );
       if (!feedbackComponent) {
         errors.push(feedbackComponentStructure.component.missingError);
@@ -514,7 +514,7 @@ const checkFeedbackComponent = async (url: string) => {
 
       //Check title present
       const feedbackTitleElement = feedbackComponent.querySelector(
-        `[data-element="${feedbackComponentStructure.title.dataElement}"]`,
+        `[data-element="${feedbackComponentStructure.title.dataElement}"]`
       );
       if (!feedbackTitleElement) {
         if (score > 0.5) score = 0.5;
@@ -534,7 +534,7 @@ const checkFeedbackComponent = async (url: string) => {
 
       //check input text
       const feedbackInputText = feedbackComponent.querySelector(
-        `[data-element="${feedbackComponentStructure.input_text.dataElement}"]`,
+        `[data-element="${feedbackComponentStructure.input_text.dataElement}"]`
       );
       if (!feedbackInputText) {
         if (score > 0.5) score = 0.5;
@@ -554,7 +554,7 @@ const checkFeedbackComponent = async (url: string) => {
     ) {
       try {
         const feedbackComponentRate = await page.$(
-          `[data-element="${feedbackComponentStructure.rate.dataElement + i}"]`,
+          `[data-element="${feedbackComponentStructure.rate.dataElement + i}"]`
         );
         await page.waitForNetworkIdle();
         await feedbackComponentRate?.click({
@@ -578,16 +578,16 @@ const checkFeedbackComponent = async (url: string) => {
           let checkRateComponentAssociation = true; //false if the association between rating input and rating components is incorrect
 
           const feedbackRatingPositiveElement = document.querySelector(
-            `[data-element="${feedbackComponentStructure.positive_rating.dataElement}"]`,
+            `[data-element="${feedbackComponentStructure.positive_rating.dataElement}"]`
           ) as HTMLElement;
           const feedbackRatingNegativeElement = document.querySelector(
-            `[data-element="${feedbackComponentStructure.negative_rating.dataElement}"]`,
+            `[data-element="${feedbackComponentStructure.negative_rating.dataElement}"]`
           ) as HTMLElement;
 
           const feedbackRateElement = document.querySelector(
             `[data-element="${
               feedbackComponentStructure.rate.dataElement + i
-            }"]`,
+            }"]`
           ) as HTMLElement;
           if (feedbackRateElement && !existsRateComponents) {
             existsRateComponents = true;
@@ -656,7 +656,7 @@ const checkFeedbackComponent = async (url: string) => {
           const feedbackPositiveRect =
             feedbackRatingPositiveElement.getBoundingClientRect();
           const feedbackPositiveStyle = window.getComputedStyle(
-            feedbackRatingPositiveElement,
+            feedbackRatingPositiveElement
           );
           const feedbackPositiveVisible =
             feedbackRatingPositiveElement.offsetParent &&
@@ -669,7 +669,7 @@ const checkFeedbackComponent = async (url: string) => {
           const feedbackNegativeRect =
             feedbackRatingNegativeElement.getBoundingClientRect();
           const feedbackNegativeStyle = window.getComputedStyle(
-            feedbackRatingNegativeElement,
+            feedbackRatingNegativeElement
           );
           const feedbackNegativeVisible =
             feedbackRatingNegativeElement.offsetParent &&
@@ -697,19 +697,19 @@ const checkFeedbackComponent = async (url: string) => {
             if (!feedbackRatingNegativeElement) {
               if (score > 0.5) score = 0.5;
               errors.push(
-                feedbackComponentStructure.negative_rating.missingError,
+                feedbackComponentStructure.negative_rating.missingError
               );
             } else {
               const feedbackRatingNegativeQuestionElement =
                 feedbackRatingNegativeElement.querySelector(
-                  `[data-element="${feedbackComponentStructure.negative_rating.question.dataElement}"]`,
+                  `[data-element="${feedbackComponentStructure.negative_rating.question.dataElement}"]`
                 );
 
               if (!feedbackRatingNegativeQuestionElement) {
                 if (score > 0.5) score = 0.5;
                 errors.push(
                   feedbackComponentStructure.negative_rating.question
-                    .missingError,
+                    .missingError
                 );
               }
 
@@ -723,13 +723,13 @@ const checkFeedbackComponent = async (url: string) => {
               ) {
                 if (score > 0) score = 0;
                 errors.push(
-                  feedbackComponentStructure.negative_rating.question.error,
+                  feedbackComponentStructure.negative_rating.question.error
                 );
               }
 
               const feedbackRatingNegativeAnswersElements =
                 feedbackRatingNegativeElement.querySelectorAll(
-                  `[data-element="${feedbackComponentStructure.negative_rating.answers.dataElement}"]`,
+                  `[data-element="${feedbackComponentStructure.negative_rating.answers.dataElement}"]`
                 );
 
               if (feedbackRatingNegativeAnswersElements) {
@@ -744,14 +744,14 @@ const checkFeedbackComponent = async (url: string) => {
 
                 const lowerCasedVocabulary =
                   feedbackComponentStructure.negative_rating.answers.texts.map(
-                    (vocabularyElements) => vocabularyElements.toLowerCase(),
+                    (vocabularyElements) => vocabularyElements.toLowerCase()
                   );
 
                 let allCorrectAnswers = true;
                 for (const feedbackRatingNegativeAnswer of feedbackRatingNegativeAnswers) {
                   if (
                     lowerCasedVocabulary.indexOf(
-                      feedbackRatingNegativeAnswer.toLowerCase(),
+                      feedbackRatingNegativeAnswer.toLowerCase()
                     ) === -1
                   ) {
                     allCorrectAnswers = false;
@@ -762,7 +762,7 @@ const checkFeedbackComponent = async (url: string) => {
                   if (score > 0.5) score = 0.5;
                   errors.push(
                     feedbackComponentStructure.negative_rating.answers
-                      .missingError,
+                      .missingError
                   );
                 }
 
@@ -772,7 +772,7 @@ const checkFeedbackComponent = async (url: string) => {
                 ) {
                   if (score > 0) score = 0;
                   errors.push(
-                    feedbackComponentStructure.negative_rating.answers.error,
+                    feedbackComponentStructure.negative_rating.answers.error
                   );
                 }
               }
@@ -783,19 +783,19 @@ const checkFeedbackComponent = async (url: string) => {
             if (!feedbackRatingPositiveElement) {
               if (score > 0.5) score = 0.5;
               errors.push(
-                feedbackComponentStructure.positive_rating.missingError,
+                feedbackComponentStructure.positive_rating.missingError
               );
             } else {
               const feedbackRatingPositiveQuestionElement =
                 feedbackRatingPositiveElement.querySelector(
-                  `[data-element="${feedbackComponentStructure.positive_rating.question.dataElement}"]`,
+                  `[data-element="${feedbackComponentStructure.positive_rating.question.dataElement}"]`
                 );
 
               if (!feedbackRatingPositiveQuestionElement) {
                 if (score > 0.5) score = 0.5;
                 errors.push(
                   feedbackComponentStructure.positive_rating.question
-                    .missingError,
+                    .missingError
                 );
               }
 
@@ -809,13 +809,13 @@ const checkFeedbackComponent = async (url: string) => {
               ) {
                 if (score > 0) score = 0;
                 errors.push(
-                  feedbackComponentStructure.positive_rating.question.error,
+                  feedbackComponentStructure.positive_rating.question.error
                 );
               }
 
               const feedbackRatingPositiveAnswersElements =
                 feedbackRatingPositiveElement.querySelectorAll(
-                  `[data-element="${feedbackComponentStructure.positive_rating.answers.dataElement}"]`,
+                  `[data-element="${feedbackComponentStructure.positive_rating.answers.dataElement}"]`
                 );
 
               if (feedbackRatingPositiveAnswersElements) {
@@ -830,14 +830,14 @@ const checkFeedbackComponent = async (url: string) => {
 
                 const lowerCasedVocabulary =
                   feedbackComponentStructure.positive_rating.answers.texts.map(
-                    (vocabularyElements) => vocabularyElements.toLowerCase(),
+                    (vocabularyElements) => vocabularyElements.toLowerCase()
                   );
 
                 let allCorrectAnswers = true;
                 for (const feedbackRatingPositiveAnswer of feedbackRatingPositiveAnswers) {
                   if (
                     lowerCasedVocabulary.indexOf(
-                      feedbackRatingPositiveAnswer.toLowerCase(),
+                      feedbackRatingPositiveAnswer.toLowerCase()
                     ) === -1
                   ) {
                     allCorrectAnswers = false;
@@ -848,7 +848,7 @@ const checkFeedbackComponent = async (url: string) => {
                   if (score > 0.5) score = 0.5;
                   errors.push(
                     feedbackComponentStructure.positive_rating.answers
-                      .missingError,
+                      .missingError
                   );
                 }
 
@@ -858,7 +858,7 @@ const checkFeedbackComponent = async (url: string) => {
                 ) {
                   if (score > 0) score = 0;
                   errors.push(
-                    feedbackComponentStructure.positive_rating.answers.error,
+                    feedbackComponentStructure.positive_rating.answers.error
                   );
                 }
               }
@@ -890,7 +890,7 @@ const checkFeedbackComponent = async (url: string) => {
           };
         },
         feedbackComponentStructure,
-        i,
+        i
       );
       returnValues.errors = [
         ...returnValues.errors,
@@ -908,7 +908,7 @@ const checkFeedbackComponent = async (url: string) => {
     console.error(`ERROR ${url}: ${ex}`);
     await browser.close();
     throw new Error(
-      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`,
+      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`
     );
   }
 
@@ -922,7 +922,7 @@ const checkFeedbackComponent = async (url: string) => {
 const getButtonUrl = async (
   $: CheerioAPI,
   url: string,
-  dataElement: string,
+  dataElement: string
 ) => {
   const button = $(dataElement).attr();
   if (
@@ -934,7 +934,7 @@ const getButtonUrl = async (
     const onClick: string = button.onclick;
     let secondPageLink = onClick.substring(
       onClick.indexOf("'") + 1,
-      onClick.lastIndexOf("'"),
+      onClick.lastIndexOf("'")
     );
     if (!secondPageLink.includes(url)) {
       secondPageLink = await buildUrl(url, secondPageLink);
@@ -993,7 +993,7 @@ const isDrupal = async (url: string): Promise<boolean> => {
 const getPages = async (
   url: string,
   requests: requestPages[],
-  removeExternal = true,
+  removeExternal = true
 ): Promise<string[]> => {
   let pagesUrl: string[] = [];
   const missingDataElements: string[] = [];
@@ -1001,32 +1001,32 @@ const getPages = async (
   for (const request of requests) {
     try {
       let requestedPages = cacheResults.get(
-        request.type + "-" + request.numberOfPages,
+        request.type + "-" + request.numberOfPages
       );
       if (requestedPages === undefined) {
         switch (request.type) {
           case "first_level_pages": {
             requestedPages = await getRandomFirstLevelPagesUrl(
               url,
-              request.numberOfPages,
+              request.numberOfPages
             );
             break;
           }
           case "second_level_pages": {
             requestedPages = await getRandomSecondLevelPagesUrl(
               url,
-              request.numberOfPages,
+              request.numberOfPages
             );
             break;
           }
           case "services_page": {
             const servicesPage = await getPrimaryPageUrl(
               url,
-              primaryMenuItems.services.data_element,
+              primaryMenuItems.services.data_element
             );
             if (servicesPage === "") {
               throw new DataElementError(
-                primaryMenuItems.services.data_element,
+                primaryMenuItems.services.data_element
               );
             }
             requestedPages = [servicesPage];
@@ -1035,11 +1035,11 @@ const getPages = async (
           case "services": {
             const allServicePage = await getPrimaryPageUrl(
               url,
-              primaryMenuItems.services.data_element,
+              primaryMenuItems.services.data_element
             );
             if (allServicePage.length === 0) {
               throw new DataElementError(
-                primaryMenuItems.services.data_element,
+                primaryMenuItems.services.data_element
               );
             }
 
@@ -1047,11 +1047,11 @@ const getPages = async (
               url,
               allServicePage,
               `[data-element="${primaryMenuItems.services.third_item_data_element}"]`,
-              request.numberOfPages,
+              request.numberOfPages
             );
             if (randomServicesUrl.length === 0) {
               throw new DataElementError(
-                primaryMenuItems.services.third_item_data_element,
+                primaryMenuItems.services.third_item_data_element
               );
             }
             requestedPages = randomServicesUrl;
@@ -1060,7 +1060,7 @@ const getPages = async (
           case "events": {
             const primaryPageUrl = await getPrimaryPageUrl(
               url,
-              primaryMenuItems.live.data_element,
+              primaryMenuItems.live.data_element
             );
 
             if (!primaryPageUrl) {
@@ -1072,10 +1072,10 @@ const getPages = async (
               await getButtonUrl(
                 await loadPageData(primaryPageUrl),
                 url,
-                `[data-element="${primaryMenuItems.live.secondary_item_data_element[1]}"]`,
+                `[data-element="${primaryMenuItems.live.secondary_item_data_element[1]}"]`
               ),
               `[data-element="${primaryMenuItems.live.third_item_data_element}"]`,
-              request.numberOfPages,
+              request.numberOfPages
             );
 
             break;
@@ -1083,17 +1083,17 @@ const getPages = async (
           case "booking_appointment": {
             const servicesPage = await getPrimaryPageUrl(
               url,
-              primaryMenuItems.services.data_element,
+              primaryMenuItems.services.data_element
             );
             if (servicesPage === "") {
               throw new DataElementError(
-                primaryMenuItems.services.data_element,
+                primaryMenuItems.services.data_element
               );
             }
 
             const bookingAppointmentPage = await getPrimaryPageUrl(
               servicesPage,
-              "appointment-booking",
+              "appointment-booking"
             );
             if (bookingAppointmentPage === "") {
               throw new DataElementError("appointment-booking");
@@ -1104,7 +1104,7 @@ const getPages = async (
           case "personal_area_login": {
             const personalAreaLoginPageUrl = await getPrimaryPageUrl(
               url,
-              "personal-area-login",
+              "personal-area-login"
             );
             if (personalAreaLoginPageUrl !== "") {
               requestedPages = [personalAreaLoginPageUrl];
@@ -1118,7 +1118,7 @@ const getPages = async (
         }
         cacheResults.set(
           request.type + "-" + request.numberOfPages,
-          requestedPages,
+          requestedPages
         );
       }
       pagesUrl = [...pagesUrl, ...requestedPages];

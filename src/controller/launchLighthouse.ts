@@ -34,7 +34,7 @@ const run = async (
   view = false,
   accuracy = "suggested",
   requestTimeout = 30000,
-  numberOfServicePages?: number,
+  numberOfServicePages?: number
 ) => {
   process.env["accuracy"] = accuracy;
   if (numberOfServicePages) {
@@ -71,7 +71,7 @@ const run = async (
     const runnerResult: RunnerResult = await lighthouse(
       website,
       options,
-      loadConfig,
+      loadConfig
     );
 
     if (runnerResult.report.length != 2) {

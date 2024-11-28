@@ -33,7 +33,7 @@ class LoadAudit extends Audit {
   static async audit(
     artifacts: LH.Artifacts & {
       origin: string;
-    },
+    }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
     let score = 0;

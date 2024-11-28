@@ -29,7 +29,7 @@ class LoadAudit extends Audit {
   static async audit(
     artifacts: LH.Artifacts & {
       origin: string;
-    },
+    }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
     let score = 0;
@@ -81,7 +81,7 @@ class LoadAudit extends Audit {
     const $: CheerioAPI = await loadPageData(url);
 
     const accessibilityDeclarationElement = $("footer").find(
-      '[data-element="accessibility-link"]',
+      '[data-element="accessibility-link"]'
     );
     const elementObj = $(accessibilityDeclarationElement).attr();
     items[0].link_name = accessibilityDeclarationElement.text().trim() ?? "";

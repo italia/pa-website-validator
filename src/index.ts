@@ -8,7 +8,7 @@ import { hideBin } from "yargs/helpers";
 
 const parser = yargs(hideBin(process.argv))
   .usage(
-    "Usage: --type <type> --destination <folder> --report <report_name> --website <url> --scope <scope>",
+    "Usage: --type <type> --destination <folder> --report <report_name> --website <url> --scope <scope>"
   )
   .option("type", {
     describe: "Crawler to run",
@@ -85,7 +85,7 @@ try {
     "view" in args,
     args.accuracy,
     args.timeout,
-    args["number-of-service-pages"],
+    args["number-of-service-pages"]
   );
 
   console.log("[INFO] Status result:", result.status);

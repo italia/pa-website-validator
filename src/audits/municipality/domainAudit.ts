@@ -38,7 +38,7 @@ class LoadAudit extends Audit {
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { origin: string },
+    artifacts: LH.Artifacts & { origin: string }
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
 
@@ -111,7 +111,7 @@ class LoadAudit extends Audit {
               numberOfPages: 1,
             },
           ],
-          false,
+          false
         )),
       ];
 
@@ -141,7 +141,7 @@ class LoadAudit extends Audit {
             {
               result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
-          ],
+          ]
         ),
       };
     }

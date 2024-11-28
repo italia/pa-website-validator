@@ -100,21 +100,21 @@ try {
     dest,
     `report-${hostname}-${dateFormat(
       currentDate,
-      "UTC:yyyymmdd'T'HHMMss'Z'",
+      "UTC:yyyymmdd'T'HHMMss'Z'"
     )}-v${version}`,
     true,
     accuracy === "custom" ? "all" : accuracy,
     undefined,
-    numberOfServicePages,
+    numberOfServicePages
   );
 
   console.log();
   console.log();
   console.log(
-    "[--L'analisi è terminata. Il report si aprirà automaticamente nel tuo browser--]",
+    "[--L'analisi è terminata. Il report si aprirà automaticamente nel tuo browser--]"
   );
   console.log(
-    `Se non dovesse aprirsi, una copia HTML e JSON del report è stata salvata nella cartella ${dest}}`,
+    `Se non dovesse aprirsi, una copia HTML e JSON del report è stata salvata nella cartella ${dest}}`
   );
 } catch (e) {
   console.error(e);
