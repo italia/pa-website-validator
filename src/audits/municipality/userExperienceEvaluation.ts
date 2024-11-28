@@ -42,7 +42,7 @@ class LoadAudit extends Audit {
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { origin: string }
+    artifacts: LH.Artifacts & { origin: string },
   ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
 
@@ -89,7 +89,7 @@ class LoadAudit extends Audit {
             {
               result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
-          ]
+          ],
         ),
       };
     }
@@ -101,9 +101,8 @@ class LoadAudit extends Audit {
         errors_found: "",
       };
       try {
-        const feedbackComponentAnalysis = await checkFeedbackComponent(
-          pageToBeAnalyzed
-        );
+        const feedbackComponentAnalysis =
+          await checkFeedbackComponent(pageToBeAnalyzed);
 
         if (score > feedbackComponentAnalysis.score) {
           score = feedbackComponentAnalysis.score;
@@ -131,7 +130,7 @@ class LoadAudit extends Audit {
         let errorMessage = ex.message;
         errorMessage = errorMessage.substring(
           errorMessage.indexOf('"') + 1,
-          errorMessage.lastIndexOf('"')
+          errorMessage.lastIndexOf('"'),
         );
 
         pagesInError.push({

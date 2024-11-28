@@ -30,7 +30,7 @@ const errorLogging = [
 const run = async (
   url: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  auditData: any
+  auditData: any,
 ): Promise<{ score: number; details: LH.Audit.Details.Table }> => {
   const greenResult = auditData.greenResult.replace("[url]", url);
   const redResult = auditData.redResult.replace("[url]", url);
@@ -183,7 +183,7 @@ const run = async (
     const res = await gotoRetry(
       page,
       "http://" + urlNoProtocol,
-      errorHandling.gotoRetryTentative
+      errorHandling.gotoRetryTentative,
     );
     console.log(res?.url(), res?.status());
 
@@ -202,7 +202,7 @@ const run = async (
     console.error(`ERROR ${url}: ${ex}`);
     await browser.close();
     throw new Error(
-      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`
+      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`,
     );
   }
 
@@ -225,7 +225,7 @@ async function getProtocol(url: string): Promise<string> {
 }
 
 async function checkCertificateValidation(
-  url: string
+  url: string,
 ): Promise<{ valid: boolean; valid_from: string; valid_to: string }> {
   const returnObj = {
     valid: false,
@@ -258,7 +258,7 @@ async function checkCertificateValidation(
 }
 
 async function checkTLSVersion(
-  url: string
+  url: string,
 ): Promise<{ valid: boolean; tls_version: string }> {
   const returnObj = {
     valid: false,
@@ -282,7 +282,7 @@ async function checkTLSVersion(
 }
 
 async function checkCipherSuite(
-  url: string
+  url: string,
 ): Promise<{ valid: boolean; version: string }> {
   const returnObj = {
     valid: false,

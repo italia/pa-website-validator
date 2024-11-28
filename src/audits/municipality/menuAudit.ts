@@ -35,7 +35,7 @@ class LoadAudit extends lighthouse.Audit {
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { origin: string }
+    artifacts: LH.Artifacts & { origin: string },
   ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
 
@@ -103,7 +103,7 @@ class LoadAudit extends lighthouse.Audit {
 
     const missingMandatoryElements = missingMenuItems(
       foundMenuElements,
-      menuItem
+      menuItem,
     );
     results[0].missing_menu_voices = missingMandatoryElements.join(", ");
 

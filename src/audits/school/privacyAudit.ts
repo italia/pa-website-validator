@@ -25,7 +25,7 @@ class LoadAudit extends Audit {
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { origin: string }
+    artifacts: LH.Artifacts & { origin: string },
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
 
@@ -70,7 +70,7 @@ class LoadAudit extends Audit {
 
     const $: CheerioAPI = await loadPageData(url);
     const privacyPolicyElement = $("footer").find(
-      '[data-element="privacy-policy-link"]'
+      '[data-element="privacy-policy-link"]',
     );
     const elementObj = $(privacyPolicyElement).attr();
     items[0].link_name = privacyPolicyElement.text().trim() ?? "";

@@ -45,7 +45,7 @@ class LoadAudit extends lighthouse.Audit {
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { origin: string }
+    artifacts: LH.Artifacts & { origin: string },
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
 
@@ -111,7 +111,7 @@ class LoadAudit extends lighthouse.Audit {
             {
               result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
-          ]
+          ],
         ),
       };
     }
@@ -149,7 +149,7 @@ class LoadAudit extends lighthouse.Audit {
     const customPrimaryMenuDataElement = `[data-element="${customPrimaryMenuItemsDataElement}"]`;
     const customSecondLevelPageHref = await getHREFValuesDataAttribute(
       $,
-      customPrimaryMenuDataElement
+      customPrimaryMenuDataElement,
     );
 
     for (let customSecondLevelPageUrl of customSecondLevelPageHref) {
@@ -159,7 +159,7 @@ class LoadAudit extends lighthouse.Audit {
       ) {
         customSecondLevelPageUrl = await buildUrl(
           url,
-          customSecondLevelPageUrl
+          customSecondLevelPageUrl,
         );
       }
 
@@ -168,7 +168,7 @@ class LoadAudit extends lighthouse.Audit {
       const customSecondaryMenuDataElement = `[data-element="${customSecondaryMenuItemsDataElement}"]`;
       const customSecondLevelPagesNames = await getPageElementDataAttribute(
         $,
-        customSecondaryMenuDataElement
+        customSecondaryMenuDataElement,
       );
 
       errorVoices = [...errorVoices, ...customSecondLevelPagesNames];
@@ -204,7 +204,7 @@ class LoadAudit extends lighthouse.Audit {
       (
         (pagesInVocabulary / (totalNumberOfTitleFound + errorVoices.length)) *
         100
-      ).toFixed(0)
+      ).toFixed(0),
     );
 
     if (pagesFoundInVocabularyPercentage === 100) {

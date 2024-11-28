@@ -38,7 +38,7 @@ class LoadAudit extends lighthouse.Audit {
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { origin: string }
+    artifacts: LH.Artifacts & { origin: string },
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
 
@@ -99,7 +99,7 @@ class LoadAudit extends lighthouse.Audit {
             {
               result: auditData.nonExecuted,
             },
-          ]
+          ],
         ),
       };
     }
@@ -107,7 +107,7 @@ class LoadAudit extends lighthouse.Audit {
     const foundMenuElements = await getPageElementDataAttribute(
       $,
       menuDataElement,
-      "> li > a"
+      "> li > a",
     );
 
     results[0].found_menu_voices = foundMenuElements.join(", ");
@@ -118,18 +118,18 @@ class LoadAudit extends lighthouse.Audit {
       (str) => ({
         name: str,
         regExp: new RegExp(`^${str}$`, "i"),
-      })
+      }),
     );
 
     const missingMandatoryElements = missingMenuItems(
       foundMenuElements,
-      mandatoryPrimaryMenuItems
+      mandatoryPrimaryMenuItems,
     );
     results[0].missing_menu_voices = missingMandatoryElements.join(", ");
 
     const orderResult = checkOrder(
       mandatoryPrimaryMenuItems,
-      foundMenuElements
+      foundMenuElements,
     );
     results[0].wrong_order_menu_voices =
       orderResult.elementsNotInSequence.join(", ");
@@ -138,7 +138,7 @@ class LoadAudit extends lighthouse.Audit {
       missingMandatoryElements.length === 0;
     const mandatoryElementsCorrectOrder = correctOrderMandatoryElements(
       foundMenuElements,
-      mandatoryPrimaryMenuItems
+      mandatoryPrimaryMenuItems,
     );
 
     if (
@@ -203,7 +203,7 @@ module.exports = LoadAudit;
 
 function correctOrderMandatoryElements(
   menuElements: string[],
-  mandatoryElements: MenuItem[]
+  mandatoryElements: MenuItem[],
 ): boolean {
   let result = true;
 

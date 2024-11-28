@@ -48,7 +48,7 @@ class LoadAudit extends Audit {
   static async audit(
     artifacts: LH.Artifacts & {
       origin: string;
-    }
+    },
   ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
 
@@ -132,7 +132,7 @@ class LoadAudit extends Audit {
             {
               result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
-          ]
+          ],
         ),
       };
     }
@@ -177,7 +177,7 @@ class LoadAudit extends Audit {
         const res = await gotoRetry(
           page,
           pageToBeAnalyzed,
-          errorHandling.gotoRetryTentative
+          errorHandling.gotoRetryTentative,
         );
         console.log(res?.url(), res?.status());
 
@@ -186,7 +186,7 @@ class LoadAudit extends Audit {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             //@ts-ignore
             return window.BOOTSTRAP_ITALIA_VERSION || null;
-          }
+          },
         );
 
         if (bootstrapItaliaVariableVersion !== null)
@@ -200,10 +200,10 @@ class LoadAudit extends Audit {
             //@ts-ignore
             return (
               getComputedStyle(document.body).getPropertyValue(
-                "--bootstrap-italia-version"
+                "--bootstrap-italia-version",
               ) || null
             );
-          }
+          },
         );
 
         if (bootstrapItaliaSelectorVariableVersion !== null)
@@ -270,7 +270,7 @@ class LoadAudit extends Audit {
           }
 
           const percentage = Math.round(
-            (correctClasses.length / baseClasses.length) * 100
+            (correctClasses.length / baseClasses.length) * 100,
           );
           item.classes_found = percentage + "%";
           if (percentage < 30) {

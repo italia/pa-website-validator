@@ -73,7 +73,7 @@ const loadPageData = async (url: string, wait = false): Promise<CheerioAPI> => {
     console.error(`ERROR ${url}: ${ex}`);
     await browser.close();
     throw new Error(
-      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`
+      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`,
     );
   }
 };
@@ -81,7 +81,7 @@ const loadPageData = async (url: string, wait = false): Promise<CheerioAPI> => {
 const gotoRetry = async (
   page: Page,
   url: string,
-  retryCount: number
+  retryCount: number,
 ): Promise<HTTPResponse | null> => {
   try {
     let response = await page.goto(url, {
@@ -127,7 +127,7 @@ const gotoRetry = async (
       throw error;
     }
     console.log(
-      `${url} goto tentative: ${errorHandling.gotoRetryTentative - retryCount}`
+      `${url} goto tentative: ${errorHandling.gotoRetryTentative - retryCount}`,
     );
     return await gotoRetry(page, url, retryCount - 1);
   }
@@ -136,7 +136,7 @@ const gotoRetry = async (
 const getPageElementDataAttribute = async (
   $: CheerioAPI,
   elementDataAttribute: string,
-  tag = ""
+  tag = "",
 ): Promise<string[]> => {
   const returnValues: string[] = [];
 
@@ -167,7 +167,7 @@ const getPageElementDataAttribute = async (
 const getElementHrefValuesDataAttribute = async (
   $: CheerioAPI,
   elementDataAttribute: string,
-  tag = ""
+  tag = "",
 ): Promise<Array<{ label: string; url: string }> | []> => {
   const elements = $(elementDataAttribute);
 
@@ -198,7 +198,7 @@ const getElementHrefValuesDataAttribute = async (
 
 const getHREFValuesDataAttribute = async (
   $: CheerioAPI,
-  elementDataAttribute: string
+  elementDataAttribute: string,
 ): Promise<string[]> => {
   const serviceUrls = [];
 
@@ -239,13 +239,13 @@ const toMenuItem = (str: string): MenuItem => ({
 
 const checkOrder = (
   mandatoryElements: MenuItem[],
-  foundElements: string[]
+  foundElements: string[],
 ): orderType => {
   const newMandatoryElements = mandatoryElements.filter((e) =>
-    foundElements.some((f) => e.regExp.test(f))
+    foundElements.some((f) => e.regExp.test(f)),
   );
   const newFoundElements = foundElements.filter((e) =>
-    newMandatoryElements.some((f) => f.regExp.test(e))
+    newMandatoryElements.some((f) => f.regExp.test(e)),
   );
   let numberOfElementsNotInSequence = 0;
   const elementsNotInSequence = [];
@@ -253,7 +253,7 @@ const checkOrder = (
   //The first element is always in the right order
   for (let i = 1; i < newFoundElements.length; i++) {
     const indexInMandatory = newMandatoryElements.findIndex((e) =>
-      e.regExp.test(newFoundElements[i])
+      e.regExp.test(newFoundElements[i]),
     );
     let isInSequence = true;
 
@@ -262,7 +262,7 @@ const checkOrder = (
         isInSequence = false;
       } else if (
         !newMandatoryElements[indexInMandatory + 1].regExp.test(
-          newFoundElements[i + 1]
+          newFoundElements[i + 1],
         )
       ) {
         isInSequence = false;
@@ -274,7 +274,7 @@ const checkOrder = (
         isInSequence = false;
       } else if (
         !newMandatoryElements[indexInMandatory - 1].regExp.test(
-          newFoundElements[i - 1]
+          newFoundElements[i - 1],
         )
       ) {
         isInSequence = false;
@@ -295,13 +295,13 @@ const checkOrder = (
 
 const checkOrderLoose = (
   mandatoryElements: MenuItem[],
-  foundElements: string[]
+  foundElements: string[],
 ): orderType => {
   const newMandatoryElements = mandatoryElements.filter((e) =>
-    foundElements.some((f) => e.regExp.test(f))
+    foundElements.some((f) => e.regExp.test(f)),
   );
   const newFoundElements = foundElements.filter((e) =>
-    newMandatoryElements.some((f) => f.regExp.test(e))
+    newMandatoryElements.some((f) => f.regExp.test(e)),
   );
 
   const elementsNotInSequence: string[] = [];
@@ -313,7 +313,7 @@ const checkOrderLoose = (
 
         checkOrderRecursive(
           correctArray.filter((el) => el.name !== checkArray[i]),
-          checkArray.filter((el) => el !== checkArray[i])
+          checkArray.filter((el) => el !== checkArray[i]),
         );
         return;
       }
@@ -330,7 +330,7 @@ const checkOrderLoose = (
 
 const missingMenuItems = (
   menuElements: string[],
-  mandatoryElements: MenuItem[]
+  mandatoryElements: MenuItem[],
 ): string[] =>
   mandatoryElements
     .filter((e) => menuElements.every((f) => !e.regExp.test(f)))
@@ -339,7 +339,7 @@ const missingMenuItems = (
 const urlExists = async (
   url: string,
   href: string,
-  checkHttps = false
+  checkHttps = false,
 ): Promise<{
   result: boolean;
   exception?: boolean;
@@ -402,7 +402,7 @@ const urlExists = async (
 };
 const areAllElementsInVocabulary = async (
   pageArguments: string[],
-  vocabularyElements: string[]
+  vocabularyElements: string[],
 ): Promise<vocabularyResult> => {
   let result = true;
 
@@ -411,7 +411,7 @@ const areAllElementsInVocabulary = async (
   }
 
   const lowerCasedVocabulary = vocabularyElements.map((vocabularyElements) =>
-    vocabularyElements.toLowerCase()
+    vocabularyElements.toLowerCase(),
   );
 
   const elementNotIncluded = [];
@@ -524,7 +524,7 @@ const getRedirectedUrl = async (url: string): Promise<string> => {
     console.error(`ERROR ${url}: ${ex}`);
     await browser.close();
     throw new Error(
-      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`
+      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`,
     );
   }
 

@@ -57,7 +57,7 @@ class LoadAudit extends Audit {
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { origin: string }
+    artifacts: LH.Artifacts & { origin: string },
   ): Promise<LH.Audit.ProductBase> {
     const url = artifacts.origin;
 
@@ -121,7 +121,7 @@ class LoadAudit extends Audit {
             {
               result: notExecutedErrorMessage.replace("<LIST>", ex.message),
             },
-          ]
+          ],
         ),
       };
     }
@@ -153,7 +153,7 @@ class LoadAudit extends Audit {
         let errorMessage = ex.message;
         errorMessage = errorMessage.substring(
           errorMessage.indexOf('"') + 1,
-          errorMessage.lastIndexOf('"')
+          errorMessage.lastIndexOf('"'),
         );
 
         pagesInError.push({
@@ -188,12 +188,12 @@ class LoadAudit extends Audit {
       }
 
       indexElements = indexElements.filter((value) =>
-        indexElementsWithContent.includes(value)
+        indexElementsWithContent.includes(value),
       );
 
       let missingMandatoryItems = missingMenuItems(
         indexElements,
-        mandatoryMenuItems
+        mandatoryMenuItems,
       );
 
       const title = $('[data-element="service-title"]').text().trim() ?? "";
@@ -210,13 +210,13 @@ class LoadAudit extends Audit {
       let breadcrumbElements = await getPageElementDataAttribute(
         $,
         '[data-element="breadcrumb"]',
-        "li"
+        "li",
       );
       breadcrumbElements = breadcrumbElements.map((x) =>
         x
           .replaceAll(/[^a-zA-Z0-9 ]/g, "")
           .trim()
-          .toLowerCase()
+          .toLowerCase(),
       );
 
       if (!checkBreadcrumb(breadcrumbElements)) {
@@ -225,7 +225,7 @@ class LoadAudit extends Audit {
 
       const argumentsTag = await getPageElementDataAttribute(
         $,
-        '[data-element="topic-list"]'
+        '[data-element="topic-list"]',
       );
       if (argumentsTag.length <= 0) {
         missingMandatoryItems.push(mandatoryHeaderVoices[3]);
@@ -239,7 +239,7 @@ class LoadAudit extends Audit {
       const responsibleStructure = await getPageElementDataAttribute(
         $,
         '[data-element="structures"]',
-        "a"
+        "a",
       );
       if (responsibleStructure.length <= 0) {
         missingMandatoryItems.push(mandatoryBodyVoices[1]);
@@ -398,12 +398,12 @@ module.exports = LoadAudit;
 
 async function getServicesFromIndex(
   $: CheerioAPI,
-  mandatoryElements: string[]
+  mandatoryElements: string[],
 ): Promise<string[]> {
   const indexList = await getPageElementDataAttribute(
     $,
     '[data-element="page-index"]',
-    "> li > a"
+    "> li > a",
   );
 
   const returnValues = [];
@@ -432,7 +432,7 @@ async function getPlaceInfo($: CheerioAPI, mandatoryElements: string[]) {
     const gps = await getElementHrefValuesDataAttribute(
       $,
       '[data-element="places"]',
-      "a"
+      "a",
     );
     let gpsLabel = "";
     let gpsValue = "";
@@ -472,7 +472,7 @@ async function getPlaceInfo($: CheerioAPI, mandatoryElements: string[]) {
             !labelText.match("(ora)") &&
             (labelValue.match("^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$") ||
               labelValue.match(
-                "^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$"
+                "^(2[0-3]|[01]?[0-9]):([0-5]?[0-9]):([0-5]?[0-9])$",
               ))
           ) {
             j++;

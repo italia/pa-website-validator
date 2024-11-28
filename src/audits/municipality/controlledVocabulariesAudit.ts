@@ -40,7 +40,7 @@ class LoadAudit extends lighthouse.Audit {
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { origin: string }
+    artifacts: LH.Artifacts & { origin: string },
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
 
@@ -82,7 +82,7 @@ class LoadAudit extends lighthouse.Audit {
     let $ = await loadPageData(url);
     const allArgumentsHREF = await getHREFValuesDataAttribute(
       $,
-      '[data-element="all-topics"]'
+      '[data-element="all-topics"]',
     );
     if (allArgumentsHREF.length <= 0) {
       item[0].result = notExecutedErrorMessage.replace("<LIST>", "`all-topics");
@@ -103,7 +103,7 @@ class LoadAudit extends lighthouse.Audit {
     $ = await loadPageData(allArgumentsPageUrl);
     const argumentList = await getPageElementDataAttribute(
       $,
-      '[data-element="topic-element"]'
+      '[data-element="topic-element"]',
     );
 
     if (argumentList.length === 0) {
@@ -115,7 +115,7 @@ class LoadAudit extends lighthouse.Audit {
 
     const elementInfoMunicipalityVocabulary = await areAllElementsInVocabulary(
       argumentList,
-      municipalityModelVocabulary
+      municipalityModelVocabulary,
     );
 
     const elementInMunicipalityModelPercentage = parseInt(
@@ -123,7 +123,7 @@ class LoadAudit extends lighthouse.Audit {
         (elementInfoMunicipalityVocabulary.elementIncluded.length /
           argumentList.length) *
         100
-      ).toFixed(0)
+      ).toFixed(0),
     );
 
     const lowerCaseEurovoc = eurovocVocabulary.map((element) => {
@@ -136,7 +136,7 @@ class LoadAudit extends lighthouse.Audit {
 
     const elementInUnionVocabulary = await areAllElementsInVocabulary(
       argumentList,
-      uniq
+      uniq,
     );
 
     const elementInUnionVocabularyPercentage = parseInt(
@@ -144,7 +144,7 @@ class LoadAudit extends lighthouse.Audit {
         (elementInUnionVocabulary.elementIncluded.length /
           argumentList.length) *
         100
-      ).toFixed(0)
+      ).toFixed(0),
     );
 
     if (elementInfoMunicipalityVocabulary.allArgumentsInVocabulary) {

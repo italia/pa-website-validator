@@ -40,7 +40,7 @@ class LoadAudit extends lighthouse.Audit {
   }
 
   static async audit(
-    artifacts: LH.Artifacts & { origin: string }
+    artifacts: LH.Artifacts & { origin: string },
   ): Promise<{ score: number; details: LH.Audit.Details.Table }> {
     const url = artifacts.origin;
 
@@ -74,7 +74,7 @@ class LoadAudit extends lighthouse.Audit {
         score: 0,
         details: Audit.makeTableDetails(
           [{ key: "result", itemType: "text", text: "Risultato" }],
-          [{ result: notExecutedErrorMessage.replace("<LIST>", "all-topics") }]
+          [{ result: notExecutedErrorMessage.replace("<LIST>", "all-topics") }],
         ),
       };
     }
@@ -84,14 +84,14 @@ class LoadAudit extends lighthouse.Audit {
         score: 0,
         details: Audit.makeTableDetails(
           [{ key: "result", itemType: "text", text: "Risultato" }],
-          [{ result: notExecutedErrorMessage.replace("<LIST>", "all-topics") }]
+          [{ result: notExecutedErrorMessage.replace("<LIST>", "all-topics") }],
         ),
       };
     }
 
     const schoolModelCheck = await areAllElementsInVocabulary(
       argumentsElements,
-      schoolModelVocabulary
+      schoolModelVocabulary,
     );
 
     let numberOfElementsNotInScuoleModelPercentage = 100;
@@ -162,7 +162,7 @@ async function getArgumentsElements(url: string): Promise<string[]> {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (el: any) => (el.value = "scuola")
+      (el: any) => (el.value = "scuola"),
     );
 
     const button = await page.$('[data-element="search-submit"]');
@@ -186,7 +186,7 @@ async function getArgumentsElements(url: string): Promise<string[]> {
     elements = await getPageElementDataAttribute(
       $,
       '[data-element="all-topics"]',
-      "li"
+      "li",
     );
 
     await page.goto("about:blank");
@@ -198,7 +198,7 @@ async function getArgumentsElements(url: string): Promise<string[]> {
     console.error(`ERROR ${url}: ${ex}`);
     await browser.close();
     throw new Error(
-      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`
+      `Il test è stato interrotto perché nella prima pagina analizzata ${url} si è verificato l'errore "${ex}". Verificarne la causa e rifare il test.`,
     );
   }
 }
